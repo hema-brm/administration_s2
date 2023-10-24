@@ -2,26 +2,30 @@
 For all collabolators of this project, please follow these rules.
 
 ### 1. Gihtub
-- Always commit meaningful commit signed messages.
+Always commit meaningful signed commit messages.
 ```bash
 git commit -m -S "your message"
 ```
-- Create a new branch for each new feature.
+Create a new branch for each new feature.
 ```bash
 git branch -b "your-branch-name"
 ```
-- Never push directly to the main branch.
+Never push directly to the main branch.
 ```bash
 git push origin "your-branch-name"
 ```
 
 ### 2. Code
-- Code in english ?
-- Always use camelCase for variables and functions.
+Code in english ?
+Always use camelCase for variables and functions.
 ```php
-$myVariable = "Hello World";
+$myMessage = "Hello World";
+
+function myFunction() {
+    // ...
+}
 ```
-- Always use PascalCase for classes.
+Always use PascalCase for classes.
 ```php
 class MyClass {
     // ...
