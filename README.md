@@ -1,6 +1,6 @@
 # Gestion de devis - facture
 
-### 👥 Pseudos Github
+### 👥 Pseudos Github Groupe 12
 
 **[hema-brm](https://github.com/hema-brm)** : BIRABOURAME Hemavathi 
 
