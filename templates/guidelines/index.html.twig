@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Components guideline{% endblock %}
+
+{% block body %}
+    {% for component in components %}
+        <a class="capitalize block" href={{path('app_doc_component_show', {'component': component})}}>
+            {{ component }}
+        </a>        
+    {% endfor %}
+{% endblock %}

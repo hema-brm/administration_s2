@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Available components{% endblock %}
+
+{% block body %}
+    <h1>Container</h1>
+
+    <h3>Default</h3>
+    <p>This is the default container.</p>
+    {% include "@guidelines/container/variants/base.html.twig" %}
+
+    <h3>Centered</h3>
+    <p>Just a centered version of the default container</p>
+
+    {% include "@guidelines/container/variants/centered.html.twig" %}
+    
+    
+{% endblock %}

@@ -1,0 +1,9 @@
+{% set classes = classes|default('') %}
+
+{% if centered|default(false) %}
+    {% set classes = classes ~ ' m-auto' %}
+{% endif %}
+
+<div class="container {{classes}}">
+    {% block content%}{% endblock %}
+</div>
