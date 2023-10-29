@@ -4,15 +4,15 @@ For all collabolators of this project, please follow these rules.
 ### 1. Gihtub
 Always commit meaningful signed commit messages.
 ```bash
-git commit -m -S "your message"
+git commit -S -m "your message"
 ```
 Create a new branch for each new feature.
 ```bash
-git branch -b "your-branch-name"
+git checkout -b "your-branch-name"
 ```
 Never push directly to the main branch.
 ```bash
-git push origin "your-branch-name"
+git push -f origin "your-branch-name"
 ```
 
 ### 2. Code
