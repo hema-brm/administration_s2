@@ -19,4 +19,4 @@ composer:
 	docker compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
 
 symfony:
-	docker compose exec php bin/console $(filter-out $@,$(MAKECMDGOALS))
+	docker compose exec php php bin/console $(filter-out $@,$(MAKECMDGOALS))
