@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Liste des catégories</h1> <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Décoration </a>            <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Transport </a>             <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Maquillage/Coiffure </a>   <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Photographe/Vidéaste </a>  <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Lieu de réception </a>     <br>
+    <a href="{{ path('app_product', {'id': category.id})}}"> Traiteur </a>
+    
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.name }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('insert_category')}}"> AJOUTER UNE CATEGORIE </a>
+
+</div>
+{% endblock %}
