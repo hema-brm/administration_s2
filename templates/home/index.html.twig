@@ -1,0 +1,17 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to easyVows{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center">Welcome, easyVows</h1>
+        <div class="mt-4 text-center">
+            
+            <a href="{{ path('business') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Entreprise</a>
+            <a href="{{ path('accountant') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Comptable</a>
+            <a href="{{ path('admin') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Administrateur</a>
+        </div>
+    </div>
+{% endblock %}
