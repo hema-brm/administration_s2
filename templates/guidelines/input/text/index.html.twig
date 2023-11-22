@@ -1,34 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Available input components{% endblock %}
+{% block title %}Available input components
+{% endblock %}
 
 {% block body %}
-<div class="w-12/12 p-5 m-5 border shadow-sm bg-white">
-    {% include "@guidelines/input/text/input-text.html.twig" with {
-        'label': 'Default',
-        'full': false,
-        'help': 'Help message',
+
+	{% embed "@guidelines/card/default.html.twig" with {
+        shadow: true,
     } %}
-    {% include "@guidelines/input/text/input-text.html.twig" with {
-        'label': 'Full',
-        'full': true,
-        'help': 'Help message',
-        'error': 'This is a long error message'
-    } %}
-    {% include "@guidelines/input/text/input-text.html.twig" with {
-        'label': 'Another label',
-        'full': true,
-        'help': 'Help message',
-    } %}
-    {% include "@guidelines/input/text/input-text.html.twig" with {
-        'label': 'Another one without message',
-        'full': true,
-    } %}
-    {% include "@guidelines/input/text/input-text.html.twig" with {
-        'label': 'Full error input',
-        'full': true,
-        'error': 'This is a long error message'
-    } %}
-</div>
-    
+		{% block header %}
+			<h3>Testing form components</h3>
+		{% endblock %}
+		{% block body %}
+			{% include "@guidelines/input/text/input-text.html.twig" with {
+                'label': 'Default',
+                'full': false,
+                'help': 'Help message',
+            } %}
+			{% include "@guidelines/input/text/input-text.html.twig" with {
+                'label': 'Full',
+                'full': true,
+                'help': 'Help message',
+                'error': 'This is a long error message'
+            } %}
+			{% include "@guidelines/input/text/input-text.html.twig" with {
+                'label': 'Another label',
+                'full': true,
+                'help': 'Help message',
+            } %}
+			{% include "@guidelines/input/text/input-text.html.twig" with {
+                'label': 'Another one without message',
+                'full': true,
+            } %}
+			{% include "@guidelines/input/text/input-text.html.twig" with {
+                'label': 'Full error input',
+                'full': true,
+                'error': 'This is a long error message'
+            } %}
+		{% endblock %}
+	{% endembed %}
+
+
 {% endblock %}

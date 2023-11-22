@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Available components{% endblock %}
+
+{% block body %}
+    <div class="p-2">
+     {% embed "@guidelines/card/default.html.twig" with {
+        shadow: true,
+        variant: 'full',
+    } %}
+        {% block header %}
+            <h3>HEADER</h3>
+        {% endblock %}
+        {% block body %}
+            <p>CONTENT</p>
+        {% endblock %}
+        {% block footer %}
+            <p>FOOTER</p>
+        {% endblock %}
+    {% endembed %}
+    </div>
+   
+{% endblock %}

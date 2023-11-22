@@ -32,6 +32,7 @@ class ComponentController extends AbstractController
         return [
             'container',
             'input-text',
+            'card',
         ];
     }
 }
