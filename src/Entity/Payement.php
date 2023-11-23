@@ -14,16 +14,9 @@ class Payement
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Client::class)]
+    #[ORM\ManyToOne(targetEntity: Bill::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client = null;
-
-    #[ORM\ManyToOne(targetEntity: Entreprise::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Entreprise $entreprise = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $numeroFacture = null;
+    private ?Bill $bill = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $status = null;
@@ -44,36 +37,14 @@ class Payement
         return $this->id;
     }
 
-    public function getClient(): ?Client
+    public function getBill(): ?Bill
     {
-        return $this->client;
+        return $this->bill;
     }
 
-    public function setClient(?Client $client): self
+    public function setBill(?Bill $bill): self
     {
-        $this->client = $client;
-        return $this;
-    }
-
-    public function getEntreprise(): ?Entreprise
-    {
-        return $this->entreprise;
-    }
-
-    public function setEntreprise(?Entreprise $entreprise): self
-    {
-        $this->entreprise = $entreprise;
-        return $this;
-    }
-
-    public function getNumeroFacture(): ?string
-    {
-        return $this->numeroFacture;
-    }
-
-    public function setNumeroFacture(?string $numeroFacture): self
-    {
-        $this->numeroFacture = $numeroFacture;
+        $this->bill = $bill;
         return $this;
     }
 
