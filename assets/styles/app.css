@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    @import url('https://fonts.googleapis.com/css2?family=Istok+Web&display=swap');
+    html {
+        font-family:"Istok Web", sans-serif;
+    }
+}
