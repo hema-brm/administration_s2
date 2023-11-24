@@ -1,0 +1,35 @@
+{% set data = data ?? [] %}
+{% set icon = icon ?? null %}
+{% set name = name ?? null %}
+
+{% for item in data %}
+    {% embed "@guidelines/accordion/item/index.html.twig" with {
+        icon,
+        name,
+} %}
+    {% block title %}
+        {{ item.title | raw }}
+    {% endblock %}
+    {% block description %}
+        {{ item.description | raw }}
+    {% endblock %}
+{% endembed %}
+{% endfor %}
+
+
+<script type="text/javascript">
+    let checkboxes = document.querySelectorAll('input[name="{{ name }}"]');
+    // Loop through checkboxes and add event listeners
+    // to deselect all other checkboxes when one is selected
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                checkboxes.forEach(function(otherCheckbox) {
+                    if (otherCheckbox !== checkbox) {
+                        otherCheckbox.checked = false;
+                    }
+                });
+            }
+        });
+    });
+</script>

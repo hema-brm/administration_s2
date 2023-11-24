@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Available input components{% endblock %}
+
+{% set description = "
+    <ul>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+    </ul>
+"|trim|raw %}
+
+{% block body %}
+    <div class="container m-auto w-60 bg-gray-100 p-5 rounded shadow mt-5">
+    {% include "@guidelines/accordion/group/index.html.twig" with {
+        icon: true,
+        name: 'accordion_test',
+        data: [
+            {
+                title: 'Accordion item #1',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            },  
+            {
+                title: 'Accordion item #2',
+                description: description
+            },    
+        ]  
+    } %}
+    </div>
+    
+{% endblock %}

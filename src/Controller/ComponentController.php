@@ -33,6 +33,7 @@ class ComponentController extends AbstractController
             'container',
             'input-text',
             'card',
+            'accordion',
         ];
     }
 }
