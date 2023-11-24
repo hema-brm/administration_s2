@@ -19,23 +19,25 @@ class Product
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reference = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
-    private Collection $subCategories;
-
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
+    private Collection $subCategories;
 
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
     }
-
     
     public function getId(): ?int
     {
@@ -50,6 +52,18 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): static
+    {
+        $this->reference = $reference;
 
         return $this;
     }
@@ -74,6 +88,18 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -105,17 +131,6 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
   
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SubCategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubCategoryRepository::class)]
@@ -18,8 +20,19 @@ class SubCategory
 
     #[ORM\ManyToOne(inversedBy: 'subCategories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category_id = null;
+    private ?Category $category = null;
 
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'subCategories')]
+    private ?Collection $products=null;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
+    public function __toString(){
+        return $this->getName();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -39,12 +52,36 @@ class SubCategory
 
     public function getCategoryId(): ?Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(?Category $category_id): static
+    public function setCategoryId(?Category $category): static
     {
-        $this->category_id = $category_id;
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return ?Collection<int, Product>
+     */
+    public function getProducts(): ?Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        $this->products->removeElement($product);
 
         return $this;
     }
