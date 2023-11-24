@@ -3,16 +3,41 @@
 {% block title %}Available components{% endblock %}
 
 {% block body %}
-    <h1>Container</h1>
+<div class="p-5">
+    <div class="border border-gray-400">
+        {% embed "@components/container/base.html.twig" with {
+            classes: "border bg-gray-100 p-5 mb-5",
+        } %}
+            {% block content %}
+                <p>I am the <b>default</b> container !</p>
+            {% endblock %}
+        {% endembed %}
 
-    <h3>Default</h3>
-    <p>This is the default container.</p>
-    {% include "@guidelines/container/base.html.twig" %}
+        {% embed "@components/container/base.html.twig" with {
+            classes: "border bg-gray-100 p-5",
+            centered: true,
+        }  %}
+            {% block content %}
+                <p>I am the <b>centered</b> container !</p>
+            {% endblock %}
+        {% endembed %}
 
-    <h3>Centered</h3>
-    <p>Just a centered version of the default container</p>
+        {% embed "@components/container/base.html.twig" with {
+            classes: "border bg-gray-100 p-5 mb-5",
+            centered: true,
+        }  %}
+            {% block content %}
+                <p>I am the second <b>centered</b> container !</p>
+            {% endblock %}
+        {% endembed %}
 
-    {% include "@guidelines/container/centered.html.twig" %}
-    
-    
+        {% embed "@components/container/base.html.twig" with {
+            classes: "border bg-gray-100 p-5",
+        } %}
+            {% block content %}
+                <p>👁️👁️ See the difference now ? 🧑‍🦯</p>
+            {% endblock %}
+        {% endembed %}
+    </div>
+</div>
 {% endblock %}
