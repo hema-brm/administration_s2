@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/doc/components', name: 'app_doc_component_')]
+#[Route('/doc', name: 'app_doc_component_')]
 class ComponentController extends AbstractController
 {
     #[Route('/', name: 'index')]
