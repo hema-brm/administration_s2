@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Available input components{% endblock %}
 
@@ -11,7 +11,7 @@
 "|trim|raw %}
 
 {% block body %}
-    <div class="container m-auto w-80 bg-blue-100 p-5 rounded shadow mt-5">
+    <div class="ml-5 w-96 bg-blue-100 p-5 rounded shadow mt-5">
         <h2 class="flex align-middle py-3">⚠️ Hide automatically inactive items.</h2>
         {% include "@components/accordion/group/index.html.twig" with {
             icon: true,
@@ -33,7 +33,7 @@
         } %}
     </div>
 
-    <div class="container m-auto w-80 bg-gray-100 p-5 rounded shadow mt-5">
+    <div class="ml-5 w-96 bg-gray-100 p-5 rounded shadow mt-5">
     <h2 class="flex align-middle py-3">⚠️ Hide manually items.</h2>
     {% include "@components/accordion/group/index.html.twig" with {
         icon: true,

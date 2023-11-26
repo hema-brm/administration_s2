@@ -1,9 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Components guideline{% endblock %}
 
 {% block body %}
-<div class="container m-auto">
     <h2 class="p-4 mb-2 bg-gray-100 text-lg border">Available components</h2>
     <div class="border">
     {% for component in components %}
@@ -12,6 +11,4 @@
         </a>        
     {% endfor %}
     </div>
-    
-</div>
 {% endblock %}
