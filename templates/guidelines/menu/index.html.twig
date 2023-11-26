@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Components guideline{% endblock %}
+
+{% block body %}
+
+<nav data-open="true" class="nav top-0 left-0 w-80 min-h-screen bg-gray-700 text-white p-5 transition-all duration-500">
+    <div class="flex justify-end">
+        <button id="nav-toggle" class="p-5 bg-white text-gray-700 rounded w-7 h-7 flex items-center justify-center">
+            x
+        </button>
+    </div>
+    <ul class="nav-item">
+        <li class="sub-nav-item p-2">
+            <i class=""></i>
+            <span>Menu 1</span>
+        </li>
+        <li class="sub-nav-item p-2">
+            <i class=""></i>
+            <span>Menu 2</span>
+        </li>
+        <li class="sub-nav-item p-2">
+            <i class=""></i>
+            <span>Menu 3</span>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    const navToggle = document.querySelector('#nav-toggle');
+    const nav = document.querySelector('.nav');
+
+    navToggle.addEventListener('click', () => {
+        toggleNav();
+    });
+
+    function toggleNav() {
+        const isOpen = nav.getAttribute('data-open') === 'true';
+        nav.setAttribute('data-open', !isOpen);
+
+        if (isOpen) {
+            nav.classList.remove('w-80');
+            nav.classList.add('w-20');
+        } else {
+            nav.classList.remove('w-20');
+            nav.classList.add('w-80');
+        }
+    }
+
+</script>
+
+{% endblock body %}
