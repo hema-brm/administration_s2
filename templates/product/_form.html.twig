@@ -1,43 +1,45 @@
 {{ form_start(form) }}
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.name, 'Nom du Produit') }}
-        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.name) }}
+        {{ form_widget(form.name, {'attr': {'class':form_errors(form.name) ? 'input-error' : 'input-without-error'}}) }}
+        {{ form_errors(form.name, {'attr': {'class': 'error-message'}}) }}
     </div>
 
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.reference, 'Reference') }}
-        {{ form_widget(form.reference, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.reference) }}
+        {{ form_widget(form.reference, {'attr': {'class':form_errors(form.reference) ? 'input-error' : 'input-without-error'}}) }}
+        {{ form_help(form.reference,   {'attr': {'class': 'help-message'}}) }}
+        {{ form_errors(form.reference, {'attr': {'class': 'error-message'}}) }}
     </div>
 
         {# Champ pour la description du produit #}
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.description, 'Description') }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class':form_errors(form.description) ? 'input-error' : 'input-without-error'}}) }}
+        {{ form_help(form.description,   {'attr': {'class': 'help-message'}}) }}
+        {{ form_errors(form.description, {'attr': {'class': 'error-message'}}) }}
     </div>
 
     {# Champ pour le prix du produit #}
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.price, 'Prix') }}
-        {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.price) }}
+        {{ form_widget(form.price, {'attr': {'class':form_errors(form.price) ? 'input-error' : 'input-without-error'}}) }}
+        {{ form_errors(form.price, {'attr': {'class': 'error-message'}}) }}
     </div>
 
     {# Champ pour la catégorie du produit #}
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.category, 'Catégorie') }}
-        {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.category, {'attr': {'class': 'input-without-error'}}) }}
         {{ form_errors(form.category) }}
     </div>
 
     {# Champ pour la sous-catégorie du produit #}
-    <div>
+    <div class='input-wrapper'>
         {{ form_label(form.subCategories, 'Sous-catégorie') }}
-        {{ form_widget(form.subCategories, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.subCategories, {'attr': {'class': 'input-without-error'}}) }}
         {{ form_errors(form.subCategories) }}
     </div>
 
-    <button class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">{{ button_label|default('Sauvegarder') }}</button>
+    <button class="btn-validate">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}

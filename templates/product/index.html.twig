@@ -27,7 +27,10 @@
                 <td>{{ product.reference }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
-                <td>{{ product.price }}</td>
+
+                {% set price = product.price/100 %}
+
+                <td>{{ price }}</td>
                 <td> {{product.category}} </td> 
                 <td>
 
@@ -54,5 +57,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
 {% endblock %}
