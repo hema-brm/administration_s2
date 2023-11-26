@@ -16,11 +16,5 @@ class BusinessController extends AbstractController
         return $this->render('business/business.html.twig');
     }
 
-    /**
-     * @Route("/payement", name="payement")
-     */
-    public function payement(): Response
-    {
-        return $this->render('business/payement.html.twig');
-    }
+    
 }

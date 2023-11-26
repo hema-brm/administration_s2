@@ -1,13 +1,14 @@
 <?php
-// src/Entity/Payement.php
+
+// src/Entity/Payment.php
 
 namespace App\Entity;
 
-use App\Repository\PayementRepository;
+use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PayementRepository::class)]
-class Payement
+#[ORM\Entity(repositoryClass: PaymentRepository::class)]
+class Payment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,10 +25,10 @@ class Payement
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $moyen = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $datePaiement = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $dateEcheance = null;
 
     // Getter et Setter pour chaque propriété
@@ -91,4 +92,6 @@ class Payement
         $this->dateEcheance = $dateEcheance;
         return $this;
     }
+
+    
 }
