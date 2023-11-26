@@ -1,0 +1,25 @@
+{% block body %}
+
+<div>
+    <!-- Bouton pour ouvrir la modale -->
+    <button id="openModal" class="btn-validate">
+        Nouveau produit
+    </button>
+
+    <!-- Modale -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2">
+            <!-- Contenu de la modale -->
+            <h2 class="text-lg font-bold mb-4">Création d'un produit</h2>
+  
+            {{ include('product/_form.html.twig') }}
+
+            <!-- Bouton pour fermer la modale -->
+            <button id="closeModal" class="btn-close">
+                Fermer
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
