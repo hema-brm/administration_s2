@@ -18,8 +18,10 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $Nom = null;
 
-    #[ORM\Column]
-    private ?int $Numero_Siret = null;
+     /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $Numero_Siret;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Adresse = null;
@@ -103,5 +105,9 @@ class Entreprise
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->getNom();
+    }
 
 }

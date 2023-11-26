@@ -22,8 +22,11 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): Passport
@@ -42,17 +45,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
-
-        if (!$targetPath) {
-            // Choisir une redirection par défaut si la cible n'est pas définie
-            $targetPath = $this->getDefaultSuccessRedirectURL();
-        }
-
-        return new RedirectResponse($targetPath);
-    }
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName = null): ?Response
+{
+    return new RedirectResponse($this->urlGenerator->generate('add_user'));
+}
 
     protected function getLoginUrl(Request $request): string
     {
@@ -61,7 +57,6 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     protected function getDefaultSuccessRedirectURL(): string
     {
-        // Choisissez l'URL vers laquelle vous souhaitez rediriger après une authentification réussie
         return $this->urlGenerator->generate('app_login');
     }
 }
