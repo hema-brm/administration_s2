@@ -1,43 +1,66 @@
-{% extends 'base.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/table.html.twig" import default as table %}
+
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Customer index{% endblock %}
 
 {% block body %}
-    <h1>Customer index</h1>
+    {{ header({
+        text: 'Liste des clients',
+    }) }}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Lastname</th>
-                <th>Firstname</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for customer in customers %}
-            <tr>
-                <td>{{ customer.id }}</td>
-                <td>{{ customer.email }}</td>
-                <td>{{ customer.lastname }}</td>
-                <td>{{ customer.firstname }}</td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.phone }}</td>
-                <td>
-                    <a href="{{ path('app_customer_show', {'id': customer.id}) }}">show</a>
-                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="px-4">
+        <div class="flex justify-end py-2">
+            <a href="{{ path('app_customer_new') }}">
+                <button class="group rounded p-2 bg-blue-50 text-blue-500 text-sm transition-all ease-in-out hover:bg-blue-500 hover:text-white">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nouveau client</span>
+                </button>
+            </a>
+        </div>
 
-    <a href="{{ path('app_customer_new') }}">Create new</a>
+        {% set cellPadding = 'p-4 px-2' %}
+        {% set borderClass = 'border-b border-b-gray-200' %}
+        <table class="w-full border shadow-sm">
+            <thead>
+                <tr class="{{ borderClass }}">
+                    <th class="{{ cellPadding }} text-right">#</th>
+                    <th class="{{ cellPadding }} text-left">Email</th>
+                    <th class="{{ cellPadding }} text-left">Prénom</th>
+                    <th class="{{ cellPadding }} text-left">Nom</th>
+                    <th class="{{ cellPadding }} text-left">Adresse</th>
+                    <th class="{{ cellPadding }} text-left">Téléphone</th>
+                    <th class="{{ cellPadding }}"></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for customer in customers %}
+                <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-gray-50">
+                    <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.lastname }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.firstname }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.address }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
+                    <td class="{{ cellPadding }} text-right text-gray-400">
+                        <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
+                            <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            (new Link('tr[data-href]'));
+        });
+    </script>
 {% endblock %}
