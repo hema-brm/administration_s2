@@ -14,4 +14,8 @@
             <a href="{{ path('admin') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Administrateur</a>
         </div>
     </div>
+     {% set error = app.request.session.get('security.last_error') %}
+    
+    {% include 'security/login.html.twig' with {'last_username': app.request.session.get('security.last_username')} %}
+    
 {% endblock %}
