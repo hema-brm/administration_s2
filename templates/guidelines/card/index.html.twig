@@ -1,0 +1,45 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Available components{% endblock %}
+
+{% block body %}
+    <div class="p-5">
+     {% embed "@components/card/default.html.twig" with {
+        shadow: true,
+        variant: 'full',
+    } %}
+        {% block header %}
+            <h3 class="text-lg font-semibold bg-blue-100 p-4 rounded-sm">
+                This is my card header
+            </h3>
+        {% endblock %}
+        {% block body %}
+            <div class="bg-white p-4">
+                <p>This is a long description inside my card body. </p>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facilis, minus dolore, illum quibusdam ex officia ducimus laudantium voluptas laboriosam ipsa aliquam quidem harum nesciunt asperiores. Quis commodi explicabo reiciendis magnam? </p>
+                <br>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium vitae, voluptatibus impedit quam facere, aperiam similique iusto quo blanditiis corrupti officia dolorem sunt rem magnam itaque aliquam commodi dolores excepturi! ⚠️ </p>
+                <br>
+                <p>You can put everything inside the card body.</p>
+
+                {# Add youtube video here #}
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe src="https://www.youtube.com/watch?v=wcY5fk9Ve00" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        {% endblock %}
+        {% block footer %}
+            <div class="p-4 bg-green-100 rounded-sm">
+            <small >
+                This is my card footer
+            </small></br>
+            <small>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </small>
+            </div>
+            
+        {% endblock %}
+    {% endembed %}
+    </div>
+   
+{% endblock %}

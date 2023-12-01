@@ -1,0 +1,89 @@
+{# Properties #}
+{% set full = (full is defined) ? full : false %}
+{% set row = (row is defined) ? row : false %}
+{% set label = label|default('') %}
+{% set help = help|default('') %}
+{% set error = error|default('')  %}
+
+{# Div wrapper classes #}
+{% set wrapperClasses = [
+    'flex',
+    'my-2',
+] %}
+{% set flexDirection = row ? 'flex-row' : 'flex-col' %}
+{% set alignItems = ( help is empty and row) ? 'items-center' : '' %}
+{% set wrapperClasses = wrapperClasses
+    |merge([flexDirection])
+    |merge([alignItems])
+    |join(' ') %}
+
+{# Label classes #}
+{% set labelTextClasses = [
+    'text-sm',
+]|join(' ') %}
+
+{# Input classes #}
+{% set inputTextClasses = [
+    'p-2',
+    'text-sm',
+    'max-w-full',
+] %}
+{% set inputBorderColor = error ? 'border-red-500' : 'border-gray-500' %}
+{% set inputOutlineClasses = [
+    'focus:outline-1',
+    'focus:outline-none',
+    'focus:ring-2',
+    'focus:border-blue-400',
+] %}
+{% set inputBorderClasses = [
+    inputBorderColor,
+    'border',
+    'rounded',
+] %}
+{% set inputSizingClasses = full ? 'grow' : 'w-fit' %}
+{% set inputMarginClasses = row ? 'ml-1' : '' %}
+{% set inputClasses = []
+    |merge(inputTextClasses)
+    |merge(inputOutlineClasses)
+    |merge(inputBorderClasses)
+    |merge([inputSizingClasses])
+    |merge([inputMarginClasses])
+    |join(' ') 
+%}
+
+{# helper classes #}
+{% set helpMessageClasses = [
+        inputMarginClasses,
+        'text-xs',
+        'text-gray-500',
+    ]|join(' ')
+%}
+{% set errorMessageClasses = []
+    |merge([inputMarginClasses])
+    |merge(['text-xs', 'text-red-500'])
+    |join(' ')
+%}
+
+
+<div class="{{wrapperClasses}}">
+    <label class="{{labelTextClasses}}">{{ label }}</label>
+    {% if row %}
+        <div class="flex flex-col {{inputSizingClasses}}">
+            <input type="text" class="{{inputClasses}}" />
+            {% if help %}
+                <small class="{{helpMessageClasses}}">{{ help }}</small>
+            {% endif %}
+            {% if error %}
+                <small class="{{errorMessageClasses}}">{{ error }}</small>
+            {% endif %}
+        </div>
+    {% else %}
+        <input type="text" class="{{inputClasses}}" />
+        {% if help %}
+            <small class="{{helpMessageClasses}}">{{ help }}</small>
+        {% endif %}
+        {% if error %}
+            <small class="{{errorMessageClasses}}">{{ error }}</small>
+        {% endif %}
+    {% endif %}
+</div>

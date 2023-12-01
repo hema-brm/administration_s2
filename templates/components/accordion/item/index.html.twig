@@ -1,0 +1,58 @@
+{% set unique_id = uniqid('accordion_') %}
+{% set unique_name = uniqid('accordion_name_') %}
+
+{% set id = id|default(unique_id) %}
+
+{% set name = name|default(unique_name) %}
+
+{% set icon = icon is defined ? icon : false %}
+
+{% set spaceBottom = spaceBottom|default('') %}
+
+{% set wrapperClasses = [
+    'rounded-md', 
+    'relative',
+    spaceBottom,
+]|join(' ') %}
+
+{% set iconClasses = [
+    'after:absolute',
+    "after:content-['+']",
+    'after:right-0 after:text-2xl',
+    'after:text-gray-400',
+    'hover:after:text-gray-900',
+    'peer-checked:after:transform',
+    'peer-checked:after:rotate-45',
+] %}
+
+{% set inputClasses = [
+    'hidden',
+    'peer',
+]|join(' ') %}
+
+{% set labelClasses = [
+    'flex', 
+    'items-center',
+    'cursor-pointer',
+] %}
+
+{% set descriptionClasses = [
+    'h-0',
+    'overflow-hidden', 
+    'peer-checked:h-full',
+]|join(' ') %}
+
+{% set labelClasses = (icon 
+    ? labelClasses|merge(iconClasses) 
+    : labelClasses)|join(' ') %}
+
+<div class="{{ wrapperClasses }}">
+    <input type="checkbox" name="{{name}}" id="{{ id }}" class="{{inputClasses}}">
+    <label for="{{ id }}" class="{{ labelClasses }}">
+        {% block title %}{% endblock %}
+    </label>
+    <div class="{{ descriptionClasses }}">
+        {% block description %}{% endblock %}
+    </div>
+</div>
+

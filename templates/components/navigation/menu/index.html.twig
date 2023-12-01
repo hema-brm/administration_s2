@@ -1,0 +1,20 @@
+{% import "@components/navigation/menu/macro/index.html.twig" as menuMacro %}
+
+<aside data-open="true" class="overflow-hodden nav relative bg-gray-500 text-white w-72 ml-0 transform min-h-screen transition-all duration-500 ease-in-out shadow-2xl overflow-y-visible">
+    <ul class="nav-item">
+        {{ menuMacro.item({
+            text: 'Factures',
+            icon: 'fa-file-invoice'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Clients',
+            icon: 'fa-user'
+        }) }}
+    </ul>
+</aside>
+
+<script>
+    window.addEventListener('load', () => {
+        (new NavToggle('#btn_toggle-menu', '.nav'));
+    });
+</script>

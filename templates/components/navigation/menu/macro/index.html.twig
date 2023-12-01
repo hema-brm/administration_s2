@@ -1,0 +1,8 @@
+{% macro item(params) %}
+    {% set text = params.text|default('') %}
+    {% set iconClass = params.icon|default('') %}
+    <li class="sub-nav-item py-2 px-4 hover:cursor-pointer transition duration-300 hover:bg-gray-600">
+        <i class="fa-solid {{ iconClass }} mr-2"></i>
+        <span>{{ text }}</span>
+    </li>
+{% endmacro %}

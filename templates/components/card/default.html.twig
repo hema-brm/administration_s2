@@ -1,0 +1,25 @@
+{% set border = (border is defined and border == true) ? 'border' : '' %}
+{% set shadow = (shadow is defined and shadow == true) ? 'shadow' : '' %}
+{% set padding = (compact is defined and compact == false) ? '' : 'p-5' %}
+{% set borderRadius = (rounded is defined and rounded == true) ? 'rounded-lg' : '' %}
+
+{% set cardClasses = [
+    border,
+    shadow,
+    padding,
+    borderRadius,
+]|join(' ') %}
+ 
+<article class="{{cardClasses}}">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    
+    <div>
+        {% block body %}{% endblock %}
+    </div>
+    
+    <footer>
+        {% block footer %}{% endblock %}
+    </footer>
+</article>

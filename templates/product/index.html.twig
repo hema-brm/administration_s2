@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+    <h1>PRODUIT</h1>
+    <br>
+     {{ include('product/modal.html.twig') }}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Reference</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Catégorie</th>
+                <th>Sous-catégorie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.reference }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+
+                {% set price = product.price/100 %}
+
+                <td>{{ price }}</td>
+                <td> {{product.category}} </td> 
+                <td>
+
+                    {% for subCategory in product.subCategories %}
+                        {{subCategory}} 
+                    {% else %}
+                        none
+                    
+                     {% endfor %}
+                    </td> 
+
+             
+
+                <td>
+                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
+                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

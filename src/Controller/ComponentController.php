@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/doc/components', name: 'app_doc_component_')]
+#[Route('/doc', name: 'app_doc_component_')]
 class ComponentController extends AbstractController
 {
     #[Route('/', name: 'index')]
@@ -23,16 +23,17 @@ class ComponentController extends AbstractController
         try {
             return $this->render('guidelines/' . $component . '/index.html.twig');
         } catch (\Exception $e) {
-            throw $this->createNotFoundException(
-                "Cannot find component guideline: templates/guidelines/$component.html.twig "
-            );
+            throw $e;
         }
     }
 
     private function getComponentList()
     {
         return [
-            "container",
+            'container',
+            'input-text',
+            'card',
+            'accordion',
         ];
     }
 }
