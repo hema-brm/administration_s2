@@ -37,6 +37,7 @@
 
 ### Table `product`
 - `id`* : Identifiant unique du produit
+- `reference`* : Reference unique d'un produit
 - `name`* : Nom du produit
 - `description` : Description du produit
 - `price`* : Prix du produit
