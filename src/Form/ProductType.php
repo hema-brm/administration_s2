@@ -25,11 +25,13 @@ class ProductType extends AbstractType
 
             ->add('reference',TextType::class, [
                 'constraints' => [new Length(['min' => 1, 'max' => 50])],
+                'required'    => false,
                 'help' => 'facultatif',
             ])
 
             ->add('description', TextareaType::class, [
                 'constraints' => [new Length([ 'max' => 150])],
+                'required'    => false,
                 'help' => 'facultatif',
             ] )
 

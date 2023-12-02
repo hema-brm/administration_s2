@@ -1,0 +1,21 @@
+{% block body %}
+
+<!-- Bouton permettant de supprimer un ou plusieurs produits -->
+<button id="delete" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50" disabled>Supprimer</button>
+
+<!-- Modal de confirmation -->
+<div id="modal_delete" class="hidden fixed inset-0 z-50 overflow-auto bg-gray-700 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-8 max-w-md mx-auto rounded shadow-lg">
+        <div class="text-center">
+            <h3 class="text-lg font-bold mb-4">Confirmation de suppression</h3>
+            <p class="mb-4">Êtes-vous sûr de vouloir supprimer ce(s) produit(s) ?</p>
+        </div>
+        <div class="flex justify-center">
+            <button id="cancelDelete" class="mr-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Annuler</button>
+            <button id="confirmDelete" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Supprimer</button>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

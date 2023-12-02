@@ -5,12 +5,15 @@
 {% block body %}
     <h1>PRODUIT</h1>
     <br>
-     {{ include('product/modal.html.twig') }}
+    <div class='flex'>
+        {{ include('product/modal_add_product.html.twig') }}
+        {{ include('product/modal_delete.html.twig') }}
+     </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th>id</th>
+                <th><input type="checkbox" class="products-checkbox"></th>
                 <th>Reference</th>
                 <th>Nom</th>
                 <th>Description</th>
@@ -23,7 +26,7 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <td>{{ product.id }}</td>
+                <td><input type="checkbox" class="product-checkbox" data-product-id="{{ product.id }}"></td>
                 <td>{{ product.reference }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
@@ -51,7 +54,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">aucun produit trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
