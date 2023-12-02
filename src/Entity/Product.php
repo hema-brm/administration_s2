@@ -34,6 +34,9 @@ class Product
     #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
     private Collection $subCategories;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Entreprise $company = null;
+
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
@@ -127,6 +130,18 @@ class Product
         if ($this->subCategories->removeElement($subCategory)) {
             $subCategory->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getCompanyId(): ?Entreprise
+    {
+        return $this->company;
+    }
+
+    public function setCompanyId(?Entreprise $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

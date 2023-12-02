@@ -21,7 +21,8 @@ class Entreprise
      /**
      * @ORM\Column(type="bigint", nullable=true)
      */
-    private $Numero_Siret;
+    #[ORM\Column(length: 14,nullable: true)]
+    private ?string $Numero_Siret=null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Adresse = null;
@@ -29,9 +30,17 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: User::class)]
     private Collection $UserId;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
+    private Collection $categories;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Product::class, orphanRemoval: true)]
+    private Collection $products;
+
     public function __construct()
     {
         $this->UserId = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,12 +60,12 @@ class Entreprise
         return $this;
     }
 
-    public function getNumeroSiret(): ?int
+    public function getNumeroSiret(): ?string
     {
         return $this->Numero_Siret;
     }
 
-    public function setNumeroSiret(int $Numero_Siret): static
+    public function setNumeroSiret(?string $Numero_Siret): static
     {
         $this->Numero_Siret = $Numero_Siret;
 
@@ -108,6 +117,66 @@ class Entreprise
     public function __toString()
     {
         return $this->getNom();
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setCompanyId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getCompanyId() === $this) {
+                $category->setCompanyId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setCompanyId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getCompanyId() === $this) {
+                $product->setCompanyId(null);
+            }
+        }
+
+        return $this;
     }
 
 }

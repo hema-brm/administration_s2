@@ -10,8 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-#[Route('/product')]
+#[Route('/products')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
@@ -28,13 +29,14 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
             'form' => $form,
         ]);
     }
 
 
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
+    #[Security('product.getCompanyId() === user.getEntreprise()')]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -43,6 +45,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
+    #[Security('product.getCompanyId() === user.getEntreprise()')]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -61,6 +64,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
+    #[Security('product.getCompanyId() === user.getEntreprise()')]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
