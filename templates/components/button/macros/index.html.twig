@@ -1,10 +1,12 @@
 {% macro button_macro(params) %}
     {# Initialize button atributes #}
 
+    {% set id = params.id|default(uniqid()) %}
     {% set text = params.text|default('') %}
     {% set route = params.route|default('#') %}
     {% set has_action = route is not empty %}
     {% set custom_classes = params.custom_classes|default([]) %}
+    {% set icon = params.icon|default('') %}
     
     {# Initialize button classes #}
     {% set button_classes = [
@@ -23,7 +25,10 @@
         <a href="{{ route }}">
     {% endif %}
 
-        <button class="{{ button_classes }}">{{ text }}</button>
+        <button id="{{id}}" class="{{ button_classes }}">
+            <i class="fa-solid {{ icon }}"></i>
+                {{ text }}
+        </button>
     
     {% if has_action %}
         </a>
