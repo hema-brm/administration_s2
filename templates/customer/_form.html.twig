@@ -1,4 +1,87 @@
+{% set inputWrapperClasses = [
+    'flex',
+    'flex-col',
+]|join(' ') %}
+
+{% set inputOutlineClasses = [
+    'w-full',
+    'border-b',
+    'pt-2',
+    'pb-1',
+    'mb-2',
+    'outline-none',
+    'focus:border-b-blue-400',
+]|join(' ') %}
+
+{% set labelClasses = [
+    'text-xs',
+    'text-gray-500',
+]|join(' ') %}
+
+{% set button_classes = button_classes|default([])|join(' ') %}
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="{{ inputWrapperClasses }}">
+        <label class="{{ labelClasses }}" for="email">{{ form_label(form.email) }}</label>
+        <div>
+            {{ form_widget(form.email, {
+                attr: {
+                    placeholder: 'ex: user@email.com',
+                    class: inputOutlineClasses,
+                }
+            }) }}
+        </div>
+    </div>
+    <div class="{{ inputWrapperClasses }}">
+        <label class="{{ labelClasses }}" for="lastname">{{ form_label(form.lastname) }}</label>
+        <div>
+            {{ form_widget(form.lastname, {
+                attr: {
+                    placeholder: 'ex: Doe',
+                    class: inputOutlineClasses,
+                }
+            }) }}
+        </div>
+    </div>
+    <div class="{{ inputWrapperClasses }}">
+        <label class="{{ labelClasses }}" for="firstname">{{ form_label(form.firstname) }}</label>
+        <div>
+            {{ form_widget(form.firstname, {
+                attr: {
+                    placeholder: 'ex: John',
+                    class: inputOutlineClasses,
+                }
+            }) }}
+        </div>
+    </div>
+    {# form address, phone #}
+    <div class="flex flex-col">
+        <label class="{{ labelClasses }}" for="address">{{ form_label(form.address) }}</label>
+        <div>
+            {{ form_widget(form.address, {
+                attr: {
+                    placeholder: 'ex: 123 rue de la paix',
+                    class: inputOutlineClasses,
+                }
+            }) }}
+        </div>
+    </div>
+
+    <div class="flex flex-col">
+        <label class="{{ labelClasses }}" for="phone">{{ form_label(form.phone) }}</label>
+        <div>
+            {{ form_widget(form.phone, {
+                attr: {
+                    placeholder: 'ex: 0606060606',
+                    class: inputOutlineClasses,
+                }
+            }) }}
+        </div>
+    </div>
+
+    <div class="flex flex-row-reverse">
+        <button class="group {{ button_classes }}">
+            {{ button_label|default('Sauvegarder') }}
+        </button>
+    </div>
 {{ form_end(form) }}

@@ -1,42 +1,57 @@
+{% from "@components/macros/content.html.twig" import header %}
+
 {% extends 'front/base.html.twig' %}
 
 {% block title %}Customer{% endblock %}
 
 {% block body %}
-    <h1>Customer</h1>
+    {{ header({
+        text: 'Détail du client',
+    }) }}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ customer.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ customer.email }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ customer.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ customer.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ customer.address }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ customer.phone }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
+        </div>
 
-    <a href="{{ path('app_customer_index') }}">back to list</a>
-
-    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
-
-    {{ include('customer/_delete_form.html.twig') }}
+        <article class="w-full shadow relative">
+        <div class="absolute top-0 right-0 p-2 flex flex-row-reverse items-baseline text-sm text-gray-400">
+            <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
+                <button class="group">
+                    <i class="fa-solid fa-edit ml-2 group-hover:text-yellow-500"></i>
+                </button>
+            </a>
+            <div>
+                {% embed 'customer/_delete_form.html.twig' with {
+                    customer: customer
+                } %}
+                    {% block button_content %}
+                        <i class="fa-solid fa-trash group-hover:text-red-500"></i>
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        </div>
+        <div class="flex flex-row p-4 items-start">
+            <div class="mr-4">
+                <img class="w-24 aspect-square rounded-md" src="{{ asset('build/images/default/profile.png') }}" alt="">
+            </div>
+            <div class="flex flex-col">
+                <div class="text-lg">
+                    <span>{{ customer.firstname }}</span>
+                    <span>{{ customer.lastname }}</span>
+                </div>
+                <div class="leading-5 text-xs text-gray-500">
+                    <span>{{ "<" ~ customer.email ~ ">" }}</span>
+                </div>
+                <div class="leading-5 text-xs">
+                    <span>{{ customer.phone }}</span>
+                </div>
+                <div class="leading-5 text-xs">
+                    <span>{{ customer.address }}</span>
+                </div>
+            </div>
+        </div>
+    </article>
+    </div>
 {% endblock %}

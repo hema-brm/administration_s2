@@ -79,6 +79,13 @@ Encore
         ],
         verbose: true
     }))
+
+    // Copy public asset images
+    .copyFiles({
+        from: './assets/images',
+        to: 'images/[path][name].[ext]',
+        pattern: /\.(png|jpg|jpeg|svg)$/
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
