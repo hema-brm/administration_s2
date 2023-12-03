@@ -3,29 +3,45 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<style>
+    body {
+        background-color: #1E90FF; 
+    }
+</style>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+<div class="flex justify-center items-center h-screen">
+    <div class="w-full max-w-md bg-gray-100 p-4 rounded-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6 text-center">Connexion</h1>
+        {% if error %}
+            <div class=" mb-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">E-mail ou mot de passe incorrect !</strong>
+            </div>
+        {% endif %}
+        <form method="post" class="grid gap-4">
+            
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+           {#} {% if app.user %}
+                <div class="mb-3">
+                    Vous êtes connectés en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}#}
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+            <label for="inputEmail" class="">E-mail</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="border p-3 rounded-md w-full text-sm" autocomplete="email" required autofocus placeholder="Entrez votre adresse e-mail">
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="border p-3 rounded-md w-full text-sm" autocomplete="current-password" required placeholder="Entrez votre mot de passe">
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="flex justify-center mt-4">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Se connecter</button>
+            </div>
+
+            <div class="text-center mt-2">
+                <a href="{{ path('app_register') }}" class="text-blue-500 hover:text-blue-700">S'inscrire</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

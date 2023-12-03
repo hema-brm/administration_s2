@@ -40,12 +40,13 @@ class AddUserFormType extends AbstractType
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Admin' => 'ROLE_ADMIN',
+                    'Gérant' => 'ROLE_ADMIN',
                     'Entreprise' => 'ROLE_ENTREPRISE',
                     'Comptable' => 'ROLE_COMPTABLE',
                 ],
                 'label' => 'Role',
                 'multiple' => true,
+                
             ])
             ->add('entreprise', EntityType::class, [
                 'class' => Entreprise::class,
@@ -53,6 +54,7 @@ class AddUserFormType extends AbstractType
                 'data' => $options['entreprise'],
                 'disabled' => true,
                 'required' => true,
+                
             ]);
     }
 
