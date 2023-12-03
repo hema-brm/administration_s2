@@ -50,14 +50,14 @@
 - `sub_category_id`\* : Identifiant de la sous-catégorie
 
 ### Table `customer`
+- `id`* : Identifiant unique du client
+- `email`* : Adresse email du client
+- `company_id`* : Identifiant de l'entreprise
+- `lastname`* : Nom du client
+- `firstname`* : Prénom du client
+- `address`* : Adresse du client
+- `phone`* : Numéro de téléphone du client
 
-- `id`\* : Identifiant unique du client
-- `lastname`\* : Nom du client
-- `firstname`\* : Prénom du client
-- `address`\* : Adresse du client
-- `phone`\* : Numéro de téléphone du client
-- `email`\* : Adresse email du client
-- `company_id`\* : Identifiant de l'entreprise
 
 ### Table `quote`
 

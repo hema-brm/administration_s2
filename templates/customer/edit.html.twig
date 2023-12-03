@@ -1,0 +1,38 @@
+{% from "@components/macros/content.html.twig" import header %}
+
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Modification du client{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Modification du client',
+        johan: 'bg-yellow-400', 
+    }) }}
+
+    <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
+        </div>
+        <div class="p-4 shadow-md w-1/2 border rounded">
+            <div class="text-sm">
+                {{ include('customer/_form.html.twig', {
+                    button_label: 'Modifier',
+                    button_classes: [
+                        'rounded',
+                        'p-2',
+                        'bg-yellow-400',
+                        'text-gray-900',
+                        'text-sm',
+                        'transition-all',
+                        'ease-out',
+                        'hover:bg-yellow-500',
+                        'ml-2',
+                    ]
+                }) }}
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

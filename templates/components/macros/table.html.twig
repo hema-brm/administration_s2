@@ -1,0 +1,98 @@
+{% macro default(params) %}
+    {% set rowNumberLabel = params.rowNumberLabel|default('') %}
+    {% set columns = params.columns|default([]) %}
+
+    {% set bordered = (params.bordered is defined)
+        ? params.bordered 
+        : false 
+    %}
+    {% set striped = (params.striped is defined)
+        ? params.striped 
+        : false  
+    %}
+
+    {% set tableClasses = [] %}
+
+    {% if bordered %}
+        {% set tableClasses = tableClasses|merge(['border']) %}
+    {% endif %}
+
+    {% if striped %}
+        {% set tableClasses = tableClasses|merge(['striped']) %}
+    {% endif %}
+
+    {% set tableClasses = tableClasses|join(' ') %}
+    {% set cellPadding = 'py-4 px-2' %}
+
+    <table class="w-full {{ tableClasses }}">
+        <thead>
+            <tr>
+                {% if rowNumberLabel is not empty %}
+                    <th class="{{ cellPadding }} text-right">{{ rowNumberLabel }}</th>
+                {% endif %}
+                {% for column in columns %}
+                    {% set columnClasses = '' %}
+                        {% if 'text' == column.type %}
+                            {% set columnClasses = 'text-left' %}
+                        {% endif %}
+                        {% if 'number' == column.type %}
+                            {% set columnClasses = 'text-right' %}
+                        {% endif %}
+                        {% if 'date' == column.type %}
+                            {% set columnClasses = 'text-center' %}
+                        {% endif %}
+                    <th class="{{ cellPadding }} {{columnClasses}}">{{ column.text }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in params.rows %}
+                <tr class="border hover:bg-gray-50">
+                    {% if rowNumberLabel is not empty %}
+                        <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                    {% endif %}
+                    {% for attribute, column in columns %}
+                        {% set rowClasses = '' %}
+                        {% if 'text' == column.type %}
+                            {% set rowClasses = 'text-left' %}
+                        {% endif %}
+                        {% if 'number' == column.type %}
+                            {% set rowClasses = 'text-right' %}
+                        {% endif %}
+                        {% if 'date' == column.type %}
+                            {% set rowClasses = 'text-center' %}
+                        {% endif %}
+
+                        {% set columnClass = column.class|default('') %}
+                        {% set rowClasses = rowClasses ~ ' ' ~ columnClass  %}
+                        <td class="{{ cellPadding }} {{ rowClasses }}">{{ attribute(row, attribute) }}</td>
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro th(params) %}
+    {% set columns = params.columns|default([]) %}
+    {% if rowNumberLabel is not empty %}
+        <th class="{{ cellPadding }} text-right">{{ rowNumberLabel }}</th>
+    {% endif %}
+    {% for column in columns %}
+        {% set columnClasses = '' %}
+            {% if 'text' == column.type %}
+                {% set columnClasses = 'text-left' %}
+            {% endif %}
+            {% if 'number' == column.type %}
+                {% set columnClasses = 'text-right' %}
+            {% endif %}
+            {% if 'date' == column.type %}
+                {% set columnClasses = 'text-center' %}
+            {% endif %}
+        <th class="{{ cellPadding }} {{columnClasses}}">{{ column.text }}</th>
+    {% endfor %}
+{% endmacro %}

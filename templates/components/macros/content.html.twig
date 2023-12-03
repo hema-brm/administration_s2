@@ -1,0 +1,5 @@
+{% macro header(params) %}
+<div class="bg-gray-100 p-4 border border-b-gray-200 text-lg font-medium">
+    <h1>{{ params.text|default('') }}</h1>
+</div>
+{% endmacro %}
