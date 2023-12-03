@@ -47,6 +47,7 @@ class AddUserFormType extends AbstractType
                 ],
                 'label' => 'Role',
                 'multiple' => true,
+                
             ])
             ->add('entreprise', EntityType::class, [
                 'class' => Entreprise::class,
@@ -54,6 +55,7 @@ class AddUserFormType extends AbstractType
                 'data' => $options['entreprise'],
                 'disabled' => true,
                 'required' => true,
+                
             ]);
     }
 

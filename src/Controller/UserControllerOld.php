@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
-class UserController extends AbstractController
+class UserControllerOld extends AbstractController
 {
     #[Route('/add_user', name: 'add_user')]
     public function addUser(Request $request, Security $security, EntityManagerInterface $entityManager): Response
@@ -22,8 +22,6 @@ class UserController extends AbstractController
 
         // Récupérer l'entreprise de l'utilisateur connecté
         $entreprise = $security->getUser()->getEntreprise();
-
-        echo($entreprise);
 
         $form = $this->createForm(AddUserFormType::class, $user, ['entreprise' => $entreprise]);
         $form->handleRequest($request);
