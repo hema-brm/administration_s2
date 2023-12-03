@@ -1,50 +1,61 @@
-{% extends 'base.html.twig' %}
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Payment{% endblock %}
 
 {% block body %}
-    <h1>Payment</h1>
+    <div class="flex-col justify-center items-center h-screen mx-20 my-5">
+      
+        <h1 class="text-2xl font-bold mb-4">Détails du paiement:</h1>
+        <div class="">
+          <a href="{{ path('app_payment_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">retour à la liste</a>
+        </div>
+        <div class="bg-gray-100 p-8 rounded-lg shadow-md mt-5">
+           <table class="table">
+                <tbody>
+                    <tr>
+                        <th class="">Id:</th>
+                        <td>{{ payment.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Client:</th>
+                        <td>{{ payment.bill.nomClient }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>{{ payment.status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Moyen:</th>
+                        <td>{{ payment.moyen }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de paiement:</th>
+                        <td>{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date d'échéance:</th>
+                        <td>{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>N° de facture:</th>
+                        <td>{{ payment.bill.numeroFacture }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prix total:</th>
+                        <td>{{ payment.bill.totalPrice }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ payment.id }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ payment.status }}</td>
-            </tr>
-            <tr>
-                <th>Moyen</th>
-                <td>{{ payment.moyen }}</td>
-            </tr>
-            <tr>
-                <th>DatePaiement</th>
-                <td>{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>DateEcheance</th>
-                <td>{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Client</th>
-                <td>{{ payment.bill.nomClient }}</td>
-            </tr>
-            <tr>
-                <th>Numéro Facture</th>
-                <td>{{ payment.bill.numeroFacture }}</td>
-            </tr>
-            <tr>
-                <th>Total Price</th>
-                <td>{{ payment.bill.totalPrice }}</td>
-            </tr>
-        </tbody>
-    </table>
+            {{ include('payment/_delete_form.html.twig') }}
+            <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="bg-blue-500 text-white px-4 py-2 rounded-md m-2">Modifier</a>
 
-    <a href="{{ path('app_payment_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Back to list</a>
 
-    <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Edit</a>
 
-    {{ include('payment/_delete_form.html.twig') }}
+        </div>
+
+    
+    </div>
+
+    
 {% endblock %}

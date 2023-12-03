@@ -1,4 +1,36 @@
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="bg-blue-500 text-white px-4 py-2 rounded-md">{{ button_label|default('Save') }}</button>
+     {{ form_row(form.bill, {
+        'attr': {
+            'class': 'border rounded-lg m-5',   
+        }
+     }) }}
+     {{ form_row(form.status, {
+        'attr': {
+            'class': 'border rounded-lg m-5',  
+            'placeholder': 'Status du paiement',  
+        }
+     }) }}
+     {{ form_row(form.moyen, {
+        'attr': {
+            'class': 'border rounded-lg m-5',  
+            'placeholder': 'moyen de paiement',  
+        }
+     }) }}
+     {{ form_row(form.datePaiement, {
+       'attr': {
+         'class': 'm-2',  
+
+        },
+     }) }}
+     {{ form_row(form.dateEcheance, {
+       'attr': {
+         'class': 'm-2',  
+
+        },
+     }) }}
+     
+     
+    {{ form_rest(form) }}
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md m-2">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
