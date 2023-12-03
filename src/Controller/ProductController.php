@@ -34,6 +34,29 @@ class ProductController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    
+    #[Route('/new', name: 'app_product_new', methods: ['GET','POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setCompanyId($this->getUser()->getEntreprise());
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
+    }
+
     
     #[Route('/delete', name: 'app_products_deleteAll', methods: ['POST'])]
     #[Security('product.getCompanyId() === user.getEntreprise()')]
