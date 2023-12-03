@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Entity\Bill;
 
 class PaymentEditType extends AbstractType
@@ -14,12 +15,32 @@ class PaymentEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('status')
-            ->add('moyen')
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Terminé' => 'terminé',
+                    'En Retard' => 'en retard',
+                    'En Cours' => 'en cours',
+                ],
+                'label' => 'Status du paiement', 
+            ])
+            ->add('moyen', ChoiceType::class, [
+                'choices' => [
+                    'Carte bancaire' => 'cb',
+                    'Espèces' => 'especes',
+                    'Chèque' => 'cheques',
+                    'Virement bancaire' => 'vb',
+                ],
+                'label' => 'Moyen de paiement', 
+            ])
             ->add('datePaiement')
-            ->add('dateEcheance');
+            ->add('dateEcheance')
+            ->add('bill', EntityType::class, [
+                'class' => Bill::class,
+                'choice_label' => 'nomClient', 
+                'label' => 'Client', 
+                'disabled' => true,
+            ]);
     }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -1,41 +1,37 @@
-{% extends 'base.html.twig' %}
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Payment index{% endblock %}
 
 {% block body %}
-    {% include "@components/navigation/index.html.twig" %}
-    <div class="flex justify-center items-center h-screen">
-        <div class="bg-gray-100 p-8 rounded-lg shadow-md">
-            <h1 class="text-2xl font-bold mb-4">Payment index</h1>
-            <a href="{{ path('app_payment_new') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Create new</a>
+    <div class="flex-col justify-center items-center h-screen mx-20 my-5">
+      
+        <h1 class="text-2xl font-bold mb-4">Liste des paiements:</h1>
+        <div class="">
+          <a href="{{ path('app_payment_new') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Ajouter</a>
+        </div>
+        <div class="bg-gray-100 p-8 rounded-lg shadow-md mt-5">
             <table class="min-w-full">
                 <thead>
                     <tr>
-                        <th class="font-bold">Id</th>
+                        <th class="font-bold">Client</th>
                         <th class="font-bold">Status</th>
-                        <th class="font-bold">Moyen</th>
                         <th class="font-bold">DatePaiement</th>
                         <th class="font-bold">DateEcheance</th>
-                        <th class="font-bold">Client</th>
                         <th class="font-bold">Numéro Facture</th>
-                        <th class="font-bold">Total Price</th>
                         <th class="font-bold">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for payment in payments %}
                         <tr>
-                            <td>{{ payment.id }}</td>
-                            <td>{{ payment.status }}</td>
-                            <td>{{ payment.moyen }}</td>
-                            <td>{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>{{ payment.bill.nomClient }}</td>
-                            <td>{{ payment.bill.numeroFacture }}</td>
-                            <td>{{ payment.bill.totalPrice }}</td>
+                            <td class="border border-slate-300">{{ payment.bill.nomClient }}</td>
+                            <td class="border border-slate-300">{{ payment.status }}</td>
+                            <td class="border border-slate-300">{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="border border-slate-300">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="border border-slate-300">{{ payment.bill.numeroFacture }}</td>
                             <td>
-                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-blue-500">show</a>
-                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-blue-500 ml-2">edit</a>
+                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-blue-500">Détails</a>
+                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-blue-500 ml-2">Modifier</a>
                             </td>
                         </tr>
                     {% else %}

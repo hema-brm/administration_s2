@@ -1,18 +1,14 @@
 
 
-{% extends 'base.html.twig' %}
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Entreprise{% endblock %}
 
 {% block body %}
-    {% include "@components/navigation/index.html.twig" %}
     <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold text-center">Vue Entreprise</h1>
+        <h1 class="text-4xl font-bold text-center">Accueil Entreprise</h1>
         <div class="mt-4 flex flex-col">
             
-            <a href="{{ path('app_payment_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md w-64 mt-4">Suivi des paiements</a>
-            <a href="{{ path('app_product_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md w-64 mt-4">Gestion des produits</a>
-            <a href="" class="bg-blue-500 text-white px-4 py-2 rounded-md w-64 mt-4">Gestion des clients</a>
         </div>
     </div>
     
