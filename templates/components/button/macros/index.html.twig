@@ -1,0 +1,31 @@
+{% macro button_macro(params) %}
+    {# Initialize button atributes #}
+
+    {% set text = params.text|default('') %}
+    {% set route = params.route|default('#') %}
+    {% set has_action = route is not empty %}
+    {% set custom_classes = params.custom_classes|default([]) %}
+    
+    {# Initialize button classes #}
+    {% set button_classes = [
+        'rounded',
+        'p-2',
+        'text-sm',
+        'transition-all',
+        'ease-out',
+    ] %}
+    {% if custom_classes is not empty %}
+        {% set button_classes = button_classes|merge(custom_classes) %}
+    {% endif %}
+    {% set button_classes = button_classes|join(' ') %}
+    
+    {% if has_action %}
+        <a href="{{ route }}">
+    {% endif %}
+
+        <button class="{{ button_classes }}">{{ text }}</button>
+    
+    {% if has_action %}
+        </a>
+    {% endif %}
+{% endmacro %}

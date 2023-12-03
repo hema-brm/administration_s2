@@ -1,87 +1,52 @@
+{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
+{% from "@components/button/macros/index.html.twig" import button_macro %}
+
 {% set inputWrapperClasses = [
     'flex',
     'flex-col',
+    'mb-2',
 ]|join(' ') %}
 
 {% set inputOutlineClasses = [
     'w-full',
     'border-b',
-    'pt-2',
-    'pb-1',
-    'mb-2',
     'outline-none',
     'focus:border-b-blue-400',
 ]|join(' ') %}
 
 {% set labelClasses = [
+    'mb-2',
     'text-xs',
     'text-gray-500',
 ]|join(' ') %}
 
-{% set button_classes = button_classes|default([])|join(' ') %}
+{% set errorClasses = [
+    'border-red-500',
+]|join(' ') %}
+
+{% set button_classes = button_classes|default([]) %}
 
 {{ form_start(form) }}
-    <div class="{{ inputWrapperClasses }}">
-        <label class="{{ labelClasses }}" for="email">{{ form_label(form.email) }}</label>
-        <div>
-            {{ form_widget(form.email, {
-                attr: {
-                    placeholder: 'ex: user@email.com',
-                    class: inputOutlineClasses,
-                }
-            }) }}
-        </div>
-    </div>
-    <div class="{{ inputWrapperClasses }}">
-        <label class="{{ labelClasses }}" for="lastname">{{ form_label(form.lastname) }}</label>
-        <div>
-            {{ form_widget(form.lastname, {
-                attr: {
-                    placeholder: 'ex: Doe',
-                    class: inputOutlineClasses,
-                }
-            }) }}
-        </div>
-    </div>
-    <div class="{{ inputWrapperClasses }}">
-        <label class="{{ labelClasses }}" for="firstname">{{ form_label(form.firstname) }}</label>
-        <div>
-            {{ form_widget(form.firstname, {
-                attr: {
-                    placeholder: 'ex: John',
-                    class: inputOutlineClasses,
-                }
-            }) }}
-        </div>
-    </div>
-    {# form address, phone #}
-    <div class="flex flex-col">
-        <label class="{{ labelClasses }}" for="address">{{ form_label(form.address) }}</label>
-        <div>
-            {{ form_widget(form.address, {
-                attr: {
-                    placeholder: 'ex: 123 rue de la paix',
-                    class: inputOutlineClasses,
-                }
-            }) }}
-        </div>
-    </div>
-
-    <div class="flex flex-col">
-        <label class="{{ labelClasses }}" for="phone">{{ form_label(form.phone) }}</label>
-        <div>
-            {{ form_widget(form.phone, {
-                attr: {
-                    placeholder: 'ex: 0606060606',
-                    class: inputOutlineClasses,
-                }
-            }) }}
-        </div>
-    </div>
+    {{ form_widget_macro({
+        item: form.email,
+    }) }}
+    {{ form_widget_macro({
+        item: form.lastname,
+    }) }}
+    {{ form_widget_macro({
+        item: form.firstname,
+    }) }}
+    {{ form_widget_macro({
+        item: form.address,
+    }) }}
+    {{ form_widget_macro({
+        item: form.phone,
+    }) }}
 
     <div class="flex flex-row-reverse">
-        <button class="group {{ button_classes }}">
-            {{ button_label|default('Sauvegarder') }}
-        </button>
+        {{ button_macro({
+            text: button_label|default('Enregistrer'),
+            custom_classes: button_classes,
+        }) }}
     </div>
 {{ form_end(form) }}

@@ -1,0 +1,56 @@
+{% macro form_widget_macro(params) %}
+    {# Initialize classes #}
+    {% set inputWrapperClasses = [
+        'flex',
+        'flex-col',
+        'mb-2',
+    ]|join(' ') %}
+
+    {% set inputOutlineClasses = [
+        'w-full',
+        'border-b',
+        'outline-none',
+        'border-w',
+        'focus:border-b-blue-400',
+    ]|join(' ') %}
+
+    {% set labelClasses = [
+        'mb-2',
+        'text-sm',
+        'text-gray-500',
+    ]|join(' ') %}
+
+    {% set errorClasses = [
+        'border-red-500',
+    ]|join(' ') %}
+
+    {# params.item is a form element. Ex: form.email #}
+    {% set item = params.item %}
+
+    <div class="{{ inputWrapperClasses }}">
+        {% set itemClass = '' %}
+        {% if not item.vars.valid %}
+            {% set itemClass = errorClasses %}
+        {% endif %}
+        <label class="{{ labelClasses }}" for="phone">{{ form_label(item) }}</label>
+        <div>
+            {{ form_widget(item, {
+                attr: {
+                    class: inputOutlineClasses ~ ' ' ~ itemClass,
+                }
+            }) }}
+        </div>
+
+        {% if not item.vars.valid %}
+            <small class="text-red-500">
+                {{ form_errors(item) }}
+            </small>
+        {% endif %}
+
+        {% if item.vars.help is defined %}
+            <small class="text-gray-500">
+                {{ item.vars.help }}
+            </small>
+        {% endif %}
+    </div>
+{% endmacro %}
