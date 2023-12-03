@@ -3,8 +3,10 @@
     {% set route = params.route|default('#') %}
     {% set iconClass = params.icon|default('') %}
     <a href="{{ route }}">
-        <li class="sub-nav-item py-2 px-4 hover:cursor-pointer transition duration-300 hover:bg-gray-600">
-            <i class="fa-solid {{ iconClass }} mr-2"></i>
+        <li class="flex sub-nav-item py-2 px-4 hover:cursor-pointer transition duration-300 hover:bg-gray-600">
+            <div class="w-7">
+                <i class="fa-solid {{ iconClass }}"></i>
+            </div>
             <span>{{ text }}</span>
         </li>
     </a>
