@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Entreprise;
-use App\Security\Roles\IUserRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -18,16 +17,9 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AddUserFormType extends AbstractType
+class UserType extends AbstractType
 {
-    private $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
-
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('firstName', TextType::class, [
@@ -79,9 +71,9 @@ class AddUserFormType extends AbstractType
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Admin' => IUserRole::ROLE_ADMIN,
-                    'Entreprise' => IUserRole::ROLE_COMPANY,
-                    'Comptable' => IUserRole::ROLE_ACCOUNTANT,
+                    'Gérant' => 'ROLE_ADMIN',
+                    'Entreprise' => 'ROLE_ENTREPRISE',
+                    'Comptable' => 'ROLE_COMPTABLE',
                 ],
                 'label' => 'Rôles',
                 'attr' => [
@@ -96,11 +88,10 @@ class AddUserFormType extends AbstractType
                 'data' => $options['entreprise'],
                 'disabled' => true,
                 'required' => true,
-                
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
@@ -108,4 +99,3 @@ class AddUserFormType extends AbstractType
         ]);
     }
 }
-
