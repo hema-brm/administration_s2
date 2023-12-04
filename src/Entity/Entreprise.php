@@ -66,7 +66,7 @@ class Entreprise
         return $this->NumeroSiret;
     }
 
-    public function setNumeroSiret(?string $Numero_Siret): static
+    public function setNumeroSiret(?string $NumeroSiret): static
     {
         $this->Numero_Siret = $NumeroSiret;
 

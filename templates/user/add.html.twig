@@ -1,73 +1,72 @@
-{% extends 'base.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
+{% from "@components/button/macros/index.html.twig" import button_macro %}
+
+{% extends 'front/base.html.twig' %}
 
 {% block title %}Add User{% endblock %}
 
 {% block body %}
-<style>
-    body {
-        background-color: #1E90FF;
-        padding-top: 80px;
-        padding-bottom: 150px;
-    }
-</style>
 
-<div class="flex justify-center items-center h-screen">
-    <div class="w-full max-w-md bg-gray-100 p-4 rounded-md mx-auto">
-        <h1 class="text-2xl font-bold mb-6 text-center">Ajouter un Employé</h1>
+    {{ header({
+        text: 'Ajouter un employé',
+    }) }}
 
-        {{ form_start(form) }}
-            {{ form_row(form.firstName, {
-                'label': 'Nom',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3',
-                    'placeholder': "Entrez le nom de l'Employé"
-                }
-            }) }}
+    <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="#">Retour à la liste</a>
+        </div>
+        <div class="p-4 shadow-md w-1/2 border rounded">
+            <div class="text-sm">
+                {{ form_start(form) }}
+                    {{
+                        form_widget_macro({
+                            item: form.firstName,
+                        })
+                    }}
+                    {{
+                        form_widget_macro({
+                            item: form.lastName,
+                        })
+                    }}
+                    {{
+                        form_widget_macro({
+                            item: form.email,
+                        })
+                    }}
+                    {{
+                        form_widget_macro({
+                            item: form.password,
+                        })
+                    }}
+                    {{
+                        form_widget_macro({
+                            item: form.entreprise,
+                        })
+                    }}
+                    {{
+                        form_widget_macro({
+                            item: form.roles,
+                        })
+                    }}
 
-            {{ form_row(form.lastName, {
-                'label': 'Prénom',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3' ,
-                    'placeholder': "Entrez le prénom de l'Employé"
-                }
-            }) }}
+                    <div class="flex flex-row-reverse">
+                        {{ button_macro({
+                            text: 'Ajouter',
+                            custom_classes: [
+                                'bg-blue-500',
+                                'text-white',
+                                'hover:bg-blue-600',
+                                'ml-2',
+                            ],
+                        }) }}
+                    </div>
 
-            {{ form_row(form.email, {
-                'label': 'Email',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3',
-                    'placeholder': "Entrez l'adresse mail de l'Employé"
-                }
-            }) }}
-
-            {{ form_row(form.password, {
-                'label': 'Password',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3',
-                    'placeholder': 'Entrez un mot de passe'
-                }
-            }) }}
-
-            {{ form_row(form.roles, {
-                'label': 'Roles',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3',
-                    'placeholder': "Choisissez le role de l'Employé"
-                }
-            }) }}
-
-            {{ form_row(form.entreprise, {
-                'label': 'Entreprise',
-                'attr': {
-                    'class': 'border p-3 rounded-md w-full text-sm mb-3',
-                    'placeholder': ''
-                }
-            }) }}
-
-            <div class="flex justify-center mt-4">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold items-center p-3 rounded">Ajouter</button>
+                {{ form_end(form) }}
             </div>
-        {{ form_end(form) }}
+        </div>
+        </div>
+        
     </div>
-</div>
 {% endblock %}

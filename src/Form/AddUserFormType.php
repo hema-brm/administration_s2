@@ -14,6 +14,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AddUserFormType extends AbstractType
 {
@@ -28,16 +31,51 @@ class AddUserFormType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'First Name',
+                'label' => 'Prénom',
+                'attr' => [
+                    'placeholder' => 'Entrez le prénom',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un prénom',
+                    ]),
+                ],
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Last Name',
+                'label' => 'Nom',
+                'attr' => [
+                    'placeholder' => 'Entrez le nom',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un nom',
+                    ]),
+                ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'Adresse email',
+                'attr' => [
+                    'placeholder' => 'Entrez l\'adresse email',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer une adresse email',
+                    ]),
+                    new Email([
+                        'message' => 'Veuillez entrer une adresse email valide',
+                    ]),
+                ],
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Password',
+                'label' => 'Mot de passe',
+                'attr' => [
+                    'placeholder' => 'Entrez un mot de passe',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un mot de passe',
+                    ]),
+                ],
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
@@ -45,7 +83,10 @@ class AddUserFormType extends AbstractType
                     'Entreprise' => IUserRole::ROLE_COMPANY,
                     'Comptable' => IUserRole::ROLE_ACCOUNTANT,
                 ],
-                'label' => 'Role',
+                'label' => 'Rôles',
+                'attr' => [
+                    'placeholder' => 'Veuillez choisir les rôles',
+                ],
                 'multiple' => true,
                 
             ])
@@ -55,7 +96,6 @@ class AddUserFormType extends AbstractType
                 'data' => $options['entreprise'],
                 'disabled' => true,
                 'required' => true,
-                
             ]);
     }
 
