@@ -96,7 +96,6 @@ class AddUserFormType extends AbstractType
                 'data' => $options['entreprise'],
                 'disabled' => true,
                 'required' => true,
-                
             ]);
     }
 
