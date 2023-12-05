@@ -4,7 +4,14 @@
     <ul class="nav-item">
         {{ menuMacro.item({
             text: 'Factures',
-            icon: 'fa-file-invoice'
+            icon: 'fa-file-invoice-dollar',
+            route: path('app_bill_index')
+        }) }}
+        {{ menuMacro.item({
+            text: 'Devis',
+            icon: 'fa-file-invoice',
+            route: path('app_quote_index')
+            
         }) }}
         {{ menuMacro.item({
             text: 'Clients',
@@ -13,7 +20,7 @@
         }) }}
         {{ menuMacro.item({
             text: 'Paiements',
-            icon: 'fas fa-money-bill',
+            icon: 'fas fa-money-bill-wave',
             route: path('app_payment_index')
         }) }}
         

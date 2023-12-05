@@ -21,9 +21,10 @@
 - `user_id`\* : Identifiant du gérant de l'entreprise
 
 ### Table `category`
-- `id`* : Identifiant unique de la catégorie
-- `id_entreprise`* : Identifiant unique de l'entreprise à laquelle appartient la catégorie
-- `name`* : Nom de la catégorie
+
+- `id`\* : Identifiant unique de la catégorie
+- `id_entreprise`\* : Identifiant unique de l'entreprise à laquelle appartient la catégorie
+- `name`\* : Nom de la catégorie
 
 ### Table `category_company`
 
@@ -50,14 +51,14 @@
 - `sub_category_id`\* : Identifiant de la sous-catégorie
 
 ### Table `customer`
-- `id`* : Identifiant unique du client
-- `email`* : Adresse email du client
-- `company_id`* : Identifiant de l'entreprise
-- `lastname`* : Nom du client
-- `firstname`* : Prénom du client
-- `address`* : Adresse du client
-- `phone`* : Numéro de téléphone du client
 
+- `id`\* : Identifiant unique du client
+- `email`\* : Adresse email du client
+- `company_id`\* : Identifiant de l'entreprise
+- `lastname`\* : Nom du client
+- `firstname`\* : Prénom du client
+- `address`\* : Adresse du client
+- `phone`\* : Numéro de téléphone du client
 
 ### Table `quote`
 
@@ -68,7 +69,7 @@
 - `total_price`\* : Prix total du devis
 - `discount` : Réduction du devis
 
-### Table `invoice`
+### Table `bill`
 
 - `id`\* : Identifiant unique de la facture
 - `date`\* : Date de la facture
