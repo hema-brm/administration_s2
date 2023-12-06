@@ -28,6 +28,10 @@ class Customer
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $phone = null;
 
+    // Add tsvector column
+    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
+    private ?string $searchVector = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +93,18 @@ class Customer
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getSearchVector(): ?string
+    {
+        return $this->searchVector;
+    }
+
+    public function setSearchVector(?string $searchVector): static
+    {
+        $this->searchVector = $searchVector;
 
         return $this;
     }

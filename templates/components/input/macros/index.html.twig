@@ -54,3 +54,31 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% macro form_search_macro(params) %}
+    {% set id = params.id|default(uniqid()) %}
+    {% set action = params.action|default('#') %}
+    {% set name = params.name|default('search') %}
+    {% set value = params.value|default('') %}
+    {% set placeholder = params.placeholder|default('') %}
+
+    {% set inputClasses = "h-full p-2 text-gray-950 leading-none outline-0 focus:bg-gray-50 transition-all duration-300" %}
+
+    <form class="text-sm" id="{{ id }}" action="{{ action }}">
+        <div class="flex flex-row items-center border">
+            <input class="{{ inputClasses }}" type="text" name="{{ name }}" value="{{ value }}" placeholder="{{ placeholder }}" />
+            {% from "@components/macros/content.html.twig" import button_macro %}
+            {{ button_macro({
+                custom_classes: [
+                    'cursor-pointer',
+                    'bg-gray-50',
+                    'rounded-none',
+                    'hover:bg-gray-100',
+                    'text-blue-500',
+                ],
+                icon: 'fa-solid fa-search',
+            }) }}
+        </div>
+    </form>
+        
+{% endmacro %}

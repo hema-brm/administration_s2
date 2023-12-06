@@ -33,7 +33,9 @@
 
         <button id="{{id}}" class="{{ button_classes }}">
             <i class="fa-solid {{ icon }}"></i>
+            {% if text is not empty %}
                 {{ text }}
+            {% endif %}
         </button>
     
     {% if has_action %}
@@ -158,4 +160,94 @@
         <i class="fa-solid {{ icon }}"></i>
         {{ params.text|default('') }}
     </div>    
+{% endmacro %}
+
+{% macro paginator(params) %}
+    {% set id = id|default(uniqid()) %}
+    {% set name = params.name|default('page') %}
+    {% set route = params.route|default('#') %}
+    {% set urlParams = params.urlParams|default({}) %}
+
+    {% set current = params.current|default(1) %}
+    {% set total = params.total|default(current) %}
+    {% set countButton = params.countButton|default(5) %}
+    
+    {# Setting classes #}
+    {% set buttonClasses = [
+        'text-sm',
+        'border',
+        'px-2',
+        'py-1',
+        'w-8',
+    ] %}
+    {% set pageClasses = [
+        'text-center',
+    ] %}
+    {% set hoveredPageClass = [
+        'hover:bg-gray-100',
+    ]|join(' ') %}
+    {% set prevNextClasses = [
+        '',
+    ] %}
+    {% set prevNextClasses = prevNextClasses
+        |merge(buttonClasses)
+        |join(' ') %}
+    {% set disabledButtonClasses = [
+        'bg-gray-100',
+        'text-gray-400',
+        'cursor-not-allowed',
+    ]|join(' ') %}
+    {% set pageClasses = pageClasses
+        |merge(buttonClasses)
+        |join(' ') %}
+    
+    {% set buttonPage = generatePaginatorButton(current, total, countButton) %}
+    {% set pageLabels = buttonPage.label %}
+    {% if pageLabels is not empty %}
+        <div id="{{ id }}" class="flex flex-row">
+            {# Previous button #}
+            {% set previousButtonClasses = prevNextClasses %}
+            {% set previousButtonAttribute = '' %}
+            {% if 1 >= current %}
+                {% set previousButtonAttribute = 'disabled' %}
+                {% set previousButtonClasses = previousButtonClasses ~ ' ' ~ disabledButtonClasses %}
+            {% endif %}
+            {% set previousButtonParams = urlParams|merge({(name): current-1}) %}
+            <a href="{{ path(route, previousButtonParams) }}">
+                <button {{ previousButtonAttribute }} class="{{ previousButtonClasses }}">
+                    <i class="fa-solid fa-caret-left"></i>
+                </button>
+            </a>
+            
+            {# Generated page buttons #}
+            {% for page in pageLabels %}
+                {% if page is not empty and page != current %}
+                    {% set availableButtonClasses = pageClasses ~ ' ' ~ hoveredPageClass %}
+                    {% set buttonPageParams = urlParams|merge({(name): page}) %}
+                    <a href="{{ path(route, buttonPageParams) }}">
+                        <button class="{{ availableButtonClasses }}">{{ page }}</button>
+                    </a>
+                {% elseif page == current %}
+                    {% set activeClasses = 'bg-blue-500 text-white hover:bg-blue-500' %}
+                    <span class="{{ pageClasses ~ ' ' ~ activeClasses }}">{{ page }}</span>
+                {% else %}
+                    <span class="{{ pageClasses }} bg-gray-50">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {# Next button #}
+            {% set nextButtonClasses = prevNextClasses %}
+            {% set nextButtonAttribute = '' %}
+            {% if current >= buttonPage.total %}
+                {% set nextButtonAttribute = 'disabled' %}
+                {% set nextButtonClasses = nextButtonClasses ~ ' ' ~ disabledButtonClasses %}
+            {% endif %}
+            {% set nextButtonParams = urlParams|merge({(name): current+1}) %}
+            <a href="{{ path(route, nextButtonParams) }}">
+                <button {{ nextButtonAttribute }} class="{{ nextButtonClasses }}">
+                    <i class="fa-solid fa-caret-right"></i>
+                </button>
+            </a>
+        </div>
+    {% endif %}
 {% endmacro %}

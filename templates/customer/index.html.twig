@@ -1,6 +1,8 @@
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/macros/content.html.twig" import alert %}
+{% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/macros/table.html.twig" import default as table %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
 {% extends 'front/base.html.twig' %}
 
@@ -12,7 +14,14 @@
     }) }}
 
     <div class="px-4">
-        <div class="flex justify-end py-2">
+        <div class="flex flex-row justify-between py-2">
+            {{ form_search_macro({
+                id: 'form-search-customer',
+                action: path('app_customer_index'),
+                placeholder: 'Rechercher',
+                name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
+                value: searchTerm|default(''),
+            }) }}
             <a href="{{ path('app_customer_new') }}">
                 <button class="group rounded p-2 bg-blue-50 text-blue-500 text-sm transition-all ease-in-out hover:bg-blue-500 hover:text-white">
                     <i class="fa-solid fa-plus"></i>
@@ -64,6 +73,18 @@
             {% endfor %}
             </tbody>
         </table>
+        <div id="customer-paginator" class="flex flex-row justify-end my-2">
+            {{ paginator({
+                name: 'page',
+                countButton: 5,
+                current: paginatorHelper.current,
+                total: paginatorHelper.total,
+                route: 'app_customer_index',
+                urlParams: { 
+                    (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
+                },
+            }) }}
+        </div>
     </div>
 
     <script>
