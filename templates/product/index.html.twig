@@ -12,7 +12,6 @@
     <div class="px-4">
         <div class="flex justify-end py-2 gap-2">
             {{ button_macro({
-                id: 'openModal',
                 custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
                 text:  "Nouveau produit",
                 icon: "fa-plus",
@@ -46,7 +45,7 @@
                     <td class="{{ cellPadding }} text-left">{{ product.reference }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.name }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.category }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.price }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ product.price/100 }}</td>
                     <td class="{{ cellPadding }} text-right text-gray-400">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}">
                             <i class="fa-solid fa-edit hover:text-yellow-500"></i>

@@ -16,28 +16,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {   
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-        $product->setCompanyId($this->getUser()->getEntreprise());
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $entityManager->persist($product);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
-        }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
-            'form' => $form,
         ]);
     }
 
     
     #[Route('/new', name: 'app_product_new', methods: ['GET','POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);

@@ -1,7 +1,7 @@
 // Récupérer les éléments HTML de la modale et des boutons
-const openModalButton = document.getElementById('openModal');
-const closeModalButton = document.getElementById('closeModal');
-const modal = document.getElementById('modal');
+const openModalButton = document.getElementById('category_open_button');
+const closeModalButton = document.getElementById('category_close_button');
+const modal = document.getElementById('category_modal');
 
 // Fonction pour ouvrir la modale
 function openModal() {
