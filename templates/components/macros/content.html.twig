@@ -1,5 +1,161 @@
 {% macro header(params) %}
-<div class="bg-gray-100 p-4 border border-b-gray-200 text-lg font-medium">
-    <h1>{{ params.text|default('') }}</h1>
-</div>
+    <div class="bg-gray-100 p-4 border border-b-gray-200 text-lg font-medium">
+        <h1>{{ params.text|default('') }}</h1>
+    </div>
+{% endmacro %}
+
+{% macro button_macro(params) %}
+    {# Initialize button atributes #}
+
+    {% set id = params.id|default(uniqid()) %}
+    {% set text = params.text|default('') %}
+    {% set route = params.route|default('#') %}
+    {% set has_action = route is not empty %}
+    {% set custom_classes = params.custom_classes|default([]) %}
+    {% set icon = params.icon|default('') %}
+    
+    {# Initialize button classes #}
+    {% set button_classes = [
+        'rounded',
+        'p-2',
+        'text-sm',
+        'transition-all',
+        'ease-out',
+    ] %}
+    {% if custom_classes is not empty %}
+        {% set button_classes = button_classes|merge(custom_classes) %}
+    {% endif %}
+    {% set button_classes = button_classes|join(' ') %}
+    
+    {% if has_action %}
+        <a href="{{ route }}">
+    {% endif %}
+
+        <button id="{{id}}" class="{{ button_classes }}">
+            <i class="fa-solid {{ icon }}"></i>
+                {{ text }}
+        </button>
+    
+    {% if has_action %}
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{% macro alert(params) %}
+
+    {# Set alert types #}
+    {% set type = {
+        primary: {
+            backgroundColor: 'bg-blue-100',
+            textColor: 'text-blue-500',
+            borderColor: 'border-blue-200',
+        },
+        secondary: {
+            backgroundColor: 'bg-gray-100',
+            textColor: 'text-gray-700',
+            borderColor: 'border-gray-200',
+        },
+        success: {
+            backgroundColor: 'bg-green-100',
+            textColor: 'text-green-700',
+            borderColor: 'border-green-200',
+        },
+        danger: {
+            backgroundColor: 'bg-red-100',
+            textColor: 'text-red-500',
+            borderColor: 'border-red-200',
+        },
+        warning: {
+            backgroundColor: 'bg-yellow-100',
+            textColor: 'text-dark-900',
+            borderColor: 'border-dark-500',
+        },
+        info: {
+            backgroundColor: 'bg-cyan-100',
+            textColor: 'text-cyan-600',
+            borderColor: 'border-cyan-200',
+        },
+    } %}
+
+    {% set variants = {
+        small: {
+            padding: 'p-2',
+            fontSize: 'text-sm',
+        },
+        normal: {
+            padding: 'p-3',
+            fontSize: 'text-base',
+        },
+        large: {
+            padding: 'p-4',
+            fontSize: 'text-lg',
+        },
+    } %}
+
+    {# Define colors #}
+    {% set color = params.color|default('primary') %}
+    {% set backgroundColor = type[color].backgroundColor %}
+    {% set textColor = type[color].textColor %}
+    {% set borderColor = type[color].borderColor %}
+
+    {# Define variants #}
+    {% set variant = params.variant|default('normal') %}
+    {% set padding = variants[variant].padding %}
+    {% set fontSize = variants[variant].fontSize %}
+
+    {# Set wrapper classes #}
+    {% set contentClasses = [
+        padding,
+        fontSize,
+        'text-center',
+    ] %}
+
+    {# Set border classes #}
+    {% set borderClasses = [
+        'border',
+    ] %}
+
+    {# Set color classes #}
+    {% set colorClasses = [
+        backgroundColor,
+        textColor,
+        borderColor,
+    ] %}
+
+    {# Merge all wrapper classes #}
+    {% set wrapperClasses = contentClasses|merge(borderClasses)|merge(colorClasses) %}
+    {% set wrapperClasses = wrapperClasses|join(' ') %}
+
+    {# Icon classes #}
+    {% set icon = (params.icon is defined and params.icon is not empty)
+        ? params.icon 
+        : ''
+    %}
+
+    {# Set border classes #}
+    {% set borderClasses = [
+        'border',
+    ] %}
+
+    {# Set color classes #}
+    {% set colorClasses = [
+        backgroundColor,
+        textColor,
+        borderColor,
+    ] %}
+
+    {# Merge all wrapper classes #}
+    {% set wrapperClasses = contentClasses|merge(borderClasses)|merge(colorClasses) %}
+    {% set wrapperClasses = wrapperClasses|join(' ') %}
+
+    {# Icon classes #}
+    {% set icon = (params.icon is defined and params.icon is not empty)
+        ? params.icon 
+        : ''
+    %}
+
+    <div class="{{ wrapperClasses }}">
+        <i class="fa-solid {{ icon }}"></i>
+        {{ params.text|default('') }}
+    </div>    
 {% endmacro %}

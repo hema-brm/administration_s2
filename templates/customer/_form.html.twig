@@ -1,28 +1,5 @@
 {% from "@components/input/macros/index.html.twig" import form_widget_macro %}
-{% from "@components/button/macros/index.html.twig" import button_macro %}
-
-{% set inputWrapperClasses = [
-    'flex',
-    'flex-col',
-    'mb-2',
-]|join(' ') %}
-
-{% set inputOutlineClasses = [
-    'w-full',
-    'border-b',
-    'outline-none',
-    'focus:border-b-blue-400',
-]|join(' ') %}
-
-{% set labelClasses = [
-    'mb-2',
-    'text-xs',
-    'text-gray-500',
-]|join(' ') %}
-
-{% set errorClasses = [
-    'border-red-500',
-]|join(' ') %}
+{% from "@components/macros/content.html.twig" import button_macro %}
 
 {% set button_classes = button_classes|default([]) %}
 

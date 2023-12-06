@@ -1,4 +1,5 @@
 {% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/table.html.twig" import default as table %}
 
 {% extends 'front/base.html.twig' %}
@@ -51,7 +52,14 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">Pas de résultat</td>
+                    <td colspan="7">
+                        {{ alert({
+                            text: 'Aucun client enregistré',
+                            color: 'warning',
+                            icon: 'fa-circle-info',
+                            variant: 'small',
+                        }) }}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
