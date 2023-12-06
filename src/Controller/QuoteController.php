@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Quote;
-
+use App\Form\QuoteType;
 use App\Repository\QuoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,13 +18,77 @@ class QuoteController extends AbstractController
     public function index(QuoteRepository $quoteRepository): Response
     {
         return $this->render('quote/index.html.twig', [
-            'quote' => $quoteRepository->findAll(),
+            'quotes' => $quoteRepository->findAll(),
         ]);
     }
 
-    
-    
-    
+    #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $quote = new Quote();
+        $form = $this->createForm(QuoteType::class, $quote);
+        $form->handleRequest($request);
 
-   
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle products association
+            foreach ($quote->getProducts() as $product) {
+                $product->addQuote($quote);
+                $entityManager->persist($product);
+            }
+
+            $entityManager->persist($quote);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('quote/new.html.twig', [
+            'quote' => $quote,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_quote_show', methods: ['GET'])]
+    public function show(Quote $quote): Response
+    {
+        return $this->render('quote/show.html.twig', [
+            'quote' => $quote,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_quote_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(QuoteType::class, $quote);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle products association
+            foreach ($quote->getProducts() as $product) {
+                $product->addQuote($quote);
+                $entityManager->persist($product);
+            }
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('quote/edit.html.twig', [
+            'quote' => $quote,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/{id}', name: 'app_quote_delete', methods: ['POST'])]
+    public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($quote);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

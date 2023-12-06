@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quote{% endblock %}
+
+{% block body %}
+    <h1>Quote</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quote.id }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ quote.status }}</td>
+            </tr>
+            <tr>
+                <th>Quote_number</th>
+                <td>{{ quote.quoteNumber }}</td>
+            </tr>
+            <tr>
+                <th>Quote_issuance_date</th>
+                <td>{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Expiry_date</th>
+                <td>{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Total_price</th>
+                <td>{{ quote.totalPrice }}</td>
+            </tr>
+            <tr>
+                <th>Discount</th>
+                <td>{{ quote.discount }}</td>
+            </tr>
+            <tr>
+                <th>Tva</th>
+                <td>{{ quote.tva }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quote_index') }}">back to list</a>
+
+    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}">edit</a>
+
+    {{ include('quote/_delete_form.html.twig') }}
+{% endblock %}

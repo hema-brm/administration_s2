@@ -1,14 +1,47 @@
-
 {% extends 'front/base.html.twig' %}
 
 {% block title %}Devis{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold text-center">Les devis</h1>
-        <div class="mt-4 flex flex-col">
-            
-        </div>
-    </div>
-    
+    <h1>La liste des devis:</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Status</th>
+                <th>Quote_number</th>
+                <th>Quote_issuance_date</th>
+                <th>Expiry_date</th>
+                <th>Total_price</th>
+                <th>Discount</th>
+                <th>Tva</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in quotes %}
+            <tr>
+                <td>{{ quote.id }}</td>
+                <td>{{ quote.status }}</td>
+                <td>{{ quote.quoteNumber }}</td>
+                <td>{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+                <td>{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+                <td>{{ quote.totalPrice }}</td>
+                <td>{{ quote.discount }}</td>
+                <td>{{ quote.tva }}</td>
+                <td>
+                    <a href="{{ path('app_quote_show', {'id': quote.id}) }}">show</a>
+                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quote_new') }}">Create new</a>
 {% endblock %}
