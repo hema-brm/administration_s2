@@ -14,8 +14,8 @@
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
         </div>
-        <div class="p-4 shadow-md w-1/2 border rounded">
-            <div class="text-sm">
+        {% embed "@components/container/form-container.html.twig" %}
+            {% block content %}
                 {% include('customer/_form.html.twig') with {
                     button_label: 'Ajouter',
                     button_classes: [
@@ -25,8 +25,8 @@
                         'ml-2',
                     ]
                 } %}
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
         </div>
         
     </div>
