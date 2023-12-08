@@ -1,3 +1,5 @@
+{% from "@components/button/macros/index.html.twig" import button_macro %}
+
 {% block body %}
 
 <!-- Bouton permettant de supprimer un ou plusieurs produits -->
@@ -12,6 +14,19 @@
         </div>
         <div class="flex justify-center">
             <button id="cancelDelete" class="mr-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Annuler</button>
+
+            {{ button_macro({
+                id: 'confirmDelete',
+                custom_classes: ["bg-red-500", 
+                                "hover:bg-red-600",
+                                "text-white", 
+                                "font-bold", 
+                                "py-2", 
+                                "px-4",
+                                "rounded"],
+                text: "Supprimer",
+                route:  path('app_products_delete_list') 
+            }) }}
             <button id="confirmDelete" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Supprimer</button>
         </div>
     </div>

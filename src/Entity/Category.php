@@ -27,8 +27,8 @@ class Category
     #[ORM\ManyToOne(inversedBy: 'categories')]
     private ?Entreprise $company = null;
 
-    public function __construct()
-    {
+    public function __construct($name)
+    {   $this->name = $name;
         $this->subCategories = new ArrayCollection();
         $this->products = new ArrayCollection();
     }

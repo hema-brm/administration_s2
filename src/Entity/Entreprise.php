@@ -30,7 +30,7 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: User::class)]
     private Collection $UserId;
 
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class,cascade: ["persist"],orphanRemoval: true)]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Product::class, orphanRemoval: true)]
@@ -41,6 +41,10 @@ class Entreprise
         $this->UserId = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
+
+        $this->addCategory(new Category("Décoration"));
+        $this->addCategory(new Category("Traiteur"));
+        $this->addCategory(new Category("Divertissement"));
     }
 
     public function getId(): ?int
