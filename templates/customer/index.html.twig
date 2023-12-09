@@ -54,9 +54,21 @@
                     <td class="{{ cellPadding }} text-left">{{ customer.address }}</td>
                     <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
                     <td class="{{ cellPadding }} text-right text-gray-400">
-                        <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
-                            <i class="fa-solid fa-edit hover:text-yellow-500"></i>
-                        </a>
+                        <div class="flex flex-row justify-end">
+                            <div class="mr-2">
+                                {% embed "customer/_delete_form.html.twig" with {
+                                    customer: customer,
+                                    hidden: true,
+                                } %}
+                                    {% block button_content %}
+                                        <i class="fa-regular fa-trash-can group-hover:text-red-500"></i>
+                                    {% endblock %}
+                                {% endembed %}
+                            </div>
+                            <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
+                                <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             {% else %}

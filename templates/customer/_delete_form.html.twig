@@ -2,9 +2,48 @@
 
 {% set buttonClasses = buttonClasses|join(' ') %}
 
-<form class="flex" method="post" action="{{ path('app_customer_delete', {'id': customer.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form id="form-delete-customer-{{ customer.id }}" class="flex" method="post" action="{{ path('app_customer_delete', {'id': customer.id}) }}">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
-    <button class="group {{ buttonClasses }}">
+    <button id="delete_customer_button_{{ customer.id }}" class="group {{ buttonClasses }}">
         {% block button_content %}{% endblock %}
     </button>
 </form>
+{% embed "@components/container/modal.html.twig" with {
+    id: 'delete_customer_modal_' ~ customer.id,
+    attach_to: 'delete_customer_button_' ~ customer.id,
+    no_close_button: true,
+} %}
+    {% block content %}
+        <div class="p-2 text-center text-gray-900">
+            <p>Êtes-vous sûr de vouloir supprimer ce client ?</p>
+            <div class="">
+                <span class="font-semibold text-sm">{{ "<" ~ customer.email ~ ">" }}</span>
+            </div>
+        </div>
+        <div class="flex flex-row justify-center">
+            <button id="confirm-no-{{ customer.id }}" class="px-2 py-1 bg-gray-500 hover:bg-gray-600 text-white mr-1">
+                Annuler
+            </button>
+            <button id="confirm-yes-{{ customer.id }}" class="px-2 py-1 text-red-500 bg-red-50 hover:bg-red-500 hover:text-white">
+                Supprimer
+            </button>
+        </div>
+    {% endblock %}
+
+    {% block script %}
+        <script>
+            var confirmModal{{ customer.id }} = document.querySelector('#delete_customer_modal_{{ customer.id }}');
+            var confirmNo{{ customer.id }} = document.querySelector('#confirm-no-{{ customer.id }}');
+            var confirmYes{{ customer.id }} = document.querySelector('#confirm-yes-{{ customer.id }}');
+
+            confirmNo{{ customer.id }}.addEventListener('click', () => {
+                confirmModal{{ customer.id }}.classList.add('hidden');
+                confirmModal{{ customer.id }}.classList.remove('flex');
+            });
+
+            confirmYes{{ customer.id }}.addEventListener('click', () => {
+                document.querySelector('#form-delete-customer-{{ customer.id }}').submit();
+            });
+        </script>
+    {% endblock %}
+{% endembed %}

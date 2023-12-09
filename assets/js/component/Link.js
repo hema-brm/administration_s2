@@ -18,7 +18,11 @@ class Link {
 
     attachEvent() {
         this.link.forEach(link => {
-            link.addEventListener('click', () => this.openLink(link));
+            link.addEventListener('click', e => {
+                if (e.target.nodeName === 'TR' || e.target.nodeName === 'TD') {
+                    this.openLink(link);
+                }
+            });
         });
     }
 

@@ -13,30 +13,30 @@
     </div>
 </div>
 
-{# Default script #}
+{# Default modal script #}
 <script>
-    const button = document.querySelector('#{{ attach_to }}');
-    const modal = document.querySelector('#{{ id }}');
+    var button{{ id }} = document.querySelector('#{{ attach_to }}');
+    var modal{{ id }} = document.querySelector('#{{ id }}');
 
-    button.addEventListener('click', (e) => {
+    button{{ id }}.addEventListener('click', (e) => {
         e.preventDefault();
-        modal.classList.add('flex');
-        modal.classList.remove('hidden');
+        modal{{ id }}.classList.add('flex');
+        modal{{ id }}.classList.remove('hidden');
     });
 
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+    modal{{ id }}.addEventListener('click', (e) => {
+        if (e.target === modal{{ id }}) {
+            modal{{ id }}.classList.add('hidden');
+            modal{{ id }}.classList.remove('flex');
         }
     });
 
     {% if not no_close_button %}
-        const closeButtons = document.querySelectorAll('#close-modal-{{ id }}');
-        closeButtons.forEach((closeButton) => {
-            closeButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+        var closeButtons{{ id }} = document.querySelectorAll('#close-modal-{{ id }}');
+        closeButtons{{ id }}.forEach((closeButton) => {
+            closeButton{{ id }}.addEventListener('click', () => {
+                modal{{ id }}.classList.add('hidden');
+                modal{{ id }}.classList.remove('flex');
             });
         });
     {% endif %}
