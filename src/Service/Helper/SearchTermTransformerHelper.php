@@ -8,12 +8,17 @@ class SearchTermTransformerHelper
 
     private array $searchTermArray;
 
+    const UNSUPPORTED_CHARACTERS = [
+        ':', '*', '&', '<', '>', '(', ')', '[', ']', '{', '}', 
+        '^', '~', '?', ':', '/', '!', '@', '#', '$', 
+        '%', '=', '|', '`', '"', ',',
+    ];
+
     public function get(): string
     {
         return $this
-            ->removePunctuation()
+            ->ensureCharacters()
             ->removeEmpty()
-            ->removeSpecialCharacters()
             ->addWildcards()
             ->implode()
             ->searchTerm;
@@ -27,13 +32,6 @@ class SearchTermTransformerHelper
         return $this;
     }
 
-    private function removePunctuation(): self
-    {
-        $this->searchTermArray = array_map(fn($value) => preg_replace('/[[:punct:]]/', '', $value), $this->searchTermArray);
-
-        return $this;
-    }
-
     private function removeEmpty(): self
     {
         $this->searchTermArray = array_filter($this->searchTermArray, fn($value) => $value !== '');
@@ -41,16 +39,24 @@ class SearchTermTransformerHelper
         return $this;
     }
 
-    private function removeSpecialCharacters(): self
+    private function ensureCharacters(): self
     {
-        $this->searchTermArray = array_map(fn($value) => str_replace([':', '*', '&'], '', $value), $this->searchTermArray);
+        $this->searchTermArray = array_map(
+            fn($value) => str_replace(
+                self::UNSUPPORTED_CHARACTERS, 
+                '', 
+                $value
+            ), $this->searchTermArray
+        );
 
         return $this;
     }
 
     private function addWildcards(): self
     {
-        $this->searchTermArray = array_map(fn($value) => addslashes($value), $this->searchTermArray);
+        $this->searchTermArray = array_map(
+            fn($value) => addslashes($value), $this->searchTermArray
+        );
 
         return $this;
     }
