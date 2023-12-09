@@ -20,3 +20,15 @@ composer:
 
 symfony:
 	docker compose exec php php bin/console $(filter-out $@,$(MAKECMDGOALS))
+
+database-drop:
+	docker compose exec php php bin/console doctrine:database:drop --force
+
+database-create:
+	docker compose exec php php bin/console doctrine:database:create
+
+database-migrate:
+	docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
+
+database-generate-migration:
+	docker compose exec php php bin/console make:migration
