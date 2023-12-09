@@ -1,6 +1,3 @@
-{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
-{% from "@components/macros/content.html.twig" import button_macro %}
-
 {% block body %}
 
 <div>
@@ -10,14 +7,8 @@
         <div class="bg-white p-6 rounded shadow-lg w-1/2">
             <!-- Contenu de la modale -->
             <h2 class="text-lg font-bold mb-4">Modification catégorie</h2>
-                <div class="flex m-2 gap-2 items-center">
-                    {% include '@components/input/text/index.html.twig' %}
-                    {{ button_macro({
-                        custom_classes: ["group", "rounded", "p-2", "bg-blue-500", "text-white", "text-sm", "transition-all", "ease-in-out"],
-                        text:  "ajouter"
-                    }) }}
+  
 
-                </div>
             <!-- Bouton pour fermer la modale -->
             <button id="category_close_button" class="btn-close">
                 Fermer
