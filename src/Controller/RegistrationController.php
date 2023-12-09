@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Entreprise;
 use App\Form\RegistrationFormType;
+use App\Security\Roles\IUserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,9 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $user = new User();
-        $user->setRoles(['ROLE_ENTREPRISE']);
+        $user->setRoles([
+            IUserRole::ROLE_COMPANY,
+        ]);
 
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

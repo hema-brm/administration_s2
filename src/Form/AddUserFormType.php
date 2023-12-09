@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Entreprise;
+use App\Security\Roles\IUserRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -40,9 +41,9 @@ class AddUserFormType extends AbstractType
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Admin' => 'ROLE_ADMIN',
-                    'Entreprise' => 'ROLE_ENTREPRISE',
-                    'Comptable' => 'ROLE_COMPTABLE',
+                    'Admin' => IUserRole::ROLE_ADMIN,
+                    'Entreprise' => IUserRole::ROLE_COMPANY,
+                    'Comptable' => IUserRole::ROLE_ACCOUNTANT,
                 ],
                 'label' => 'Role',
                 'multiple' => true,
