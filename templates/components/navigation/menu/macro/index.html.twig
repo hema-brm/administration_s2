@@ -2,8 +2,13 @@
     {% set text = params.text|default('') %}
     {% set route = params.route|default('#') %}
     {% set iconClass = params.icon|default('') %}
-    <a href="{{ route }}">
-        <li class="flex sub-nav-item py-2 px-4 hover:cursor-pointer transition duration-300 hover:bg-neutral-50	">
+    {% set currentRoute = app.request.attributes.get('_route')|default('') %}
+    {% set extractCurrentRoute = currentRoute|split('_')|slice(0, 2)|join('_') %}
+    {% set extractRoute = route|split('_')|slice(0, 2)|join('_') %}
+
+    <a href="{{ path(route) }}">
+        <li class="flex sub-nav-item py-2 px-4 hover:cursor-pointer transition duration-300 hover:bg-neutral-50
+        	        {% if extractCurrentRoute == extractRoute %} bg-neutral-50 {% endif %}" >
             <div class="w-7">
                 <i class="fa-solid {{ iconClass }}"></i>
             </div>
