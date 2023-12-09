@@ -2,9 +2,85 @@
 
 {% set buttonClasses = buttonClasses|join(' ') %}
 
-<form class="flex" method="post" action="{{ path('app_customer_delete', {'id': customer.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form id="form-delete-customer" class="flex" method="post" action="{{ path('app_customer_delete', {'id': customer.id}) }}">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
-    <button class="group {{ buttonClasses }}">
+    <button id="deleteCustomerButton" class="group {{ buttonClasses }}">
         {% block button_content %}{% endblock %}
     </button>
 </form>
+
+{% embed "@components/container/modal.html.twig" with {
+    id: 'delete-customer-modal',
+    attach_to: 'deleteCustomerButton',
+    no_close_button: true,
+} %}
+    {% block content %}
+        <div class="p-2 text-center text-gray-900">
+            <p>Voulez-vous vraiment supprimer ce client ?</p>
+        </div>
+        <div class="flex flex-row justify-center">
+            <button id="confirmNo" class="px-2 py-1 bg-gray-500 text-white mr-1">
+                Annuler
+            </button>
+            <button id="confirmYes" class="px-2 py-1 bg-red-500 text-white">
+                Supprimer
+            </button>
+        </div>
+    {% endblock %}
+
+    {% block script %}
+        <script>
+            const confirmModal = document.querySelector('#delete-customer-modal');
+            const confirmNo = document.querySelector('#confirmNo');
+            const confirmYes = document.querySelector('#confirmYes');
+
+            confirmNo.addEventListener('click', () => {
+                confirmModal.classList.add('hidden');
+                confirmModal.classList.remove('flex');
+            });
+
+            confirmYes.addEventListener('click', () => {
+                document.querySelector('#form-delete-customer').submit();
+            });
+        </script>
+    {% endblock %}
+{% endembed %}
+
+{# <div id="confirmModal" class="flex fixed top-0 left-0 z-[99999] bg-black bg-opacity-50 w-full h-full items-center justify-center">
+    <div class="bg-white p-5 text-center text-gray-900">
+        <h2>
+            <i class="fa-solid fa-question"></i>
+        </h2>
+        <p>Are you sure you want to delete this item?</p>
+        <div class="flex flex-row justify-center">
+            <button id="confirmNo" class="w-8 px-2 py-1 bg-red-500 text-white mr-1">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <button id="confirmYes" class="w-8 px-2 py-1 bg-green-500 text-white">
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteCustomer = document.querySelector('#deleteCustomer');
+    const confirmModal = document.querySelector('#confirmModal');
+    const confirmNo = document.querySelector('#confirmNo');
+    const confirmYes = document.querySelector('#confirmYes');
+
+    deleteCustomer.addEventListener('click', (e) => {
+        e.preventDefault();
+        confirmModal.classList.add('flex');
+        confirmModal.classList.remove('hidden');
+    });
+
+    confirmNo.addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+    });
+
+    confirmYes.addEventListener('click', () => {
+        document.querySelector('#form-delete-customer').submit();
+    });
+</script> #}
