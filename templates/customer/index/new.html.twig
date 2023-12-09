@@ -16,7 +16,7 @@
         </div>
         {% embed "@components/container/form-container.html.twig" %}
             {% block content %}
-                {% include('customer/_form.html.twig') with {
+                {% include('@customer/index/_form.html.twig') with {
                     button_label: 'Ajouter',
                     button_classes: [
                         'bg-blue-500',

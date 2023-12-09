@@ -43,7 +43,7 @@ class IndexController extends AbstractController
         $customers = $customerRepository->findAllWithPage($this->page, self::LIMIT); 
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
-        return $this->render('customer/index.html.twig', [
+        return $this->render('@customer/index/index.html.twig', [
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
         ]);
@@ -54,7 +54,7 @@ class IndexController extends AbstractController
         $customers =  $customerRepository->search($searchTerm, $this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
-        return $this->render('customer/index.html.twig', [
+        return $this->render('@customer/index/index.html.twig', [
             'searchTerm' => $searchTerm,
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
@@ -75,7 +75,7 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('customer/new.html.twig', [
+        return $this->render('@customer/index/new.html.twig', [
             'customer' => $customer,
             'form' => $form,
         ]);
@@ -84,7 +84,7 @@ class IndexController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Customer $customer): Response
     {
-        return $this->render('customer/show.html.twig', [
+        return $this->render('@customer/index/show.html.twig', [
             'customer' => $customer,
         ]);
     }
@@ -101,7 +101,7 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('customer/edit.html.twig', [
+        return $this->render('@customer/index/edit.html.twig', [
             'customer' => $customer,
             'form' => $form,
         ]);

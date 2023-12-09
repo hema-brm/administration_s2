@@ -3,6 +3,7 @@ twig:
     paths:
         '%kernel.project_dir%/templates/components': components
         '%kernel.project_dir%/templates/guidelines': guidelines
+        '%kernel.project_dir%/templates/customer': customer
 
 when@test:
     twig:

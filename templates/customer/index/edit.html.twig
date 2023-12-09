@@ -17,7 +17,7 @@
         </div>
         {% embed "@components/container/form-container.html.twig" %}
             {% block content %}
-                {{ include('customer/_form.html.twig', {
+                {{ include('@customer/index/_form.html.twig', {
                     button_label: 'Modifier',
                     button_classes: [
                         'bg-yellow-400',
