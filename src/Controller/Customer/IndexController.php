@@ -72,7 +72,14 @@ class IndexController extends AbstractController
             $entityManager->persist($customer);
             $entityManager->flush();
 
+            $this->addFlash('success', "Le client a été enregistré.");
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        // If form is not valid when submitted, display error message
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('info', "Veuillez corriger les informations saisies.");
+            $this->addFlash('error', "Le client n'a pas été enregistré.");
         }
 
         return $this->render('@customer/index/new.html.twig', [
@@ -98,7 +105,13 @@ class IndexController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', "Le client a bien été modifié.");
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('info', "Veuillez corriger les informations saisies.");
+            $this->addFlash('error', "Le client n'a pas été modifié.");
         }
 
         return $this->render('@customer/index/edit.html.twig', [
@@ -113,6 +126,11 @@ class IndexController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$customer->getId(), $request->request->get('_token'))) {
             $entityManager->remove($customer);
             $entityManager->flush();
+
+            $this->addFlash('success', "Le client a bien été supprimé.");
+        } else {
+            $this->addFlash('info', "Le client n'a pas été supprimé.");
+            $this->addFlash('error', "Oups, une erreur est survenue.");
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);

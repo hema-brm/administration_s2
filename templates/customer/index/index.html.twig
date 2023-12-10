@@ -9,6 +9,7 @@
 {% block title %}Customer index{% endblock %}
 
 {% block body %}
+
     {{ header({
         text: 'Liste des clients',
     }) }}
@@ -32,13 +33,13 @@
 
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-gray-200' %}
-        <table class="w-full border shadow-sm">
+        {% set tableHeaderClasses = borderClass ~ ' bg-gray-50' %}
+        <table class="w-full border shadow-sm text-sm">
             <thead>
-                <tr class="{{ borderClass }}">
+                <tr class="{{ tableHeaderClasses }}">
                     <th class="{{ cellPadding }} text-right">#</th>
                     <th class="{{ cellPadding }} text-left">Email</th>
-                    <th class="{{ cellPadding }} text-left">Prénom</th>
-                    <th class="{{ cellPadding }} text-left">Nom</th>
+                    <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
                     <th class="{{ cellPadding }} text-left">Adresse</th>
                     <th class="{{ cellPadding }} text-left">Téléphone</th>
                     <th class="{{ cellPadding }}"></th>
@@ -46,11 +47,10 @@
             </thead>
             <tbody>
             {% for customer in customers %}
-                <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-gray-50">
                     <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
                     <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ customer.lastname }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ customer.firstname }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
                     <td class="{{ cellPadding }} text-left">{{ customer.address }}</td>
                     <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
                     <td class="{{ cellPadding }} text-right text-gray-400">
