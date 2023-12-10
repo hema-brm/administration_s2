@@ -1,4 +1,4 @@
-<nav class="bg-cyan-900 text-white flex items-center justify-between flex-wrap px-4 py-2 shadow-md sticky top-0 left-0 z-[9999]">
+<nav class="bg-stone-800 text-white flex items-center justify-between flex-wrap px-4 py-2 shadow-md sticky top-0 left-0 z-[9999]">
   <div class="flex items-center flex-shrink-0 w-64 mr-4">
     <button id="btn_toggle-menu" class="hover:bg-gray-600 duration-300 ease-in-out p-1 rounded-full">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -10,7 +10,7 @@
   <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto sm:hidden lg:visible">
     <div class="flex flex-row text-sm lg:flex-grow">
         <input class="border-none p-2 bg-gray-200 text-gray-950 leading-none outline-0 rounded-tl rounded-bl focus:bg-gray-50 transition-all duration-300" placeholder="Rechercher" type="text" name="main_search">
-        <button class="group w-9 p-2 rounded-tr rounded-br cursor-pointer bg-gray-600">
+        <button class="group w-9 p-2 rounded-tr rounded-br cursor-pointer bg-gray-400">
             <i class="group-hover:rotate-45 transition-transform duration-300 ease-out fa-solid fa-search"></i>
         </button>
     </div>
@@ -27,9 +27,13 @@
             </span>
         </div>
         
-        <span class="flex justify-center items-center rounded-full hover:bg-gray-600 p-2 cursor-pointer transform duration-300 ease-in-out">
+       {#} <span class="flex justify-center items-center rounded-full hover:bg-gray-600 p-2 cursor-pointer transform duration-300 ease-in-out">
             <i class="fa-solid fa-power-off"></i>
-        </span>
+        </span>#}
+
+        <a href="{{ path('app_logout') }}" class="flex justify-center items-center rounded-full hover:bg-gray-600 p-2 cursor-pointer transform duration-300 ease-in-out">
+            <i class="fa-solid fa-power-off"></i>
+        </a>
     </div>
   </div>
 </nav>

@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import './js/index.js';
-import './js/modal_product.js';
+import './js/modal.js';
 import './js/handle_checkbox.js';
 
 const PaymentsList = () => {

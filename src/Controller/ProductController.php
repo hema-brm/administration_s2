@@ -16,24 +16,35 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {   
+        return $this->render('product/index.html.twig', [
+            'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
+        ]);
+    }
+
+    
+    #[Route('/new', name: 'app_product_new', methods: ['GET','POST'])]
+    public function new(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
+    {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-        $product->setCompanyId($this->getUser()->getEntreprise());
-        if ($form->isSubmitted() && $form->isValid()) {
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setCompanyId($this->getUser()->getEntreprise());
             $entityManager->persist($product);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
+
+        return $this->render('product/new.html.twig', [
+            'product' => $product,
             'form' => $form,
         ]);
     }
+
     
     #[Route('/delete', name: 'app_products_deleteAll', methods: ['POST'])]
     #[Security('product.getCompanyId() === user.getEntreprise()')]

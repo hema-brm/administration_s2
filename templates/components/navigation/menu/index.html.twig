@@ -1,7 +1,12 @@
 {% import "@components/navigation/menu/macro/index.html.twig" as menuMacro %}
 
-<aside data-open="true" class="overflow-hodden nav relative bg-cyan-900 text-white w-72 ml-0 transform min-h-screen transition-all duration-500 ease-in-out shadow-2xl overflow-y-visible">
+<aside data-open="true" class="overflow-hodden nav relative bg-red-100 text-bg-stone-800 w-72 ml-0 transform min-h-screen transition-all duration-500 ease-in-out shadow-2xl overflow-y-visible">
     <ul class="nav-item">
+        {{ menuMacro.item({
+            text: 'Employés',
+            icon: 'fa-user',
+            route: path('app_user_index')
+        }) }}
         {{ menuMacro.item({
             text: 'Factures',
             icon: 'fa-file-invoice-dollar',

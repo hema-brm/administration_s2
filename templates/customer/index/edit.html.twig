@@ -2,11 +2,12 @@
 
 {% extends 'front/base.html.twig' %}
 
-{% block title %}Nouveau client{% endblock %}
+{% block title %}Modification du client{% endblock %}
 
 {% block body %}
     {{ header({
-        text: 'Ajouter un nouveau client',
+        text: 'Modification du client',
+        johan: 'bg-yellow-400', 
     }) }}
 
     <div class="p-4">
@@ -14,20 +15,18 @@
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
         </div>
-        <div class="p-4 shadow-md w-1/2 border rounded">
-            <div class="text-sm">
-                {% include('customer/_form.html.twig') with {
-                    button_label: 'Ajouter',
+        {% embed "@components/container/form-container.html.twig" %}
+            {% block content %}
+                {{ include('@customer/index/_form.html.twig', {
+                    button_label: 'Modifier',
                     button_classes: [
-                        'bg-blue-500',
-                        'text-white',
-                        'hover:bg-blue-600',
-                        'ml-2',
+                        'bg-yellow-400',
+                        'text-gray-900',
+                        'hover:bg-yellow-500',
                     ]
-                } %}
-            </div>
+                }) }}
+            {% endblock %}
+        {% endembed %}
         </div>
-        </div>
-        
     </div>
 {% endblock %}

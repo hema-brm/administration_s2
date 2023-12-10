@@ -18,11 +18,8 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $Nom = null;
 
-     /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    #[ORM\Column(length: 14,nullable: true)]
-    private ?string $Numero_Siret=null;
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $NumeroSiret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Adresse = null;
@@ -30,7 +27,7 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: User::class)]
     private Collection $UserId;
 
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class,cascade: ["persist"],orphanRemoval: true)]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Product::class, orphanRemoval: true)]
@@ -41,6 +38,10 @@ class Entreprise
         $this->UserId = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
+
+        $this->addCategory(new Category("Décoration"));
+        $this->addCategory(new Category("Traiteur"));
+        $this->addCategory(new Category("Divertissement"));
     }
 
     public function getId(): ?int
@@ -62,12 +63,12 @@ class Entreprise
 
     public function getNumeroSiret(): ?string
     {
-        return $this->Numero_Siret;
+        return $this->NumeroSiret;
     }
 
-    public function setNumeroSiret(?string $Numero_Siret): static
+    public function setNumeroSiret(?string $NumeroSiret): static
     {
-        $this->Numero_Siret = $Numero_Siret;
+        $this->Numero_Siret = $NumeroSiret;
 
         return $this;
     }

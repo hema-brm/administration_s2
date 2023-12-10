@@ -1,0 +1,32 @@
+{% set defaultClasses = [
+    'p-4',
+    'w-full',
+    'text-sm',
+    'border',
+    'rounded-sm',
+    'shadow-sm',
+] %}
+
+{% set smallClasses = [] %}
+
+{% set mediumClasses = [
+    'md:text-base',
+    'md:shadow',
+] %}
+
+{% set largeClasses = [
+    'lg:p-5',
+    'lg:w-3/4',
+    'lg:rounded',
+] %}
+
+{# Merge all responsive classes #}
+{% set classes = defaultClasses
+    |merge(smallClasses)
+    |merge(mediumClasses)
+    |merge(largeClasses) 
+%}
+
+<div class="{{ classes|join(' ') }}">
+    {% block content %}{% endblock %}
+</div>

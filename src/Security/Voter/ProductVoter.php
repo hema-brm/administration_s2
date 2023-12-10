@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Product;
+use App\Security\Roles\IUserRole;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,7 +42,7 @@ class ProductVoter extends Voter
 
     private function canShow(Product $product, UserInterface $user): bool
     {//role admin, entreprise, employee
-        $permission = in_array('ROLE_ADMIN', $user->getRoles()) or ($product->getCompanyId() === $user->getEntreprise());
+        $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ($product->getCompanyId() === $user->getEntreprise());
         
         if(!$permission){
             throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à ce produit.');
@@ -50,7 +51,7 @@ class ProductVoter extends Voter
     }
 
     private function canModify(Product $product, UserInterface $user): bool
-    {   $permission = in_array('ROLE_ADMIN', $user->getRoles()) or ( in_array('ROLE_ENTREPRISE', $user->getRoles()) and ($product->getCompanyId() === $user->getEntreprise()) );
+    {   $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ( in_array(IUserRole::ROLE_COMPANY, $user->getRoles()) and ($product->getCompanyId() === $user->getEntreprise()) );
         if(!$permission){
             throw new AccessDeniedException('Vous n\'avez pas la permission de modifier ou supprimer ce produit.');
         }

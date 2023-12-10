@@ -1,0 +1,33 @@
+{% from "@components/macros/content.html.twig" import header %}
+
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Nouveau client{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Ajouter un nouveau client',
+    }) }}
+
+    <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
+        </div>
+        {% embed "@components/container/form-container.html.twig" %}
+            {% block content %}
+                {% include('@customer/index/_form.html.twig') with {
+                    button_label: 'Ajouter',
+                    button_classes: [
+                        'bg-blue-500',
+                        'text-white',
+                        'hover:bg-blue-600',
+                        'ml-2',
+                    ]
+                } %}
+            {% endblock %}
+        {% endembed %}
+        </div>
+        
+    </div>
+{% endblock %}
