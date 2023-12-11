@@ -23,13 +23,11 @@ class UserController extends AbstractController
         // Récupérer l'entreprise de l'utilisateur connecté
         $entreprise = $security->getUser()->getEntreprise();
 
-        echo($entreprise);
-
         $form = $this->createForm(AddUserFormType::class, $user, ['entreprise' => $entreprise]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarder l'utilisateur dans la base de données
+            
             $entityManager->persist($user);
             $entityManager->flush();
 

@@ -18,11 +18,8 @@ class Entreprise
     #[ORM\Column(length: 255)]
     private ?string $Nom = null;
 
-     /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    #[ORM\Column(length: 14,nullable: true)]
-    private ?string $Numero_Siret=null;
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $NumeroSiret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Adresse = null;
@@ -66,12 +63,12 @@ class Entreprise
 
     public function getNumeroSiret(): ?string
     {
-        return $this->Numero_Siret;
+        return $this->NumeroSiret;
     }
 
-    public function setNumeroSiret(?string $Numero_Siret): static
+    public function setNumeroSiret(?string $NumeroSiret): static
     {
-        $this->Numero_Siret = $Numero_Siret;
+        $this->Numero_Siret = $NumeroSiret;
 
         return $this;
     }
