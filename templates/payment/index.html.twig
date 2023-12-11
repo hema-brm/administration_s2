@@ -7,9 +7,9 @@
       
         <h1 class="text-2xl font-bold mb-4">Liste des paiements:</h1>
         <div class="">
-          <a href="{{ path('app_payment_new') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Ajouter</a>
+          <a href="{{ path('app_payment_new') }}" class="bg-primary-500 text-white px-4 py-2 rounded-md mt-4">Ajouter</a>
         </div>
-        <div class="bg-gray-100 p-8 rounded-lg shadow-md mt-5">
+        <div class="bg-secondary-100 p-8 rounded-lg shadow-md mt-5">
             <table class="min-w-full">
                 <thead>
                     <tr>
@@ -30,8 +30,8 @@
                             <td class="border border-slate-300">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
                             <td class="border border-slate-300">{{ payment.bill.numeroFacture }}</td>
                             <td>
-                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-blue-500">Détails</a>
-                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-blue-500 ml-2">Modifier</a>
+                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-primary-500">Détails</a>
+                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-primary-500 ml-2">Modifier</a>
                             </td>
                         </tr>
                     {% else %}

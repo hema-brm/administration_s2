@@ -14,17 +14,17 @@
     no_close_button: true,
 } %}
     {% block content %}
-        <div class="p-2 text-center text-gray-900">
+        <div class="p-2 text-center text-secondary-900">
             <p>Êtes-vous sûr de vouloir supprimer ce client ?</p>
             <div class="">
                 <span class="font-semibold text-sm">{{ "<" ~ customer.email ~ ">" }}</span>
             </div>
         </div>
         <div class="flex flex-row justify-center">
-            <button id="confirm-no-{{ customer.id }}" class="px-2 py-1 bg-gray-500 hover:bg-gray-600 text-white mr-1">
+            <button id="confirm-no-{{ customer.id }}" class="px-2 py-1 bg-secondary-500 hover:bg-secondary-600 text-white mr-1">
                 Annuler
             </button>
-            <button id="confirm-yes-{{ customer.id }}" class="px-2 py-1 text-red-500 bg-red-50 hover:bg-red-500 hover:text-white">
+            <button id="confirm-yes-{{ customer.id }}" class="px-2 py-1 text-danger-500 bg-danger-50 hover:bg-danger-500 hover:text-white">
                 Supprimer
             </button>
         </div>

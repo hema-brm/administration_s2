@@ -11,7 +11,7 @@
     }) }}
 
     <div class="p-4">
-        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_product_index') }}">Retour à la liste</a>
         </div>
@@ -19,13 +19,13 @@
         <div>
             <div class="flex justify-end py-2 gap-2 w-1/2">
                 {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
+                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                     text:  "Nouvelle catégorie",
                     icon: "fa-plus",
                 }) }}
                  
                  {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500",  "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
+                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500",  "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                     text:  "Nouvelle sous-catégorie",
                     icon: "fa-plus",
                 }) }}        
@@ -37,9 +37,9 @@
                 {{ include('product/_form.html.twig', {
                     button_label: 'Modifier',
                     button_classes: [
-                        'bg-yellow-400',
-                        'text-gray-900',
-                        'hover:bg-yellow-500',
+                        'bg-warning-400',
+                        'text-secondary-900',
+                        'hover:bg-warning-500',
                         'ml-2',
                     ]
                 }) }}

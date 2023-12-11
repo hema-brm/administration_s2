@@ -28,12 +28,12 @@
     'text-sm',
     'max-w-full',
 ] %}
-{% set inputBorderColor = error ? 'border-red-500' : 'border-gray-500' %}
+{% set inputBorderColor = error ? 'border-danger-500' : 'border-secondary-500' %}
 {% set inputOutlineClasses = [
     'focus:outline-1',
     'focus:outline-none',
     'focus:ring-2',
-    'focus:border-blue-400',
+    'focus:border-primary-400',
 ] %}
 {% set inputBorderClasses = [
     inputBorderColor,
@@ -55,12 +55,12 @@
 {% set helpMessageClasses = [
         inputMarginClasses,
         'text-xs',
-        'text-gray-500',
+        'text-secondary-500',
     ]|join(' ')
 %}
 {% set errorMessageClasses = []
     |merge([inputMarginClasses])
-    |merge(['text-xs', 'text-red-500'])
+    |merge(['text-xs', 'text-danger-500'])
     |join(' ')
 %}
 

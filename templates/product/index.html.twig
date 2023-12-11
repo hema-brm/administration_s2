@@ -12,7 +12,7 @@
     <div class="px-4">
         <div class="flex justify-end py-2 gap-2">
             {{ button_macro({
-                custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
+                custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                 text:  "Nouveau produit",
                 icon: "fa-plus",
                 route : path('app_product_new')
@@ -20,13 +20,13 @@
              
              {{ button_macro({
                 id: 'delete',
-                custom_classes: ["group", "rounded", "p-2", "bg-red-50", "text-red-500",  "transition-all", "ease-in-out", "hover:bg-red-500", "hover:text-white"],
+                custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
                 icon: "fa-trash",
             }) }}        
         </div>
         
         {% set cellPadding = 'p-4 px-2' %}
-        {% set borderClass = 'border-b border-b-gray-200' %}
+        {% set borderClass = 'border-b border-b-secondary-200' %}
         <table class="w-full border shadow-sm">
             <thead>
                 <tr class="{{ borderClass }}">
@@ -40,15 +40,15 @@
             </thead>
             <tbody>
             {% for product in products %}
-                <tr data-href="{{ path('app_product_show', {'id': product.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                <tr data-href="{{ path('app_product_show', {'id': product.id}) }}" class="{{ borderClass }} hover:bg-secondary-50 text-sm">
                     <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.reference }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.name }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.category }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.price/100 }}</td>
-                    <td class="{{ cellPadding }} text-right text-gray-400">
+                    <td class="{{ cellPadding }} text-right text-secondary-400">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}">
-                            <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                            <i class="fa-solid fa-edit hover:text-warning-500"></i>
                         </a>
                     </td>
                 </tr>

@@ -4,9 +4,9 @@
 
 {% block body %}
 <div class="p-5">
-    <div class="border border-gray-400">
+    <div class="border border-secondary-400">
         {% embed "@components/container/base.html.twig" with {
-            classes: "border bg-gray-100 p-5 mb-5",
+            classes: "border bg-secondary-100 p-5 mb-5",
         } %}
             {% block content %}
                 <p>I am the <b>default</b> container !</p>
@@ -14,7 +14,7 @@
         {% endembed %}
 
         {% embed "@components/container/base.html.twig" with {
-            classes: "border bg-gray-100 p-5",
+            classes: "border bg-secondary-100 p-5",
             centered: true,
         }  %}
             {% block content %}
@@ -23,7 +23,7 @@
         {% endembed %}
 
         {% embed "@components/container/base.html.twig" with {
-            classes: "border bg-gray-100 p-5 mb-5",
+            classes: "border bg-secondary-100 p-5 mb-5",
             centered: true,
         }  %}
             {% block content %}
@@ -32,7 +32,7 @@
         {% endembed %}
 
         {% embed "@components/container/base.html.twig" with {
-            classes: "border bg-gray-100 p-5",
+            classes: "border bg-secondary-100 p-5",
         } %}
             {% block content %}
                 <p>👁️👁️ See the difference now ? 🧑‍🦯</p>

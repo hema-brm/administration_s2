@@ -3,9 +3,9 @@
 {% set no_close_button = no_close_button is defined ? no_close_button : false %}
 
 <div id="{{ id }}" class="hidden fixed top-0 left-0 z-[99999] bg-black bg-opacity-50 w-full h-full items-center justify-center">
-    <div class="bg-white p-5 text-center text-gray-900 relative shadow-2xl rounded-sm transition-all transform">
+    <div class="bg-white p-5 text-center text-secondary-900 relative shadow-2xl rounded-sm transition-all transform">
         {% if not no_close_button %}
-            <button id="close-modal-{{ id }}" class="flex absolute top-0 right-0 m-2 text-gray-500">
+            <button id="close-modal-{{ id }}" class="flex absolute top-0 right-0 m-2 text-secondary-500">
                 <i class="fa-solid fa-times"></i>
             </button>
         {% endif %}

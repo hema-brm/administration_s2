@@ -1,5 +1,5 @@
 {% macro header(params) %}
-    <div class="bg-gray-100 p-4 border border-b-gray-200 text-lg font-medium">
+    <div class="bg-secondary-100 p-4 border border-b-secondary-200 text-lg font-medium">
         <h1>{{ params.text|default('') }}</h1>
     </div>
 {% endmacro %}
@@ -48,34 +48,34 @@
     {# Set alert types #}
     {% set type = {
         primary: {
-            backgroundColor: 'bg-blue-100',
-            textColor: 'text-blue-500',
-            borderColor: 'border-blue-200',
+            backgroundColor: 'bg-primary-100',
+            textColor: 'text-primary-500',
+            borderColor: 'border-primary-200',
         },
         secondary: {
-            backgroundColor: 'bg-gray-100',
-            textColor: 'text-gray-700',
-            borderColor: 'border-gray-200',
+            backgroundColor: 'bg-secondary-100',
+            textColor: 'text-secondary-700',
+            borderColor: 'border-secondary-200',
         },
         success: {
-            backgroundColor: 'bg-green-100',
-            textColor: 'text-green-700',
-            borderColor: 'border-green-200',
+            backgroundColor: 'bg-success-100',
+            textColor: 'text-success-700',
+            borderColor: 'border-success-200',
         },
         danger: {
-            backgroundColor: 'bg-red-100',
-            textColor: 'text-red-500',
-            borderColor: 'border-red-200',
+            backgroundColor: 'bg-danger-100',
+            textColor: 'text-danger-500',
+            borderColor: 'border-danger-200',
         },
         warning: {
-            backgroundColor: 'bg-yellow-100',
+            backgroundColor: 'bg-warning-100',
             textColor: 'text-dark-900',
             borderColor: 'border-dark-500',
         },
         info: {
-            backgroundColor: 'bg-cyan-100',
-            textColor: 'text-cyan-600',
-            borderColor: 'border-cyan-200',
+            backgroundColor: 'bg-info-100',
+            textColor: 'text-info-600',
+            borderColor: 'border-info-200',
         },
     } %}
 
@@ -184,7 +184,7 @@
         'text-center',
     ] %}
     {% set hoveredPageClass = [
-        'hover:bg-gray-100',
+        'hover:bg-secondary-100',
     ]|join(' ') %}
     {% set prevNextClasses = [
         '',
@@ -193,8 +193,8 @@
         |merge(buttonClasses)
         |join(' ') %}
     {% set disabledButtonClasses = [
-        'bg-gray-100',
-        'text-gray-400',
+        'bg-secondary-100',
+        'text-secondary-400',
         'cursor-not-allowed',
     ]|join(' ') %}
     {% set pageClasses = pageClasses
@@ -228,10 +228,10 @@
                         <button class="{{ availableButtonClasses }}">{{ page }}</button>
                     </a>
                 {% elseif page == current %}
-                    {% set activeClasses = 'bg-blue-500 text-white hover:bg-blue-500' %}
+                    {% set activeClasses = 'bg-primary-500 text-white hover:bg-primary-500' %}
                     <span class="{{ pageClasses ~ ' ' ~ activeClasses }}">{{ page }}</span>
                 {% else %}
-                    <span class="{{ pageClasses }} bg-gray-50">...</span>
+                    <span class="{{ pageClasses }} bg-secondary-50">...</span>
                 {% endif %}
             {% endfor %}
 

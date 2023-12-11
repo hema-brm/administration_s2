@@ -3,10 +3,10 @@
 {% block title %}Components guideline{% endblock %}
 
 {% block body %}
-    <h2 class="p-4 mb-2 bg-gray-100 text-lg border">Available components</h2>
+    <h2 class="p-4 mb-2 bg-secondary-100 text-lg border">Available components</h2>
     <div class="border">
     {% for component in components %}
-        <a class="p-2 capitalize block hover:bg-gray-50" href={{path('app_doc_component_show', {'component': component})}}>
+        <a class="p-2 capitalize block hover:bg-secondary-50" href={{path('app_doc_component_show', {'component': component})}}>
             ➡️ {{ component }}
         </a>        
     {% endfor %}

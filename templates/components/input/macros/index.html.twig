@@ -11,17 +11,17 @@
         'border-b',
         'outline-none',
         'border-w',
-        'focus:border-b-blue-400',
+        'focus:border-b-primary-400',
     ]|join(' ') %}
 
     {% set labelClasses = [
         'mb-2',
         'text-sm',
-        'text-gray-500',
+        'text-secondary-500',
     ]|join(' ') %}
 
     {% set errorClasses = [
-        'border-red-500',
+        'border-danger-500',
     ]|join(' ') %}
 
     {# params.item is a form element. Ex: form.email #}
@@ -42,13 +42,13 @@
         </div>
 
         {% if not item.vars.valid %}
-            <small class="text-red-500">
+            <small class="text-danger-500">
                 {{ form_errors(item) }}
             </small>
         {% endif %}
 
         {% if item.vars.help is defined %}
-            <small class="text-gray-500">
+            <small class="text-secondary-500">
                 {{ item.vars.help }}
             </small>
         {% endif %}
@@ -62,7 +62,7 @@
     {% set value = params.value|default('') %}
     {% set placeholder = params.placeholder|default('') %}
 
-    {% set inputClasses = "h-full p-2 text-gray-950 leading-none outline-0 focus:bg-gray-50 transition-all duration-300" %}
+    {% set inputClasses = "h-full p-2 text-secondary-950 leading-none outline-0 focus:bg-secondary-50 transition-all duration-300" %}
 
     <form class="text-sm" id="{{ id }}" action="{{ action }}">
         <div class="flex flex-row items-center border">
@@ -71,10 +71,10 @@
             {{ button_macro({
                 custom_classes: [
                     'cursor-pointer',
-                    'bg-gray-50',
+                    'bg-secondary-50',
                     'rounded-none',
-                    'hover:bg-gray-100',
-                    'text-blue-500',
+                    'hover:bg-secondary-100',
+                    'text-primary-500',
                 ],
                 icon: 'fa-solid fa-search',
             }) }}

@@ -4,22 +4,22 @@
 
 {% if allMessages is not empty %}
 <div id="flash-message-{{ id }}" class="z-[99999] fixed top-3 right-3 transform transition-transform ease-in-out max-w-[20rem]">
-    <div class="flex flex-row items-start justify-between text-sm bg-gray-50 rounded-sm shadow-xl p-2">
+    <div class="flex flex-row items-start justify-between text-sm bg-secondary-50 rounded-sm shadow-xl p-2">
         <div>
             {% for type, messages in allMessages %}
                 {% for message in messages %}
                     {% if type == 'success' %}
-                        {% set textClass = 'text-green-700' %}
-                        {% set icon = 'fa-circle-check text-green-500' %}
+                        {% set textClass = 'text-success-700' %}
+                        {% set icon = 'fa-circle-check text-success-500' %}
                     {% elseif type == 'error' %}
-                        {% set textClass = 'text-red-700' %}
-                        {% set icon = 'fa-circle-xmark text-red-500' %}
+                        {% set textClass = 'text-danger-700' %}
+                        {% set icon = 'fa-circle-xmark text-danger-500' %}
                     {% elseif type == 'warning' %}
-                        {% set textClass = 'text-yellow-700' %}
-                        {% set icon = 'fa-triangle-exclamation text-yellow-500' %}
+                        {% set textClass = 'text-warning-700' %}
+                        {% set icon = 'fa-triangle-exclamation text-warning-500' %}
                     {% elseif type == 'info' %}
-                        {% set textClass = 'text-blue-500' %}
-                        {% set icon = 'fa-circle-info text-blue-500' %}
+                        {% set textClass = 'text-primary-500' %}
+                        {% set icon = 'fa-circle-info text-primary-500' %}
                     {% endif %}
                     <div class="flex flex-row items-baseline text-sm">
                         <i class="w-4 mr-1 fa-solid text-center {{ icon }}"></i>
@@ -30,7 +30,7 @@
         </div>
         <div class="flex ml-2">
             <button id="close-flash-message-{{ id }}">
-                <i class="fa-solid fa-times text-gray-500 hover:text-gray-700"></i>
+                <i class="fa-solid fa-times text-secondary-500 hover:text-secondary-700"></i>
             </button>
         </div>
     </div>
