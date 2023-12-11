@@ -12,7 +12,10 @@ class UserFixtures extends Fixture
     public function __construct(private readonly UserPasswordHasherInterface $passwordHasher) {}
 
     public function load(ObjectManager $manager): void
-    {   /*
+    {
+        $this->addAdmin($manager);
+
+        /*
         $faker = \Faker\Factory::create('fr_FR');
         $pwd = 'test';
 
@@ -74,5 +77,19 @@ class UserFixtures extends Fixture
         }*/
 
         $manager->flush();
+    }
+
+    private function addAdmin(ObjectManager $manager): void
+    {
+        $user = (new User())
+            ->setFirstName('Admin')
+            ->setLastName('Admin')
+            ->setPhoneNumber('0102030405')
+            ->setEmail('admin@easyvows.com')
+            ->setRoles(['ROLE_ADMIN']);
+
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'admin'));
+
+        $manager->persist($user);
     }
 }
