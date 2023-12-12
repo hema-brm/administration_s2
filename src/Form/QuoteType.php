@@ -23,13 +23,13 @@ class QuoteType extends AbstractType
             ->add('discount')
             ->add('tva')
             ->add('customer')
-            ->add('products');
-            //->add('products', EntityType::class, [
-            //     'class' => 'App\Entity\Product',
-            //     'choice_label' => 'name',
-            //     'multiple' => true,
-            //     'expanded' => true,
-            // ]);
+            
+            ->add('products', EntityType::class, [
+                'class' => 'App\Entity\Product',
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+            ]);
         ;
     }
 

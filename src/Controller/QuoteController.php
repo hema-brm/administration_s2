@@ -32,7 +32,7 @@ class QuoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle products association
             foreach ($quote->getProducts() as $product) {
-                $product->addQuote($quote);
+                $product->setQuote($quote);
                 $entityManager->persist($product);
             }
 
@@ -41,6 +41,7 @@ class QuoteController extends AbstractController
 
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
+        
 
         return $this->render('quote/new.html.twig', [
             'quote' => $quote,
@@ -65,7 +66,7 @@ class QuoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle products association
             foreach ($quote->getProducts() as $product) {
-                $product->addQuote($quote);
+                $product->setQuote($quote);
                 $entityManager->persist($product);
             }
 

@@ -1,5 +1,4 @@
-{% extends 'base.html.twig' %}
-
+{% extends 'front/base.html.twig' %}
 {% block title %}Quote{% endblock %}
 
 {% block body %}
@@ -38,6 +37,21 @@
             <tr>
                 <th>Tva</th>
                 <td>{{ quote.tva }}</td>
+            </tr>
+            <tr>
+                <th>Products</th>
+                <td>
+                    {% if quote.products is not empty %}
+                        <ul>
+                            {% for product in quote.products %}
+                                <li>{{ product.name }}</li>
+                                
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No products associated with this quote.
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>

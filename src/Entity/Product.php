@@ -36,6 +36,22 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Entreprise $company = null;
+    
+    #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Quote $quote = null;
+
+    public function getQuote(): ?Quote
+    {
+        return $this->quote;
+    }
+
+    public function setQuote(?Quote $quote): self
+    {
+        $this->quote = $quote;
+
+        return $this;
+    }
 
     public function __construct()
     {
@@ -144,6 +160,10 @@ class Product
         $this->company = $company;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
 

@@ -44,7 +44,7 @@ class Quote
     
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: "quote", orphanRemoval: true)]
     private Collection $products;
-
+    
     public function __construct()
     {
         $this->products = new ArrayCollection();
