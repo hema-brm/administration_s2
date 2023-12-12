@@ -77,12 +77,68 @@
     }
 
     .theme-blue {
-        --color-primary: var(--color-primary-500);
-        --color-secondary: var(--color-secondary-500);
-        --color-success: var(--color-success-500);
-        --color-warning: var(--color-warning-500);
-        --color-danger: var(--color-danger-500);
-        --color-info: var(--color-info-500);
+        --color-primary-50: 239, 246, 255;
+        --color-primary-100: 219, 234, 254;
+        --color-primary-200: 191, 219, 254;
+        --color-primary-300: 147, 197, 253;
+        --color-primary-400: 96, 165, 250;
+        --color-primary-500: 59, 130, 246;
+        --color-primary-600: 37, 99, 235;
+        --color-primary-700: 29, 78, 216;
+        --color-primary-800: 30, 64, 175;
+        --color-primary-900: 30, 58, 138;
+    }
+
+    .theme-yellow {
+        --color-primary-50: 255, 253, 231;
+        --color-primary-100: 254, 251, 219;
+        --color-primary-200: 253, 243, 188;
+        --color-primary-300: 249, 229, 137;
+        --color-primary-400: 245, 213, 77;
+        --color-primary-500: 242, 185, 0;
+        --color-primary-600: 202, 149, 0;
+        --color-primary-700: 161, 107, 0;
+        --color-primary-800: 121, 68, 0;
+        --color-primary-900: 92, 39, 0;
+    }
+
+    .theme-green {
+        --color-primary-50: 236, 253, 245;
+        --color-primary-100: 209, 250, 229;
+        --color-primary-200: 167, 243, 208;
+        --color-primary-300: 110, 231, 183;
+        --color-primary-400: 52, 211, 153;
+        --color-primary-500: 16, 185, 129;
+        --color-primary-600: 5, 150, 105;
+        --color-primary-700: 4, 120, 87;
+        --color-primary-800: 6, 95, 70;
+        --color-primary-900: 6, 78, 59;
+    }
+
+    .theme-red {
+        --color-primary-50: 254, 242, 242;
+        --color-primary-100: 254, 226, 226;
+        --color-primary-200: 254, 202, 202;
+        --color-primary-300: 252, 165, 165;
+        --color-primary-400: 245, 101, 101;
+        --color-primary-500: 214, 48, 49;
+        --color-primary-600: 185, 28, 28;
+        --color-primary-700: 153, 27, 28;
+        --color-primary-800: 127, 29, 33;
+        --color-primary-900: 102, 29, 37;
+    }
+
+    .theme-orange {
+        --color-primary-50: 255, 247, 237;
+        --color-primary-100: 254, 236, 200;
+        --color-primary-200: 252, 217, 164;
+        --color-primary-300: 250, 190, 127;
+        --color-primary-400: 245, 146, 73;
+        --color-primary-500: 235, 120, 0;
+        --color-primary-600: 210, 103, 0;
+        --color-primary-700: 172, 74, 0;
+        --color-primary-800: 140, 58, 0;
+        --color-primary-900: 115, 47, 0;
     }
 
     .theme-pink {
@@ -96,19 +152,6 @@
         --color-primary-700: 190, 24, 93;
         --color-primary-800: 157, 23, 77;
         --color-primary-900: 131, 24, 67;
-    }
-
-    .theme-purple {
-        --color-primary-50: 251, 245, 255;
-        --color-primary-100: 245, 233, 253;
-        --color-primary-200: 237, 218, 252;
-        --color-primary-300: 221, 181, 252;
-        --color-primary-400: 196, 145, 252;
-        --color-primary-500: 167, 139, 250;
-        --color-primary-600: 139, 92, 246;
-        --color-primary-700: 124, 58, 237;
-        --color-primary-800: 109, 40, 217;
-        --color-primary-900: 91, 33, 182;
     }
 
     .theme-indigo {
@@ -137,5 +180,8 @@
         --color-primary-900: 90, 51, 0;
     }
 
-    /* You can add your preferred themes here ;) */
+    /**
+        You can add your preferred themes here ;)
+        And don't forget to add the class to `tailwind.config.js` safelist option
+    */
 }

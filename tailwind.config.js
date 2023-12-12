@@ -4,6 +4,25 @@ module.exports = {
     "./assets/**/*.js",
     "./templates/**/*.html.twig",
   ],
+  purge: {
+    options: {
+        safelist: [
+            'theme-blue',
+            'theme-yellow',
+            'theme-green',
+            'theme-red',
+            'theme-teal',
+            'theme-orange',
+            'theme-gold',
+            'theme-silver',
+            'theme-black',
+            'theme-pink',
+            'theme-purple',
+            'theme-indigo',
+            'theme-coffee',
+        ],
+    },
+  },
   theme: {
     extend: {
       colors: {
