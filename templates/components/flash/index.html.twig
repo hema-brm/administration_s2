@@ -18,8 +18,8 @@
                         {% set textClass = 'text-warning-700' %}
                         {% set icon = 'fa-triangle-exclamation text-warning-500' %}
                     {% elseif type == 'info' %}
-                        {% set textClass = 'text-primary-500' %}
-                        {% set icon = 'fa-circle-info text-primary-500' %}
+                        {% set textClass = 'text-info-600' %}
+                        {% set icon = 'fa-circle-info text-info-600' %}
                     {% endif %}
                     <div class="flex flex-row items-baseline text-sm">
                         <i class="w-4 mr-1 fa-solid text-center {{ icon }}"></i>
@@ -40,14 +40,40 @@
     const flashMessage = document.getElementById('flash-message-{{ id }}');
     const closeFlashMessage = document.getElementById('close-flash-message-{{ id }}');
     const classAfterClosing = 'translate-x-96';
+    let isHovered = false;
 
-    // After 7 seconds, the flash message is hidden automatically
-    setTimeout(() => {
-        flashMessage.classList.add(classAfterClosing);
-    }, 7000);
+    function hideFlashMessage(time) {
+        setTimeout(() => {
+            // If the flash message is hovered, do not hide it
+            if (isHovered) {
+                return;
+            }
+            // Otherwise, hide it
+            flashMessage.classList.add(classAfterClosing);
+        }, time);
+    }
 
+    // After 7 seconds, the flash message is hidden automatically at the first time
+    window.onload = () => {
+        hideFlashMessage(7000);
+    };
+
+    // But if the flash message is hovered, it is not hidden
+    flashMessage.addEventListener('mouseover', () => {
+        isHovered = true;
+        flashMessage.classList.remove(classAfterClosing);
+    });
+
+    // And when the mouse leaves the flash message, it is hidden after 2 seconds
+    flashMessage.addEventListener('mouseout', () => {
+        isHovered = false;
+       hideFlashMessage(2000);
+    });
+
+    // When the close button is clicked, the flash message is hidden immediately
     closeFlashMessage.addEventListener('click', () => {
-        flashMessage.classList.add(classAfterClosing);
+        isHovered = false;
+        hideFlashMessage(0);
     });
 </script>
 {% endif %}
