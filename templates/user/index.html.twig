@@ -1,0 +1,68 @@
+{% from "@components/macros/content.html.twig" import header %}
+
+{% extends 'front/base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Liste des employés',
+    }) }}
+
+    
+    <div class="px-4">
+        <div class="flex justify-end py-2">
+            <a href="{{ path('app_user_new') }}">
+                <button class="group rounded p-2 bg-blue-50 text-blue-500 text-sm transition-all ease-in-out hover:bg-blue-500 hover:text-white">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nouvel employé</span>
+                </button>
+            </a>
+        </div>
+
+        {% set cellPadding = 'p-4 px-2' %}
+        {% set borderClass = 'border-b border-b-gray-200' %}
+
+    <table class="w-full border shadow-sm">
+        <thead>
+            <tr class="{{ borderClass }}">
+                <th class="{{ cellPadding }} text-right">#</th>
+                <th class="{{ cellPadding }} text-left">Email</th>
+                <th class="{{ cellPadding }} text-left">FirstName</th>
+                <th class="{{ cellPadding }} text-left">LastName</th>
+                <th class="{{ cellPadding }} text-left">PhoneNumber</th>
+                <th class="{{ cellPadding }} text-left">Roles</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr data-href="{{ path('app_user_show', {'id': user.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
+                <td class="{{ cellPadding }} text-left">{{ user.firstName }}</td>
+                <td class="{{ cellPadding }} text-left">{{ user.lastName }}</td>
+                <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
+                <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td class="{{ cellPadding }} text-right text-gray-400">
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">
+                        <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+     </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            (new Link('tr[data-href]'));
+        });
+    </script>
+{% endblock %}

@@ -1,34 +1,51 @@
 {% extends 'front/base.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
+
 
 {% block title %}Payment index{% endblock %}
 
 {% block body %}
-    <div class="flex-col justify-center items-center h-screen mx-20 my-5">
-      
-        <h1 class="text-2xl font-bold mb-4">Liste des paiements:</h1>
-        <div class="">
-          <a href="{{ path('app_payment_new') }}" class="bg-primary-500 text-white px-4 py-2 rounded-md mt-4">Ajouter</a>
-        </div>
-        <div class="bg-secondary-100 p-8 rounded-lg shadow-md mt-5">
-            <table class="min-w-full">
+    {{ header({
+            text: 'Liste des paiements',
+    }) }}
+    <div class="px-4">
+            <div class="flex flex-row justify-between py-2">
+                    {{ form_search_macro({
+                        id: 'form-search-customer',
+                        action: path('app_customer_index'),
+                        placeholder: 'Rechercher',
+                        name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
+                        value: searchTerm|default(''),
+                    }) }}
+                    <a href="{{ path('app_payment_new') }}">
+                        <button class="group rounded p-2 bg-blue-50 text-blue-500 text-sm transition-all ease-in-out hover:bg-blue-500 hover:text-white">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Nouveau paiement</span>
+                        </button>
+                    </a>
+            </div>
+            {% set cellPadding = 'p-4 px-2' %}
+            {% set borderClass = 'border-b border-b-gray-200' %}
+            <table class="w-full border shadow-sm">
                 <thead>
-                    <tr>
-                        <th class="font-bold">Client</th>
-                        <th class="font-bold">Status</th>
-                        <th class="font-bold">DatePaiement</th>
-                        <th class="font-bold">DateEcheance</th>
-                        <th class="font-bold">Numéro Facture</th>
-                        <th class="font-bold">Actions</th>
+                    <tr class="{{ borderClass }}">
+                        <th class="{{ cellPadding }} text-left">Client</th>
+                        <th class="{{ cellPadding }} text-left">Status</th>
+                        <th class="{{ cellPadding }} text-left">DatePaiement</th>
+                        <th class="{{ cellPadding }} text-left">DateEcheance</th>
+                        <th class="{{ cellPadding }} text-left">Numéro Facture</th>
+                        <th class="{{ cellPadding }} text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for payment in payments %}
-                        <tr>
-                            <td class="border border-slate-300">{{ payment.bill.nomClient }}</td>
-                            <td class="border border-slate-300">{{ payment.status }}</td>
-                            <td class="border border-slate-300">{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
-                            <td class="border border-slate-300">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
-                            <td class="border border-slate-300">{{ payment.bill.numeroFacture }}</td>
+                        <tr class="{{ borderClass }}">
+                            <td class="{{ cellPadding }} text-left">{{ payment.bill.nomClient }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.status }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.bill.numeroFacture }}</td>
                             <td>
                                 <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-primary-500">Détails</a>
                                 <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-primary-500 ml-2">Modifier</a>
@@ -43,6 +60,6 @@
             </table>
 
             
-        </div>
+        
     </div>
 {% endblock %}
