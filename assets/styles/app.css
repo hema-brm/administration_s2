@@ -3,18 +3,17 @@
 @tailwind utilities;
 
 @layer base {
-    :root, .theme-blue {
-        /* Variants of blue */
-        --color-primary-50: 239, 246, 255;
-        --color-primary-100: 219, 234, 254;
-        --color-primary-200: 191, 219, 254;
-        --color-primary-300: 147, 197, 253;
-        --color-primary-400: 96, 165, 250;
-        --color-primary-500: 59, 130, 246;
-        --color-primary-600: 37, 99, 235;
-        --color-primary-700: 29, 78, 216;
-        --color-primary-800: 30, 64, 175;
-        --color-primary-900: 30, 58, 138;
+    :root {
+        --color-primary-50: 248, 250, 252;
+        --color-primary-100: 241, 245, 249;
+        --color-primary-200: 226, 232, 240;
+        --color-primary-300: 203, 213, 225;
+        --color-primary-400: 148, 163, 184;
+        --color-primary-500: 100, 116, 139;
+        --color-primary-600: 71, 85, 105;
+        --color-primary-700: 51, 65, 85;
+        --color-primary-800: 30, 41, 59;
+        --color-primary-900: 15, 23, 42;
 
         /* Variants of gray */
         --color-secondary-50: 249, 250, 251;
@@ -77,6 +76,15 @@
         --color-info-900: 3, 78, 107;
     }
 
+    .theme-blue {
+        --color-primary: var(--color-primary-500);
+        --color-secondary: var(--color-secondary-500);
+        --color-success: var(--color-success-500);
+        --color-warning: var(--color-warning-500);
+        --color-danger: var(--color-danger-500);
+        --color-info: var(--color-info-500);
+    }
+
     .theme-pink {
         --color-primary-50: 252, 242, 250;
         --color-primary-100: 252, 231, 243;
@@ -128,4 +136,6 @@
         --color-primary-800: 115, 66, 0;
         --color-primary-900: 90, 51, 0;
     }
+
+    /* You can add your preferred themes here ;) */
 }
