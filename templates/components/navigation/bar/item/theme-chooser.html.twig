@@ -1,0 +1,91 @@
+{% set availableThemes = {
+    'default': {
+        'label': 'Default',
+        'color': '#718096',
+        'textColor': '#fff'
+    },
+    'blue': {
+        'label': 'Blue',
+        'color': '#4299e1',
+        'textColor': '#fff'
+    },
+    'yellow': {
+        'label': 'Yellow',
+        'color': '#ecc94b',
+        'textColor': '#fff'
+    },
+    'green': {
+        'label': 'Green',
+        'color': '#48bb78',
+        'textColor': '#fff'
+    },
+    'red': {
+        'label': 'Red',
+        'color': '#f56565',
+        'textColor': '#fff'
+    },
+    'orange': {
+        'label': 'Orange',
+        'color': '#ed8936',
+        'textColor': '#fff'
+    },
+    'pink': {
+        'label': 'Pink',
+        'color': '#ed64a6',
+        'textColor': '#fff'
+    },
+    'indigo': {
+        'label': 'Indigo',
+        'color': '#667eea',
+        'textColor': '#fff'
+    },
+    'coffee': {
+        'label': 'Coffee',
+        'color': '#e69c41',
+        'textColor': '#fff'
+    },
+} %}
+
+{% embed "@components/dropdown/index.html.twig" with {
+    id: 'theme_chooser'
+} %}
+    {% block toggle %}
+        <i class="fa-solid fa-cog"></i>
+    {% endblock %}
+    {% block content %}
+        <div class="w-36 p-2 bg-white text-secondary-900 rounded border border-primary-200 text-xs">
+            <h3 class="font-semibold ml-1">Changez le theme</h3>
+            {% for theme, options in availableThemes %}
+                <div id="choose-theme-{{ theme }}" class="p-1 hover:bg-secondary-100 rounded-sm cursor-pointer">
+                    <button>
+                        <i style="color: {{ options.color }}" class="fa-solid fa-circle"></i>
+                        <span>{{ options.label }}</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endblock %}
+{% endembed %}
+
+
+<script>
+    const themeChooser = document.getElementById('dropdown_content_theme_chooser');
+    const themeChooserButtons = themeChooser.querySelectorAll('[id^="choose-theme-"]');
+
+    const body = document.querySelector('body');
+
+    themeChooserButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            let theme = button.id.replace('choose-theme-', '');
+            // remove body class starting with theme-
+            body.classList.forEach(className => {
+                if (className.startsWith('theme-')) {
+                    body.classList.remove(className);
+                }
+            });
+            theme = `theme-${theme}`;
+            body.classList.add(theme);
+            localStorage.setItem('theme', theme);
+        });
+    });
+</script>

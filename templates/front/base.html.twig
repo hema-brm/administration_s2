@@ -15,7 +15,7 @@
         {% endblock %}
         
     </head>
-    <body class="text-secondary-700 theme-pink">
+    <body class="hidden text-secondary-700">
         {% block navbar %}
             {% include "@components/navigation/bar/index.html.twig" %}
         {% endblock %}
@@ -30,6 +30,13 @@
                 {% block body %}{% endblock %}
             </div>
         </div>
-        
+        <script>
+            // only show body when all html are loaded
+            document.querySelector('body').classList.remove('hidden');
+            const theme = localStorage.getItem('theme');
+            if (theme) {
+                document.querySelector('body').classList.add(theme);
+            }
+        </script>
     </body>
 </html>

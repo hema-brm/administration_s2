@@ -1,0 +1,26 @@
+{% set id = id|default(uniqid()) %}
+
+{% set toggleId = "dropdown_toggle_" ~ id %}
+{% set contentId = "dropdown_content_" ~ id %}
+
+<div class="relative">
+    <div id="{{ toggleId }}">
+        {% block toggle %}
+        {% endblock %}
+    </div>
+    {# A dropdown on the bottom #}
+    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+    const {{ toggleId }} = document.getElementById("{{ toggleId }}");
+    const {{ contentId }} = document.getElementById("{{ contentId }}");
+
+    {{ toggleId }}.addEventListener('click', function () {
+        {{ contentId }}.classList.toggle('scale-0');
+        {{ contentId }}.classList.toggle('scale-100');
+    });
+</script>
