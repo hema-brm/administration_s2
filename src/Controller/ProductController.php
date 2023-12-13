@@ -46,13 +46,20 @@ class ProductController extends AbstractController
     }
 
     
-    #[Route('/delete', name: 'app_products_deleteAll', methods: ['POST'])]
-    #[Security('product.getCompanyId() === user.getEntreprise()')]
-    public function deleteProductsList(Request $request, ProductRepository $productRepository): Response
+    #[Route('/delete', name: 'app_product_deleteAll', methods: ['POST'])]
+    public function deleteProductsList(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
     {
-        $productDatas = $request->request->all();
-        //a finir
-        
+        $productDatasJSON = $request->getContent();
+        $productDatas = json_decode($productDatasJSON, true);
+
+        foreach($productDatas as $id){
+            $product = $productRepository->find($id);
+            if($product)
+                $entityManager->remove($product);
+        }
+        $entityManager->flush();
+        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+
     }
 
 

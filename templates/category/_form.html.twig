@@ -1,0 +1,16 @@
+{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
+{% from "@components/macros/content.html.twig" import button_macro %}
+
+{{ form_start(form) }}
+    <div class='input-wrapper'>
+       {{form_widget_macro({item: form.name})}}
+    </div>
+
+    <div class="flex flex-row-reverse">
+        {{ button_macro({
+            text: button_label|default('Enregistrer'),
+            custom_classes: button_classes,
+        }) }}
+    </div>
+    
+{{ form_end(form) }}

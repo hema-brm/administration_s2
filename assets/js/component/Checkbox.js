@@ -1,5 +1,4 @@
-// Récupérer toutes les cases à cocher des produits
-const productCheckboxes = document.querySelectorAll('.product-checkbox');
+/*const productCheckboxes = document.querySelectorAll('.product-checkbox');
 const checkboxForAllProducts = document.querySelector('.products-checkbox');
 
 const deleteButton = document.getElementById('delete');
@@ -7,6 +6,65 @@ const modal_delete = document.getElementById('modal_delete');
 const cancelDeleteButton = document.getElementById('cancelDelete');
 const confirmDeleteButton = document.getElementById('confirmDelete');
 //coche ou decoche les checkbox en fonction de la checkbox qui selectionne tout
+*/
+class Checkbox{
+    constructor(checkboxForAll, checkboxes){
+        this.checkboxSelectAll = document.querySelector(checkboxForAll);
+        this.checkboxes = document.querySelectorAll(checkboxes);
+        this.onInit();
+    }
+
+    onInit =()=>{
+        this.checkboxSelectAll.addEventListener('change', this.selectAllCheckBoxes);
+
+        this.checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', this.selectAllCheckBoxes);
+        });
+
+    }
+
+    selectAllCheckBoxes =()=>{
+        const clickedCheckBox = event.target;
+
+        if(clickedCheckBox == this.checkboxSelectAll && clickedCheckBox.checked){
+            this.checkboxes.forEach((checkbox) => {
+                if(!checkbox.checked){
+                    checkbox.checked = true;
+                }
+            });
+        }
+        else if(clickedCheckBox == this.checkboxSelectAll && !clickedCheckBox.checked){
+            this.checkboxes.forEach((checkbox) => {
+                if(checkbox.checked){
+                    checkbox.checked = false;
+                }
+            });
+        }
+        else if(clickedCheckBox != this.checkboxSelectAll && !clickedCheckBox.checked){
+            if(this.checkboxSelectAll.checked){
+                this.checkboxSelectAll.checked = false;
+            }
+        }
+    
+    }
+
+    getProductsID =()=>{
+        let productsID = [];
+        this.checkboxes.forEach((checkbox) => {
+            if(checkbox.checked){
+                 productsID.push(parseInt(checkbox.getAttribute('name')));
+                 console.log(typeof parseInt(checkbox.getAttribute('name')));
+            }
+        });
+
+        return productsID;
+    }
+
+}
+
+export default Checkbox;
+
+/*
 function selectAllCheckBoxes(){
     const clickedCheckBox = event.target;
 
@@ -71,8 +129,6 @@ function getCheckBoxProductID(){
             }
         });
         return productsID;
-    
-
 }
 // Afficher la modale
 deleteButton.addEventListener('click', () => {
@@ -104,3 +160,4 @@ productCheckboxes.forEach(checkbox => {
     checkbox.addEventListener('change', selectAllCheckBoxes);
 });
 
+*/

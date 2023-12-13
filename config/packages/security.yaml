@@ -43,7 +43,7 @@ security:
     access_control:
         - { path: ^/admin, roles: IUserRole::ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/products, roles: IUserRole::ROLE_COMPANY }
+        - { path: ^/products, roles: ROLE_ENTREPRISE }
 
 when@test:
     security:

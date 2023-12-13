@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Category{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle catégorie</h1>
+    <div class="p-4 shadow-md w-1/2 border rounded">
+        {% include('category/_form.html.twig') with {
+            button_label: 'Ajouter',
+            button_classes: [
+                'rounded',
+                'p-2',
+                'bg-blue-500',
+                'text-white',
+                'text-sm',
+                'transition-all',
+                'ease-out',
+                'hover:bg-blue-600',
+                'ml-2',
+            ]
+        } %}
+    </div>
+
+    <a href="{{ path('app_product_new') }}">back</a>
+{% endblock %}

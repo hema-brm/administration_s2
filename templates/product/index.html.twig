@@ -1,5 +1,6 @@
 {% extends 'front/base.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {% block title %}Produit{% endblock %}
@@ -21,16 +22,17 @@
              {{ button_macro({
                 id: 'delete',
                 custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
-                icon: "fa-trash",
+                icon: "fa-trash"
             }) }}        
         </div>
+        {{include('product/modal_delete.html.twig')}}
         
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
         <table class="w-full border shadow-sm">
             <thead>
                 <tr class="{{ borderClass }}">
-                    <th class="{{ cellPadding }} text-right">#</th>
+                    <th class="{{ cellPadding }} text-right"><input type="checkbox" class="products-checkbox"></th>
                     <th class="{{ cellPadding }} text-left">Reference</th>
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
@@ -41,7 +43,8 @@
             <tbody>
             {% for product in products %}
                 <tr data-href="{{ path('app_product_show', {'id': product.id}) }}" class="{{ borderClass }} hover:bg-secondary-50 text-sm">
-                    <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                    <td class="{{ cellPadding }} text-right"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}"> </td>
+
                     <td class="{{ cellPadding }} text-left">{{ product.reference }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.name }}</td>
                     <td class="{{ cellPadding }} text-left">{{ product.category }}</td>
@@ -54,7 +57,14 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">Pas de résultat</td>
+                    <td colspan="7">
+                        {{ alert({
+                            text: 'Aucun produit enregistré',
+                            color: 'warning',
+                            icon: 'fa-circle-info',
+                            variant: 'small',
+                        }) }}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -1,0 +1,61 @@
+{% extends 'front/base.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import button_macro %}
+
+{% block body %}
+ {{ header({
+        text: 'Liste des catégories',
+    }) }}
+
+    <div class="px-4">
+        <div class="flex justify-end py-2 gap-2">
+            {{ button_macro({
+                custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
+                text:  "Nouvelle catégorie",
+                icon: "fa-plus",
+                route : path('app_category_new')
+            }) }}
+             
+             {{ button_macro({
+                id: 'delete',
+                custom_classes: ["group", "rounded", "p-2", "bg-red-50", "text-red-500",  "transition-all", "ease-in-out", "hover:bg-red-500", "hover:text-white"],
+                icon: "fa-trash",
+            }) }}        
+        </div>
+        
+        {% set cellPadding = 'p-4 px-2' %}
+        {% set borderClass = 'border-b border-b-gray-200' %}
+        <table class="w-full border shadow-sm">
+            <thead>
+                <tr class="{{ borderClass }}">
+                    <th class="{{ cellPadding }} text-right">#</th>
+                    <th class="{{ cellPadding }} text-left">Nom</th>
+                    <th class="{{ cellPadding }}"></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr data-href="{{ path('app_category_show', {'id': category.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                    <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ category.name }}</td>
+                    <td class="{{ cellPadding }} text-right text-gray-400">
+                        <a href="{{ path('app_category_edit', {'id': category.id}) }}">
+                            <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Pas de résultat</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+        </tbody>
+    </table>
+
+{% endblock %}
