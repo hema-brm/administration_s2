@@ -1,26 +1,26 @@
 {% set availableThemes = {
     'default': {
-        'label': 'Default',
+        'label': 'Gris (défaut)',
         'color': '#718096',
         'textColor': '#fff'
     },
     'blue': {
-        'label': 'Blue',
+        'label': 'Bleu',
         'color': '#4299e1',
         'textColor': '#fff'
     },
     'yellow': {
-        'label': 'Yellow',
+        'label': 'Jaune',
         'color': '#ecc94b',
         'textColor': '#fff'
     },
     'green': {
-        'label': 'Green',
+        'label': 'Vert',
         'color': '#48bb78',
         'textColor': '#fff'
     },
     'red': {
-        'label': 'Red',
+        'label': 'Rouge',
         'color': '#f56565',
         'textColor': '#fff'
     },
@@ -30,7 +30,7 @@
         'textColor': '#fff'
     },
     'pink': {
-        'label': 'Pink',
+        'label': 'Rose',
         'color': '#ed64a6',
         'textColor': '#fff'
     },
@@ -40,7 +40,7 @@
         'textColor': '#fff'
     },
     'coffee': {
-        'label': 'Coffee',
+        'label': 'Café',
         'color': '#e69c41',
         'textColor': '#fff'
     },
@@ -50,7 +50,9 @@
     id: 'theme_chooser'
 } %}
     {% block toggle %}
-        <i class="fa-solid fa-cog"></i>
+        <div class="transform rotate-0 hover:rotate-45 duration-300 hover:bg-primary-600 px-1 rounded-full">
+            <i class="fa-solid fa-palette"></i>
+        </div>
     {% endblock %}
     {% block content %}
         <div class="w-36 p-2 bg-white text-secondary-900 rounded border border-primary-200 text-xs">
