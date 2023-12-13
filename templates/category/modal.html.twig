@@ -1,0 +1,50 @@
+{% block body %}
+
+<div>
+
+    <!-- Modale -->
+    <div id="category_modal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2">
+            <!-- Contenu de la modale -->
+            <h2 class="text-lg font-bold mb-4">Catégorie</h2>
+  
+            {% set cellPadding = 'p-4 px-2' %}
+            {% set borderClass = 'border-b border-b-gray-200' %}
+            <table class="w-full border shadow-sm">
+                <thead>
+                    <tr class="{{ borderClass }}">
+                        <th class="{{ cellPadding }} text-right">#</th>
+                        <th class="{{ cellPadding }} text-left">Nom</th>
+                        <th class="{{ cellPadding }}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr data-href="{{ path('app_category_show', {'id': category.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                        <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                        <td class="{{ cellPadding }} text-left">{{ category.name }}</td>
+                        <td class="{{ cellPadding }} text-right text-gray-400">
+                            <a href="{{ path('app_category_edit', {'id': category.id}) }}">
+                                <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">Pas de résultat</td>
+                    </tr>
+                {% endfor %}
+            {% include "@components/input/text/index.html.twig" with {
+                'label': 'Ajout catégorie',
+                'full': false,
+            } %}
+
+            <!-- Bouton pour fermer la modale -->
+            <button id="category_close_button" class="btn-close">
+                Fermer
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

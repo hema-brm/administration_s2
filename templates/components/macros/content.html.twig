@@ -11,6 +11,7 @@
     {% set text = params.text|default('') %}
     {% set route = params.route|default('#') %}
     {% set has_action = route is not empty %}
+    {% set onclick = params.onclick|default('') %}
     {% set custom_classes = params.custom_classes|default([]) %}
     {% set icon = params.icon|default('') %}
     
@@ -31,7 +32,7 @@
         <a href="{{ route }}">
     {% endif %}
 
-        <button id="{{id}}" class="{{ button_classes }}">
+        <button id="{{id}}" class="{{ button_classes }} onclick="{{onclick}}" ">
             <i class="fa-solid {{ icon }}"></i>
             {% if text is not empty %}
                 {{ text }}
