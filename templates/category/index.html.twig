@@ -2,20 +2,18 @@
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
-{% block title %}Produit{% endblock %}
-
 {% block body %}
  {{ header({
-        text: 'Liste des produits',
+        text: 'Liste des catégories',
     }) }}
 
     <div class="px-4">
         <div class="flex justify-end py-2 gap-2">
             {{ button_macro({
                 custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-blue-500", "hover:text-white"],
-                text:  "Nouveau produit",
+                text:  "Nouvelle catégorie",
                 icon: "fa-plus",
-                route : path('app_product_new')
+                route : path('app_category_new')
             }) }}
              
              {{ button_macro({
@@ -24,35 +22,28 @@
                 icon: "fa-trash",
             }) }}        
         </div>
-        {{include('product/modal_delete.html.twig')}}
         
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-gray-200' %}
         <table class="w-full border shadow-sm">
             <thead>
                 <tr class="{{ borderClass }}">
-                    <th class="{{ cellPadding }} text-right"><input type="checkbox" class="products-checkbox"></th>
-                    <th class="{{ cellPadding }} text-left">Reference</th>
+                    <th class="{{ cellPadding }} text-right">#</th>
                     <th class="{{ cellPadding }} text-left">Nom</th>
-                    <th class="{{ cellPadding }} text-left">Catégorie</th>
-                    <th class="{{ cellPadding }} text-left">Prix</th>
                     <th class="{{ cellPadding }}"></th>
                 </tr>
             </thead>
             <tbody>
-            {% for product in products %}
-                <tr data-href="{{ path('app_product_show', {'id': product.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
-                    <td class="{{ cellPadding }} text-right"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}"> </td>
-
-                    <td class="{{ cellPadding }} text-left">{{ product.reference }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.name }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.category }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.price/100 }}</td>
+            {% for category in categories %}
+                <tr data-href="{{ path('app_category_show', {'id': category.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                    <td class="{{ cellPadding }} text-right">{{ loop.index }}</td>
+                    <td class="{{ cellPadding }} text-left">{{ category.name }}</td>
                     <td class="{{ cellPadding }} text-right text-gray-400">
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}">
+                        <a href="{{ path('app_category_edit', {'id': category.id}) }}">
                             <i class="fa-solid fa-edit hover:text-yellow-500"></i>
                         </a>
                     </td>
+
                 </tr>
             {% else %}
                 <tr>
