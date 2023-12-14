@@ -49,8 +49,14 @@ class PaginatorHelper {
     }
 
 
-    private function setTotal() {
+    private function setTotal(): void
+    {
         $this->total = ceil($this->itemCount / $this->limit);
+    }
+
+    public function getOffset(): int
+    {
+        return ($this->current - 1) * $this->limit;
     }
 
 }
