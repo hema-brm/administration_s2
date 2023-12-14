@@ -7,8 +7,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use App\Entity\Product;
+use App\Entity\ProductQuote;
+use App\Form\ProductQuoteType;
 
 class QuoteType extends AbstractType
 {
@@ -23,14 +26,12 @@ class QuoteType extends AbstractType
             ->add('discount')
             ->add('tva')
             ->add('customer')
-            
-            ->add('products', EntityType::class, [
-                'class' => 'App\Entity\Product',
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true,
+            ->add('productQuotes', CollectionType::class, [
+                'entry_type' => ProductQuoteType::class,
+                'allow_add' => true,
+                'by_reference' => false,
             ]);
-        ;
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void

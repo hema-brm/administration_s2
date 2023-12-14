@@ -40,6 +40,9 @@ class Product
     #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Quote $quote = null;
+    
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
 
     public function getQuote(): ?Quote
     {
@@ -56,6 +59,7 @@ class Product
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
+
     }
     
     public function getId(): ?int
@@ -158,6 +162,17 @@ class Product
     public function setCompanyId(?Entreprise $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

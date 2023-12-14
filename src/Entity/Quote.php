@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\QuoteRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,50 +22,69 @@ class Quote
     #[ORM\Column(length: 255)]
     private ?string $quote_number = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $quote_issuance_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: 'date', nullable: true)]
     private ?\DateTimeInterface $expiry_date = null;
 
     #[ORM\Column]
     private ?float $total_price = null;
-    
-    #[ORM\Column(nullable:true)]
+
+    #[ORM\Column(nullable: true)]
     private ?float $discount = null;
-    
-    #[ORM\Column(nullable:true)]
+
+    #[ORM\Column(nullable: true)]
     private ?float $tva = null;
 
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
-    
+
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: "quote", orphanRemoval: true)]
     private Collection $products;
+
+    #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", orphanRemoval: true, cascade: ["persist", "remove"])]
+    private Collection $productQuotes;
+
     
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->productQuotes = new ArrayCollection();
     }
 
-    public function getProducts(): Collection
+    public function getProductQuotes(): Collection
     {
-        return $this->products;
+        return $this->productQuotes;
     }
 
-    public function addProduct(Product $product): self
+    /**
+     * @param ProductQuote $productQuote
+     * @return $this
+     */
+    public function addProductQuote(ProductQuote $productQuote): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
+        if (!$this->productQuotes->contains($productQuote)) {
+            $this->productQuotes[] = $productQuote;
+            $productQuote->setQuote($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    /**
+     * @param ProductQuote $productQuote
+     * @return $this
+     */
+    public function removeProductQuote(ProductQuote $productQuote): self
     {
-        $this->products->removeElement($product);
+        if ($this->productQuotes->removeElement($productQuote)) {
+            // set the owning side to null (unless already changed)
+            if ($productQuote->getQuote() === $this) {
+                $productQuote->setQuote(null);
+            }
+        }
 
         return $this;
     }
