@@ -1,5 +1,5 @@
 <?php
-
+//ProductQuote.php
 
 namespace App\Entity;
 
@@ -15,11 +15,11 @@ class ProductQuote
     private $id;
 
 
-    #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy:"productQuotes")]
+    #[ORM\ManyToOne(targetEntity: Quote::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $quote;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy:"productQuotes")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $product;
 
@@ -65,5 +65,9 @@ class ProductQuote
         $this->quantity = $quantity;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->product;
     }
 }

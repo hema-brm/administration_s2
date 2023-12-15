@@ -1,15 +1,15 @@
 <?php
-
+//QuoteType.php
 namespace App\Form;
 
 use App\Entity\Quote;
+use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use App\Entity\Product;
 use App\Entity\ProductQuote;
 use App\Form\ProductQuoteType;
 
@@ -27,11 +27,14 @@ class QuoteType extends AbstractType
             ->add('tva')
             ->add('customer')
             ->add('productQuotes', CollectionType::class, [
+                'label' => 'Products',
                 'entry_type' => ProductQuoteType::class,
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
+                 
             ]);
-        
+    
     }
 
     public function configureOptions(OptionsResolver $resolver): void

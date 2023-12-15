@@ -1,5 +1,5 @@
 <?php
-
+//Product.php
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
@@ -43,7 +43,8 @@ class Product
     
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
-
+    
+    
     public function getQuote(): ?Quote
     {
         return $this->quote;

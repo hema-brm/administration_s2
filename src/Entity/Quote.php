@@ -1,5 +1,5 @@
 <?php
-
+//Quote.php
 namespace App\Entity;
 
 use App\Repository\QuoteRepository;
@@ -41,10 +41,9 @@ class Quote
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: "quote", orphanRemoval: true)]
-    private Collection $products;
+    
 
-    #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", orphanRemoval: true, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", cascade: ["persist", "remove"])]
     private Collection $productQuotes;
 
     
@@ -73,10 +72,6 @@ class Quote
         return $this;
     }
 
-    /**
-     * @param ProductQuote $productQuote
-     * @return $this
-     */
     public function removeProductQuote(ProductQuote $productQuote): self
     {
         if ($this->productQuotes->removeElement($productQuote)) {

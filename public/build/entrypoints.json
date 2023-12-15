@@ -2,12 +2,13 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.b7316bf2.js",
-        "/build/app.92ba849f.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/17.58770bac.css",
-        "/build/app.2e7daac1.css"
+        "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.css",
+        "/build/app.css"
       ]
     }
   }

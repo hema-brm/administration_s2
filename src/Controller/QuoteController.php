@@ -1,5 +1,5 @@
 <?php
-
+//QuoteController.php
 namespace App\Controller;
 
 use App\Entity\Quote;
@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\ProductQuote;
 
 #[Route('/quote')]
 class QuoteController extends AbstractController
@@ -21,33 +22,48 @@ class QuoteController extends AbstractController
             'quotes' => $quoteRepository->findAll(),
         ]);
     }
-
+    
+    #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
     #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $quote = new Quote();
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle products association
-            foreach ($quote->getProducts() as $product) {
-                $product->setQuote($quote);
-                $entityManager->persist($product);
-            }
-
+            // No need to iterate over productQuotes here, Symfony will handle it
             $entityManager->persist($quote);
             $entityManager->flush();
-
+    
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
-        
-
+    
         return $this->render('quote/new.html.twig', [
             'quote' => $quote,
             'form' => $form->createView(),
         ]);
     }
+    
+    #[Route('/{id}/edit', name: 'app_quote_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(QuoteType::class, $quote);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // No need to iterate over productQuotes here, Symfony will handle it
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+        }
+    
+        return $this->render('quote/edit.html.twig', [
+            'quote' => $quote,
+            'form' => $form->createView(),
+        ]);
+    }
+    
 
     #[Route('/{id}', name: 'app_quote_show', methods: ['GET'])]
     public function show(Quote $quote): Response
@@ -57,30 +73,7 @@ class QuoteController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_quote_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(QuoteType::class, $quote);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Handle products association
-            foreach ($quote->getProducts() as $product) {
-                $product->setQuote($quote);
-                $entityManager->persist($product);
-            }
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('quote/edit.html.twig', [
-            'quote' => $quote,
-            'form' => $form->createView(),
-        ]);
-    }
-
+    
 
     #[Route('/{id}', name: 'app_quote_delete', methods: ['POST'])]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response

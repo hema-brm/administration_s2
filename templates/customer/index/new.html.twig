@@ -1,33 +1,26 @@
-{% from "@components/macros/content.html.twig" import header %}
+{# Your Twig template, e.g., quote/new.html.twig #}
 
-{% extends 'front/base.html.twig' %}
+<form method="post">
+    {{ form_start(form) }}
+    
+    {# Other fields... #}
 
-{% block title %}Nouveau client{% endblock %}
-
-{% block body %}
-    {{ header({
-        text: 'Ajouter un nouveau client',
-    }) }}
-
-    <div class="p-4">
-        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
-            <i class="fa-solid fa-arrow-left mr-1"></i>
-            <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
+    {{ form_label(form.productQuotes) }}
+    {{ form_errors(form.productQuotes) }}
+    
+    {# Render each productQuotes entry with its associated ProductQuoteType form fields #}
+    {% for productQuoteForm in form.productQuotes %}
+        <div>
+            {{ form_row(productQuoteForm.quantity) }}
+            {{ form_widget(productQuoteForm) }}
         </div>
-        {% embed "@components/container/form-container.html.twig" %}
-            {% block content %}
-                {% include('@customer/index/_form.html.twig') with {
-                    button_label: 'Ajouter',
-                    button_classes: [
-                        'bg-primary-500',
-                        'text-white',
-                        'hover:bg-primary-600',
-                        'ml-2',
-                    ]
-                } %}
-            {% endblock %}
-        {% endembed %}
-        </div>
-        
-    </div>
-{% endblock %}
+    {% endfor %}
+    
+    {# Allow users to dynamically add/remove productQuotes #}
+    <button type="button" class="add-product">Add Product</button>
+    <button type="button" class="remove-product">Remove Product</button>
+
+    {# Submit button and end of the form #}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
+</form>
