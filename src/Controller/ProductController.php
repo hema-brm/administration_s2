@@ -11,18 +11,56 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Service\Request\PageFromRequestService;
+use App\Service\Request\RequestQueryService;
+use App\Twig\Helper\Paginator\PaginatorHelper;
 
 #[Route('/products')]
 class ProductController extends AbstractController
 {
+    private ?string $searchTerm;
+    private ?int $page;
+
+    public const SEARCH_FORM_NAME = 'search';
+
+    const PAGE_PARAM_NAME = 'page';
+    const LIMIT = 10;
+
+    public function __construct(
+        RequestQueryService $requestQueryService,
+        PageFromRequestService $pageFromRequestService
+    ) {
+        $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
+        $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+    }
+
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
     public function index(Request $request, ProductRepository $productRepository): Response
     {   
+        if ($this->searchTerm) {
+            return $this->search($this->searchTerm, $productRepository);
+        }
+
+        $products = $productRepository->findAllWithPage($this->page, self::LIMIT); 
+        $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
+
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
+            'paginatorHelper' => $paginatorHelper,
         ]);
     }
 
+    private function search(string $searchTerm, ProductRepository $productRepository): Response
+    {
+        $products =  $productRepository->search($searchTerm, $this->page, self::LIMIT);
+        $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
+
+        return $this->render('@product/index/index.html.twig', [
+            'searchTerm' => $searchTerm,
+            'products' => $products,
+            'paginatorHelper' => $paginatorHelper,
+        ]);
+    }
     
     #[Route('/new', name: 'app_product_new', methods: ['GET','POST'])]
     public function new(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
@@ -36,6 +74,7 @@ class ProductController extends AbstractController
             $entityManager->persist($product);
             $entityManager->flush();
 
+            $this->addFlash('success', "Le produit a bien été enregistré.");
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -91,15 +130,4 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    #[Security('product.getCompanyId() === user.getEntreprise()')]
-    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($product);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

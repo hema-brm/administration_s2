@@ -25,11 +25,6 @@
         {{form_widget_macro({item: form.category})}}
     </div>
 
-    {# Champ pour la sous-catégorie du produit #}
-    <div class='input-wrapper'>
-        {{form_widget_macro({item: form.subCategories})}}
-    </div>
-    
     <div class="flex flex-row-reverse">
         {{ button_macro({
             text: button_label|default('Enregistrer'),

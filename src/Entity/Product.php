@@ -32,6 +32,7 @@ class Product
     private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
+    #[ORM\JoinColumn(onDelete:"CASCADE")] 
     private Collection $subCategories;
 
     #[ORM\ManyToOne(inversedBy: 'products')]

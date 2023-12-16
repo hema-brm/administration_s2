@@ -23,6 +23,7 @@ class SubCategory
     private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'subCategories')]
+    #[ORM\JoinColumn(onDelete:"CASCADE")] 
     private ?Collection $products=null;
 
     public function __construct()

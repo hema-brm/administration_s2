@@ -2,6 +2,8 @@
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
+{% from "@components/macros/content.html.twig" import paginator %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
 {% block title %}Produit{% endblock %}
 
@@ -11,19 +13,34 @@
     }) }}
 
     <div class="px-4">
-        <div class="flex justify-end py-2 gap-2">
-            {{ button_macro({
-                custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                text:  "Nouveau produit",
-                icon: "fa-plus",
-                route : path('app_product_new')
-            }) }}
-             
-             {{ button_macro({
-                id: 'delete',
-                custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
-                icon: "fa-trash"
-            }) }}        
+        <div class="flex flex-row justify-between">
+            <div class="gap-2 py-2">
+                {{ form_search_macro({
+                    id: 'form-search-product',
+                    action: path('app_product_index'),
+                    placeholder: 'Rechercher',
+                    name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
+                    value: searchTerm|default(''),
+                }) }}
+            </div>
+            
+            <div class="flex justify-end py-2 gap-2">
+                {{ button_macro({
+                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
+                    text:  "Nouveau produit",
+                    icon: "fa-plus",
+                    route : path('app_product_new')
+                }) }}
+                <div id="disable_buttons" class="hidden">
+                    {{ button_macro({
+                    id: 'delete_products',
+                    custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
+                    icon: "fa-trash",
+                    }) }}  
+                </div>
+                
+            </div>
+                  
         </div>
         {{include('product/modal_delete.html.twig')}}
         
@@ -32,10 +49,11 @@
         <table class="w-full border shadow-sm">
             <thead>
                 <tr class="{{ borderClass }}">
-                    <th class="{{ cellPadding }} text-right"><input type="checkbox" class="products-checkbox"></th>
+                    <th class="{{ cellPadding }} text-center"><input type="checkbox" class="products-checkbox"></th>
                     <th class="{{ cellPadding }} text-left">Reference</th>
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
+                    <th class="{{ cellPadding }} text-left">Description</th>
                     <th class="{{ cellPadding }} text-left">Prix</th>
                     <th class="{{ cellPadding }}"></th>
                 </tr>
@@ -43,12 +61,24 @@
             <tbody>
             {% for product in products %}
                 <tr data-href="{{ path('app_product_show', {'id': product.id}) }}" class="{{ borderClass }} hover:bg-secondary-50 text-sm">
-                    <td class="{{ cellPadding }} text-right"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}"> </td>
+                    <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}"> </td>
+                   
+                    {% if product.reference is empty %}
+                        <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
+                    {% else %}
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.reference }}</td>
+                    {% endif %}
 
-                    <td class="{{ cellPadding }} text-left">{{ product.reference }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.name }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.category }}</td>
-                    <td class="{{ cellPadding }} text-left">{{ product.price/100 }}</td>
+                    <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.name }}</td>
+                    <td class="{{ cellPadding }} text-left  max-w-[100px] truncate">{{ product.category }}</td>
+                    
+                    {% if product.description is empty %}
+                        <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
+                    {% else %}
+                        <td class="{{ cellPadding }} text-left max-w-[150px] truncate" >{{ product.description }}</td>
+                    {% endif %}
+
+                    <td class="{{ cellPadding }} text-left max-w-[20px] truncate">{{ product.price/100 }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}">
                             <i class="fa-solid fa-edit hover:text-warning-500"></i>
@@ -74,5 +104,18 @@
     
         </tbody>
     </table>
+    <div id="product-paginator" class="flex flex-row justify-end my-2">
+        {{ paginator({
+            name: 'page',
+            countButton: 5,
+            current: paginatorHelper.current,
+            total: paginatorHelper.total,
+            route: 'app_product_index',
+            urlParams: { 
+                (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
+            },
+        }) }}
+    </div>
+    
 
 {% endblock %}

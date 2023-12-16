@@ -3,6 +3,7 @@
 {% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/macros/table.html.twig" import default as table %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
+{% from "@components/macros/content.html.twig" import paginator %}
 
 {% extends 'front/base.html.twig' %}
 
@@ -85,7 +86,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <div id="customer-paginator" class="flex flex-row justify-end my-2">
+        <div id="product-paginator" class="flex flex-row justify-end my-2">
             {{ paginator({
                 name: 'page',
                 countButton: 5,

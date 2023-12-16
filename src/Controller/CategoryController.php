@@ -17,30 +17,48 @@ class CategoryController extends AbstractController
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
+
         return $this->render('category/index.html.twig', [
             'categories' => $categoryRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
         ]);
     }
 
-    #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/delete', name: 'app_category_deleteAll', methods: ['POST'])]
+    public function deleteCategoryList(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
     {
-        $category = new Category("");
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $category->setCompanyId($this->getUser()->getEntreprise());
-            $entityManager->persist($category);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        $categoryDatasJSON = $request->getContent();
+        $categoryDatas = json_decode($categoryDatasJSON, true);
+        
+        foreach($categoryDatas as $id){
+            $category = $categoryRepository->find($id);
+            if($category){
+                $entityManager->remove($category);
+            } 
         }
+        $entityManager->flush();
+        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
 
-        return $this->render('category/new.html.twig', [
-            'category' => $category,
-            'form' => $form,
-        ]);
+    }
+
+     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+     public function new(Request $request, EntityManagerInterface $entityManager): Response
+     {
+         $category = new Category("");
+         $form = $this->createForm(CategoryType::class, $category);
+         $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+    $category->setCompanyId($this->getUser()->getEntreprise());
+    $entityManager->persist($category);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->render('category/new.html.twig', [
+    'category' => $category,
+    'form' => $form,
+    ]);
     }
 
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
@@ -69,14 +87,5 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
-    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($category);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
-    }
+  
 }
