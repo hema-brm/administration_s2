@@ -1,12 +1,19 @@
 {% from "@components/macros/content.html.twig" import paginator %}
 
+{% set urlParams = {} %}
+
+{% if searchTerm is defined and searchTerm is not empty %}
+    {% set urlParams = { 
+        (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
+    } %}
+{% endif %}
+
+
 {{ paginator({
     name: 'page',
     countButton: 5,
     current: paginatorHelper.current,
     total: paginatorHelper.total,
     route: 'app_customer_index',
-    urlParams: { 
-        (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
-    },
+    urlParams: urlParams,
 }) }}
