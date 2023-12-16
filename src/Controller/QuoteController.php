@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Quote;
 use App\Form\QuoteType;
 use App\Repository\QuoteRepository;
+use App\Service\Request\PageFromRequestService;
+use App\Service\Request\RequestQueryService;
+use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +18,47 @@ use App\Entity\ProductQuote;
 #[Route('/quote')]
 class QuoteController extends AbstractController
 {
+    private ?string $searchTerm;
+    private ?int $page;
+
+    public const SEARCH_FORM_NAME = 'search';
+
+    const PAGE_PARAM_NAME = 'page';
+    const LIMIT = 10;
+
+    public function __construct(
+        RequestQueryService $requestQueryService,
+        PageFromRequestService $pageFromRequestService
+    ) {
+        $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
+        $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+    }
+
     #[Route('/', name: 'app_quote_index', methods: ['GET'])]
     public function index(QuoteRepository $quoteRepository): Response
     {
+        if ($this->searchTerm) {
+            return $this->search($this->searchTerm, $quoteRepository);
+        }
+        
+        $quotes = $quoteRepository->findAllWithPage($this->page, self::LIMIT); 
+        $paginatorHelper = new PaginatorHelper($this->page, count($quotes), self::LIMIT);
+
+        
         return $this->render('quote/index.html.twig', [
-            'quotes' => $quoteRepository->findAll(),
+            'quotes' => $quotes,
+            'paginatorHelper' => $paginatorHelper,
+        ]);
+    }
+    private function search(string $searchTerm, QuoteRepository $quoteRepository): Response
+    {
+        $quotes =  $quoteRepository->search($searchTerm, $this->page, self::LIMIT);
+        $paginatorHelper = new PaginatorHelper($this->page, count($quotes), self::LIMIT);
+
+        return $this->render('quote/index.html.twig', [
+            'searchTerm' => $searchTerm,
+            'quotes' => $quotes,
+            'paginatorHelper' => $paginatorHelper,
         ]);
     }
     

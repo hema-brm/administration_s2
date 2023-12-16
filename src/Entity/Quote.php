@@ -16,6 +16,9 @@ class Quote
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
+    private ?string $searchVector = null;
+
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
@@ -45,12 +48,23 @@ class Quote
 
     #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", cascade: ["persist", "remove"])]
     private Collection $productQuotes;
-    
+
     #[ORM\ManyToOne(targetEntity: Entreprise::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?Entreprise $entreprise = null;
 
+    public function getSearchVector(): ?string
+    {
+        return $this->searchVector;
+    }
 
+    public function setSearchVector(?string $searchVector): static
+    {
+        $this->searchVector = $searchVector;
+
+        return $this;
+    }
+    
     public function getEntreprise(): ?Entreprise
     {
         return $this->entreprise;

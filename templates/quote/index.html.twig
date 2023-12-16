@@ -17,9 +17,9 @@
     <div class="flex flex-row justify-between py-2">
             {{ form_search_macro({
                 id: 'form-search-customer',
-                action: path('app_customer_index'),
+                action: path('app_quote_index'),
                 placeholder: 'Rechercher',
-                name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
+                name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
                 value: searchTerm|default(''),
             }) }}
             <a href="{{ path('app_quote_new') }}">
