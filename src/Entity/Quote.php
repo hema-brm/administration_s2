@@ -45,7 +45,23 @@ class Quote
 
     #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", cascade: ["persist", "remove"])]
     private Collection $productQuotes;
+    
+    #[ORM\ManyToOne(targetEntity: Entreprise::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Entreprise $entreprise = null;
 
+
+    public function getEntreprise(): ?Entreprise
+    {
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?Entreprise $entreprise): self
+    {
+        $this->entreprise = $entreprise;
+
+        return $this;
+    }
     
     public function __construct()
     {
