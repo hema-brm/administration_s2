@@ -37,6 +37,9 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Entreprise $company = null;
 
+    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
+    private ?string $searchVector = null;
+
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
@@ -142,6 +145,18 @@ class Product
     public function setCompanyId(?Entreprise $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getSearchVector(): ?string
+    {
+        return $this->searchVector;
+    }
+
+    public function setSearchVector(?string $searchVector): static
+    {
+        $this->searchVector = $searchVector;
 
         return $this;
     }
