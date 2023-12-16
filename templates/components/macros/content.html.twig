@@ -14,6 +14,8 @@
     {% set onclick = params.onclick|default('') %}
     {% set custom_classes = params.custom_classes|default([]) %}
     {% set icon = params.icon|default('') %}
+    {% set disabled = params.disabled|default(false) %}
+    {% set bool = disabled ? 'disabled':'' %}
     
     {# Initialize button classes #}
     {% set button_classes = [
@@ -32,7 +34,7 @@
         <a href="{{ route }}">
     {% endif %}
 
-        <button id="{{id}}" class="{{ button_classes }} onclick="{{onclick}}" ">
+        <button id="{{id}}" class="{{ button_classes }}" onclick="{{onclick}}" {{bool}}>
             <i class="fa-solid {{ icon }}"></i>
             {% if text is not empty %}
                 {{ text }}

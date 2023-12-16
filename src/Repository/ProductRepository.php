@@ -5,6 +5,9 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Query\Customer\FullSearchQuery;
+use App\Query\Trait\PaginatorTrait;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Product>
@@ -16,9 +19,35 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    use PaginatorTrait;
+    private FullSearchQuery $fullSearchQuery;
+
+    public function __construct(ManagerRegistry $registry, FullSearchQuery $fullSearchQuery)
     {
         parent::__construct($registry, Product::class);
+        $this->fullSearchQuery = $fullSearchQuery;
+    }
+
+    public function search(string $search, int $page = 1, int $limit = 10): Paginator 
+    {
+        $query = $this->fullSearchQuery
+            ->withTerm($search)
+            ->get();
+
+        $this->decoratePaginator($query, $page, $limit);
+
+        return new Paginator($query);
+    }
+
+    public function findAllWithPage(int $page = 1, int $limit = 10): Paginator
+    {
+        $query = $this
+                    ->createQueryBuilder('c')
+                    ->getQuery();
+
+        $this->decoratePaginator($query, $page, $limit); 
+
+        return new Paginator($query);
     }
 
 //    /**

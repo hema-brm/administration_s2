@@ -60,7 +60,7 @@ class ProductType extends AbstractType
             ])
 
             ->add('description', TextareaType::class, [
-                'label' => 'Descripion',
+                'label' => 'Description',
                 'constraints' => [new Length([ 'max' => 150])],
                 'required'    => false,
                 'help' => 'facultatif',
@@ -78,9 +78,8 @@ class ProductType extends AbstractType
                 'placeholder' => 'Sélectionner une catégorie',
                 'choices' => $choices,
                 'required' => true
-            ])
+            ]);
 
-            ->add('subCategories');  
 
     }
 

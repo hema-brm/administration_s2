@@ -1,5 +1,6 @@
 
 {% extends 'front/base.html.twig' %}
+{% from "@components/macros/content.html.twig" import button_macro %}
 
 {% block title %}Devis{% endblock %}
 
@@ -7,7 +8,20 @@
     <div class="container mx-auto mt-10">
         <h1 class="text-4xl font-bold text-center">Les devis</h1>
         <div class="mt-4 flex flex-col">
-            
+            {{ button_macro({
+                text: "envoyer mail",
+                custom_classes: [
+                    'rounded',
+                    'p-2',
+                    'bg-secondary-500',
+                    'text-white',
+                    'text-sm',
+                    'transition-all',
+                    'ease-out',
+                    'hover:bg-blue-600',
+                    'ml-2',
+                ]
+            }) }}
         </div>
     </div>
     
