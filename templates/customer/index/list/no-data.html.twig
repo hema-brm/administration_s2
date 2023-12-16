@@ -1,0 +1,8 @@
+{% from "@components/macros/content.html.twig" import alert %}
+
+{{ alert({
+    text: 'Aucun client n\'a été trouvé',
+    color: 'warning',
+    icon: 'fa-circle-info',
+    variant: 'small',
+}) }}

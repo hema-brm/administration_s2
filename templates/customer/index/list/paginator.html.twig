@@ -1,0 +1,12 @@
+{% from "@components/macros/content.html.twig" import paginator %}
+
+{{ paginator({
+    name: 'page',
+    countButton: 5,
+    current: paginatorHelper.current,
+    total: paginatorHelper.total,
+    route: 'app_customer_index',
+    urlParams: { 
+        (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
+    },
+}) }}

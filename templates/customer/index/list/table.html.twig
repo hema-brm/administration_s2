@@ -1,0 +1,55 @@
+{% set cellPadding = 'p-4 px-2' %}
+{% set borderClass = 'border-b border-b-secondary-200' %}
+{% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+
+<table class="w-full border shadow-sm text-sm">
+    <thead>
+        <tr class="{{ tableHeaderClasses }}">
+            <th class="{{ cellPadding }} text-right">#</th>
+            <th class="{{ cellPadding }} text-left">Email</th>
+            <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
+            <th class="{{ cellPadding }} text-left">Adresse</th>
+            <th class="{{ cellPadding }} text-left">Téléphone</th>
+            <th class="{{ cellPadding }}"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% set offset = paginatorHelper.offset %}
+    {% for customer in customers %}
+        <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-secondary-50">
+            <td class="{{ cellPadding }} text-right">{{ loop.index + offset }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.address }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
+            <td class="{{ cellPadding }} text-right text-secondary-400">
+                <div class="flex flex-row justify-end">
+                    <div class="mr-2">
+                        {% embed "@customer/index/_delete_form.html.twig" with {
+                            customer: customer,
+                            hidden: true,
+                        } %}
+                            {% block button_content %}
+                                <i class="fa-regular fa-trash-can group-hover:text-danger-500"></i>
+                            {% endblock %}
+                        {% endembed %}
+                    </div>
+                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
+                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div id="customer-paginator" class="flex flex-row justify-end my-2">
+    {% include "@customer/index/list/paginator.html.twig" %}
+</div>
+
+<script>
+    window.addEventListener('load', () => {
+        (new Link('tr[data-href]'));
+    });
+</script>
