@@ -23,4 +23,14 @@
         {{ contentId }}.classList.toggle('scale-0');
         {{ contentId }}.classList.toggle('scale-100');
     });
+
+    document.addEventListener('click', function (event) {
+        const isClickOutside = (!{{ toggleId }}.contains(event.target)) 
+            && (!{{ contentId }}.contains(event.target));
+            
+        if (isClickOutside) {
+            {{ contentId }}.classList.remove('scale-100');
+            {{ contentId }}.classList.add('scale-0');
+        }
+    });
 </script>
