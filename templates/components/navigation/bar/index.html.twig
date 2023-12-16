@@ -1,23 +1,20 @@
-<nav class="bg-primary-500 text-white flex items-center justify-between flex-wrap px-4 py-2 shadow-md sticky top-0 left-0 z-[9999] transition-colors ease-in-out duration-300">
-  <div class="flex items-center flex-shrink-0 w-64 mr-4">
-    <button id="btn_toggle-menu" class="hover:bg-secondary-600 duration-300 ease-in-out p-1 rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-    </button>
-    <span class="font-semibold text-xl tracking-tight ml-4">EasyVows</span>
-  </div>
-  <div class="w-full block flex-grow justify-end lg:flex lg:items-center lg:w-auto sm:hidden lg:visible">
-    <div class="flex flex-row">
+<nav class="bg-primary-500 text-white flex flex-row items-center justify-between flex-wrap px-4 py-2 shadow-md sticky top-0 left-0 z-[9999] transition-colors ease-in-out duration-300">
+    <div class="flex items-center flex-shrink-0 w-64 mr-4">
+        <button id="btn_toggle-menu" class="hover:bg-primary-600 duration-300 ease-in-out p-1 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <span class="font-semibold text-xl tracking-tight ml-4">EasyVows</span>
+    </div>
+    <div class="flex flex-row  p-2">
         <div class="flex flex-row-reverse mr-5">
-            <div class="flex justify-center items-center rounded-full p-2 cursor-pointer">
+            <div class="flex justify-center items-center cursor-pointer">
                 {% include "@components/navigation/bar/item/theme-chooser.html.twig" %}
             </div>
         </div>
-        
-        <span class="flex justify-center items-center rounded-full hover:bg-secondary-600 p-2 cursor-pointer transform duration-300 ease-in-out">
+        <div class="flex justify-center items-center rounded-full hover:bg-primary-600 cursor-pointer transform duration-300 ease-in-out px-1">
             <i class="fa-solid fa-power-off"></i>
-        </span>
+        </div>
     </div>
-  </div>
 </nav>
