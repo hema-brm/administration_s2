@@ -31,20 +31,12 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
-    private Collection $subCategories;
-
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Entreprise $company = null;
 
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
 
-    public function __construct()
-    {
-        $this->subCategories = new ArrayCollection();
-    }
-    
     public function getId(): ?int
     {
         return $this->id;
@@ -106,33 +98,6 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SubCategory>
-     */
-    public function getSubCategories(): Collection
-    {
-        return $this->subCategories;
-    }
-
-    public function addSubCategory(SubCategory $subCategory): static
-    {
-        if (!$this->subCategories->contains($subCategory)) {
-            $this->subCategories->add($subCategory);
-            $subCategory->addProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubCategory(SubCategory $subCategory): static
-    {
-        if ($this->subCategories->removeElement($subCategory)) {
-            $subCategory->removeProduct($this);
-        }
 
         return $this;
     }
