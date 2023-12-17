@@ -55,7 +55,7 @@ class ProductController extends AbstractController
         $products =  $productRepository->search($searchTerm, $this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
 
-        return $this->render('@product/index/index.html.twig', [
+        return $this->render('product/index.html.twig', [
             'searchTerm' => $searchTerm,
             'products' => $products,
             'paginatorHelper' => $paginatorHelper,
