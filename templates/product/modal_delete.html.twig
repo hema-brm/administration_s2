@@ -2,32 +2,35 @@
 
 {% block body %}
 
-<!-- Bouton permettant de supprimer un ou plusieurs produits -->
-<button id="delete" class="bg-danger-500 hover:bg-danger-600 text-white font-bold py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50" disabled>Supprimer</button>
-
 <!-- Modal de confirmation -->
 <div id="modal_delete" class="hidden fixed inset-0 z-50 overflow-auto bg-secondary-700 bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-8 max-w-md mx-auto rounded shadow-lg">
-        <div class="text-center">
-            <h3 class="text-lg font-bold mb-4">Confirmation de suppression</h3>
-            <p class="mb-4">Êtes-vous sûr de vouloir supprimer ce(s) produit(s) ?</p>
+    <div class="bg-white p-5 text-center text-secondary-900 relative shadow-2xl rounded-sm transition-all transform">
+        <div class="p-2  text-sm text-center text-secondary-900">
+            <h3 class="text-lg font-bold mb-2">Confirmation</h3>
+            <p>Êtes-vous sûrs de vouloir supprimer ce(s) produit(s) ?</p>
         </div>
-        <div class="flex justify-center">
-            <button id="cancelDelete" class="mr-4 bg-secondary-500 hover:bg-secondary-600 text-white font-bold py-2 px-4 rounded">Annuler</button>
+        <div class="flex flex-row justify-center">
+            {{ button_macro({
+                id: 'cancel_delete',
+                custom_classes: ["bg-secondary-500",
+                                "hover:bg-secondary-600",
+                                "text-white",
+                                "mr-1",
+                                "py-1",
+                                "px-2"],
+                text: "Annuler",
+            }) }}
 
             {{ button_macro({
-                id: 'confirmDelete',
-                custom_classes: ["bg-danger-500",
-                                "hover:bg-danger-600",
-                                "text-white", 
-                                "font-bold", 
-                                "py-2", 
-                                "px-4",
-                                "rounded"],
+                id: 'confirm_delete',
+                custom_classes: ["bg-danger-50",
+                                "hover:bg-danger-500",
+                                "text-danger-500", 
+                                "hover:text-white", 
+                                "py-1", 
+                                "px-2"],
                 text: "Supprimer",
-                route:  path('app_products_delete_list') 
             }) }}
-            <button id="confirmDelete" class="bg-danger-500 hover:bg-danger-600 text-white font-bold py-2 px-4 rounded">Supprimer</button>
         </div>
     </div>
 </div>

@@ -8,8 +8,9 @@ import ReactDOM from 'react-dom';
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import './js/index.js';
-import './js/modal.js';
-import './js/handle_checkbox.js';
+import './js/handleCheckbox.js';
+//import '/js/handleModal.js;'
+
 
 const PaymentsList = () => {
   return (
@@ -21,5 +22,4 @@ const PaymentsList = () => {
 
 
 ReactDOM.render(<PaymentsList />, document.getElementById('paymentroot'));
-
 
