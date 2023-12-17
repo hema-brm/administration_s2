@@ -15,18 +15,7 @@
               <i class="fa-solid fa-arrow-left mr-1"></i>
               <a href="{{ path('app_category_index') }}">Retour à la liste</a>
           </div>
-
-          <div>
-            <div class="flex justify-end py-2 gap-2 w-1/2">
-                {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-blue-50", "text-blue-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    route: path('app_category_index'),
-                    text:  "Nouvelle catégorie",
-                    icon: "fa-plus",
-                }) }}
-            </div>
-
-          </div>
+          
           <div class="p-4 shadow-md w-1/2 border rounded">
               <div class="text-sm">
                   {% include('category/_form.html.twig') with {

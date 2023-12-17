@@ -22,13 +22,11 @@
                 {{ button_macro({
                     id: "category_open_button",
                     custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    text:  "Nouvelle catégorie",
-                    icon: "fa-plus",
+                    text:  "Catégorie",
                     route : path('app_category_index')
                 }) }}      
             </div>
 
-           {{include('product/modal_category.twig')}}
           </div>
           <div class="p-4 shadow-md w-1/2 border rounded">
               <div class="text-sm">
