@@ -19,7 +19,7 @@
                     id: 'form-search-product',
                     action: path('app_product_index'),
                     placeholder: 'Rechercher',
-                    name: constant('App\\Controller\\ProductController::SEARCH_FORM_NAME'),
+                    name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
                     value: searchTerm|default(''),
                 }) }}
             </div>
@@ -66,7 +66,7 @@
                     {% if product.reference is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
-                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.getReference() }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.reference }}</td>
                     {% endif %}
 
                     <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.name }}</td>
@@ -104,7 +104,7 @@
     
         </tbody>
     </table>
-    <div id="products-paginator" class="flex flex-row justify-end my-2">
+    <div id="product-paginator" class="flex flex-row justify-end my-2">
         {{ paginator({
             name: 'page',
             countButton: 5,
@@ -112,7 +112,7 @@
             total: paginatorHelper.total,
             route: 'app_product_index',
             urlParams: { 
-                (constant('App\\Controller\\ProductController::SEARCH_FORM_NAME')): searchTerm|default('') 
+                (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
             },
         }) }}
     </div>

@@ -28,15 +28,20 @@ class Product
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false, name: "category_id")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
+    #[ORM\JoinColumn(onDelete:"CASCADE")] 
+    private Collection $subCategories;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Entreprise $company = null;
 
-    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
-    private ?string $searchVector = null;
-
+    public function __construct()
+    {
+        $this->subCategories = new ArrayCollection();
+    }
     
     public function getId(): ?int
     {
@@ -103,6 +108,33 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection<int, SubCategory>
+     */
+    public function getSubCategories(): Collection
+    {
+        return $this->subCategories;
+    }
+
+    public function addSubCategory(SubCategory $subCategory): static
+    {
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories->add($subCategory);
+            $subCategory->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubCategory(SubCategory $subCategory): static
+    {
+        if ($this->subCategories->removeElement($subCategory)) {
+            $subCategory->removeProduct($this);
+        }
+
+        return $this;
+    }
+
     public function getCompanyId(): ?Entreprise
     {
         return $this->company;
@@ -111,18 +143,6 @@ class Product
     public function setCompanyId(?Entreprise $company): static
     {
         $this->company = $company;
-
-        return $this;
-    }
-    
-    public function getSearchVector(): ?string
-    {
-        return $this->searchVector;
-    }
-
-    public function setSearchVector(?string $searchVector): static
-    {
-        $this->searchVector = $searchVector;
 
         return $this;
     }

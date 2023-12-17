@@ -18,6 +18,9 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\OneToMany(mappedBy: 'category_id', targetEntity: SubCategory::class, orphanRemoval: true)]
+    private Collection $subCategories;
+
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class, orphanRemoval: true)]
     private Collection $products;
 
@@ -26,6 +29,7 @@ class Category
 
     public function __construct($name)
     {   $this->name = $name;
+        $this->subCategories = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
@@ -47,6 +51,36 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubCategory>
+     */
+    public function getSubCategories(): Collection
+    {
+        return $this->subCategories;
+    }
+
+    public function addSubCategory(SubCategory $subCategory): static
+    {
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories->add($subCategory);
+            $subCategory->setCategoryId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubCategory(SubCategory $subCategory): static
+    {
+        if ($this->subCategories->removeElement($subCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($subCategory->getCategoryId() === $this) {
+                $subCategory->setCategoryId(null);
+            }
+        }
 
         return $this;
     }
