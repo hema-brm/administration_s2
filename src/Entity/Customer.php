@@ -43,6 +43,9 @@ class Customer
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
 
+    #[ORM\ManyToOne(inversedBy: 'customers')]
+    private ?Entreprise $company = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,18 @@ class Customer
     public function setSearchVector(?string $searchVector): static
     {
         $this->searchVector = $searchVector;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Entreprise
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Entreprise $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

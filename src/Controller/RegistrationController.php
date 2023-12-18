@@ -35,22 +35,22 @@ class RegistrationController extends AbstractController
             // Récupérer les données du formulaire User
             $userData = $form->getData();
 
-            // Récupérer les données de l'entreprise à partir du formulaire
-            $entrepriseNom = $form->get('Nom')->getData();
-            $entrepriseAdresse = $form->get('Adresse')->getData();
-            $entrepriseNumeroSiret = $form->get('Numero_Siret')->getData();
+            // Récupérer les données de l'company à partir du formulaire
+            $companyName = $form->get('name')->getData();
+            $companyAdress = $form->get('adress')->getData();
+            $companySiretNumber = $form->get('siretNumber')->getData();
 
-            // Créer une instance d'entreprise et lui attribuer les données du formulaire
-            $entreprise = new Entreprise();
-            $entreprise->setNom($entrepriseNom);
-            $entreprise->setAdresse($entrepriseAdresse);
-            $entreprise->setNumeroSiret($entrepriseNumeroSiret);
+            // Créer une instance d'company et lui attribuer les données du formulaire
+            $company = new Entreprise();
+            $company->setName($companyName);
+            $company->setAdress($companyAdress);
+            $company->setSiretNumber($companySiretNumber);
 
-            // Enregistrer l'entreprise
-            $entityManager->persist($entreprise);
+            // Enregistrer l'company
+            $entityManager->persist($company);
             $entityManager->flush();
 
-            // Enregistrer l'utilisateur et associer l'entreprise
+            // Enregistrer l'utilisateur et associer l'company
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setEntreprise($entreprise);
+            $user->setEntreprise($company);
             $firstName = $form->get('firstName')->getData();
             $user->setFirstName($firstName);
             $lastName = $form->get('lastName')->getData();
