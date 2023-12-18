@@ -1,0 +1,11 @@
+{% if app.user %}
+<div class="flex flex-row p-3 items-center bg-primary-50">
+    <div class="mr-2">
+        <img class="rounded-full aspect-square w-10" src="{{ asset('build/images/default/profile.png') }}">
+    </div>
+    <div>
+        <p class="text-sm">{{ app.user.fullname }}</p>
+        <p class="text-xs text-gray-400">{{ app.user.email }}</p>
+    </div>
+</div>
+{% endif %}
