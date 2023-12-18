@@ -1,51 +1,9 @@
-{% import "@components/navigation/menu/macro/index.html.twig" as menuMacro %}
-
-<aside data-open="true" class="overflow-hodden nav relative bg-primary-100 text-bg-stone-800 w-72 ml-0 transform min-h-screen transition-all duration-300 ease-in-out shadow-2xl overflow-y-visible">
-    <ul class="nav-item">
-        {{ menuMacro.item({
-            text: 'Factures',
-            icon: 'fa-file-invoice-dollar',
-            route: 'app_bill_index'
-        }) }}
-        {{ menuMacro.item({
-            text: 'Devis',
-            icon: 'fa-file-invoice',
-            route: 'app_quote_index'
-            
-        }) }}
-        {{ menuMacro.item({
-            text: 'Clients',
-            icon: 'fa-user',
-            route: 'app_customer_index'
-        }) }}
-        {{ menuMacro.item({
-            text: 'Paiements',
-            icon: 'fas fa-money-bill-wave',
-            route:'app_payment_index'
-        }) }}
-        
-        {{ menuMacro.item({
-            text: 'Produits',
-            icon: 'fa-box',
-            route: 'app_product_index'
-        }) }}
-        {% set currentRoute = app.request.attributes.get('_route')|split('_')|slice(0, 2)|join('_') %}
-        {% if  currentRoute == 'app_product' or currentRoute ==  'app_category'%}
-        <ul>
-            {{ menuMacro.item({
-                text: 'Catégories',
-                icon: 'fa-layer-group',
-                route: 'app_category_index'
-            }) }}
-        </ul>
-        {% endif %}
-        
-       
-    </ul>
+<aside data-open="true" class="overflow-hidden relative bg-primary-100 text-bg-stone-800 w-60 ml-0 transform min-h-screen transition-all duration-300 ease-in-out shadow-2xl overflow-y-visible">
+    {% include "@components/navigation/menu/item/element.html.twig" %}
 </aside>
 
 <script>
     window.addEventListener('load', () => {
-        (new NavToggle('#btn_toggle-menu', '.nav'));
+        (new NavToggle('#btn_toggle-menu', '.nav', 60));
     });
 </script>
