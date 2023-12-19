@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231206224432 extends AbstractMigration
+final class Version20231216154534 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,12 @@ final class Version20231206224432 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $sql = <<<SQL
-            CREATE TRIGGER customer_search_vector_update BEFORE INSERT OR UPDATE
-                ON customer FOR EACH ROW EXECUTE PROCEDURE
+            CREATE TRIGGER quote_search_vector_update BEFORE INSERT OR UPDATE
+                ON quote FOR EACH ROW EXECUTE PROCEDURE
                 tsvector_update_trigger(
                     search_vector, 
                     'pg_catalog.english', 
-                    email, 
-                    lastname,
-                    firstname,
-                    address,
-                    phone
+                    quote_number
                 );
             SQL;
 
@@ -38,6 +34,6 @@ final class Version20231206224432 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TRIGGER customer_search_vector_update ON customer;');
+        $this->addSql('DROP TRIGGER quote_search_vector_update ON quote;');
     }
 }

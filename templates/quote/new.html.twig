@@ -1,0 +1,21 @@
+{% extends 'front/base.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% block title %}New Quote{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Créer un devis',
+    }) }}
+    <div class= "flex flex-row items-center justify-start mb-4 m-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_quote_index') }}">Retour à la liste</a>
+    </div>
+    <div class="bg-secondary-100 p-8 rounded-lg shadow-md mt-5 m-6">
+        <div class=" mb-7">
+          <h2>{{ entreprise.getNom() }}</h2>
+          <h2>{{ entreprise.getAdresse() }}</h2>
+        </div>
+        {{ include('quote/_form.html.twig') }}
+    </div>
+   
+{% endblock %}

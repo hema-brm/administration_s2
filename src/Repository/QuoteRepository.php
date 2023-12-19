@@ -5,6 +5,11 @@ namespace App\Repository;
 use App\Entity\Quote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Query\Quote\FullSearchQuery;
+use App\Query\Trait\PaginatorTrait;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
+
 
 /**
  * @extends ServiceEntityRepository<Quote>
@@ -16,33 +21,37 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class QuoteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    
+    use PaginatorTrait;
+
+    private FullSearchQuery $fullSearchQuery;
+
+    public function __construct(ManagerRegistry $registry,FullSearchQuery $fullSearchQuery) {
         parent::__construct($registry, Quote::class);
+        $this->fullSearchQuery = $fullSearchQuery;
     }
 
-//    /**
-//     * @return Quote[] Returns an array of Quote objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('q.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function search(string $search, int $page = 1, int $limit = 10): Paginator 
+    {
+        $query = $this->fullSearchQuery
+            ->withTerm($search)
+            ->get();
 
-//    public function findOneBySomeField($value): ?Quote
-//    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $this->decoratePaginator($query, $page, $limit);
+
+        return new Paginator($query);
+    }
+
+    public function findAllWithPage(int $page = 1, int $limit = 10): Paginator
+    {
+        $query = $this
+            ->createQueryBuilder('c')
+            ->getQuery();
+
+        $this->decoratePaginator($query, $page, $limit); 
+
+        return new Paginator($query);
+    }
+
+
 }
