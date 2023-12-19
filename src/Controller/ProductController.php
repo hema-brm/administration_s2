@@ -41,8 +41,6 @@ class ProductController extends AbstractController
             return $this->search($this->searchTerm, $productRepository);
         }
 
-        dd("caca");
-
         $products = $productRepository->findAllWithPage($this->page, self::LIMIT); 
         $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
 
