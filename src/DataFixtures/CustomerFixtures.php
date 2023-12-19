@@ -6,16 +6,19 @@ use App\Entity\Customer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Repository\EntrepriseRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 
 class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
     private $faker;
+    private $entrepriseRepository;
     // construct with faker
-    public function __construct()
+    public function __construct(EntrepriseRepository $entrepriseRepository)
     {
         $this->faker = Factory::create();
+        $this->entrepriseRepository = $entrepriseRepository;
     }
 
     public function load(ObjectManager $manager): void
@@ -30,6 +33,8 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
             $customer->setPhone($this->faker->phoneNumber());
             $customer->setAddress($this->faker->address());
 
+            $company = $this->entrepriseRepository->findOneBy(['name'=>'MarryMe']);
+            $customer->setCompany($company);
             $manager->persist($customer);
         }
 

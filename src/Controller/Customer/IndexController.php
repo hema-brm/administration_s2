@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/customer', name: 'app_customer_')]
-#[IsGranted("manage")]
 class IndexController extends AbstractController
 {
     private ?string $searchTerm;
