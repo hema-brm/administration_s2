@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use App\Repository\SubCategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,15 +19,13 @@ use Symfony\Component\Security\Core\Security;
 
 class ProductType extends AbstractType
 {
-    private $subCategoryRepository;
     private $categoryRepository;
     private $currentUser;
     
-    public function __construct(CategoryRepository $categoryRepository, SubCategoryRepository $subCategoryRepository, Security $security)
+    public function __construct(CategoryRepository $categoryRepository, Security $security)
     {
         $this->currentUser = $security->getUser(); 
         $this->categoryRepository = $categoryRepository;
-        $this->subCategoryRepository = $subCategoryRepository;
 
     }
 
@@ -41,8 +38,6 @@ class ProductType extends AbstractType
         foreach($categories as $category){
             $choices[$category->getName()] = $category;
         }
-        //pour chaque catégorie selectionné on va chercher les sous categorie en fonction de l'id de la categorie et l'afficher
-        //$subcategories = $this->subCategoryRepository->findBy(['category'=> $this->])
 
         $builder
             ->add('name', TextType::class, [
@@ -60,7 +55,7 @@ class ProductType extends AbstractType
             ])
 
             ->add('description', TextareaType::class, [
-                'label' => 'Descripion',
+                'label' => 'Description',
                 'constraints' => [new Length([ 'max' => 150])],
                 'required'    => false,
                 'help' => 'facultatif',
@@ -78,9 +73,7 @@ class ProductType extends AbstractType
                 'placeholder' => 'Sélectionner une catégorie',
                 'choices' => $choices,
                 'required' => true
-            ])
-
-            ->add('subCategories');  
+            ]);
 
     }
 
