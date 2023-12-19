@@ -23,7 +23,7 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $count = 100;
+        $count = 25;
 
         for ($i = 0; $i < $count; $i++) {
             $customer = new Customer();
@@ -33,7 +33,7 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
             $customer->setPhone($this->faker->phoneNumber());
             $customer->setAddress($this->faker->address());
 
-            $company = $this->entrepriseRepository->findOneBy(['name'=>'MarryMe']);
+            $company = $this->getReference('company');
             $customer->setCompany($company);
             $manager->persist($customer);
         }

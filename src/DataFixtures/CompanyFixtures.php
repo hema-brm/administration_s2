@@ -17,15 +17,17 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
     }
     public function load(ObjectManager $manager): void
     {
-            $company = new Company();
-            $company
-                ->setName("MarryMe")
-                ->setSiretNumber("12321123212432")
-                ->setAdress("11 avenue du grand moulin, 75002 Paris");
-            
-            $owner = $this->userRepository->findOneBy(['email' => 'owner@gmail.com']);
-            
-            $company->addUserId($owner);
+        $company = new Company();
+        $company
+            ->setName("MarryMe")
+            ->setSiretNumber("12321123212432")
+            ->setAdress("11 avenue du grand moulin, 75002 Paris");
+
+        $owner = $this->userRepository->findOneBy(['email' => 'owner@gmail.com']);
+
+        $company->addUserId($owner);
+
+        $this->addReference('company', $company);
         
         $manager->persist($company);
         $manager->flush();
