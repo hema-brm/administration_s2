@@ -1,0 +1,59 @@
+{% from "@components/macros/content.html.twig" import header %}
+{% extends 'front/base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Détail de l\'employé',
+    }) }}
+
+    <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-primary-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_customer_index') }}">Retour à la liste</a>
+        </div>
+
+        <article class="w-full shadow relative">
+        <div class="absolute top-0 right-0 p-2 flex flex-row-reverse items-baseline text-sm text-gray-400">
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}">
+                <button class="group">
+                    <i class="fa-solid fa-edit ml-2 group-hover:text-warning-500"></i>
+                </button>
+            </a>
+            <div>
+                {% embed 'user/_delete_form.html.twig' with {
+                    user: user
+                } %}
+                    {% block button_content %}
+                        <i class="fa-solid fa-trash group-hover:text-danger-500"></i>
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        </div>
+        <div class="flex flex-row p-4 items-start">
+            <div class="mr-4">
+                <img class="w-24 aspect-square rounded-md" src="{{ asset('build/images/default/profile.png') }}" alt="">
+            </div>
+            <div class="flex flex-col">
+                <div class="text-lg">
+                    <span>{{ user.firstName }}</span>
+                    <span>{{ user.lastName }}</span>
+                </div>
+                <div class="leading-5 text-xs text-gray-500">
+                    <span>{{ "<" ~ user.email ~ ">" }}</span>
+                </div>
+                <div class="leading-5 text-xs">
+                    <span>{{ user.phoneNumber }}</span>
+                </div>
+                <div class="leading-5 text-xs">
+                    <span>{{ user.roles ? user.roles|json_encode : ''}}</span>
+                </div>
+            </div>
+        </div>
+    </article>
+    </div>
+
+
+    
+{% endblock %}

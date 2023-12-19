@@ -1,0 +1,30 @@
+{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
+{% from "@components/macros/content.html.twig" import button_macro %}
+
+{{ form_start(form) }}
+    {{ form_widget_macro({
+        item: form.firstName,
+    }) }}
+    {{ form_widget_macro({
+        item: form.lastName,
+    }) }}
+    {{ form_widget_macro({
+        item: form.email,
+    }) }}
+    {{ form_widget_macro({
+        item: form.password,
+    }) }}
+    {{ form_widget_macro({
+        item: form.roles,
+    }) }}
+    {{ form_widget_macro({
+        item: form.entreprise,
+    }) }}
+
+    <div class="flex flex-row-reverse">
+        {{ button_macro({
+            text: button_label|default('Enregistrer'),
+            custom_classes: button_classes,
+        }) }}
+    </div>
+{{ form_end(form) }}
