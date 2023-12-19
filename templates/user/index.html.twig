@@ -13,7 +13,7 @@
     <div class="px-4">
         <div class="flex justify-end py-2">
             <a href="{{ path('app_user_new') }}">
-                <button class="group rounded p-2 bg-blue-50 text-blue-500 text-sm transition-all ease-in-out hover:bg-blue-500 hover:text-white">
+                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
                     <i class="fa-solid fa-plus"></i>
                     <span>Nouvel employé</span>
                 </button>
@@ -46,7 +46,7 @@
                 <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td class="{{ cellPadding }} text-right text-gray-400">
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}">
-                        <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
                 </td>
             </tr>

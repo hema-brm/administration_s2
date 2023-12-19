@@ -15,14 +15,14 @@ class Entreprise
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Nom = null;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\Column(length: 20, nullable: true)]
-    private ?string $NumeroSiret = null;
+    private ?string $siretNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Adresse = null;
+    private ?string $adress = null;
 
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: User::class)]
     private Collection $UserId;
@@ -33,6 +33,9 @@ class Entreprise
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Product::class, orphanRemoval: true)]
     private Collection $products;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class)]
+    private Collection $customers;
+
     public function __construct()
     {
         $this->UserId = new ArrayCollection();
@@ -42,6 +45,7 @@ class Entreprise
         $this->addCategory(new Category("Décoration"));
         $this->addCategory(new Category("Traiteur"));
         $this->addCategory(new Category("Divertissement"));
+        $this->customers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,38 +53,38 @@ class Entreprise
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->Nom;
+        return $this->name;
     }
 
-    public function setNom(string $Nom): static
+    public function setName(string $name): static
     {
-        $this->Nom = $Nom;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getNumeroSiret(): ?string
+    public function getSiretNumber(): ?string
     {
-        return $this->NumeroSiret;
+        return $this->siretNumber;
     }
 
-    public function setNumeroSiret(?string $NumeroSiret): static
+    public function setSiretNumber(?string $siretNumber): static
     {
-        $this->Numero_Siret = $NumeroSiret;
+        $this->siretNumber = $siretNumber;
 
         return $this;
     }
 
-    public function getAdresse(): ?string
+    public function getAdress(): ?string
     {
-        return $this->Adresse;
+        return $this->adress;
     }
 
-    public function setAdresse(?string $Adresse): static
+    public function setAdress(?string $adress): static
     {
-        $this->Adresse = $Adresse;
+        $this->adress = $adress;
 
         return $this;
     }
@@ -117,7 +121,7 @@ class Entreprise
 
     public function __toString()
     {
-        return $this->getNom();
+        return $this->getName();
     }
 
     /**
@@ -174,6 +178,36 @@ class Entreprise
             // set the owning side to null (unless already changed)
             if ($product->getCompanyId() === $this) {
                 $product->setCompanyId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Customer>
+     */
+    public function getCustomers(): Collection
+    {
+        return $this->customers;
+    }
+
+    public function addCustomer(Customer $customer): static
+    {
+        if (!$this->customers->contains($customer)) {
+            $this->customers->add($customer);
+            $customer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomer(Customer $customer): static
+    {
+        if ($this->customers->removeElement($customer)) {
+            // set the owning side to null (unless already changed)
+            if ($customer->getCompany() === $this) {
+                $customer->setCompany(null);
             }
         }
 

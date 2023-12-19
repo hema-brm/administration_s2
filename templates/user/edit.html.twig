@@ -9,7 +9,7 @@
     }) }}
 
      <div class="p-4">
-        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-primary-500 ease-in-out">
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_user_index') }}">Retour à la liste</a>
         </div>
@@ -18,9 +18,9 @@
                 {{ include('user/_form.html.twig', {
                     button_label: 'Modifier',
                     button_classes: [
-                        'bg-yellow-400',
+                        'bg-warning-400',
                         'text-gray-900',
-                        'hover:bg-yellow-500',
+                        'hover:bg-warning-500',
                         'ml-2',
                     ]
                 }) }}

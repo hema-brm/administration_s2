@@ -6,8 +6,10 @@ use App\Entity\Customer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class CustomerFixtures extends Fixture
+
+class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
     private $faker;
     // construct with faker
@@ -38,6 +40,7 @@ class CustomerFixtures extends Fixture
     {
         return [
             UserFixtures::class,
+            CompanyFixtures::class
         ];
     }
 }
