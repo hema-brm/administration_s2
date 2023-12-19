@@ -1,5 +1,6 @@
 {% macro item(params) %}
     {% set text = params.text|default('') %}
+    {% set subList = params.subList|default('') %}
     {% set route = params.route|default('#') %}
     {% set iconClass = params.icon|default('') %}
     {% set currentRoute = app.request.attributes.get('_route')|default('') %}
@@ -13,10 +14,13 @@
     <a href="{{ path(route) }}">
         <li class="group flex sub-nav-item py-2 px-6 hover:cursor-pointer hover:bg-primary-50 {{ activeClass.wrapper }}">
             <div class="flex items-center group-hover:text-primary-500">
-                <div class="w-7">
-                    <i class="text-primary-500 fa-solid {{ iconClass }}"></i>
+                <div class="{{subList}} flex flex-row ">
+                    <div class="w-7">
+                        <i class="text-primary-500 fa-solid {{ iconClass }}"></i>
+                    </div>
+                    <span class="{{ activeClass.text }}">{{ text }}</span>
                 </div>
-                <span class="{{ activeClass.text }}">{{ text }}</span>
+                
             </div>
         </li>
     </a>
