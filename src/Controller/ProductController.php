@@ -70,7 +70,7 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setCompanyId($this->getUser()->getEntreprise());
+            $product->setCompanyId($this->getUser()->getCompany());
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -103,7 +103,7 @@ class ProductController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
-    #[Security('product.getCompanyId() === user.getEntreprise()')]
+    #[Security('product.getCompanyId() === user.getCompany()')]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -112,7 +112,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    #[Security('product.getCompanyId() === user.getEntreprise()')]
+    #[Security('product.getCompanyId() === user.getCompany()')]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);

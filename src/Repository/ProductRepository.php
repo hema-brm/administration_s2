@@ -47,7 +47,7 @@ class ProductRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('c');
         //requete sql, company sera specifie via setParameter
         $query->andWhere('c.company = :company')
-              ->setParameter('company', $this->user->getEntreprise());
+              ->setParameter('company', $this->user->getCompany());
         
         $query = $query->getQuery();
 

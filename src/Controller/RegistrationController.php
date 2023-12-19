@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Entreprise;
+use App\Entity\Company;
 use App\Form\RegistrationFormType;
 use App\Security\Roles\IUserRole;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController
             $companySiretNumber = $form->get('siretNumber')->getData();
 
             // Créer une instance d'company et lui attribuer les données du formulaire
-            $company = new Entreprise();
+            $company = new Company();
             $company->setName($companyName);
             $company->setAdress($companyAdress);
             $company->setSiretNumber($companySiretNumber);

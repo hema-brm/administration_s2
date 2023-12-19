@@ -22,11 +22,11 @@ final class Version20231218222716 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE customer ADD company_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TSVECTOR');
-        $this->addSql('ALTER TABLE customer ADD CONSTRAINT FK_81398E09979B1AD6 FOREIGN KEY (company_id) REFERENCES entreprise (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE customer ADD CONSTRAINT FK_81398E09979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_81398E09979B1AD6 ON customer (company_id)');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN nom TO name');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN numero_siret TO siret_number');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN adresse TO adress');
+        $this->addSql('ALTER TABLE company RENAME COLUMN nom TO name');
+        $this->addSql('ALTER TABLE company RENAME COLUMN numero_siret TO siret_number');
+        $this->addSql('ALTER TABLE company RENAME COLUMN adresse TO adress');
         $this->addSql('ALTER TABLE product ALTER search_vector TYPE TSVECTOR');
     }
 
@@ -39,8 +39,8 @@ final class Version20231218222716 extends AbstractMigration
         $this->addSql('ALTER TABLE customer DROP company_id');
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TEXT');
         $this->addSql('ALTER TABLE product ALTER search_vector TYPE TEXT');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN name TO nom');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN siret_number TO numero_siret');
-        $this->addSql('ALTER TABLE entreprise RENAME COLUMN adress TO adresse');
+        $this->addSql('ALTER TABLE company RENAME COLUMN name TO nom');
+        $this->addSql('ALTER TABLE company RENAME COLUMN siret_number TO numero_siret');
+        $this->addSql('ALTER TABLE company RENAME COLUMN adress TO adresse');
     }
 }

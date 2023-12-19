@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Entreprise;
+use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\UserRepository;
@@ -17,7 +17,7 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
     }
     public function load(ObjectManager $manager): void
     {
-            $company = new Entreprise();
+            $company = new Company();
             $company
                 ->setName("MarryMe")
                 ->setSiretNumber("12321123212432")

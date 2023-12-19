@@ -32,7 +32,7 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         //Récupérer les catégories associées à l'entreprise de l'utilisateur connecté
-        $categories = $this->categoryRepository->findBy(['company'=> $this->currentUser->getEntreprise()]);
+        $categories = $this->categoryRepository->findBy(['company'=> $this->currentUser->getCompany()]);
 
         $choices = [];
         foreach($categories as $category){

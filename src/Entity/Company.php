@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\EntrepriseRepository;
+use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
-class Entreprise
+#[ORM\Entity(repositoryClass: CompanyRepository::class)]
+class Company
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -111,7 +111,7 @@ class Entreprise
     {
         if ($this->UserId->removeElement($userId)) {
             // set the owning side to null (unless already changed)
-            if ($userId->getEntreprise() === $this) {
+            if ($userId->getCompany() === $this) {
                 $userId->setEntreprise(null);
             }
         }

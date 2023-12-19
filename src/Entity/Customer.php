@@ -44,7 +44,7 @@ class Customer
     private ?string $searchVector = null;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
-    private ?Entreprise $company = null;
+    private ?Company $company = null;
 
     public function getId(): ?int
     {
@@ -128,12 +128,12 @@ class Customer
         return $this;
     }
 
-    public function getCompany(): ?Entreprise
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(?Entreprise $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
 

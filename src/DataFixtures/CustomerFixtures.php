@@ -6,7 +6,7 @@ use App\Entity\Customer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use App\Repository\EntrepriseRepository;
+use App\Repository\CompanyRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 
@@ -15,7 +15,7 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
     private $faker;
     private $entrepriseRepository;
     // construct with faker
-    public function __construct(EntrepriseRepository $entrepriseRepository)
+    public function __construct(CompanyRepository $entrepriseRepository)
     {
         $this->faker = Factory::create();
         $this->entrepriseRepository = $entrepriseRepository;
