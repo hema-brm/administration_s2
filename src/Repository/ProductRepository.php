@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Query\Product\FullSearchQuery;
 use App\Query\Trait\PaginatorTrait;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<Product>
@@ -21,11 +22,13 @@ class ProductRepository extends ServiceEntityRepository
 {
     use PaginatorTrait;
     private FullSearchQuery $fullSearchQuery;
+    private $user;
 
-    public function __construct(ManagerRegistry $registry, FullSearchQuery $fullSearchQuery)
+    public function __construct(ManagerRegistry $registry, FullSearchQuery $fullSearchQuery, Security $security)
     {
         parent::__construct($registry, Product::class);
         $this->fullSearchQuery = $fullSearchQuery;
+        $this->user = $security->getUser();
     }
 
     public function search(string $search, int $page = 1, int $limit = 10): Paginator 
@@ -40,10 +43,13 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     public function findAllWithPage(int $page = 1, int $limit = 10): Paginator
-    {
-        $query = $this
-                    ->createQueryBuilder('c')
-                    ->getQuery();
+    {   //c est un alias correspondant ici à product 
+        $query = $this->createQueryBuilder('c');
+        //requete sql, company sera specifie via setParameter
+        $query->andWhere('c.company = :company')
+              ->setParameter('company', $this->user->getEntreprise());
+        
+        $query = $query->getQuery();
 
         $this->decoratePaginator($query, $page, $limit); 
 

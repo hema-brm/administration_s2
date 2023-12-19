@@ -45,7 +45,7 @@ class ProductController extends AbstractController
         $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
 
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
+            'products' => $products,
             'paginatorHelper' => $paginatorHelper,
         ]);
     }
