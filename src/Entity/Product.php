@@ -54,18 +54,12 @@ class Product
         return $this;
     }
 
-<<<<<<< HEAD
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
 
     }
     
-=======
-    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
-    private ?string $searchVector = null;
-
->>>>>>> develop
     public function getId(): ?int
     {
         return $this->id;
