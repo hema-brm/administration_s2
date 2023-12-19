@@ -31,9 +31,6 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToMany(targetEntity: SubCategory::class, mappedBy: 'products')]
-    private Collection $subCategories;
-
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Entreprise $company = null;
     
@@ -57,12 +54,18 @@ class Product
         return $this;
     }
 
+<<<<<<< HEAD
     public function __construct()
     {
         $this->subCategories = new ArrayCollection();
 
     }
     
+=======
+    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
+    private ?string $searchVector = null;
+
+>>>>>>> develop
     public function getId(): ?int
     {
         return $this->id;
@@ -128,33 +131,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, SubCategory>
-     */
-    public function getSubCategories(): Collection
-    {
-        return $this->subCategories;
-    }
-
-    public function addSubCategory(SubCategory $subCategory): static
-    {
-        if (!$this->subCategories->contains($subCategory)) {
-            $this->subCategories->add($subCategory);
-            $subCategory->addProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubCategory(SubCategory $subCategory): static
-    {
-        if ($this->subCategories->removeElement($subCategory)) {
-            $subCategory->removeProduct($this);
-        }
-
-        return $this;
-    }
-
     public function getCompanyId(): ?Entreprise
     {
         return $this->company;
@@ -180,6 +156,18 @@ class Product
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getSearchVector(): ?string
+    {
+        return $this->searchVector;
+    }
+
+    public function setSearchVector(?string $searchVector): static
+    {
+        $this->searchVector = $searchVector;
+
+        return $this;
     }
 
 

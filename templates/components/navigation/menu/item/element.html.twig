@@ -1,0 +1,41 @@
+{% import "@components/macros/menu.html.twig" as menuMacro %}
+
+<ul class="nav-item text-sm">
+    {{ menuMacro.item({
+        text: 'Factures',
+        icon: 'fa-file-invoice-dollar',
+        route: 'app_bill_index'
+    }) }}
+    {{ menuMacro.item({
+        text: 'Devis',
+        icon: 'fa-file-invoice',
+        route: 'app_quote_index'
+
+    }) }}
+    {{ menuMacro.item({
+        text: 'Clients',
+        icon: 'fa-user',
+        route: 'app_customer_index'
+    }) }}
+    {{ menuMacro.item({
+        text: 'Paiements',
+        icon: 'fas fa-money-bill-wave',
+        route:'app_payment_index'
+    }) }}
+
+    {{ menuMacro.item({
+        text: 'Produits',
+        icon: 'fa-box',
+        route: 'app_product_index'
+    }) }}
+    {% set currentRoute = app.request.attributes.get('_route')|split('_')|slice(0, 2)|join('_') %}
+    {% if  currentRoute == 'app_product' or currentRoute ==  'app_category'%}
+        <ul>
+            {{ menuMacro.item({
+                text: 'Catégories',
+                icon: 'fa-layer-group',
+                route: 'app_category_index'
+            }) }}
+        </ul>
+    {% endif %}
+</ul>

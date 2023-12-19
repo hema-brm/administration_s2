@@ -4,6 +4,7 @@
     </div>
 {% endmacro %}
 
+
 {% macro button_macro(params) %}
     {# Initialize button atributes #}
 
@@ -11,8 +12,11 @@
     {% set text = params.text|default('') %}
     {% set route = params.route|default('#') %}
     {% set has_action = route is not empty %}
+    {% set onclick = params.onclick|default('') %}
     {% set custom_classes = params.custom_classes|default([]) %}
     {% set icon = params.icon|default('') %}
+    {% set disabled = params.disabled|default(false) %}
+    {% set bool = disabled ? 'disabled':'' %}
     
     {# Initialize button classes #}
     {% set button_classes = [
@@ -31,7 +35,7 @@
         <a href="{{ route }}">
     {% endif %}
 
-        <button id="{{id}}" class="{{ button_classes }}">
+        <button id="{{id}}" class="{{ button_classes }}" onclick="{{onclick}}" {{bool}}>
             <i class="fa-solid {{ icon }}"></i>
             {% if text is not empty %}
                 {{ text }}
@@ -69,8 +73,8 @@
         },
         warning: {
             backgroundColor: 'bg-warning-100',
-            textColor: 'text-dark-900',
-            borderColor: 'border-dark-500',
+            textColor: 'text-warning-700',
+            borderColor: 'border-warning-200',
         },
         info: {
             backgroundColor: 'bg-info-100',
