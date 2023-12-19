@@ -18,7 +18,6 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
     .enablePostCssLoader()
-    .enableReactPreset()
     .addPlugin(new WatchExternalFilesPlugin({
         files: [
             './templates/**/*.html.twig',
