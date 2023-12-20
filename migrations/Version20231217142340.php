@@ -27,7 +27,7 @@ final class Version20231217142340 extends AbstractMigration
         $this->addSql('DROP TABLE sub_category_product');
         $this->addSql('DROP TABLE sub_category');
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TSVECTOR');
-        $this->addSql('ALTER TABLE entreprise ALTER numero_siret TYPE VARCHAR(20)');
+        $this->addSql('ALTER TABLE company ALTER numero_siret TYPE VARCHAR(20)');
         $this->addSql('ALTER TABLE product ADD search_vector TSVECTOR DEFAULT \'\'');
         $this->addSql('ALTER TABLE product ALTER search_vector TYPE TSVECTOR');
         
@@ -84,7 +84,7 @@ final class Version20231217142340 extends AbstractMigration
         $this->addSql('ALTER TABLE sub_category_product ADD CONSTRAINT fk_bf59c2fa4584665a FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE sub_category ADD CONSTRAINT fk_bce3f79812469de2 FOREIGN KEY (category_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TEXT');
-        $this->addSql('ALTER TABLE entreprise ALTER numero_siret TYPE VARCHAR(14)');
+        $this->addSql('ALTER TABLE company ALTER numero_siret TYPE VARCHAR(14)');
         $this->addSql('ALTER TABLE product DROP search_vector');
         $this->addSql('DROP TRIGGER product_search_vector_update ON product;');
     }

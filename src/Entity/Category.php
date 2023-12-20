@@ -22,7 +22,7 @@ class Category
     private Collection $products;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
-    private ?Entreprise $company = null;
+    private ?Company $company = null;
 
     public function __construct($name)
     {   $this->name = $name;
@@ -81,12 +81,12 @@ class Category
         return $this;
     }
 
-    public function getCompanyId(): ?Entreprise
+    public function getCompanyId(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompanyId(?Entreprise $company): static
+    public function setCompanyId(?Company $company): static
     {
         $this->company = $company;
 

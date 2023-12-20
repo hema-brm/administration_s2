@@ -19,7 +19,7 @@ class CategoryController extends AbstractController
     {
 
         return $this->render('category/index.html.twig', [
-            'categories' => $categoryRepository->findBy(['company' => $this->getUser()->getEntreprise()]),
+            'categories' => $categoryRepository->findBy(['company' => $this->getUser()->getCompany()]),
         ]);
     }
 
@@ -48,7 +48,7 @@ class CategoryController extends AbstractController
          $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-    $category->setCompanyId($this->getUser()->getEntreprise());
+    $category->setCompanyId($this->getUser()->getCompany());
     $entityManager->persist($category);
     $entityManager->flush();
 

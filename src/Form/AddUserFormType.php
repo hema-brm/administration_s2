@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Entity\Entreprise;
+use App\Entity\Company;
 use App\Security\Roles\IUserRole;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -91,7 +91,7 @@ class AddUserFormType extends AbstractType
                 
             ])
             ->add('entreprise', EntityType::class, [
-                'class' => Entreprise::class,
+                'class' => Company::class,
                 'label' => 'Entreprise',
                 'data' => $options['entreprise'],
                 'disabled' => true,

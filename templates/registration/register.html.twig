@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '@base/public.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
@@ -44,7 +44,7 @@
         'placeholder': 'Entrez votre numéro de téléphone'
                         }
                     }) }}
-        {{ form_row(registrationForm.Nom, {
+        {{ form_row(registrationForm.name, {
             label: "Nom de l'Entreprise"
        ,
                         'attr': {
@@ -52,14 +52,14 @@
         'placeholder': 'Entrez le nom de votre Entreprise'
                         }
                     }) }}
-        {{ form_row(registrationForm.Adresse, {
+        {{ form_row(registrationForm.adress, {
     'label': "Adresse de l'Entreprise",
     'attr': {
         'class': 'border p-2 rounded-md w-full text-sm' ,
         'placeholder': "Entrez l'adresse de votre Entreprise"
     }
 }) }}
-        {{ form_row(registrationForm.Numero_Siret, {
+        {{ form_row(registrationForm.siretNumber, {
             label: "Numéro Siret de l'Entreprise"
         , 
                         'attr': {

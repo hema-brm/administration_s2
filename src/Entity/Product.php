@@ -32,7 +32,7 @@ class Product
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?Entreprise $company = null;
+    private ?Company $company = null;
 
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
@@ -102,12 +102,12 @@ class Product
         return $this;
     }
 
-    public function getCompanyId(): ?Entreprise
+    public function getCompanyId(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompanyId(?Entreprise $company): static
+    public function setCompanyId(?Company $company): static
     {
         $this->company = $company;
 

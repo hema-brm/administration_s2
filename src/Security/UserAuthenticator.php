@@ -47,7 +47,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName = null): ?Response
     {
-        return new RedirectResponse($this->urlGenerator->generate('app_customer_index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_product_index'));
     }
 
     protected function getLoginUrl(Request $request): string

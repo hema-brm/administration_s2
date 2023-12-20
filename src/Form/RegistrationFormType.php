@@ -27,15 +27,15 @@ class RegistrationFormType extends AbstractType
         ->add('phoneNumber', TextType::class, [
             'label' => 'Phone Number',
         ])
-        ->add('Nom', TextType::class, [
+        ->add('name', TextType::class, [
             'label' => 'Entreprise Name',
             'mapped' => false,
         ])
-        ->add('Adresse', TextType::class, [
+        ->add('adress', TextType::class, [
             'label' => 'Entreprise Address',
             'mapped' => false,
         ])
-        ->add('Numero_Siret', TextType::class, [
+        ->add('siretNumber', TextType::class, [
             'label' => 'Entreprise SIRET Number',
             'mapped' => false,
         ])
