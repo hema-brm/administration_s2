@@ -51,7 +51,7 @@ deleteButtons.forEach((button, index)=>{
             });
     
             confirmDeleteButtons[0].addEventListener('click', async () => {
-                    const list = checkboxObjects[index].getlistID();
+                    const list = checkboxObjects[index].getlistDeleteProducts();
                     console.log(list);
                     console.log('list en json');
                     console.log(JSON.stringify(list));

@@ -90,11 +90,16 @@ class ProductController extends AbstractController
     {
         $productDatasJSON = $request->getContent();
         $productDatas = json_decode($productDatasJSON, true);
-
-        foreach($productDatas as $id){
+        
+        foreach($productDatas as $productData){
+            $id = $productData['id'];
+            $token = $productData['token'];
             $product = $productRepository->find($id);
-            if($product)
-                $entityManager->remove($product);
+            if($product){
+                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
+                    $entityManager->remove($product);
+                }
+            }
         }
         $entityManager->flush();
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
