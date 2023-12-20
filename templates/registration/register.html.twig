@@ -18,7 +18,7 @@
 
     {{ form_start(registrationForm)}}
     <div class="grid gap-4">
-        {{ form_row(registrationForm.firstName, {
+        {{ form_widget(registrationForm.firstName, {
                         label: 'Nom'
        ,
                         'attr': {
@@ -27,7 +27,7 @@
                         }
 
                     }) }}
-        {{ form_row(registrationForm.lastName, {
+        {{ form_widget(registrationForm.lastName, {
             label: 'Prénom'
        ,
                         'attr': {
@@ -36,7 +36,7 @@
                         }
                         
                     }) }}
-        {{ form_row(registrationForm.phoneNumber, {
+        {{ form_widget(registrationForm.phoneNumber, {
             label: 'Numéro de téléphone'
        ,
                         'attr': {
@@ -44,7 +44,7 @@
         'placeholder': 'Entrez votre numéro de téléphone'
                         }
                     }) }}
-        {{ form_row(registrationForm.Nom, {
+        {{ form_widget(registrationForm.Nom, {
             label: "Nom de l'Entreprise"
        ,
                         'attr': {
@@ -52,14 +52,14 @@
         'placeholder': 'Entrez le nom de votre Entreprise'
                         }
                     }) }}
-        {{ form_row(registrationForm.Adresse, {
+        {{ form_widget(registrationForm.Adresse, {
     'label': "Adresse de l'Entreprise",
     'attr': {
         'class': 'border p-2 rounded-md w-full text-sm' ,
         'placeholder': "Entrez l'adresse de votre Entreprise"
     }
 }) }}
-        {{ form_row(registrationForm.Numero_Siret, {
+        {{ form_widget(registrationForm.Numero_Siret, {
             label: "Numéro Siret de l'Entreprise"
         , 
                         'attr': {
@@ -73,7 +73,7 @@
             <strong class="font-bold">Un compte existe déjà avec cette adresse e-mail</strong>
         </div>
     {% endif %}
-        {{ form_row(registrationForm.email, {
+        {{ form_widget(registrationForm.email, {
             label: 'Adresse e-mail'
        ,
                         'attr': {
@@ -81,7 +81,7 @@
                             'placeholder': 'Entrez votre adresse e-mail'
                         }
                     }) }}
-        {{ form_row(registrationForm.plainPassword, {
+        {{ form_widget(registrationForm.plainPassword, {
             label: 'Mot de passe'
         ,
                         'attr': {
