@@ -25,6 +25,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
     {   
         $count = 100;
         $category = new Category('Art');
+
         $manager->persist($category);
         for ($i = 0; $i < $count; $i++) {
             $product = new Product();
@@ -42,6 +43,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
             $product->setDescription($description);
             
             $company = $this->entrepriseRepository->findOneBy(['name'=>'MarryMe']);
+            $company->addCategory($category);
             $product->setCompanyId($company);
             $manager->persist($product);
         }
