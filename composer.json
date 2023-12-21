@@ -45,7 +45,8 @@
         "symfony/web-link": "6.*",
         "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "6.*",
-        "twig/twig": "3.*"
+        "twig/twig": "3.*",
+        "vich/uploader-bundle": "^2.3"
     },
     "config": {
         "allow-plugins": {
