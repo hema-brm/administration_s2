@@ -22,7 +22,7 @@
 {% block form_label %}
     <div class="flex flex-row mb-1">
         {{- parent() -}}
-        {% if required %}
+        {% if label is not same as(false) and required %}
             <span class="text-xs">*</span>
         {% endif %}
     </div>
