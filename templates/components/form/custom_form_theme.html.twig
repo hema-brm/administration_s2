@@ -32,8 +32,17 @@
     {%- set attr = attr|merge({
         class: classes
     }) -%}
-    {% set type = type|default('text') %}
-    {{- block('form_widget_simple') -}}
+    {{- block('form_widget') -}}
+{% endblock %}
+
+{% block password_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {%- set type = 'password' -%}
+    {{- block('form_widget') -}}
 {% endblock %}
 
 {%- block textarea_widget -%}
