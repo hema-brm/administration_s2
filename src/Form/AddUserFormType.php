@@ -90,10 +90,10 @@ class AddUserFormType extends AbstractType
                 'multiple' => true,
                 
             ])
-            ->add('entreprise', EntityType::class, [
+            ->add('company', EntityType::class, [
                 'class' => Company::class,
                 'label' => 'Entreprise',
-                'data' => $options['entreprise'],
+                'data' => $options['company'],
                 'disabled' => true,
                 'required' => true,
             ]);
@@ -103,7 +103,7 @@ class AddUserFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'entreprise' => null,
+            'company' => null,
         ]);
     }
 }
