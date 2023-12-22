@@ -1,29 +1,11 @@
-{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {{ form_start(form) }}
-    <div class='input-wrapper'>
-       {{form_widget_macro({item: form.name})}}
-    </div>
-
-    <div class='input-wrapper'>
-        {{form_widget_macro({item: form.reference})}}
-    </div>
-
-        {# Champ pour la description du produit #}
-    <div class='input-wrapper'>
-        {{form_widget_macro({item: form.description})}}
-    </div>
-
-    {# Champ pour le prix du produit #}
-    <div class='input-wrapper'>
-        {{form_widget_macro({item: form.price})}}
-    </div>
-
-    {# Champ pour la catégorie du produit #}
-    <div class='input-wrapper'>
-        {{form_widget_macro({item: form.category})}}
-    </div>
+    {{ form_row(form.name) }}
+    {{ form_row(form.reference) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.category) }}
 
     <div class="flex flex-row-reverse">
         {{ button_macro({
@@ -31,5 +13,4 @@
             custom_classes: button_classes,
         }) }}
     </div>
-
 {{ form_end(form) }}

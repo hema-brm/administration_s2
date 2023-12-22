@@ -6,8 +6,7 @@ twig:
         '%kernel.project_dir%/templates/customer': customer
         '%kernel.project_dir%/templates/base': base
     form_themes:
-        - 'tailwind_2_layout.html.twig'
-        - 'components/form/custom_form_theme.html.twig'
+        - 'components/form/custom_theme.html.twig'
 
 when@test:
     twig:

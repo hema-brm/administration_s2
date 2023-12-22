@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Payment;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -32,12 +33,16 @@ class PaymentType extends AbstractType
                 ],
                 'label' => 'Moyen de paiement', 
             ])
-            ->add('datePaiement')
-            ->add('dateEcheance')
+            ->add('datePaiement', DateTimeType::class, [
+                'widget' => 'single_text'
+            ])
+            ->add('dateEcheance', DateTimeType::class, [
+                'widget' => 'single_text'
+            ])
             ->add('bill', EntityType::class, [
                 'class' => Bill::class,
                 'choice_label' => 'nomClient', 
-                'label' => 'Client', 
+                'label' => 'Client',
             ]);
     }
 
