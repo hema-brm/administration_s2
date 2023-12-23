@@ -41,7 +41,7 @@ class ProductVoter extends Voter
     }
 
     private function canShow(Product $product, UserInterface $user): bool
-    {//role admin, entreprise, employee
+    {//role admin, company, employee
         $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ($product->getCompanyId() === $user->getCompany());
         
         if(!$permission){

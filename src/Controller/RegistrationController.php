@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setEntreprise($company);
+            $user->setCompany($company);
             $firstName = $form->get('firstName')->getData();
             $user->setFirstName($firstName);
             $lastName = $form->get('lastName')->getData();

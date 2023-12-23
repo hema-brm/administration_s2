@@ -13,12 +13,12 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
     private $faker;
-    private $entrepriseRepository;
+    private $companyRepository;
     // construct with faker
-    public function __construct(CompanyRepository $entrepriseRepository)
+    public function __construct(CompanyRepository $companyRepository)
     {
         $this->faker = Factory::create();
-        $this->entrepriseRepository = $entrepriseRepository;
+        $this->companyRepository = $companyRepository;
     }
 
     public function load(ObjectManager $manager): void

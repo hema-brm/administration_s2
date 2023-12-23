@@ -80,7 +80,7 @@ class AddUserFormType extends AbstractType
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => IUserRole::ROLE_ADMIN,
-                    'Entreprise' => IUserRole::ROLE_COMPANY,
+                    'Company' => IUserRole::ROLE_COMPANY,
                     'Comptable' => IUserRole::ROLE_ACCOUNTANT,
                 ],
                 'label' => 'Rôles',

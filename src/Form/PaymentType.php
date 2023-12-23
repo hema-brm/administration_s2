@@ -41,7 +41,7 @@ class PaymentType extends AbstractType
             ])
             ->add('bill', EntityType::class, [
                 'class' => Bill::class,
-                'choice_label' => 'nomClient', 
+                'choice_label' => 'nameClient', 
                 'label' => 'Client',
             ]);
     }

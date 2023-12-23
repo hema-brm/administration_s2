@@ -24,7 +24,7 @@
                 <tbody>
                     {% for payment in payments %}
                         <tr>
-                            <td class="border border-slate-300">{{ payment.bill.nomClient }}</td>
+                            <td class="border border-slate-300">{{ payment.bill.nameClient }}</td>
                             <td class="border border-slate-300">{{ payment.status }}</td>
                             <td class="border border-slate-300">{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
                             <td class="border border-slate-300">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>

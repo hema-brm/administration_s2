@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'UserId')]
-    private ?Company $entreprise = null;
+    private ?Company $company = null;
 
     public function getId(): ?int
     {
@@ -156,12 +156,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCompany(): ?Company
     {
-        return $this->entreprise;
+        return $this->company;
     }
 
-    public function setEntreprise(?Company $entreprise): static
+    public function setCompany(?Company $company): static
     {
-        $this->entreprise = $entreprise;
+        $this->company = $company;
 
         return $this;
     }

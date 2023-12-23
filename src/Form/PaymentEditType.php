@@ -36,7 +36,7 @@ class PaymentEditType extends AbstractType
             ->add('dateEcheance')
             ->add('bill', EntityType::class, [
                 'class' => Bill::class,
-                'choice_label' => 'nomClient', 
+                'choice_label' => 'nameClient', 
                 'label' => 'Client', 
                 'disabled' => true,
             ]);

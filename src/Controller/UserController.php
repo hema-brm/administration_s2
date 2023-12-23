@@ -21,9 +21,9 @@ class UserController extends AbstractController
         $user = new User();
 
         // Récupérer l'entreprise de l'utilisateur connecté
-        $entreprise = $security->getUser()->getCompany();
+        $company = $security->getUser()->getCompany();
 
-        $form = $this->createForm(AddUserFormType::class, $user, ['company' => $entreprise]);
+        $form = $this->createForm(AddUserFormType::class, $user, ['company' => $company]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

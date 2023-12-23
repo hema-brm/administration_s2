@@ -29,11 +29,11 @@ final class Version20231203180241 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE sub_category_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE test_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE bill (id INT NOT NULL, total_price NUMERIC(10, 2) DEFAULT NULL, numero_facture VARCHAR(255) DEFAULT NULL, nom_client VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE bill (id INT NOT NULL, total_price NUMERIC(10, 2) DEFAULT NULL, numero_facture VARCHAR(255) DEFAULT NULL, name_client VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE category (id INT NOT NULL, company_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_64C19C1979B1AD6 ON category (company_id)');
         $this->addSql('CREATE TABLE customer (id INT NOT NULL, email VARCHAR(255) NOT NULL, lastname VARCHAR(50) NOT NULL, firstname VARCHAR(50) NOT NULL, address VARCHAR(255) DEFAULT NULL, phone VARCHAR(15) DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE company (id INT NOT NULL, nom VARCHAR(255) NOT NULL, numero_siret VARCHAR(14) DEFAULT NULL, adresse VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE company (id INT NOT NULL, name VARCHAR(255) NOT NULL, numero_siret VARCHAR(14) DEFAULT NULL, adresse VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE payment (id INT NOT NULL, bill_id INT NOT NULL, status VARCHAR(255) NOT NULL, moyen VARCHAR(255) NOT NULL, date_paiement TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, date_echeance TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6D28840D1A8C12F5 ON payment (bill_id)');
         $this->addSql('CREATE TABLE product (id INT NOT NULL, category_id INT NOT NULL, company_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, reference VARCHAR(255) DEFAULT NULL, description VARCHAR(255) DEFAULT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');

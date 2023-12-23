@@ -1,4 +1,4 @@
-## Inscription Entreprise
+## Inscription Company
 
 ### Table `users`
 
