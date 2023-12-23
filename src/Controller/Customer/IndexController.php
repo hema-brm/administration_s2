@@ -3,6 +3,7 @@
 namespace App\Controller\Customer;
 
 use App\Entity\Customer;
+use App\Form\CrudSearchType;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
 use App\Service\Request\PageFromRequestService;
@@ -10,6 +11,7 @@ use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +23,7 @@ class IndexController extends AbstractController
     private ?string $searchTerm;
     private ?int $page;
 
-    public const SEARCH_FORM_NAME = 'search';
+    public const SEARCH_FORM_NAME = 'crud_search';
 
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
@@ -30,14 +32,15 @@ class IndexController extends AbstractController
         RequestQueryService $requestQueryService,
         PageFromRequestService $pageFromRequestService
     ) {
-        $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
+        $searchQuery = $requestQueryService->all(self::SEARCH_FORM_NAME);
+        $this->searchTerm = $searchQuery['search'] ?? null;
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(CustomerRepository $customerRepository): Response
     {
-        if ($this->searchTerm) {
+        if (!empty($this->searchTerm)) {
             return $this->search($this->searchTerm, $customerRepository);
         }
 
@@ -45,6 +48,7 @@ class IndexController extends AbstractController
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
         return $this->render('@customer/index/index.html.twig', [
+            'searchForm' => $this->getSearchForm(),
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
         ]);
@@ -55,7 +59,10 @@ class IndexController extends AbstractController
         $customers =  $customerRepository->search($searchTerm, $this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
+        $form = $this->getSearchForm();
+
         return $this->render('@customer/index/index.html.twig', [
+            'searchForm' => $form,
             'searchTerm' => $searchTerm,
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
@@ -135,6 +142,22 @@ class IndexController extends AbstractController
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function getSearchForm(): FormInterface
+    {
+        $search = !empty($this->searchTerm)
+            ? $this->searchTerm
+            : '';
+
+        $data = [
+            'search' => $search,
+        ];
+
+        return $this
+            ->createForm(CrudSearchType::class, $data, [
+                'action' => $this->generateUrl('app_customer_index'),
+            ]);
     }
 
 }

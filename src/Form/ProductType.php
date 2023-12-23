@@ -44,35 +44,45 @@ class ProductType extends AbstractType
                 'label' => 'Nom',
                 'required' => true,
                 'constraints' => [new Length(['min' => 2, 'max' => 25])],
-                'help' => 'obligatoire',
+                'attr' => [
+                    'placeholder' => 'Nom du produit',
+                ],
             ])
 
             ->add('reference',TextType::class, [
                 'label' => 'Reference',
                 'constraints' => [new Length(['min' => 1, 'max' => 50])],
                 'required'    => false,
-                'help' => 'facultatif',
+                'attr' => [
+                    'placeholder' => 'Référence du produit',
+                ],
             ])
 
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'constraints' => [new Length([ 'max' => 150])],
                 'required'    => false,
-                'help' => 'facultatif',
+                'attr' => [
+                    'placeholder' => 'Description du produit',
+                ],
             ] )
 
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
                 'divisor' => 100,
                 'required' => true,
-                'help' => 'obligatoire',
+                'attr' => [
+                    'placeholder' => 'Prix du produit',
+                ],
             ])
             
             ->add('category', ChoiceType::class, [
                 'label' => 'Catégorie',
-                'placeholder' => 'Sélectionner une catégorie',
                 'choices' => $choices,
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Sélectionner une catégorie',
+                ],
             ]);
 
     }

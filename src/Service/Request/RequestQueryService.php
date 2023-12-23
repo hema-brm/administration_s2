@@ -13,9 +13,9 @@ class RequestQueryService
         $this->request = Request::createFromGlobals();
     }
 
-    public function all(): array
+    public function all(?string $key): array
     {
-        return $this->request->query->all();
+        return $this->request->query->all($key);
     }
 
     public function get(string $key): mixed

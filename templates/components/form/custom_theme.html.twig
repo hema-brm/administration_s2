@@ -1,0 +1,103 @@
+
+{% use 'tailwind_2_layout.html.twig' %}
+{% use 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    {%- set row_attr = {
+        class: 'flex flex-col mb-3 text-sm'
+    } -%}
+    {{- parent() -}}
+{% endblock %}
+
+{% block form_errors %}
+    {% set error_item_class = 'text-danger-400 text-xs' %}
+    {{- parent() -}}
+{% endblock %}
+
+{% block form_help %}
+    {% set help_class = 'text-secondary-500 text-xs' %}
+    {{- parent() -}}
+{% endblock %}
+
+{% block form_label %}
+    <div class="flex flex-row mb-1">
+        {{- parent() -}}
+        {% if label is not same as(false) and required %}
+            <span class="text-xs">*</span>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block text_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- block('form_widget') -}}
+{% endblock %}
+
+{% block search_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'p-2 leading-none outline-0 bg-secondary-50 transition-all duration-300 border focus:border-primary-300 rounded' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {%- set type = 'search' -%}
+    {{- block('form_widget') -}}
+{% endblock %}
+
+{% block password_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {%- set type = 'password' -%}
+    {{- block('form_widget') -}}
+{% endblock %}
+
+{%- block textarea_widget -%}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget -%}
+
+{% block email_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+{% endblock %}
+
+{% block money_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+{% endblock %}
+
+{% block choice_widget_collapsed %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 bg-white' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+{% endblock %}
+
+{%- block datetime_widget -%}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 bg-white' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+{%- endblock datetime_widget -%}

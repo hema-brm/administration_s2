@@ -4,7 +4,9 @@
 
 {% if searchTerm is defined and searchTerm is not empty %}
     {% set urlParams = { 
-        (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): searchTerm|default('') 
+        (constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME')): {
+            search:  searchTerm|default(''),
+        }
     } %}
 {% endif %}
 

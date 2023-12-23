@@ -1,24 +1,13 @@
-{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {% set button_classes = button_classes|default([]) %}
 
 {{ form_start(form) }}
-    {{ form_widget_macro({
-        item: form.email,
-    }) }}
-    {{ form_widget_macro({
-        item: form.lastname,
-    }) }}
-    {{ form_widget_macro({
-        item: form.firstname,
-    }) }}
-    {{ form_widget_macro({
-        item: form.address,
-    }) }}
-    {{ form_widget_macro({
-        item: form.phone,
-    }) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.lastname) }}
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.address) }}
+    {{ form_row(form.phone) }}
 
     <div class="flex flex-row-reverse">
         {{ button_macro({

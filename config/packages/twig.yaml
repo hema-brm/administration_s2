@@ -5,6 +5,8 @@ twig:
         '%kernel.project_dir%/templates/guidelines': guidelines
         '%kernel.project_dir%/templates/customer': customer
         '%kernel.project_dir%/templates/base': base
+    form_themes:
+        - 'components/form/custom_theme.html.twig'
 
 when@test:
     twig:
