@@ -1,5 +1,5 @@
 <?php
-
+//Product.php
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
@@ -33,10 +33,33 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Company $company = null;
+    
+    #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Quote $quote = null;
+    
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
+    
+    
+    public function getQuote(): ?Quote
+    {
+        return $this->quote;
+    }
 
-    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
-    private ?string $searchVector = null;
+    public function setQuote(?Quote $quote): self
+    {
+        $this->quote = $quote;
 
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->subCategories = new ArrayCollection();
+
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -112,6 +135,21 @@ class Product
         $this->company = $company;
 
         return $this;
+    }
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getSearchVector(): ?string

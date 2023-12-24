@@ -2,6 +2,11 @@
 
 <ul class="nav-item text-sm">
     {{ menuMacro.item({
+        text: 'Employés',
+        icon: 'fa-user',
+        route: 'app_user_index'
+    }) }}
+    {{ menuMacro.item({
         text: 'Factures',
         icon: 'fa-file-invoice-dollar',
         route: 'app_bill_index'

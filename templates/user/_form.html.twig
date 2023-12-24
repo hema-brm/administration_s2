@@ -1,0 +1,20 @@
+
+{% from "@components/macros/content.html.twig" import button_macro %}
+
+
+{{ form_start(form) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.roles) }}
+    {{ form_row(form.company) }}
+
+
+    <div class="flex flex-row-reverse">
+        {{ button_macro({
+            text: button_label|default('Enregistrer'),
+            custom_classes: button_classes,
+        }) }}
+    </div>
+{{ form_end(form) }}
