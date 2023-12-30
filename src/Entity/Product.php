@@ -37,10 +37,9 @@ class Product
     #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Quote $quote = null;
-    
-    #[ORM\Column(nullable: true)]
-    private ?int $quantity = null;
-    
+
+    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
+    private ?string $searchVector = null;
     
     public function getQuote(): ?Quote
     {
@@ -136,17 +135,7 @@ class Product
 
         return $this;
     }
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(?int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
+    
     public function __toString(): string
     {
         return $this->name;
