@@ -63,7 +63,6 @@ class ProductType extends AbstractType
 
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
-                'divisor' => 100,
                 'required' => true,
                 'help' => 'obligatoire',
             ])
