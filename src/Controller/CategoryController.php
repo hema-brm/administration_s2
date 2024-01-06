@@ -29,10 +29,14 @@ class CategoryController extends AbstractController
         $categoryDatasJSON = $request->getContent();
         $categoryDatas = json_decode($categoryDatasJSON, true);
         
-        foreach($categoryDatas as $id){
+        foreach($categoryDatas as $categoryData){
+            $id = $categoryData['id'];
+            $token = $categoryData['token'];
             $category = $categoryRepository->find($id);
             if($category){
-                $entityManager->remove($category);
+                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
+                    $entityManager->remove($category);
+                }
             } 
         }
         $entityManager->flush();

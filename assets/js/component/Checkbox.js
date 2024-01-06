@@ -53,15 +53,17 @@ class Checkbox{
     
     }
 
-    getlistID =()=>{
-        let listID = [];
+    getlistToDelete =()=>{
+        let list = [];
         this.checkboxes.forEach((checkbox) => {
             if(checkbox.checked){
-                listID.push(parseInt(checkbox.getAttribute('name')));
+                let id = parseInt(checkbox.getAttribute('name'));
+                let token = checkbox.getAttribute('data-csrf-token');
+                list.push({ id: id, token: token});
             }
         });
 
-        return listID;
+        return list;
     }
 
 }
