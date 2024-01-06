@@ -86,7 +86,7 @@ class ProductController extends AbstractController
 
     
     #[Route('/delete', name: 'app_product_deleteAll', methods: ['POST'])]
-    public function deleteProductsList(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
+    public function deleteMany(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
     {
         $productDatasJSON = $request->getContent();
         $productDatas = json_decode($productDatasJSON, true);

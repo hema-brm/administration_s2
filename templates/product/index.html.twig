@@ -5,6 +5,7 @@
 {% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
+
 {% block title %}Produit{% endblock %}
 
 {% block body %}
@@ -42,8 +43,12 @@
             </div>
                   
         </div>
-        {{include('product/modal_delete.html.twig')}}
-        
+
+        {% embed "./modal/modal_delete.html.twig" with {
+            text: 'Êtes-vous sûrs de vouloir supprimer ce(s) produits(s) ?',
+        } %}
+        {% endembed %}
+
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
         <table class="w-full border shadow-sm">
