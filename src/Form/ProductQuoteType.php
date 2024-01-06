@@ -6,17 +6,20 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\ProductQuote;
+use App\Entity\Product;
 
 class ProductQuoteType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity', IntegerType::class, [
-                'label' => 'Quantity',
-               
-            ]);
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
+                'choice_label' => 'name',
+            ])
+            ->add('quantity', IntegerType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,9 +1,6 @@
 {
-  "build/app.css": "/build/app.css",
-  "build/app.js": "/build/app.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-c47e6e.css": "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-c47e6e.css",
-  "build/images/default/profile.png": "/build/images/default/profile.png",
-  "build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.css": "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.css",
-  "build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.js": "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-99a4e9.js"
+  "build/app.css": "/build/app.1eedb7bf.css",
+  "build/app.js": "/build/app.f39a0268.js",
+  "build/runtime.js": "/build/runtime.ad8a04c6.js",
+  "build/images/default/profile.png": "/build/images/default/profile.png"
 }

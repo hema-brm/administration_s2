@@ -73,6 +73,11 @@ class QuoteController extends AbstractController
 
         // Create a new Quote instance
         $quote = new Quote();
+        
+
+        $quote->addProductQuote(new ProductQuote());
+
+
 
         // Set the company information in the Quote form
         $quote->setCompany($company);
@@ -82,26 +87,21 @@ class QuoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle products association
-            foreach ($quote->getProductQuotes() as $product) {
-                $productQuote = new ProductQuote();
+            foreach ($quote->getProductQuotes() as $productQuote) {
                 $productQuote->setQuote($quote);
-                $productQuote->setProduct($product);
-                $productQuote->setQuantity($form->get('quantities')->getData());
-
                 $entityManager->persist($productQuote);
             }
-
+        
             $entityManager->persist($quote);
             $entityManager->flush();
-
+        
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quote/new.html.twig', [
             'quote' => $quote,
-            'form' => $form->createView(),
             'company' => $company, 
+            'form' => $form,
         ]);
     }
     

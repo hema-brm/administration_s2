@@ -44,17 +44,30 @@ class QuoteType extends AbstractType
             ],])
             ->add('quote_issuance_date')
             ->add('expiry_date')
+            ->add('total_price', IntegerType::class, [
+                'label' => 'Prix total: ',
+                'attr' => [
+                    'placeholder' => ' ',
+            ],])
+            ->add('discount', IntegerType::class, [
+                'label' => 'Remise: ',
+                'attr' => [
+                    'placeholder' => ' ',
+            ],])
+            ->add('tva', IntegerType::class, [
+                'label' => 'TVA: ',
+                'attr' => [
+                    'placeholder' => ' ',
+            ],])
             ->add('productQuotes', CollectionType::class, [
-                'label' => 'Products',
                 'entry_type' => ProductQuoteType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                 
-            ])
-            ->add('total_price')
-            ->add('discount')
-            ->add('tva');
+            ]);
+            
+            
     
     }
 

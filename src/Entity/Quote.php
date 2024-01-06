@@ -79,9 +79,9 @@ class Quote
     
     public function __construct()
     {
-        $this->products = new ArrayCollection();
         $this->productQuotes = new ArrayCollection();
     }
+
 
     public function getProductQuotes(): Collection
     {
