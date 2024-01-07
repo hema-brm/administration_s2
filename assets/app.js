@@ -1,3 +1,4 @@
+import './bootstrap.js';
 // import tailwind utilities
 import 'tailwindcss/base.css';
 import 'tailwindcss/components.css';
