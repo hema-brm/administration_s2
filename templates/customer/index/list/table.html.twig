@@ -32,7 +32,7 @@
                             {% endblock %}
                         {% endembed %}
                     </div>
-                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">
+                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" data-turbo-action="replace">
                         <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
                 </div>

@@ -3,7 +3,7 @@
 {% set allMessages = app.session.flashbag.all() %}
 
 {% if allMessages is not empty %}
-<div id="flash-message-{{ id }}" class="z-[99999] fixed top-3 right-3 transform transition-transform ease-in-out max-w-[20rem]">
+<div id="flash-message-{{ id }}" class="z-[99999] fixed top-3 right-3 transform transition-transform ease-in-out max-w-[20rem]" {{ stimulus_controller('toast') }}>
     <div class="flex flex-row items-start justify-between text-sm bg-secondary-50 rounded-sm shadow-xl p-2">
         <div>
             {% for type, messages in allMessages %}

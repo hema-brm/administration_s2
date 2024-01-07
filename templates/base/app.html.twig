@@ -1,7 +1,7 @@
 {% extends "@base/base.html.twig" %}
 
 {% block content %}
-    <body class="hidden text-secondary-700">
+    <body class="text-secondary-700 bg-white">
     {% block navbar %}
         {% include "@components/navigation/bar/index.html.twig" %}
     {% endblock %}
@@ -10,18 +10,18 @@
         {% block menu %}
             {% include "@components/navigation/menu/index.html.twig" %}
         {% endblock %}
-        <div id="content" class="flex-1">
+        <div id="page-content" class="flex-1">
             {# Rendering any flash messages #}
-            {% include "@components/flash/index.html.twig" %}
             {% block body %}{% endblock %}
         </div>
     </div>
+    {% set uniqid = '{{ uniqid() }}' %}
     <script>
         // only show body when all html are loaded
         document.querySelector('body').classList.remove('hidden');
-        const theme = localStorage.getItem('theme');
-        if (theme) {
-            document.querySelector('body').classList.add(theme);
+        const theme{{ uniqid }} = localStorage.getItem('theme');
+        if (theme{{ uniqid }}) {
+            document.querySelector('body').classList.add(theme{{ uniqid }});
         }
     </script>
     </body>

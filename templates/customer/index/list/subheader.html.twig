@@ -1,14 +1,10 @@
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
 <div class="flex flex-row items-center justify-between py-2">
-    {{ form_start(searchForm) }}
-        {{ form_row(searchForm.search, {
-            attr: {
-                'id': 'search_customer_form'
-            },
-        }) }}
+    {{ form_start(searchForm, {'attr': {'data-turbo-action': 'replace'}}) }}
+    {{ form_row(searchForm.search, {'attr': {'id': 'search_customer_form'}}) }}
     {{ form_end(searchForm) }}
-    <a href="{{ path('app_customer_new') }}">
+    <a href="{{ path('app_customer_new') }}" data-turbo-frame="customer_content" data-turbo-action="replace">
         <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
             <i class="fa-solid fa-plus"></i>
             <span>Nouveau client</span>

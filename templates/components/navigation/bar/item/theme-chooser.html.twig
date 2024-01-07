@@ -47,7 +47,7 @@
 } %}
 
 {% embed "@components/dropdown/index.html.twig" with {
-    id: 'theme_chooser'
+    id: 'theme_chooser_' ~ uniqid(),
 } %}
     {% block toggle %}
         <div class="transform rotate-0 hover:rotate-45 duration-300 hover:bg-primary-600 px-1 rounded-full">

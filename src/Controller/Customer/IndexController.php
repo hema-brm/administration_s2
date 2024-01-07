@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/customer', name: 'app_customer_')]
 class IndexController extends AbstractController
@@ -81,6 +82,7 @@ class IndexController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', "Le client a été enregistré.");
+
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
