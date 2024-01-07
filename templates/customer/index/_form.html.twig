@@ -13,6 +13,9 @@
         {{ button_macro({
             text: button_label|default('Enregistrer'),
             custom_classes: button_classes,
+            attr: {
+                type: "submit",
+            },
         }) }}
     </div>
 {{ form_end(form) }}

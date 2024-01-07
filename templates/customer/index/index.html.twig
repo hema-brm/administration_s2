@@ -1,26 +1,25 @@
 {% from "@components/macros/content.html.twig" import header %}
 
-{% extends '@base/app.html.twig' %}
+{% extends '@customer/index/customer-content.html.twig' %}
 
-{% block title %}Customer index{% endblock %}
+{% block title %}Liste des clients{% endblock %}
 
-{% block body %}
+{% block customer_content %}
+        {{ header({
+            text: 'Liste des clients',
+        }) }}
 
-    {{ header({
-        text: 'Liste des clients',
-    }) }}
+        <div class="px-4">
+            <div id="customer_subheader">
+                {% include "@customer/index/list/subheader.html.twig" %}
+            </div>
 
-    <div class="px-4">
-        <div id="customer_subheader">
-            {% include "@customer/index/list/subheader.html.twig" %}
+            <div id="customer_list">
+                {% if customers is empty %}
+                    {% include "@customer/index/list/no-data.html.twig" %}
+                {% else %}
+                    {% include "@customer/index/list/table.html.twig" %}
+                {% endif %}
+            </div>
         </div>
-
-        <div id="customer_list">
-            {% if customers is empty %}
-                {% include "@customer/index/list/no-data.html.twig" %}
-            {% else %}
-                {% include "@customer/index/list/table.html.twig" %}
-            {% endif %}
-        </div>
-    </div>
 {% endblock %}
