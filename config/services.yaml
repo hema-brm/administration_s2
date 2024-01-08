@@ -30,3 +30,8 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Twig\AppExtension:
         tags: ['twig.extension']
+    App\Twig\FlashExtension:
+        arguments:
+            $twig: '@twig'
+        tags:
+            - { name: 'twig.extension' }
