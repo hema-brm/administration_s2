@@ -1,7 +1,10 @@
 {% extends "@base/base.html.twig" %}
 
 {% block content %}
-    <body class="text-secondary-700 bg-white">
+    <body class="text-secondary-700 bg-white"
+        data-controller="theme"
+        data-theme-target="body"
+    >
     {% block navbar %}
         {% include "@components/navigation/bar/index.html.twig" %}
     {% endblock %}
@@ -11,18 +14,8 @@
             {% include "@components/navigation/menu/index.html.twig" %}
         {% endblock %}
         <div id="page-content" class="flex-1">
-            {# Rendering any flash messages #}
             {% block body %}{% endblock %}
         </div>
     </div>
-    {% set uniqid = '{{ uniqid() }}' %}
-    <script>
-        // only show body when all html are loaded
-        document.querySelector('body').classList.remove('hidden');
-        const theme{{ uniqid }} = localStorage.getItem('theme');
-        if (theme{{ uniqid }}) {
-            document.querySelector('body').classList.add(theme{{ uniqid }});
-        }
-    </script>
     </body>
 {% endblock %}

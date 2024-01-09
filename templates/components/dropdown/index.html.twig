@@ -3,34 +3,18 @@
 {% set toggleId = "dropdown_toggle_" ~ id %}
 {% set contentId = "dropdown_content_" ~ id %}
 
-<div class="relative">
-    <div id="{{ toggleId }}">
+<div class="relative"
+    data-controller="dropdown"
+    data-dropdown-target="container"
+    data-dropdown-show-class="scale-100"
+    data-dropdown-hide-class="scale-0"
+>
+    <div id="{{ toggleId }}" data-dropdown-target="toggle">
         {% block toggle %}
         {% endblock %}
     </div>
-    {# A dropdown on the bottom #}
-    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out">
+    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out" data-dropdown-target="content">
         {% block content %}
         {% endblock %}
     </div>
 </div>
-
-<script>
-    const {{ toggleId }} = document.getElementById("{{ toggleId }}");
-    const {{ contentId }} = document.getElementById("{{ contentId }}");
-
-    {{ toggleId }}.addEventListener('click', function () {
-        {{ contentId }}.classList.toggle('scale-0');
-        {{ contentId }}.classList.toggle('scale-100');
-    });
-
-    document.addEventListener('click', function (event) {
-        const isClickOutside = (!{{ toggleId }}.contains(event.target)) 
-            && (!{{ contentId }}.contains(event.target));
-            
-        if (isClickOutside) {
-            {{ contentId }}.classList.remove('scale-100');
-            {{ contentId }}.classList.add('scale-0');
-        }
-    });
-</script>
