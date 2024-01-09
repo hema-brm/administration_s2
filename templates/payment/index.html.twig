@@ -27,27 +27,28 @@
             </div>
             {% set cellPadding = 'p-4 px-2' %}
             {% set borderClass = 'border-b border-b-gray-200' %}
+            {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
             <table class="w-full border shadow-sm">
                 <thead>
-                    <tr class="{{ borderClass }}">
+                    <tr class="{{ tableHeaderClasses }}">
                         <th class="{{ cellPadding }} text-left">Client</th>
                         <th class="{{ cellPadding }} text-left">Status</th>
-                        <th class="{{ cellPadding }} text-left">DatePaiement</th>
-                        <th class="{{ cellPadding }} text-left">DateEcheance</th>
-                        <th class="{{ cellPadding }} text-left">Numéro Facture</th>
+                        <th class="{{ cellPadding }} text-left">Date de paiement</th>
+                        <th class="{{ cellPadding }} text-left">Date d'échéance</th>
+                        <th class="{{ cellPadding }} text-left">N° Facture</th>
                         <th class="{{ cellPadding }} text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for payment in payments %}
                         <tr class="{{ borderClass }}">
-                            <td class="{{ cellPadding }} text-left">{{ payment.bill.nomClient }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.bill.nameClient }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.status }}</td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.bill.numeroFacture }}</td>
                             <td>
-                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-primary-500">Détails</a>
+                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-primary-500">Voir</a>
                                 <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-primary-500 ml-2">Modifier</a>
                             </td>
                         </tr>

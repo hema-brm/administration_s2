@@ -27,16 +27,18 @@ class PaymentType extends AbstractType
             ->add('moyen', ChoiceType::class, [
                 'choices' => [
                     'Carte bancaire' => 'cb',
-                    'Espèces' => 'especes',
-                    'Chèque' => 'cheques',
+                    'Espèces' => 'espèces',
+                    'Chèque' => 'chèques',
                     'Virement bancaire' => 'vb',
                 ],
                 'label' => 'Moyen de paiement', 
             ])
             ->add('datePaiement', DateTimeType::class, [
+                'required' => false,
                 'widget' => 'single_text'
             ])
             ->add('dateEcheance', DateTimeType::class, [
+                'required' => false,
                 'widget' => 'single_text'
             ])
             ->add('bill', EntityType::class, [

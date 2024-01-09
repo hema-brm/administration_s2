@@ -99,11 +99,11 @@ deleteButtons.forEach((button, index)=>{
                             window.location.reload(true);
                         }
                         else{
-                            console.error('Erreur lors de la suppresion.');
+                            console.error('Erreur lors de la suppression.');
                         }
                     })
                     .catch(error =>{
-                        console.error('Erreur lors de la requête de suppresion : ', error);
+                        console.error('Erreur lors de la requête de suppression : ', error);
                     })
                     
                     modal_delete.classList.add('hidden');

@@ -50,12 +50,12 @@ class Bill
         return $this;
     }
 
-    public function getNomClient(): ?string
+    public function getNameClient(): ?string
     {
         return $this->nameClient;
     }
 
-    public function setNomClient(?string $nameClient): self
+    public function setNameClient(?string $nameClient): self
     {
         $this->nameClient = $nameClient;
         return $this;

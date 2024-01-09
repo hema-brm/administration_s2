@@ -1,4 +1,10 @@
+{% from "@components/macros/content.html.twig" import button_macro %}
+
 <form method="post" action="{{ path('app_payment_delete', {'id': payment.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ payment.id) }}">
-    <button class="bg-primary-500 text-white px-4 py-2 rounded-md m-2">Supprimer</button>
+    {{ button_macro({
+        id: 'delete_payment',
+        custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
+        icon: "fa-trash",
+    }) }}
 </form>

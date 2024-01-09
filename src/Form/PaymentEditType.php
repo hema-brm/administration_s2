@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Entity\Bill;
 
@@ -26,14 +27,20 @@ class PaymentEditType extends AbstractType
             ->add('moyen', ChoiceType::class, [
                 'choices' => [
                     'Carte bancaire' => 'cb',
-                    'Espèces' => 'especes',
-                    'Chèque' => 'cheques',
+                    'Espèces' => 'espèces',
+                    'Chèque' => 'chèques',
                     'Virement bancaire' => 'vb',
                 ],
                 'label' => 'Moyen de paiement', 
             ])
-            ->add('datePaiement')
-            ->add('dateEcheance')
+            ->add('datePaiement', DateTimeType::class, [
+                'required' => false,
+                'widget' => 'single_text'
+            ])
+            ->add('dateEcheance', DateTimeType::class, [
+                'required' => false,
+                'widget' => 'single_text'
+            ])
             ->add('bill', EntityType::class, [
                 'class' => Bill::class,
                 'choice_label' => 'nameClient', 

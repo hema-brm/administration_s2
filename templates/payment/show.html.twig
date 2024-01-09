@@ -1,58 +1,54 @@
 {% extends '@base/app.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+
 
 {% block title %}Payment{% endblock %}
 
 {% block body %}
-    <div class="flex-col justify-center items-center h-screen mx-20 my-5">
-      
-        <h1 class="text-2xl font-bold mb-4">Détails du paiement:</h1>
-        <div class="">
-          <a href="{{ path('app_payment_index') }}" class="bg-primary-500 text-white px-4 py-2 rounded-md">retour à la liste</a>
+    {{ header({
+        text: 'Détails du paiement',
+    }) }}
+    <div class="flex-col justify-center items-center p-4">
+        
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_payment_index') }}">Retour à la liste</a>
         </div>
-        <div class="bg-secondary-100 p-8 rounded-lg shadow-md mt-5">
-           <table class="table">
-                <tbody>
-                    <tr>
-                        <th class="">Id:</th>
-                        <td>{{ payment.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Client:</th>
-                        <td>{{ payment.bill.nameClient }}</td>
-                    </tr>
-                    <tr>
-                        <th>Status:</th>
-                        <td>{{ payment.status }}</td>
-                    </tr>
-                    <tr>
-                        <th>Moyen:</th>
-                        <td>{{ payment.moyen }}</td>
-                    </tr>
-                    <tr>
-                        <th>Date de paiement:</th>
-                        <td>{{ payment.datePaiement ? payment.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Date d'échéance:</th>
-                        <td>{{ payment.dateEcheance ? payment.dateEcheance|date('Y-m-d H:i:s') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>N° de facture:</th>
-                        <td>{{ payment.bill.numeroFacture }}</td>
-                    </tr>
-                    <tr>
-                        <th>Prix total:</th>
-                        <td>{{ payment.bill.totalPrice }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="w-full shadow relative px-4 py-14 ">
+            <div class="absolute top-0 right-0 p-2 flex flex-row-reverse items-baseline text-sm text-gray-400">
+               {{ include('payment/_delete_form.html.twig') }}
+               <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-primary-500 rounded-md">
+                  <button class="group px-4">
+                     <i class="fa-solid fa-edit ml-2 group-hover:text-yellow-500"></i>
+                  </button>
+               </a>
 
-            {{ include('payment/_delete_form.html.twig') }}
-            <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="bg-primary-500 text-white px-4 py-2 rounded-md m-2">Modifier</a>
-
-
-
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border rounded-md">
+                    <h2 class="font-bold text-lg mb-2">Détails du paiement:</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><span class="font-semibold">N° (id):</span></div><div>{{ payment.id }}</div>
+                        <div><span class="font-semibold">Status:</span></div><div>{{ payment.status }}</div>
+                        <div><span class="font-semibold">Moyen:</span></div><div>{{ payment.moyen }}</div>
+                        <div><span class="font-semibold">Date de paiement:</span></div><div>{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y  H:i') : '' }}</div>
+                        <div><span class="font-semibold">Date d'échéance:</span></div><div>{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y  H:i') : '' }}</div>
+                    </div>
+                </div>
+                <div class="p-4 border rounded-md">
+                    <h2 class="font-bold text-lg mb-2">Facture associée:</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><span class="font-semibold">N° de facture:</span></div><div>{{ payment.bill.numeroFacture }}</div>
+                        <div><span class="font-semibold">Client:</span></div><div>{{ payment.bill.nameClient }}</div>
+                        <div><span class="font-semibold">Prix total:</span></div><div>{{ payment.bill.totalPrice }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
+            
+        
+          
+        
 
     
     </div>
