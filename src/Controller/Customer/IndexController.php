@@ -45,7 +45,7 @@ class IndexController extends AbstractController
             return $this->search($this->searchTerm, $customerRepository);
         }
 
-        $customers = $customerRepository->findAllWithPage($this->page, self::LIMIT); 
+        $customers = $customerRepository->findAllWithPage($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
         return $this->render('@customer/index/index.html.twig', [
@@ -143,7 +143,12 @@ class IndexController extends AbstractController
             $this->addFlash('error', "Oups, une erreur est survenue.");
         }
 
-        return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        // get referer query params
+        $referer = $request->headers->get('referer');
+        $refererQuery = parse_url($referer, PHP_URL_QUERY);
+        parse_str($refererQuery, $refererQueryParams);
+
+        return $this->redirectToRoute('app_customer_index', $refererQueryParams, Response::HTTP_SEE_OTHER);
     }
 
     private function getSearchForm(): FormInterface

@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ComponentTransformerSubscriber implements EventSubscriberInterface
 {
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
         $controller = $event->getController();
 
@@ -26,15 +26,13 @@ class ComponentTransformerSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function transformComponent($component)
+    private function transformComponent($component): string
     {
         $component = explode('-', $component);
-        $component = implode('/', $component);
-
-        return $component;
+        return implode('/', $component);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::CONTROLLER => 'onKernelController',

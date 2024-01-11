@@ -1,0 +1,41 @@
+{% set id = id|default(uniqid()) %}
+{% set no_close_button = no_close_button is defined ? no_close_button : false %}
+{% set formAction = formAction|default('#') %}
+{% set formMethod = formMethod|default('POST') %}
+{% set animationDuration = animationDuration|default(300) %}
+
+<div data-controller="modal-confirm" data-modal-confirm-duration-value="{{ animationDuration }}">
+    <form action="{{ formAction }}"  method="{{ formMethod }}" class="hidden" data-modal-confirm-target="form">
+        {% block form %}
+        {% endblock %}
+    </form>
+    <div data-modal-confirm-target="button" data-action="click->modal-confirm#open">
+        {% block trigger %}
+        {% endblock %}
+    </div>
+
+    <div id="{{ id }}" class="hidden cursor-auto opacity-0 fixed top-0 left-0 z-[99999] bg-black bg-opacity-70 w-full h-full items-center justify-center transition-all duration-{{ animationDuration }}" data-modal-confirm-target="backdrop">
+        <div class="scale-0 bg-white p-5 relative shadow-2xl rounded-sm w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-{{ animationDuration }}" data-modal-confirm-target="modal">
+            {% if not no_close_button %}
+                <button id="close-modal-{{ id }}"
+                        class="flex absolute top-0 right-0 m-2 text-secondary-500"
+                        data-action="click->modal-confirm#close"
+                >
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+            <div class="flex flex-row justify-center mt-2">
+                <div data-modal-confirm-target="cancel" data-action="click->modal-confirm#cancel">
+                    {% block cancel %}
+                    {% endblock %}
+                </div>
+                <div data-modal-confirm-target="confirm" data-action="click->modal-confirm#confirm">
+                    {% block confirm %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

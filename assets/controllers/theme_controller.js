@@ -11,13 +11,12 @@ export default class extends Controller {
     }
 
     setTheme() {
-        const body = document.querySelector('body');
         const themeClass = localStorage.getItem('theme') || 'theme-default';
-        body.classList.forEach(className => {
+        this.bodyTarget.classList.forEach(className => {
             if (className.startsWith('theme-')) {
-                body.classList.remove(className);
+                this.bodyTarget.classList.remove(className);
             }
         });
-        body.classList.add(themeClass);
+        this.bodyTarget.classList.add(themeClass);
     }
 }

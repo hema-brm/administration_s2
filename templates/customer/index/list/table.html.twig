@@ -15,24 +15,27 @@
     <tbody>
     {% set offset = paginatorHelper.offset %}
     {% for customer in customers %}
-        <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500">
+        <tr data-controller="clickable"
+            data-clickable-path-value="{{ path('app_customer_show', {'id': customer.id}) }}"
+            data-action="click->clickable#visit"
+            data-clickable-target="element"
+            class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500">
             <td class="{{ cellPadding }} text-right">{{ loop.index + offset }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
             <td class="{{ cellPadding }} text-right text-secondary-400">
-                <div class="flex flex-row justify-end">
+                <div class="flex flex-row justify-end" data-clickable-target="exclude">
                     <div class="mr-2">
                         {% embed "@customer/index/_delete_form.html.twig" with {
                             customer: customer,
-                            hidden: true,
                         } %}
                             {% block button_content %}
-                                <i class="fa-regular fa-trash-can group-hover:text-danger-500"></i>
+
                             {% endblock %}
                         {% endembed %}
                     </div>
-                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" data-turbo-action="replace">
+                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" data-turbo-action="replace" data-clickable-target="exclude">
                         <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
                 </div>
@@ -45,9 +48,3 @@
 <div id="customer-paginator" class="flex flex-row justify-end my-2">
     {% include "@customer/index/list/paginator.html.twig" %}
 </div>
-
-<script>
-    window.addEventListener('load', () => {
-        (new Link('tr[data-href]'));
-    });
-</script>

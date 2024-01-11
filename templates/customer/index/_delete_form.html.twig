@@ -1,54 +1,33 @@
 {% set buttonClasses = buttonClasses|default([]) %}
-
 {% set buttonClasses = buttonClasses|join(' ') %}
 
-<form id="form-delete-customer-{{ customer.id }}" class="flex" method="post" action="{{ path('app_customer_delete', {'id': customer.id}) }}">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
-    <button id="delete_customer_button_{{ customer.id }}" class="group {{ buttonClasses }}">
-        {% block button_content %}{% endblock %}
-    </button>
-</form>
-{% embed "@components/container/modal.html.twig" with {
-    id: 'delete_customer_modal_' ~ customer.id,
-    attach_to: 'delete_customer_button_' ~ customer.id,
-    no_close_button: true,
+{% embed '@components/container/modal-confirm.html.twig' with {
+    formAction: path('app_customer_delete', {'id': customer.id}),
 } %}
-    {% block title %}
-        <p class="font-medium">Êtes-vous sûr de vouloir supprimer ce client ?</p>
+    {% block form %}
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+    {% endblock %}
+    {% block trigger %}
+        <button id="delete_customer_button_{{ customer.id }}" class="group {{ buttonClasses }}">
+            <i class="fa-regular fa-trash-can group-hover:text-danger-500"></i>
+        </button>
     {% endblock %}
     {% block content %}
         <div class="text-center">
+            <p class="font-medium text-gray-900">Êtes-vous sûr de vouloir supprimer ce client ?</p>
             <div class="flex justify-center text-center">
-                <span class="font-semibold text-primary-500 text-sm">{{ "<" ~ customer.email ~ ">" }}</span>
-            </div>
-        </div>
-        <div class="text-center">
-            <small class="text-secondary-500">Cette action est irréversible.</small>
-            <div class="flex flex-row justify-center">
-                <button id="confirm-no-{{ customer.id }}" class="px-2 py-1 bg-secondary-500 hover:bg-secondary-600 text-white mr-1">
-                    Annuler
-                </button>
-                <button id="confirm-yes-{{ customer.id }}" class="px-2 py-1 text-danger-500 bg-danger-50 hover:bg-danger-500 hover:text-white">
-                    Confirmer
-                </button>
+                <small class="font-semibold text-primary-500 text-xs">{{ "<" ~ customer.email ~ ">" }}</small>
             </div>
         </div>
     {% endblock %}
-
-    {% block script %}
-        <script>
-            var confirmModal{{ customer.id }} = document.querySelector('#delete_customer_modal_{{ customer.id }}');
-            var confirmNo{{ customer.id }} = document.querySelector('#confirm-no-{{ customer.id }}');
-            var confirmYes{{ customer.id }} = document.querySelector('#confirm-yes-{{ customer.id }}');
-
-            confirmNo{{ customer.id }}.addEventListener('click', () => {
-                confirmModal{{ customer.id }}.classList.add('hidden');
-                confirmModal{{ customer.id }}.classList.remove('flex');
-            });
-
-            confirmYes{{ customer.id }}.addEventListener('click', () => {
-                document.querySelector('#form-delete-customer-{{ customer.id }}').submit();
-            });
-        </script>
+    {% block cancel %}
+        <button id="confirm-no-{{ customer.id }}" class="px-2 py-1 bg-secondary-500 hover:bg-secondary-600 text-white mr-1">
+            Annuler
+        </button>
+    {% endblock %}
+    {% block confirm %}
+        <button id="confirm-yes-{{ customer.id }}" class="px-2 py-1 text-danger-500 bg-danger-50 hover:bg-danger-500 hover:text-white">
+            Confirmer
+        </button>
     {% endblock %}
 {% endembed %}
