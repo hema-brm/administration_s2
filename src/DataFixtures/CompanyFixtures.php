@@ -33,11 +33,12 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
                 ->setSiretNumber($this->faker->numberBetween(10000000000000, 99999999999999))
                 ->setAdress($this->faker->address());
 
-            $owner = $this->getReference(sprintf('owner-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_OWNER_COUNT)));
+            $owner = $this->getReference(sprintf('owner-%d', $i));
+
             $company->addUserId($owner);
 
-            $this->addReference("company-$i", $company);
             $manager->persist($company);
+            $this->addReference("company-$i", $company);
         }
 
     }
