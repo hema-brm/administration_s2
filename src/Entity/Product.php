@@ -21,7 +21,7 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reference = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -110,12 +110,12 @@ class Product
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompanyId(?Company $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
 

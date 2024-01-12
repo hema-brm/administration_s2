@@ -25,7 +25,8 @@ class Category
     private ?Company $company = null;
 
     public function __construct($name)
-    {   $this->name = $name;
+    {
+        $this->name = $name;
         $this->products = new ArrayCollection();
     }
 
@@ -81,12 +82,12 @@ class Category
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompanyId(?Company $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
 

@@ -42,7 +42,7 @@ class ProductVoter extends Voter
 
     private function canShow(Product $product, UserInterface $user): bool
     {//role admin, company, employee
-        $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ($product->getCompanyId() === $user->getCompany());
+        $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ($product->getCompany() === $user->getCompany());
         
         if(!$permission){
             throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à ce produit.');
@@ -51,7 +51,7 @@ class ProductVoter extends Voter
     }
 
     private function canModify(Product $product, UserInterface $user): bool
-    {   $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ( in_array(IUserRole::ROLE_COMPANY, $user->getRoles()) and ($product->getCompanyId() === $user->getCompany()) );
+    {   $permission = in_array(IUserRole::ROLE_ADMIN, $user->getRoles()) or ( in_array(IUserRole::ROLE_COMPANY, $user->getRoles()) and ($product->getCompany() === $user->getCompany()) );
         if(!$permission){
             throw new AccessDeniedException('Vous n\'avez pas la permission de modifier ou supprimer ce produit.');
         }

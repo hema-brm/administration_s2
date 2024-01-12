@@ -136,7 +136,7 @@ class Company
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->setCompanyId($this);
+            $category->setCompany($this);
         }
 
         return $this;
@@ -146,8 +146,8 @@ class Company
     {
         if ($this->categories->removeElement($category)) {
             // set the owning side to null (unless already changed)
-            if ($category->getCompanyId() === $this) {
-                $category->setCompanyId(null);
+            if ($category->getCompany() === $this) {
+                $category->setCompany(null);
             }
         }
 
@@ -166,7 +166,7 @@ class Company
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setCompanyId($this);
+            $product->setCompany($this);
         }
 
         return $this;
@@ -176,8 +176,8 @@ class Company
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getCompanyId() === $this) {
-                $product->setCompanyId(null);
+            if ($product->getCompany() === $this) {
+                $product->setCompany(null);
             }
         }
 

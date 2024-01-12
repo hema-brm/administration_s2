@@ -7,39 +7,45 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\UserRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Faker\Factory;
+use Faker\Generator;
 
 class CompanyFixtures extends Fixture implements DependentFixtureInterface
 {
-    private $userRepository;
+    private Generator $faker;
 
-    public function __construct(UserRepository $userRepository){
-        $this->userRepository = $userRepository;
+    public function __construct(){
+        $this->faker = Factory::create();
     }
     public function load(ObjectManager $manager): void
     {
-        $company = new Company();
-        $company
-            ->setName("MarryMe")
-            ->setSiretNumber("12321123212432")
-            ->setAdress("11 avenue du grand moulin, 75002 Paris");
+        $this->addCompanies($manager, AppFixtures::COMPANY_COUNT);
 
-        $owner = $this->userRepository->findOneBy(['email' => 'owner@gmail.com']);
-
-        $company->addUserId($owner);
-
-        $this->addReference('company', $company);
-        
-        $manager->persist($company);
         $manager->flush();
+    }
+
+    private function addCompanies(ObjectManager $manager, int $count = 1): void
+    {
+        for ($i = 1; $i <= $count; $i++) {
+            $company = new Company();
+            $company
+                ->setName("Company-$i: " . $this->faker->name())
+                ->setSiretNumber($this->faker->numberBetween(10000000000000, 99999999999999))
+                ->setAdress($this->faker->address());
+
+            $owner = $this->getReference(sprintf('owner-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_OWNER_COUNT)));
+            $company->addUserId($owner);
+
+            $this->addReference("company-$i", $company);
+            $manager->persist($company);
+        }
 
     }
 
     public function getDependencies() : array
     {
-        // Spécifie les dépendances - ici, CompanyFixtures dépend de UserFixtures
         return [
             UserFixtures::class,
         ];
     }
-    
 }

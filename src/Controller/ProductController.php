@@ -70,7 +70,7 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setCompanyId($this->getUser()->getCompany());
+            $product->setCompany($this->getUser()->getCompany());
             $entityManager->persist($product);
             $entityManager->flush();
 

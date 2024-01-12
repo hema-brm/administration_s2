@@ -52,7 +52,7 @@ class CategoryController extends AbstractController
          $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-    $category->setCompanyId($this->getUser()->getCompany());
+    $category->setCompany($this->getUser()->getCompany());
     $entityManager->persist($category);
     $entityManager->flush();
 

@@ -3,59 +3,52 @@
 namespace App\DataFixtures;
 
 use App\Entity\Product;
-use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Repository\CompanyRepository;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class ProductFixtures extends Fixture implements DependentFixtureInterface
 {
     private $faker;
-    private $companyRepository;
     
-    public function __construct(CompanyRepository $companyRepository)
+    public function __construct()
     {
         $this->faker = Factory::create();
-        $this->companyRepository = $companyRepository;
     }
 
     public function load(ObjectManager $manager): void
     {   
-        $count = 100;
-        $category = new Category('Art');
+        $this->addProducts($manager, AppFixtures::PRODUCT_COUNT);
+        $manager->flush();
+    }
 
-        $manager->persist($category);
-        for ($i = 0; $i < $count; $i++) {
+    private function addProducts(ObjectManager $manager, int $count = 1): void
+    {
+        for ($i = 1; $i <= $count; $i++) {
+            $category = $this->getReference(sprintf('category-%d', $this->faker->numberBetween(1, AppFixtures::CATEGORY_COUNT)));
+
             $product = new Product();
             $product
-            ->setName($this->faker->words(random_int(4,10),true))
-            ->setReference($this->faker->ean13())
-            ->setCategory($category)
-            ->setPrice($this->faker->randomFloat(2, 10, 1000));
-            
-            $description = $this->faker->paragraph;
+                ->setName("Product-$i: " . $this->faker->name())
+                ->setReference($this->faker->ean13())
+                ->setCategory($category)
+                ->setPrice($this->faker->randomFloat(2, 10, 1000))
+                ->setDescription($this->faker->paragraph)
+            ;
 
-            if(strlen($description)>255){
-                $description = mb_substr($description, 0, 255);
-            }
-            $product->setDescription($description);
-            
-            $company = $this->companyRepository->findOneBy(['name'=>'MarryMe']);
-            $company->addCategory($category);
-            $product->setCompanyId($company);
+            $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
+            $product->setCompany($company);
             $manager->persist($product);
+            $this->addReference("product-$i", $product);
         }
-
-        $manager->flush();
     }
 
     public function getDependencies() : array
     {
-        // Spécifie les dépendances - ici, ProductFixtures dépend de CompanyFixtures
         return [
             CompanyFixtures::class,
+            CategoryFixtures::class,
         ];
     }
 }

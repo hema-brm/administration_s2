@@ -8,24 +8,28 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Faker\Generator;
 
 
 class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
-    private $faker;
-    private $companyRepository;
-    // construct with faker
-    public function __construct(CompanyRepository $companyRepository)
+    private Generator $faker;
+    public function __construct()
     {
         $this->faker = Factory::create();
-        $this->companyRepository = $companyRepository;
     }
 
     public function load(ObjectManager $manager): void
     {
-        $count = 25;
+        $this->addCustomers($manager, AppFixtures::CUSTOMER_COUNT);
 
-        for ($i = 0; $i < $count; $i++) {
+        $manager->flush();
+    }
+
+    private function addCustomers(ObjectManager $manager, int $count = 1): void
+    {
+
+        for ($i = 1; $i <= $count; $i++) {
             $customer = new Customer();
             $customer->setFirstName($this->faker->firstName());
             $customer->setLastName($this->faker->lastName());
@@ -33,12 +37,10 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
             $customer->setPhone($this->faker->phoneNumber());
             $customer->setAddress($this->faker->address());
 
-            $company = $this->getReference('company');
+            $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
             $customer->setCompany($company);
             $manager->persist($customer);
         }
-
-        $manager->flush();
     }
 
     public function getDependencies(): array
