@@ -14,11 +14,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * 2. Company manager can manage only his own customer
  */
 class CustomerVoter extends Voter {
-    public const MANAGE = 'manage';
+    public const LIST = 'list';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $attribute == self::MANAGE;
+        return $attribute == self::LIST;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -30,16 +30,21 @@ class CustomerVoter extends Voter {
         }
 
         return match ($attribute) {
-            self::MANAGE => $this->canManage($user),
+            self::LIST => $this->canList($user),
             default => false,
         };
     }
 
-    private function canManage(UserInterface $user): bool
+    private function canList(UserInterface $user): bool
     {
-        return in_array(
-            IUserRole::ROLE_ADMIN,
-            $user->getRoles()
-        );
+        if (in_array(IUserRole::ROLE_ADMIN, $user->getRoles())) {
+            return true;
+        }
+
+        if (in_array(IUserRole::ROLE_COMPANY, $user->getRoles())) {
+            return true;
+        }
+
+        return false;
     }
 }

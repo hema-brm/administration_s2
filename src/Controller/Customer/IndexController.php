@@ -39,6 +39,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
+    #[IsGranted('list')]
     public function index(CustomerRepository $customerRepository): Response
     {
         if (!empty($this->searchTerm)) {
