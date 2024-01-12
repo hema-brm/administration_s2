@@ -6,6 +6,7 @@ use App\Entity\Customer;
 use App\Form\CrudSearchType;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
+use App\Service\Customer\CustomerService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
@@ -40,13 +41,13 @@ class IndexController extends AbstractController
 
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('list')]
-    public function index(CustomerRepository $customerRepository): Response
+    public function index(CustomerService $customerService): Response
     {
-        if (!empty($this->searchTerm)) {
-            return $this->search($this->searchTerm, $customerRepository);
-        }
+       /* if (!empty($this->searchTerm)) {
+            return $this->search($this->searchTerm, $customerService);
+        }*/
 
-        $customers = $customerRepository->findAllWithPage($this->page, self::LIMIT);
+        $customers = $customerService->findAll($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
         return $this->render('@customer/index/index.html.twig', [
@@ -100,6 +101,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[IsGranted('read', 'customer')]
     public function show(Customer $customer): Response
     {
         return $this->render('@customer/index/show.html.twig', [
@@ -108,6 +110,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('edit', 'customer')]
     public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CustomerType::class, $customer);
@@ -132,6 +135,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted('delete', 'customer')]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$customer->getId(), $request->request->get('_token'))) {

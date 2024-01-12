@@ -6,6 +6,7 @@ use App\Entity\Customer;
 use App\Query\Customer\FullSearchQuery;
 use App\Query\Trait\PaginatorTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -33,23 +34,33 @@ class CustomerRepository extends ServiceEntityRepository
 
     public function search(string $search, int $page = 1, int $limit = 10): Paginator 
     {
+        return new Paginator($this->getSearchBaseQuery($search, $page, $limit));
+    }
+
+    public function findAllPaginated(int $page = 1, int $limit = 10): Paginator
+    {
+        return new Paginator($this->getBaseQuery($page, $limit));
+    }
+
+    public function getBaseQuery(int $page = 1, int $limit = 10): Query
+    {
+        $query = $this
+            ->createQueryBuilder('c')
+            ->getQuery();
+
+        $this->decoratePaginator($query, $page, $limit);
+
+        return $query;
+    }
+
+    public function getSearchBaseQuery(string $search, int $page = 1, int $limit = 10): Query
+    {
         $query = $this->fullSearchQuery
             ->withTerm($search)
             ->get();
 
         $this->decoratePaginator($query, $page, $limit);
 
-        return new Paginator($query);
-    }
-
-    public function findAllWithPage(int $page = 1, int $limit = 10): Paginator
-    {
-        $query = $this
-            ->createQueryBuilder('c')
-            ->getQuery();
-
-        $this->decoratePaginator($query, $page, $limit); 
-
-        return new Paginator($query);
+        return $query;
     }
 }
