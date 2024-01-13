@@ -78,12 +78,8 @@ class UserController extends AbstractController
     #[Route('/delete', name: 'app_employee_deleteAll', methods: ['POST'])]
     public function deleteMany(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        $EmployeesDatasJSON = $request->getContent();
-        $employeeDatas = json_decode($EmployeesDatasJSON, true);
-
-        foreach($employeeDatas as $employeeData){
-            $id = $employeeData['id'];
-            $token = $employeeData['token'];
+        $employees = $request->request->all()['employees'];
+        foreach($employees as $id => $token){
             $employee = $userRepository->find($id);
             if($employee){
                 if ($this->isCsrfTokenValid('delete'.$id, $token)) {

@@ -1,14 +1,23 @@
+{% from "@components/macros/content.html.twig" import button_macro %}
+
 {% set id = id|default(uniqid()) %}
 {% set no_close_button = no_close_button is defined ? no_close_button : false %}
-{% set formAction = formAction|default('#') %}
+{% set customFormId = customFormId|default('') %}
+{% set formAction = formAction|default('') %}
 {% set formMethod = formMethod|default('POST') %}
 {% set animationDuration = animationDuration|default(300) %}
 
-<div data-controller="content--modal--confirm" data-content--modal--confirm-duration-value="{{ animationDuration }}">
-    <form action="{{ formAction }}"  method="{{ formMethod }}" class="hidden" data-content--modal--confirm-target="form">
+<div
+        data-controller="content--modal--confirm"
+        data-content--modal--confirm-duration-value="{{ animationDuration }}"
+        data-content--modal--confirm-custom-form-id-value="{{ customFormId }}"
+>
+    {% if customFormId is empty %}
+    <form action="{{ formAction }}" method="{{ formMethod }}" class="hidden" data-content--modal--confirm-target="form">
         {% block form %}
         {% endblock %}
     </form>
+    {% endif %}
     <div data-content--modal--confirm-target="button" data-action="click->content--modal--confirm#open">
         {% block trigger %}
         {% endblock %}

@@ -6,6 +6,7 @@ export default class extends Controller {
 
     static values = {
         duration: Number,
+        customFormId: String,
     }
 
     connect() {
@@ -33,7 +34,14 @@ export default class extends Controller {
     }
 
     confirm() {
-        navigator.submitForm(this.formTarget);
+        navigator.submitForm(this.getForm());
         this.close();
+    }
+
+    getForm() {
+        if (this.customFormIdValue) {
+            return document.getElementById(this.customFormIdValue);
+        }
+        return this.formTarget;
     }
 }

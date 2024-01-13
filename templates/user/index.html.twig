@@ -1,5 +1,4 @@
 {% from "@components/macros/content.html.twig" import button_macro %}
-
 {% from "@components/macros/content.html.twig" import header %}
 
 {% extends '@base/app.html.twig' %}
@@ -11,80 +10,109 @@
         text: 'Liste des employés',
     }) }}
 
-    
-    <div class="px-4">
+    <div class="px-4"
+        data-controller="form--checkbox--post"
+    >
         <div class="flex justify-end py-2 gap-2">
-                {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    text:  "Nouvel employé",
-                    icon: "fa-plus",
-                    route : path('app_employee_new')
-                }) }}
-                <div id="disable_buttons" class="hidden">
-                    {{ button_macro({
-                    id: 'delete_employees',
-                    custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
-                    icon: "fa-trash",
-                    }) }}  
-                </div>
-                
-            </div>
-
-            {% embed "./modal/modal_delete.html.twig" with {
-                text: 'Êtes-vous sûrs de vouloir supprimer ce(s) employées(s) ?'
+            {{ button_macro({
+                custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
+                text:  "Nouvel employé",
+                icon: "fa-plus",
+                route : path('app_employee_new')
+            }) }}
+            {% embed '@components/container/modal/confirm.html.twig' with {
+                formAction: path('app_employee_deleteAll'),
+                customFormId: 'deleteManyEmployeesForm',
             } %}
+                {% block trigger %}
+                    <div id="disable_buttons" class="hidden" data-form--checkbox--post-target="button">
+                        <button class="group">
+                            <i class="fa-regular fa-trash-can group-hover:text-danger-500"></i>
+                        </button>
+                    </div>
+                {% endblock %}
+                {% block content %}
+                    <div class="text-center">
+                        <p class="font-medium text-gray-900">Êtes-vous sûr de vouloir supprimer ces employés ?</p>
+                    </div>
+                {% endblock %}
+                {% block cancel %}
+                    <button class="px-2 py-1 bg-secondary-500 hover:bg-secondary-600 text-white mr-1">
+                        Annuler
+                    </button>
+                {% endblock %}
+                {% block confirm %}
+                    <button class="px-2 py-1 text-danger-500 bg-danger-50 hover:bg-danger-500 hover:text-white">
+                        Confirmer
+                    </button>
+                {% endblock %}
             {% endembed %}
-
+        </div>
 
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-gray-200' %}
 
-    <table class="w-full border shadow-sm">
-        <thead>
-            <tr class="{{ borderClass }}">
-                <th class="{{ cellPadding }} text-center"><input type="checkbox" class="users-checkbox"></th>
-                <th class="{{ cellPadding }} text-left">Email</th>
-                <th class="{{ cellPadding }} text-left">FirstName</th>
-                <th class="{{ cellPadding }} text-left">LastName</th>
-                <th class="{{ cellPadding }} text-left">PhoneNumber</th>
-                <th class="{{ cellPadding }} text-left">Roles</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr data-controller="link--clickable"
-                data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
-                data-action="click->link--clickable#visit"
-                data-link--clickable-target="element"
-                class="{{ borderClass }} hover:bg-gray-50 text-sm"
+        <form
+            id="deleteManyEmployeesForm"
+            data-form--checkbox--post-target="form"
+            action="{{ path('app_employee_deleteAll') }}"
+            method="POST"
+        >
+            <table
+                class="w-full border shadow-sm"
+                data-controller="form--checkbox--multiple"
             >
-                <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="user-checkbox" name="{{ user.id }}" data-csrf-token="{{ csrf_token('delete' ~ user.id) }}"> </td>
-                <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
-                <td class="{{ cellPadding }} text-left">{{ user.firstName }}</td>
-                <td class="{{ cellPadding }} text-left">{{ user.lastName }}</td>
-                <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
-                <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td class="{{ cellPadding }} text-right text-gray-400">
-                    <a href="{{ path('app_employee_edit', {'id': user.id}) }}" data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                    </a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-     </div>
-
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        window.addEventListener('load', () => {
-            (new Link('tr[data-href]'));
-        });
-    </script>
+                <thead>
+                <tr class="{{ borderClass }}">
+                    <th class="{{ cellPadding }} text-center">
+                        <input type="checkbox" class="users-checkbox" data-form--checkbox--multiple-target="main">
+                    </th>
+                    <th class="{{ cellPadding }} text-left">Email</th>
+                    <th class="{{ cellPadding }} text-left">FirstName</th>
+                    <th class="{{ cellPadding }} text-left">LastName</th>
+                    <th class="{{ cellPadding }} text-left">PhoneNumber</th>
+                    <th class="{{ cellPadding }} text-left">Roles</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr
+                        data-controller="link--clickable"
+                        data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
+                        data-action="click->link--clickable#visit"
+                        data-link--clickable-target="element"
+                        class="{{ borderClass }} hover:bg-gray-50 text-sm"
+                    >
+                        <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                            <input
+                                type="checkbox"
+                                class="user-checkbox"
+                                name="employees[{{ user.id }}]"
+                                value="{{ csrf_token('delete' ~ user.id) }}"
+                                data-form--checkbox--multiple-target="items"
+                                data-form--checkbox--post-target="items"
+                            >
+                        </td>
+                        <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
+                        <td class="{{ cellPadding }} text-left">{{ user.firstName }}</td>
+                        <td class="{{ cellPadding }} text-left">{{ user.lastName }}</td>
+                        <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
+                        <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
+                        <td class="{{ cellPadding }} text-right text-gray-400">
+                            <a href="{{ path('app_employee_edit', {'id': user.id}) }}"
+                               data-link--clickable-target="exclude">
+                                <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
 {% endblock %}

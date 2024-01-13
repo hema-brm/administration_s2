@@ -2,7 +2,6 @@ import Checkbox from './component/Checkbox.js';
 const listID = [
                 ['.products-checkbox', '.product-checkbox'],
                 ['.categories-checkbox', '.category-checkbox'],
-                ['.users-checkbox', '.user-checkbox']
              ];
 
 //on récupère la case permettant de cocher toutes les autres cases et on le met dans le tableau
