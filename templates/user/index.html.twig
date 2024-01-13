@@ -53,7 +53,12 @@
         </thead>
         <tbody>
         {% for user in users %}
-            <tr data-href="{{ path('app_employee_show', {'id': user.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+            <tr data-controller="clickable"
+                data-clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
+                data-action="click->clickable#visit"
+                data-clickable-target="element"
+                class="{{ borderClass }} hover:bg-gray-50 text-sm"
+            >
                 <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="user-checkbox" name="{{ user.id }}" data-csrf-token="{{ csrf_token('delete' ~ user.id) }}"> </td>
                 <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
                 <td class="{{ cellPadding }} text-left">{{ user.firstName }}</td>
@@ -61,8 +66,8 @@
                 <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
                 <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td class="{{ cellPadding }} text-right text-gray-400">
-                    <a href="{{ path('app_employee_edit', {'id': user.id}) }}">
-                        <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                    <a href="{{ path('app_employee_edit', {'id': user.id}) }}" data-clickable-target="exclude">
+                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
                 </td>
             </tr>
@@ -76,6 +81,7 @@
 
      </div>
 
+    <script src="{{ asset('js/app.js') }}"></script>
     <script>
         window.addEventListener('load', () => {
             (new Link('tr[data-href]'));

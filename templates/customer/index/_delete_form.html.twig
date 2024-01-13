@@ -1,7 +1,7 @@
 {% set buttonClasses = buttonClasses|default([]) %}
 {% set buttonClasses = buttonClasses|join(' ') %}
 
-{% embed '@components/container/modal-confirm.html.twig' with {
+{% embed '@components/container/modal/confirm.html.twig' with {
     formAction: path('app_customer_delete', {'id': customer.id}),
 } %}
     {% block form %}
