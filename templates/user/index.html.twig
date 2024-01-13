@@ -53,10 +53,10 @@
         </thead>
         <tbody>
         {% for user in users %}
-            <tr data-controller="clickable"
-                data-clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
-                data-action="click->clickable#visit"
-                data-clickable-target="element"
+            <tr data-controller="link--clickable"
+                data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
+                data-action="click->link--clickable#visit"
+                data-link--clickable-target="element"
                 class="{{ borderClass }} hover:bg-gray-50 text-sm"
             >
                 <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="user-checkbox" name="{{ user.id }}" data-csrf-token="{{ csrf_token('delete' ~ user.id) }}"> </td>
@@ -66,7 +66,7 @@
                 <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
                 <td class="{{ cellPadding }} text-left">{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td class="{{ cellPadding }} text-right text-gray-400">
-                    <a href="{{ path('app_employee_edit', {'id': user.id}) }}" data-clickable-target="exclude">
+                    <a href="{{ path('app_employee_edit', {'id': user.id}) }}" data-link--clickable-target="exclude">
                         <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
                 </td>

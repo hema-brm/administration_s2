@@ -4,16 +4,16 @@
 {% set contentId = "dropdown_content_" ~ id %}
 
 <div class="relative"
-    data-controller="dropdown"
-    data-dropdown-target="container"
-    data-dropdown-show-class="scale-100"
-    data-dropdown-hide-class="scale-0"
+    data-controller="content--dropdown"
+    data-content--dropdown-target="container"
+    data-content--dropdown-show-class="scale-100"
+    data-content--dropdown-hide-class="scale-0"
 >
-    <div id="{{ toggleId }}" data-dropdown-target="toggle">
+    <div id="{{ toggleId }}" data-content--dropdown-target="toggle">
         {% block toggle %}
         {% endblock %}
     </div>
-    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out" data-dropdown-target="content">
+    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out" data-content--dropdown-target="content">
         {% block content %}
         {% endblock %}
     </div>

@@ -65,10 +65,10 @@
             </thead>
             <tbody>
             {% for product in products %}
-                <tr data-controller="clickable"
-                    data-clickable-path-value="{{ path('app_product_show', {'id': product.id}) }}"
-                    data-action="click->clickable#visit"
-                    data-clickable-target="element"
+                <tr data-controller="link--clickable"
+                    data-link--clickable-path-value="{{ path('app_product_show', {'id': product.id}) }}"
+                    data-action="click->link--clickable#visit"
+                    data-link--clickable-target="element"
                     class="{{ borderClass }} hover:bg-secondary-50 text-sm"
                 >
                     <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}" data-csrf-token="{{ csrf_token('delete' ~ product.id) }}"> </td>
@@ -89,7 +89,7 @@
 
                     <td class="{{ cellPadding }} text-left max-w-[20px] truncate">{{ product.price/100 }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-clickable-target="exclude">
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
                             <i class="fa-solid fa-edit hover:text-warning-500"></i>
                         </a>
                     </td>

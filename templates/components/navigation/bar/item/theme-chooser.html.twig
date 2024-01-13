@@ -59,9 +59,9 @@
             <h3 class="font-semibold ml-1">Changez le theme</h3>
             {% for theme, options in availableThemes %}
                 <div id="choose-theme-{{ theme }}" class="p-1 hover:bg-secondary-100 rounded-sm cursor-pointer"
-                     data-controller="theme-chooser"
-                     data-theme-chooser-target="themeChooser"
-                     data-theme-chooser-theme-value="{{ theme }}"
+                     data-controller="theme--chooser"
+                     data-theme--chooser-target="themeChooser"
+                     data-theme--chooser-theme-value="{{ theme }}"
                 >
                     <button>
                         <i style="color: {{ options.color }}" class="fa-solid fa-circle"></i>
