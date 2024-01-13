@@ -79,14 +79,15 @@ class UserController extends AbstractController
     public function deleteMany(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $employees = $request->request->all()['employees'];
+        $count = 0;
         foreach($employees as $id => $token){
             $employee = $userRepository->find($id);
-            if($employee){
-                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
-                    $entityManager->remove($employee);
-                }
+            if($employee && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($employee);
+                $count++;
             }
         }
+        $this->addFlash('success', $count.' employé(s) supprimé(s) avec succès.');
         $entityManager->flush(); 
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -9,44 +9,18 @@
     {{ header({
         text: 'Liste des employés',
     }) }}
-
+    {{ displayFlash() }}
     <div class="px-4"
         data-controller="form--checkbox--post"
     >
-        <div class="flex justify-end py-2 gap-2">
+        <div class="flex flex-row justify-end items-center py-2 gap-2">
+            {% include '@user/partials/delete-many-button-confirm.html.twig' %}
             {{ button_macro({
                 custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                 text:  "Nouvel employé",
                 icon: "fa-plus",
                 route : path('app_employee_new')
             }) }}
-            {% embed '@components/container/modal/confirm.html.twig' with {
-                formAction: path('app_employee_deleteAll'),
-                customFormId: 'deleteManyEmployeesForm',
-            } %}
-                {% block trigger %}
-                    <div id="disable_buttons" class="hidden" data-form--checkbox--post-target="button">
-                        <button class="group">
-                            <i class="fa-regular fa-trash-can group-hover:text-danger-500"></i>
-                        </button>
-                    </div>
-                {% endblock %}
-                {% block content %}
-                    <div class="text-center">
-                        <p class="font-medium text-gray-900">Êtes-vous sûr de vouloir supprimer ces employés ?</p>
-                    </div>
-                {% endblock %}
-                {% block cancel %}
-                    <button class="px-2 py-1 bg-secondary-500 hover:bg-secondary-600 text-white mr-1">
-                        Annuler
-                    </button>
-                {% endblock %}
-                {% block confirm %}
-                    <button class="px-2 py-1 text-danger-500 bg-danger-50 hover:bg-danger-500 hover:text-white">
-                        Confirmer
-                    </button>
-                {% endblock %}
-            {% endembed %}
         </div>
 
         {% set cellPadding = 'p-4 px-2' %}
