@@ -6,7 +6,7 @@ use App\Entity\Customer;
 use App\Form\CrudSearchType;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
-use App\Service\Customer\CustomerService;
+use App\Service\Customer\AccessibleCustomerService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
@@ -24,9 +24,7 @@ class IndexController extends AbstractController
 {
     private ?string $searchTerm;
     private ?int $page;
-
     public const SEARCH_FORM_NAME = 'crud_search';
-
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
@@ -41,7 +39,7 @@ class IndexController extends AbstractController
 
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('list')]
-    public function index(CustomerService $customerService): Response
+    public function index(AccessibleCustomerService $customerService): Response
     {
        /* if (!empty($this->searchTerm)) {
             return $this->search($this->searchTerm, $customerService);

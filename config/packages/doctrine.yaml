@@ -23,6 +23,9 @@ doctrine:
               string_functions:
                 TO_TSQUERY: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\ToTsquery
                 TSMATCH: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Tsmatch
+                CONTAINS: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Contains
+                CAST: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Cast
+                JSON_GET_FIELD_AS_TEXT: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\JsonGetFieldAsText
 
 when@test:
     doctrine:

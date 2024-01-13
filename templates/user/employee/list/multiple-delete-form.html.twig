@@ -1,0 +1,8 @@
+<form
+        id="deleteManyEmployeesForm"
+        data-form--checkbox--post-target="form"
+        action="{{ path('app_employee_deleteAll') }}"
+        method="POST"
+>
+    {% include '@user/employee/list/table.html.twig' %}
+</form>

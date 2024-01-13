@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use App\Security\Roles\IUserRole;
+use App\Util\Role\RoleColor;
+use App\Util\Role\RoleLabel;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -76,10 +78,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = IUserRole::ROLE_USER;
 
         return array_unique($roles);
+    }
+
+    public function getRolesLabel(): array
+    {
+        $roles = $this->getRoles();
+        $rolesLabel = [];
+
+        foreach ($roles as $role) {
+            $rolesLabel[] = [
+                'text' => (new RoleLabel($role))->get(),
+                'color' => (new RoleColor($role))->get(),
+            ];
+        }
+
+        return $rolesLabel;
     }
 
     public function setRoles(array $roles): self

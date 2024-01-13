@@ -22,7 +22,7 @@
                 </button>
             </a>
             <div>
-                {% embed 'user/_delete_form.html.twig' with {
+                {% embed 'user/employee/_delete_form.html.twig' with {
                     user: user
                 } %}
                     {% block button_content %}
@@ -47,7 +47,9 @@
                     <span>{{ user.phoneNumber }}</span>
                 </div>
                 <div class="leading-5 text-xs">
-                    <span>{{ user.roles ? user.roles|json_encode : ''}}</span>
+                    {% for role in user.rolesLabel %}
+                        <span class="mr-1 p-1 bg-{{ role.color }}-100 text-{{ role.color }}-600 rounded">{{ role.text }}</span>
+                    {% endfor %}
                 </div>
             </div>
         </div>

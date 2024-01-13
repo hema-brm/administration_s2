@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Quote;
+use App\Query\Trait\PaginatorTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Query\Quote\FullSearchQuery;
-use App\Query\Trait\PaginatorTrait;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 
@@ -21,7 +21,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class QuoteRepository extends ServiceEntityRepository
 {
-    
     use PaginatorTrait;
 
     private FullSearchQuery $fullSearchQuery;

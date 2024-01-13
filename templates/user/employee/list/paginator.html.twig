@@ -1,0 +1,12 @@
+{% from "@components/macros/content.html.twig" import paginator %}
+
+{% set urlParams = {} %}
+
+{{ paginator({
+    name: 'page',
+    countButton: 5,
+    current: paginatorHelper.current,
+    total: paginatorHelper.total,
+    route: 'app_employee_index',
+    urlParams: urlParams,
+}) }}

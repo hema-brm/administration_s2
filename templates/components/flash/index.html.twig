@@ -4,7 +4,7 @@
 {% set hiddenClass = 'translate-x-96' %}
 
 {% if allMessages is not empty %}
-<div id="flash-message-{{ id }}" class="z-[99999] fixed bottom-3 right-3 transform transition-transform ease-in-out max-w-[20rem] {{ hiddenClass }}"
+<div id="flash-message-{{ id }}" class="z-[99999] fixed top-1 right-3 transform transition-transform ease-in-out max-w-[20rem] {{ hiddenClass }}"
      data-controller="content--toast"
      data-content--toast-target="container"
      data-content--toast-hidden-class="{{ hiddenClass }}"

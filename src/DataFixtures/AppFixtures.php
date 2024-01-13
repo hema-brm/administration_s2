@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
-    const USER_COUNT = 100;
+    const EMPLOYEE_COUNT = 100;
     const CUSTOMER_COUNT = 25;
     const COMPANY_COUNT = 5;
     const COMPANY_OWNER_COUNT = 10;

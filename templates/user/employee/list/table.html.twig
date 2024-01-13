@@ -1,0 +1,65 @@
+{% set cellPadding = 'p-4 px-2' %}
+{% set borderClass = 'border-b border-b-gray-200' %}
+{% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+
+<table
+    class="w-full border shadow-sm text-sm"
+    data-controller="form--checkbox--multiple"
+>
+    <thead>
+    <tr class="{{ tableHeaderClasses }}">
+        <th class="{{ cellPadding }} text-center">
+            <input type="checkbox" class="users-checkbox" data-form--checkbox--multiple-target="main">
+        </th>
+        <th class="{{ cellPadding }} text-left">Email</th>
+        <th class="{{ cellPadding }} text-left">Nom et prénoms</th>
+        <th class="{{ cellPadding }} text-left">Téléphone</th>
+        <th class="{{ cellPadding }} text-left">Roles</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr
+                data-controller="link--clickable"
+                data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
+                data-action="click->link--clickable#visit"
+                data-link--clickable-target="element"
+                class="{{ borderClass }} hover:bg-gray-50 text-sm"
+        >
+            <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                <input
+                    type="checkbox"
+                    class="user-checkbox"
+                    name="employees[{{ user.id }}]"
+                    value="{{ csrf_token('delete' ~ user.id) }}"
+                    data-form--checkbox--multiple-target="items"
+                    data-form--checkbox--post-target="items"
+                >
+            </td>
+            <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
+            <td class="{{ cellPadding }} text-left">{{ user.fullName }}</td>
+            <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
+            <td class="{{ cellPadding }} text-left">
+                {% for role in user.rolesLabel %}
+                    <span class="mr-1 p-1 bg-{{ role.color }}-100 text-{{ role.color }}-600 rounded">{{ role.text }}</span>
+                {% endfor %}
+            </td>
+            <td class="{{ cellPadding }} text-right text-gray-400">
+                <a href="{{ path('app_employee_edit', {'id': user.id}) }}"
+                   data-link--clickable-target="exclude">
+                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div id="customer-paginator" class="flex flex-row justify-end my-2">
+    {% include "@user/employee/list/paginator.html.twig" %}
+</div>

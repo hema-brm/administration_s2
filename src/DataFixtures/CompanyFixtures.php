@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker\Factory;
 use Faker\Generator;
 
-class CompanyFixtures extends Fixture implements DependentFixtureInterface
+class CompanyFixtures extends Fixture
 {
     private Generator $faker;
 
@@ -33,20 +33,8 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
                 ->setSiretNumber($this->faker->numberBetween(10000000000000, 99999999999999))
                 ->setAdress($this->faker->address());
 
-            $owner = $this->getReference(sprintf('owner-%d', $i));
-
-            $company->addUserId($owner);
-
             $manager->persist($company);
             $this->addReference("company-$i", $company);
         }
-
-    }
-
-    public function getDependencies() : array
-    {
-        return [
-            UserFixtures::class,
-        ];
     }
 }

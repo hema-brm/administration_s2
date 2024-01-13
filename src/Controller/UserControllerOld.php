@@ -5,12 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\AddUserFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 class UserControllerOld extends AbstractController
@@ -34,7 +33,7 @@ class UserControllerOld extends AbstractController
             return $this->redirectToRoute('add_user'); 
         }
 
-        return $this->render('user/add.html.twig', [
+        return $this->render('user/employee/add.html.twig', [
             'form' => $form,
         ]);
     }

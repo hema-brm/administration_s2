@@ -4,12 +4,13 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private Generator $faker;
     public function __construct(private readonly UserPasswordHasherInterface $passwordHasher) {
@@ -20,6 +21,7 @@ class UserFixtures extends Fixture
     {
         $this->addAdmin($manager);
         $this->addOwner($manager, AppFixtures::COMPANY_OWNER_COUNT);
+        $this->addEmployee($manager, AppFixtures::EMPLOYEE_COUNT);
         $manager->flush();
     }
 
@@ -48,10 +50,40 @@ class UserFixtures extends Fixture
                 ->setRoles(['ROLE_ENTREPRISE']);
 
             $user->setPassword($this->passwordHasher->hashPassword($user, "owner-$i"));
+
+            $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
+            $company->addUserId($user);
+
             $manager->persist($user);
 
             $this->addReference("owner-$i", $user);
         }
+    }
+
+    private function addEmployee(ObjectManager $manager, int $count = 1): void
+    {
+        for ($i = 1; $i <= $count; $i++) {
+            $user = (new User())
+                ->setFirstName($this->faker->firstName())
+                ->setLastName($this->faker->lastName())
+                ->setPhoneNumber($this->faker->phoneNumber())
+                ->setEmail("employee-$i@gmail.com")
+                ->setRoles(['ROLE_EMPLOYEE']);
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, "employee-$i"));
+
+            $company = $this->getReference(sprintf('company-%d', rand(1, AppFixtures::COMPANY_COUNT)));
+            $user->setCompany($company);
+
+            $manager->persist($user);
+            $this->addReference("employee-$i", $user);
+        }
+    }
+    public function getDependencies() : array
+    {
+        return [
+            CompanyFixtures::class,
+        ];
     }
 
 }

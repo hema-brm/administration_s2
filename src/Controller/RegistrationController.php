@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Company;
+use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\Roles\IUserRole;
 use Doctrine\ORM\EntityManagerInterface;
