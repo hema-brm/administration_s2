@@ -24,15 +24,19 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/delete', name: 'app_category_deleteAll', methods: ['POST'])]
-    public function deleteCategoryList(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
+    public function deleteMany(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
     {
         $categoryDatasJSON = $request->getContent();
         $categoryDatas = json_decode($categoryDatasJSON, true);
         
-        foreach($categoryDatas as $id){
+        foreach($categoryDatas as $categoryData){
+            $id = $categoryData['id'];
+            $token = $categoryData['token'];
             $category = $categoryRepository->find($id);
             if($category){
-                $entityManager->remove($category);
+                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
+                    $entityManager->remove($category);
+                }
             } 
         }
         $entityManager->flush();
@@ -59,14 +63,6 @@ class CategoryController extends AbstractController
     'category' => $category,
     'form' => $form,
     ]);
-    }
-
-    #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
-    public function show(Category $category): Response
-    {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
     }
 
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]

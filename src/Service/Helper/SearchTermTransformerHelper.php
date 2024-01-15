@@ -34,7 +34,7 @@ class SearchTermTransformerHelper
 
     private function removeEmpty(): self
     {
-        $this->searchTermArray = array_filter($this->searchTermArray, fn($value) => $value !== '');
+        $this->searchTermArray = array_filter($this->TermArray, fn($value) => $value !== '');
 
         return $this;
     }
