@@ -9,3 +9,4 @@ import './styles/app.css';
 // import custom js
 import './js/index.js';
 import './js/handleCheckbox.js';
+import './js/addProductQuote.js';

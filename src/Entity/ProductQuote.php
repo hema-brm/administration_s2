@@ -22,9 +22,11 @@ class ProductQuote
     #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $product;
+    
 
     #[ORM\Column(nullable: true)]
     private $quantity;
+    
 
     public function getId(): ?int
     {
