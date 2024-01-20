@@ -1,6 +1,6 @@
-
-
-{% extends 'base.html.twig' %}
+{% extends '@base/appAcc.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
 {% block title %}Accountant{% endblock %}
 

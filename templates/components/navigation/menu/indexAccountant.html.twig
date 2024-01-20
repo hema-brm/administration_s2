@@ -1,0 +1,14 @@
+<aside data-open="true" class="nav overflow-hidden relative bg-primary-100 text-bg-stone-800 min-w-[theme('spacing[60]')] w-60 ml-0 transform min-h-screen transition-all duration-300 ease-in-out shadow-2xl overflow-y-visible">
+    <div class="mb-6">
+        {% include "@components/navigation/menu/item/current-user.html.twig" %}
+    </div>
+    <div>
+        {% include "@components/navigation/menu/item/elementAccountant.html.twig" %}
+    </div>
+</aside>
+
+<script>
+    window.addEventListener('load', () => {
+        (new NavToggle('#btn_toggle-menu', '.nav', 60));
+    });
+</script>
