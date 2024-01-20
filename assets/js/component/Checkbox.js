@@ -53,7 +53,7 @@ class Checkbox{
     
     }
 
-    getlistDeleteProducts =()=>{
+    getlistToDelete =()=>{
         let list = [];
         this.checkboxes.forEach((checkbox) => {
             if(checkbox.checked){

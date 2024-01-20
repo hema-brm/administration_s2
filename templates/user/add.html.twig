@@ -1,5 +1,4 @@
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {% extends '@base/app.html.twig' %}
@@ -20,36 +19,12 @@
         <div class="p-4 shadow-md w-1/2 border rounded">
             <div class="text-sm">
                 {{ form_start(form) }}
-                    {{
-                        form_widget_macro({
-                            item: form.firstName,
-                        })
-                    }}
-                    {{
-                        form_widget_macro({
-                            item: form.lastName,
-                        })
-                    }}
-                    {{
-                        form_widget_macro({
-                            item: form.email,
-                        })
-                    }}
-                    {{
-                        form_widget_macro({
-                            item: form.password,
-                        })
-                    }}
-                    {{
-                        form_widget_macro({
-                            item: form.entreprise,
-                        })
-                    }}
-                    {{
-                        form_widget_macro({
-                            item: form.roles,
-                        })
-                    }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.lastName) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.password) }}
+                    {{ form_row(form.company) }}
+                    {{ form_row(form.roles) }}
 
                     <div class="flex flex-row-reverse">
                         {{ button_macro({

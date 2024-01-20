@@ -49,12 +49,12 @@
                     </thead>
                     <tbody>
                     {% for category in categories %}
-                        <tr data-href="{{ path('app_category_show', {'id': category.id}) }}" class="{{ borderClass }} hover:bg-gray-50 text-sm">
+                        <tr class="{{ borderClass }} hover:bg-gray-50 text-sm">
                             <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="category-checkbox" name="{{ category.id }}" data-csrf-token="{{ csrf_token('delete' ~ category.id) }}"> </td>
                             <td class="{{ cellPadding }} text-left">{{ category.name }}</td>
                             <td class="{{ cellPadding }} text-right text-gray-400">
                                 <a href="{{ path('app_category_edit', {'id': category.id}) }}">
-                                    <i class="fa-solid fa-edit hover:text-yellow-500"></i>
+                                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
                                 </a>
                             </td>
         

@@ -24,7 +24,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
-    #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: User::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
     private Collection $UserId;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class,cascade: ["persist"],orphanRemoval: true)]
@@ -101,7 +101,7 @@ class Company
     {
         if (!$this->UserId->contains($userId)) {
             $this->UserId->add($userId);
-            $userId->setEntreprise($this);
+            $userId->setCompany($this);
         }
 
         return $this;
@@ -112,7 +112,7 @@ class Company
         if ($this->UserId->removeElement($userId)) {
             // set the owning side to null (unless already changed)
             if ($userId->getCompany() === $this) {
-                $userId->setEntreprise(null);
+                $userId->setCompany(null);
             }
         }
 

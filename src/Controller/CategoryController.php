@@ -24,7 +24,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/delete', name: 'app_category_deleteAll', methods: ['POST'])]
-    public function deleteCategoryList(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
+    public function deleteMany(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
     {
         $categoryDatasJSON = $request->getContent();
         $categoryDatas = json_decode($categoryDatasJSON, true);
@@ -64,14 +64,6 @@ class CategoryController extends AbstractController
     'category' => $category,
     'form' => $form,
     ]);
-    }
-
-    #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
-    public function show(Category $category): Response
-    {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
     }
 
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]

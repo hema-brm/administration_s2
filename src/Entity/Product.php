@@ -1,5 +1,5 @@
 <?php
-
+//Product.php
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
@@ -33,10 +33,18 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Company $company = null;
+    
 
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
+    
 
+    public function __construct()
+    {
+        $this->subCategories = new ArrayCollection();
+
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -112,6 +120,11 @@ class Product
         $this->company = $company;
 
         return $this;
+    }
+    
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getSearchVector(): ?string

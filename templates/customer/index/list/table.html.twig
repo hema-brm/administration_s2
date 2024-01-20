@@ -8,7 +8,6 @@
             <th class="{{ cellPadding }} text-right">#</th>
             <th class="{{ cellPadding }} text-left">Email</th>
             <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
-            <th class="{{ cellPadding }} text-left">Adresse</th>
             <th class="{{ cellPadding }} text-left">Téléphone</th>
             <th class="{{ cellPadding }}"></th>
         </tr>
@@ -16,11 +15,10 @@
     <tbody>
     {% set offset = paginatorHelper.offset %}
     {% for customer in customers %}
-        <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-secondary-50">
+        <tr data-href="{{ path('app_customer_show', {'id': customer.id}) }}" class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500">
             <td class="{{ cellPadding }} text-right">{{ loop.index + offset }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.address }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
             <td class="{{ cellPadding }} text-right text-secondary-400">
                 <div class="flex flex-row justify-end">

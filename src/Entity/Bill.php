@@ -21,7 +21,7 @@ class Bill
     private ?string $numeroFacture = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $nomClient = null;
+    private ?string $nameClient = null;
 
     public function getId(): ?int
     {
@@ -50,14 +50,14 @@ class Bill
         return $this;
     }
 
-    public function getNomClient(): ?string
+    public function getNameClient(): ?string
     {
-        return $this->nomClient;
+        return $this->nameClient;
     }
 
-    public function setNomClient(?string $nomClient): self
+    public function setNameClient(?string $nameClient): self
     {
-        $this->nomClient = $nomClient;
+        $this->nameClient = $nameClient;
         return $this;
     }
 }

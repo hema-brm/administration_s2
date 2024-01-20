@@ -1,9 +1,8 @@
-{% from "@components/input/macros/index.html.twig" import form_widget_macro %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {{ form_start(form) }}
     <div class='input-wrapper'>
-       {{form_widget_macro({item: form.name})}}
+       {{form_row(form.name)}}
     </div>
 
     <div class="flex flex-row-reverse">

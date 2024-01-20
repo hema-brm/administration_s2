@@ -1,0 +1,33 @@
+{% from "@components/macros/content.html.twig" import header %}
+{% extends '@base/app.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Modification de l\'employé',
+    }) }}
+
+     <div class="p-4">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-blue-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_employee_index') }}">Retour à la liste</a>
+        </div>
+        <div class="p-4 shadow-md w-1/2 border rounded">
+            <div class="text-sm">
+                {{ include('user/_form.html.twig', {
+                    button_label: 'Modifier',
+                    button_classes: [
+                        'bg-yellow-400',
+                        'text-gray-900',
+                        'hover:bg-yellow-500',
+                        'ml-2',
+                    ]
+                }) }}
+            </div>
+        </div>
+        </div>
+    </div>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
