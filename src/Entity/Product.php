@@ -38,7 +38,6 @@ class Product
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
     
-    
 
     public function __construct()
     {
