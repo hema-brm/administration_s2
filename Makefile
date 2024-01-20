@@ -22,7 +22,7 @@ symfony:
 	docker compose exec php php bin/console $(filter-out $@,$(MAKECMDGOALS))
 
 database-drop:
-	docker compose exec php php bin/console doctrine:database:drop --force
+	docker compose exec php php bin/console doctrine:database:drop --if-exists --force
 
 database-create:
 	docker compose exec php php bin/console doctrine:database:create
@@ -32,3 +32,18 @@ database-migrate:
 
 database-generate-migration:
 	docker compose exec php php bin/console make:migration
+
+database-reset:
+	docker compose exec php php bin/console doctrine:database:drop --if-exists --force \
+	&& docker compose exec php php bin/console doctrine:database:create \
+	&& docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
+
+clean-migration:
+	rm -rf migrations/*.php \
+	&& docker compose exec php php bin/console doctrine:database:drop --if-exists --force \
+	&& docker compose exec php php bin/console doctrine:database:create \
+	&& docker compose exec php php bin/console make:migration \
+	&& docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
+
+fixtures:
+	docker compose exec php php bin/console doctrine:fixtures:load --no-interaction

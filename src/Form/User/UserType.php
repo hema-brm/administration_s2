@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Form\User;
+
+use App\Entity\Company;
+use App\Entity\User;
+use App\Form\Field\CompanyAutocompleteField;
+use App\Security\Roles\IUserRole;
+use App\Util\Role\RoleLabel;
+use App\Validator\Constraint\Role;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class UserType extends AbstractType
+{
+    public const ADD = 'add';
+    public const EDIT = 'edit';
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+        ->add('firstName', TextType::class, [
+            'required' => true,
+            'label' => 'Prénom',
+            'attr' => [
+                'placeholder' => 'Entrez le prénom',
+            ],
+        ])
+        ->add('lastName', TextType::class, [
+            'required' => true,
+            'label' => 'Nom',
+            'attr' => [
+                'placeholder' => 'Entrez le nom',
+            ],
+        ])
+        ->add('email', EmailType::class, [
+            'required' => true,
+            'label' => 'Adresse email',
+            'attr' => [
+                'placeholder' => 'Entrez l\'adresse email',
+            ],
+        ]);
+
+        if (true === $options['is_admin']) {
+            $builder
+            ->add('password', PasswordType::class, [
+                'required' => $options['mode'] === self::ADD,
+                'label' => 'Mot de passe',
+                'attr' => [
+                    'placeholder' => 'Entrez le mot de passe',
+                ],
+            ]);
+        }
+
+        $choices = [
+            (new RoleLabel(IUserRole::ROLE_EMPLOYEE))->get() => RoleLabel::ROLE_EMPLOYEE,
+            (new RoleLabel(IUserRole::ROLE_ACCOUNTANT))->get() => RoleLabel::ROLE_ACCOUNTANT,
+        ];
+
+        $builder
+        ->add('roles', ChoiceType::class, [
+            'required' => true,
+            'choices' => $choices,
+            'label' => 'Rôles',
+            'attr' => [
+                'placeholder' => 'Veuillez choisir les rôles',
+            ],
+            'multiple' => true,
+        ]);
+
+        if (true === $options['is_admin']) {
+            $builder
+            ->add('company', CompanyAutocompleteField::class);
+        }
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+            'mode' => self::ADD,
+            'is_admin' => false,
+        ]);
+    }
+}

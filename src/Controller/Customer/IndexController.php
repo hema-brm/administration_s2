@@ -12,6 +12,7 @@ use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,13 +29,17 @@ class IndexController extends AbstractController
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
+    private bool $needCompany = false;
+
     public function __construct(
         RequestQueryService $requestQueryService,
-        PageFromRequestService $pageFromRequestService
+        PageFromRequestService $pageFromRequestService,
+        Security $security,
     ) {
         $searchQuery = $requestQueryService->all(self::SEARCH_FORM_NAME);
         $this->searchTerm = $searchQuery['search'] ?? null;
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+        $this->needCompany = $security->isGranted('ROLE_ADMIN');
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -52,6 +57,7 @@ class IndexController extends AbstractController
             'searchForm' => $this->getSearchForm(),
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
+            'showCompany' => $this->needCompany,
         ]);
     }
 
@@ -67,6 +73,7 @@ class IndexController extends AbstractController
             'searchTerm' => $searchTerm,
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
+            'showCompany' => $this->needCompany,
         ]);
     }
 
@@ -95,6 +102,7 @@ class IndexController extends AbstractController
         return $this->render('@customer/index/new.html.twig', [
             'customer' => $customer,
             'form' => $form,
+            'showCompany' => $this->needCompany,
         ]);
     }
 
@@ -104,6 +112,7 @@ class IndexController extends AbstractController
     {
         return $this->render('@customer/index/show.html.twig', [
             'customer' => $customer,
+            'showCompany' => $this->needCompany,
         ]);
     }
 

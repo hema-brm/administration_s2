@@ -51,6 +51,11 @@
                     <div class="leading-5 text-xs">
                         <span>{{ customer.address }}</span>
                     </div>
+                    {% if showCompany %}
+                    <div class="leading-5 text-xs">
+                        <span>{{ customer.company.name }}</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </article>

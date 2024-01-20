@@ -37,7 +37,10 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_ENTREPRISE
-        ROLE_ENTREPRISE: ROLE_EMPLOYEE
+        ROLE_ENTREPRISE:
+            - ROLE_EMPLOYEE
+        ROLE_EMPLOYEE:
+            - ROLE_COMPTABLE
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

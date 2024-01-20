@@ -5,7 +5,8 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-     {{ header({
+    {{ displayFlash() }}
+    {{ header({
         text: 'Ajouter un employé',
     }) }}
 
@@ -17,7 +18,7 @@
         {% embed "@components/container/form-container.html.twig" %}
             {% block content %}
                 {{ include('user/employee/_form.html.twig', {
-                    button_label: 'Modifier',
+                    button_label: 'Ajouter',
                     button_classes: [
                         'bg-primary-500',
                         'text-white',

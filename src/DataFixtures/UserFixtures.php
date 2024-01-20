@@ -4,13 +4,14 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture implements DependentFixtureInterface
+class UserFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     private Generator $faker;
     public function __construct(private readonly UserPasswordHasherInterface $passwordHasher) {
@@ -27,12 +28,17 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     private function addAdmin(ObjectManager $manager): void
     {
+        $company = $this->getReference('company-0');
         $user = (new User())
             ->setFirstName('Super')
             ->setLastName('Admin')
             ->setPhoneNumber('0102030405')
             ->setEmail('admin@easyvows.com')
-            ->setRoles(['ROLE_ADMIN']);
+            ->setRoles(['ROLE_ADMIN'])
+            ->setCompany($company);
+        ;
+
+        $company->addUser($user);
 
         $user->setPassword($this->passwordHasher->hashPassword($user, 'admin'));
 
@@ -52,7 +58,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPassword($this->passwordHasher->hashPassword($user, "owner-$i"));
 
             $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
-            $company->addUserId($user);
+            $company->addUser($user);
 
             $manager->persist($user);
 
@@ -86,4 +92,11 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
+    public static function getGroups(): array
+    {
+        return [
+            'company',
+            'user',
+        ];
+    }
 }

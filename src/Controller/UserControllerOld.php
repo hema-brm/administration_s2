@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\AddUserFormType;
+use App\Form\EmployeeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class UserControllerOld extends AbstractController
         // Récupérer l'entreprise de l'utilisateur connecté
         $company = $security->getUser()->getCompany();
 
-        $form = $this->createForm(AddUserFormType::class, $user, ['company' => $company]);
+        $form = $this->createForm(EmployeeType::class, $user, ['company' => $company]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

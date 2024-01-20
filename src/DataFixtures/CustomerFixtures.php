@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Customer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use App\Repository\CompanyRepository;
@@ -11,7 +12,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker\Generator;
 
 
-class CustomerFixtures extends Fixture implements DependentFixtureInterface
+class CustomerFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     private Generator $faker;
     public function __construct()
@@ -48,6 +49,13 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
         return [
             UserFixtures::class,
             CompanyFixtures::class
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return [
+            'customer',
         ];
     }
 }

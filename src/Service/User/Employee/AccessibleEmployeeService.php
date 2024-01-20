@@ -3,8 +3,8 @@
 namespace App\Service\User\Employee;
 
 use App\Query\Trait\PaginatorTrait;
-use App\Query\User\Employee\AccessibleEmployeeQuery;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Query\User\Employee\AccessibleEmployee;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -12,22 +12,21 @@ class AccessibleEmployeeService {
     use PaginatorTrait;
 
     public function __construct(
-        private readonly Security $security,
-        private readonly AccessibleEmployeeQuery $employeesQuery,
-        private readonly EntityManagerInterface $manager
+        private readonly Security           $security,
+        private readonly AccessibleEmployee $employeesQuery,
+        private readonly UserRepository     $userRepository,
     ) {}
 
     public function findAll(int $page = 1, int $limit = 10): Paginator
     {
-        $queryBuilder = $this->manager
-            ->createQueryBuilder()
-            ->select(AccessibleEmployeeQuery::getEntityAlias())
-            ->from(AccessibleEmployeeQuery::getEntityClass(), AccessibleEmployeeQuery::getEntityAlias())
-        ;
+        $loggedInUser = $this->userRepository->find(
+            ($this->security->getUser())->getId()
+        );
 
+        $queryBuilder = $this->userRepository->createQueryBuilder('u');
         $query = $this
             ->employeesQuery
-            ->withUser($this->security->getUser())
+            ->withUser($loggedInUser)
             ->apply($queryBuilder)
             ->getQuery();
 

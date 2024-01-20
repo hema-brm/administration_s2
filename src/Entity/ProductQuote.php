@@ -15,7 +15,7 @@ class ProductQuote
     private $id;
 
 
-    #[ORM\ManyToOne(targetEntity: Quote::class)]
+    #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'productQuotes')]
     #[ORM\JoinColumn(nullable: false)]
     private $quote;
 

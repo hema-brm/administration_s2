@@ -3,14 +3,7 @@
 
 
 {{ form_start(form) }}
-    {{ form_row(form.firstName) }}
-    {{ form_row(form.lastName) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.password) }}
-    {{ form_row(form.roles) }}
-    {{ form_row(form.company) }}
-
-
+    {{ form_rest(form) }}
     <div class="flex flex-row-reverse">
         {{ button_macro({
             text: button_label|default('Enregistrer'),

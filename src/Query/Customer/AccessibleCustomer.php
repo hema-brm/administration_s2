@@ -2,13 +2,12 @@
 
 namespace App\Query\Customer;
 
-use App\Entity\Customer;
 use App\Query\Criteria;
 use App\Security\Roles\IUserRole;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AccessibleCustomerQuery implements Criteria
+class AccessibleCustomer implements Criteria
 {
     private UserInterface $user;
 
@@ -24,24 +23,16 @@ class AccessibleCustomerQuery implements Criteria
         }
 
         // otherwise, return only customers from the same company
-        return $builder
-            ->where('c.company = :company')
-            ->setParameter('company', $this->security->getUser()->getCompany());
+        (new CustomerOfCompany())
+            ->withCompanyId($this->user->getCompany()->getId())
+            ->apply($builder);
+
+        return $builder;
     }
 
     public function withUser(UserInterface $user): self
     {
         $this->user = $user;
         return $this;
-    }
-
-    public static function getEntityAlias(): string
-    {
-        return 'c';
-    }
-
-    public static function getEntityClass(): string
-    {
-        return Customer::class;
     }
 }

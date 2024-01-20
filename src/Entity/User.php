@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'L\'adresse email est déjà utilisée par un autre compte.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,28 +23,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'Veuillez saisir une adresse email.')]
+    #[Assert\Email(message: 'Veuillez saisir une adresse email valide.')]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true, options: ["default" => "Unknown"])]
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un prénom.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $firstName = null;
 
-    #[ORM\Column(nullable: true, options: ["default" => "Unknown"])]
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un nom.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $lastName = null;
 
-    #[ORM\Column(nullable: true, options: ["default" => "Unknown"])]
+    #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Length(max: 20, maxMessage: 'Le numéro de téléphone ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $phoneNumber = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez saisir un rôle existant.')]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez saisir un mot de passe.')]
+    #[Assert\Length(min: 5, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.')]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'UserId')]
-    private ?Company $company = null;
+    // not nullable
+
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Company $company;
 
     public function getId(): ?int
     {
@@ -100,6 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
+        $roles = array_values($roles);
         $this->roles = $roles;
 
         return $this;
@@ -170,15 +182,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCompany(): ?Company
+    public function getCompany(): Company
     {
         return $this->company;
     }
 
-    public function setCompany(?Company $company): static
+    public function setCompany(Company $company): self
     {
         $this->company = $company;
 
         return $this;
+    }
+
+    public function hasCompany(): bool
+    {
+        return isset($this->company);
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array(IUserRole::ROLE_ADMIN, $this->roles);
     }
 }

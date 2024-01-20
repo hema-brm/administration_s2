@@ -6,6 +6,7 @@ use App\Entity\Company;
 use App\Entity\User;
 use App\Security\Roles\IUserRole;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -13,13 +14,12 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AddUserFormType extends AbstractType
+class EmployeeType extends AbstractType
 {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {
@@ -87,22 +87,24 @@ class AddUserFormType extends AbstractType
                     'placeholder' => 'Veuillez choisir les rôles',
                 ],
                 'multiple' => true,
-                
-            ])
-            ->add('company', EntityType::class, [
-                'class' => Company::class,
-                'label' => 'Entreprise',
-                'data' => $options['company'],
-                'disabled' => true,
-                'required' => true,
+
             ]);
+
+        if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
+            $builder
+                ->add('company', EntityType::class, [
+                    'class' => Company::class,
+                    'label' => 'Entreprise',
+                    'required' => true,
+                    'autocomplete' => true,
+                ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'company' => null,
         ]);
     }
 }

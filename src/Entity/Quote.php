@@ -46,7 +46,7 @@ class Quote
 
     
 
-    #[ORM\OneToMany(targetEntity: ProductQuote::class, mappedBy: "quote", cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "quote", targetEntity: ProductQuote::class, cascade: ["persist", "remove"])]
     private Collection $productQuotes;
 
     #[ORM\ManyToOne(targetEntity: Company::class)]

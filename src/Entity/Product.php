@@ -34,10 +34,13 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Company $company = null;
     
+    #[ORM\ManyToOne(targetEntity: Quote::class, inversedBy: 'productQuotes')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Quote $quote = null;
 
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
-    
+
 
     public function __construct()
     {

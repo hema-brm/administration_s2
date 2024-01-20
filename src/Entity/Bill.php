@@ -15,7 +15,7 @@ class Bill
     private ?int $id = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    private ?float $totalPrice = 0.00;
+    private ?string $totalPrice;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $numeroFacture = null;

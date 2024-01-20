@@ -21,11 +21,13 @@ doctrine:
                 alias: App
             dql: 
               string_functions:
+                ARRAY: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Arr
                 TO_TSQUERY: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\ToTsquery
                 TSMATCH: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Tsmatch
                 CONTAINS: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Contains
                 CAST: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Cast
                 JSON_GET_FIELD_AS_TEXT: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\JsonGetFieldAsText
+                ANY_ON_RIGHT_EXISTS_ON_LEFT: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\AnyOnTheRightExistsOnTheLeft
 
 when@test:
     doctrine:

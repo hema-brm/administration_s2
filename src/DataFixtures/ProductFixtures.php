@@ -4,11 +4,12 @@ namespace App\DataFixtures;
 
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ProductFixtures extends Fixture implements DependentFixtureInterface
+class ProductFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     private $faker;
     
@@ -49,6 +50,13 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
         return [
             CompanyFixtures::class,
             CategoryFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return [
+            'product',
         ];
     }
 }

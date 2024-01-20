@@ -9,6 +9,9 @@
             <th class="{{ cellPadding }} text-left">Email</th>
             <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
             <th class="{{ cellPadding }} text-left">Téléphone</th>
+            {% if showCompany %}
+                <th class="{{ cellPadding }} text-left">Entreprise</th>
+            {% endif %}
             <th class="{{ cellPadding }}"></th>
         </tr>
     </thead>
@@ -24,6 +27,9 @@
             <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
             <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
+            {% if showCompany %}
+                <td class="{{ cellPadding }} text-left">{{ customer.company.name }}</td>
+            {% endif %}
             <td class="{{ cellPadding }} text-right text-secondary-400">
                 <div class="flex flex-row justify-end" data-link--clickable-target="exclude">
                     <div class="mr-2">

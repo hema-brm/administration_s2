@@ -2,8 +2,9 @@
 
 namespace App\Service\Customer;
 
-use App\Query\Customer\AccessibleCustomerQuery;
+use App\Query\Customer\AccessibleCustomer;
 use App\Query\Trait\PaginatorTrait;
+use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -13,18 +14,14 @@ class AccessibleCustomerService {
     use PaginatorTrait;
 
     public function __construct(
-        private readonly Security $security,
-        private readonly AccessibleCustomerQuery $customersQuery,
-        private readonly EntityManagerInterface $manager
+        private readonly Security           $security,
+        private readonly AccessibleCustomer $customersQuery,
+        private readonly CustomerRepository $customerRepository,
     ) {}
 
     public function findAll(int $page, int $limit): Paginator
     {
-        $queryBuilder = $this->manager
-            ->createQueryBuilder()
-            ->select(AccessibleCustomerQuery::getEntityAlias())
-            ->from(AccessibleCustomerQuery::getEntityClass(), AccessibleCustomerQuery::getEntityAlias())
-        ;
+        $queryBuilder = $this->customerRepository->createQueryBuilder('c');
 
         $query = $this->customersQuery
             ->withUser($this->security->getUser())

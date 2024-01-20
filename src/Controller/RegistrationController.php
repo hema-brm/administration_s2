@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
             // Créer une instance d'company et lui attribuer les données du formulaire
             $company = new Company();
             $company->setName($companyName);
-            $company->setAdress($companyAdress);
+            $company->setAddress($companyAdress);
             $company->setSiretNumber($companySiretNumber);
 
             // Enregistrer l'company

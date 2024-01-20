@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\User\Employee;
 
 use App\Entity\User;
-use App\Form\AddUserFormType;
-use App\Form\UserType;
+use App\Form\User\Employee\EmployeeType;
+use App\Form\User\UserType;
 use App\Repository\UserRepository;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
@@ -12,10 +12,10 @@ use App\Service\User\Employee\AccessibleEmployeeService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 #[Route('/employee', name: 'app_employee_')]
 class EmployeeController extends AbstractController
@@ -25,15 +25,19 @@ class EmployeeController extends AbstractController
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
+    private bool $isAdmin = false;
+
     public function __construct(
         RequestQueryService $requestQueryService,
-        PageFromRequestService $pageFromRequestService
+        PageFromRequestService $pageFromRequestService,
+        Security $security
     ) {
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+        $this->isAdmin = $security->isGranted('ROLE_ADMIN');
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(AccessibleEmployeeService $service): Response
+    public function index(AccessibleEmployeeService $service, Security $security): Response
     {
         $employees = $service->findAll($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($employees), self::LIMIT);
@@ -41,6 +45,7 @@ class EmployeeController extends AbstractController
         return $this->render('user/employee/index.html.twig', [
             'users' => $employees,
             'paginatorHelper' => $paginatorHelper,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 
@@ -48,24 +53,33 @@ class EmployeeController extends AbstractController
     public function new(Request $request, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+        $formType = EmployeeType::class;
 
-        // Récupérer l'entreprise de l'utilisateur connecté
-        $company = $security->getUser()->getCompany();
+        $options = [
+            'is_admin' => $this->isAdmin,
+            'mode' => EmployeeType::ADD,
+        ];
 
-        $form = $this->createForm(AddUserFormType::class, $user, ['company' => $company]);
+        $form = $this->createForm($formType, $user, $options);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', 'L`employé a été créé avec succès.');
+
             return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('error', 'Le formulaire contient des erreurs.');
         }
 
         return $this->render('user/employee/new.html.twig', [
             'user' => $user,
             'form' => $form,
+            'needCompany' => $this->isAdmin,
         ]);
     }
 
@@ -74,18 +88,27 @@ class EmployeeController extends AbstractController
     {
         return $this->render('user/employee/show.html.twig', [
             'user' => $user,
+            'needCompany' => $this->isAdmin,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $formType = EmployeeType::class;
+
+        $options = [
+            'is_admin' => $this->isAdmin,
+            'mode' => EmployeeType::EDIT,
+        ];
+
+        $form = $this->createForm($formType, $user, $options);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'L`employé a été modifié avec succès.');
             return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
         }
 
