@@ -8,22 +8,16 @@ use App\Service\User\UserPasswordService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 
-#[AsEntityListener(event: Events::prePersist, entity: User::class)]
-#[AsEntityListener(event: Events::preUpdate, entity: User::class)]
-class UserEntityListener
+#[AsEntityListener(event: Events::prePersist, method: 'set', entity: User::class)]
+#[AsEntityListener(event: Events::preUpdate, method: 'set', entity: User::class)]
+class UserListener
 {
     public function __construct(
         private readonly UserCompanyService $userCompanyService,
         private readonly UserPasswordService $userPasswordService
     ){}
 
-    public function prePersist(User $user): void
-    {
-        $this->userCompanyService->ensureCompany($user);
-        $this->userPasswordService->ensurePassword($user);
-    }
-
-    public function preUpdate(User $user): void
+    public function set(User $user): void
     {
         $this->userCompanyService->ensureCompany($user);
         $this->userPasswordService->ensurePassword($user);

@@ -45,7 +45,6 @@ class Customer
 
     #[ORM\ManyToOne(targetEntity: Company::class ,inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: 'Veuillez choisir une entreprise.')]
     private Company $company;
 
     public function getId(): ?int
@@ -141,6 +140,12 @@ class Customer
 
         return $this;
     }
+
+    public function hasCompany(): bool
+    {
+        return isset($this->company);
+    }
+
     public function __toString(): string
     {
         return $this->firstname . ' ' . $this->lastname;

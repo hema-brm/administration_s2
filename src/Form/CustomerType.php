@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Customer;
+use App\Form\Field\CompanyAutocompleteField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,12 +47,17 @@ class CustomerType extends AbstractType
                     'placeholder' => 'Entrez un numéro de téléphone',
                 ],
             ]);
+
+            if (true === $options['is_admin']) {
+                $builder->add('company', CompanyAutocompleteField::class);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
+            'is_admin' => false,
         ]);
     }
 }

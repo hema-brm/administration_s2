@@ -75,8 +75,7 @@ class UserType extends AbstractType
         ]);
 
         if (true === $options['is_admin']) {
-            $builder
-            ->add('company', CompanyAutocompleteField::class);
+            $builder->add('company', CompanyAutocompleteField::class);
         }
     }
 

@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
-    private bool $needCompany = false;
+    private bool $isAdmin;
 
     public function __construct(
         RequestQueryService $requestQueryService,
@@ -39,17 +39,13 @@ class IndexController extends AbstractController
         $searchQuery = $requestQueryService->all(self::SEARCH_FORM_NAME);
         $this->searchTerm = $searchQuery['search'] ?? null;
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
-        $this->needCompany = $security->isGranted('ROLE_ADMIN');
+        $this->isAdmin = $security->isGranted('ROLE_ADMIN');
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('list')]
     public function index(AccessibleCustomerService $customerService): Response
     {
-       /* if (!empty($this->searchTerm)) {
-            return $this->search($this->searchTerm, $customerService);
-        }*/
-
         $customers = $customerService->findAll($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
@@ -57,7 +53,7 @@ class IndexController extends AbstractController
             'searchForm' => $this->getSearchForm(),
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
-            'showCompany' => $this->needCompany,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 
@@ -73,7 +69,7 @@ class IndexController extends AbstractController
             'searchTerm' => $searchTerm,
             'customers' => $customers,
             'paginatorHelper' => $paginatorHelper,
-            'showCompany' => $this->needCompany,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 
@@ -81,7 +77,11 @@ class IndexController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $customer = new Customer();
-        $form = $this->createForm(CustomerType::class, $customer);
+        $options = [
+            'is_admin' => $this->isAdmin,
+        ];
+
+        $form = $this->createForm(CustomerType::class, $customer, $options);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -102,7 +102,7 @@ class IndexController extends AbstractController
         return $this->render('@customer/index/new.html.twig', [
             'customer' => $customer,
             'form' => $form,
-            'showCompany' => $this->needCompany,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 
@@ -112,7 +112,7 @@ class IndexController extends AbstractController
     {
         return $this->render('@customer/index/show.html.twig', [
             'customer' => $customer,
-            'showCompany' => $this->needCompany,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 
@@ -120,7 +120,10 @@ class IndexController extends AbstractController
     #[IsGranted('edit', 'customer')]
     public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(CustomerType::class, $customer);
+        $options = [
+            'is_admin' => $this->isAdmin,
+        ];
+        $form = $this->createForm(CustomerType::class, $customer, $options);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
