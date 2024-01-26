@@ -16,6 +16,7 @@
         "martin-georgiev/postgresql-for-doctrine": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.8",
+        "sendinblue/api-v3-sdk": "^8.4",
         "sensio/framework-extra-bundle": "6.*",
         "symfony/asset": "6.*",
         "symfony/console": "6.*",

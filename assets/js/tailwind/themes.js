@@ -12,6 +12,7 @@ const availableThemes = [
     'theme-purple',
     'theme-indigo',
     'theme-coffee',
+    'theme-beige'
 ];
 
 export default availableThemes;

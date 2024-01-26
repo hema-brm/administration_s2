@@ -77,6 +77,7 @@ class IndexController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $customer->setCompany($this->getUser()->getCompany());
             $entityManager->persist($customer);
             $entityManager->flush();
 

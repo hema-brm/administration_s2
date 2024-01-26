@@ -57,6 +57,7 @@
                 <td>
                     <a href="{{ path('app_quote_show', {'id': quote.id}) }}">show</a>
                     <a href="{{ path('app_quote_edit', {'id': quote.id}) }}">edit</a>
+                    <a href="{{ path('app_mailer', {'id': quote.customer.getId()} ) }}" class="btn btn-primary">Envoyer un mail de rappel</a>
                 </td>
             </tr>
         {% else %}
