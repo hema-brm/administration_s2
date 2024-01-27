@@ -1,5 +1,29 @@
-<form method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    <button type="submit">Envoyer le lien de réinitialisation</button>
-</form>
+{% extends '@base/public.html.twig' %}
+
+{% block title %}Réinitialiser votre mot de passe{% endblock %}
+
+{% block body %}
+
+<div class="flex justify-center items-center h-screen">
+    <div class="w-full max-w-md bg-secondary-100 p-4 rounded-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6 text-center">Réinitialiser votre mot de passe</h1>
+
+        {% for flash_error in app.flashes('reset_password_error') %}
+            <div class="mb-3 bg-danger-100 border border-danger-400 text-danger-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">{{ flash_error }}</strong>
+            </div>
+        {% endfor %}
+
+        {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email, {'attr': {'class': 'border p-3 rounded-md w-full text-sm', 'autocomplete': 'email', 'required': true, 'autofocus': true, 'placeholder': 'Entrez votre adresse e-mail pour recevoir un mail de réinitialisation'}}) }}
+        
+        <div class="flex justify-center"> {# Utilisation de la classe 'flex justify-center' pour centrer le bouton #}
+            <button class="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded" type="submit">Envoyer le mail de réinitialisation</button>
+        </div>
+        
+        {{ form_end(requestForm) }}
+
+    </div>
+</div>
+
+{% endblock %}
