@@ -6,16 +6,22 @@ use App\Repository\UserRepository;
 use App\Security\Roles\IUserRole;
 use App\Util\Role\RoleColor;
 use App\Util\Role\RoleLabel;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'L\'adresse email est déjà utilisée par un autre compte.')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[Vich\Uploadable]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -53,6 +59,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private Company $company;
+
+    #[Vich\UploadableField(mapping: 'avatar', fileNameProperty: 'picture')]
+    #[Assert\Image(
+        maxSize: '500k',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        maxSizeMessage: 'Le logo ne doit pas dépasser 500ko.',
+        mimeTypesMessage: 'Le logo doit être au format JPG ou PNG.',
+        maxHeightMessage: 'Le logo ne doit pas dépasser 500px de hauteur.'
+    )]
+    #[Ignore]
+    private ?File $pictureFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picture = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'create')]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'update')]
+    private ?\DateTime $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -123,7 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -200,5 +228,95 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAdmin(): bool
     {
         return in_array(IUserRole::ROLE_ADMIN, $this->roles);
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPictureFile(): ?File
+    {
+        return $this->pictureFile;
+    }
+
+    public function setPictureFile(?File $pictureFile): void
+    {
+        $this->pictureFile = $pictureFile;
+
+        // Only change the updated af if the file is really uploaded to avoid database updates.
+        // This is needed when the file should be set when loading the entity.
+        if ($this->pictureFile instanceof UploadedFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function serialize()
+    {
+        // TODO: Implement serialize() method.
+    }
+
+    public function unserialize(string $data)
+    {
+        // TODO: Implement unserialize() method.
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->firstName,
+            $this->lastName,
+            $this->phoneNumber,
+            $this->roles,
+            $this->company,
+            $this->createdAt,
+            $this->updatedAt,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->firstName,
+            $this->lastName,
+            $this->phoneNumber,
+            $this->roles,
+            $this->company,
+            $this->createdAt,
+            $this->updatedAt,
+        ] = $data;
     }
 }

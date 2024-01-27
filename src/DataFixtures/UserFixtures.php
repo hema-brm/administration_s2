@@ -40,7 +40,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
 
         $company->addUser($user);
 
-        $user->setPassword($this->passwordHasher->hashPassword($user, 'admin'));
+        $user->setPassword('admin');
 
         $manager->persist($user);
     }
@@ -55,7 +55,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
                 ->setEmail("owner-$i@gmail.com")
                 ->setRoles(['ROLE_ENTREPRISE']);
 
-            $user->setPassword($this->passwordHasher->hashPassword($user, "owner-$i"));
+            $user->setPassword("owner-$i");
 
             $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
             $company->addUser($user);
@@ -76,7 +76,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
                 ->setEmail("employee-$i@gmail.com")
                 ->setRoles(['ROLE_EMPLOYEE']);
 
-            $user->setPassword($this->passwordHasher->hashPassword($user, "employee-$i"));
+            $user->setPassword("employee-$i");
 
             $company = $this->getReference(sprintf('company-%d', rand(1, AppFixtures::COMPANY_COUNT)));
             $user->setCompany($company);

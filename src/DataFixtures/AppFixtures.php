@@ -7,12 +7,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
-    const EMPLOYEE_COUNT = 100;
-    const CUSTOMER_COUNT = 25;
-    const COMPANY_COUNT = 5;
-    const COMPANY_OWNER_COUNT = 10;
-    const PRODUCT_COUNT = 100;
-    const CATEGORY_COUNT = 10;
+    const EMPLOYEE_COUNT = 10;
+    const CUSTOMER_COUNT = 10;
+    const COMPANY_COUNT = 3;
+    const COMPANY_OWNER_COUNT = 3;
+    const PRODUCT_COUNT = 10;
+    const CATEGORY_COUNT = 3;
 
     public function load(ObjectManager $manager): void
     {

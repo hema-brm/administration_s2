@@ -4,9 +4,10 @@ namespace App\Security\Voter;
 
 use App\Entity\Customer;
 use App\Security\Acl\Customer\UserCanCreateCustomer;
+use App\Security\Acl\Customer\UserCanEditCustomer;
 use App\Security\Acl\Customer\UserCanListCustomer;
 use App\Security\Acl\Customer\UserCanDeleteCustomer;
-use App\Security\Roles\IUserRole;
+use App\Security\Acl\Customer\UserCanReadCustomer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -77,12 +78,12 @@ class CustomerVoter extends Voter {
 
     private function canRead(UserInterface $user, Customer $customer): bool
     {
-        return (new UserCanDeleteCustomer($customer))->isSatisfiedBy($user);
+        return (new UserCanReadCustomer($customer))->isSatisfiedBy($user);
     }
 
     private function canEdit(UserInterface $user, Customer $customer): bool
     {
-        return (new UserCanDeleteCustomer($customer))->isSatisfiedBy($user);
+        return (new UserCanEditCustomer($customer))->isSatisfiedBy($user);
     }
 
     private function canDelete(UserInterface $user, Customer $customer): bool

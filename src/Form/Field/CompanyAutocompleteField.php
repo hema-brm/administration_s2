@@ -18,7 +18,7 @@ class CompanyAutocompleteField extends AbstractType
     {
         $resolver->setDefaults([
             'class' => Company::class,
-            'placeholder' => 'Choissez une entreprise',
+            'placeholder' => 'Sélectionnez une entreprise',
             'searchable_fields' => ['name'],
             'label' => 'Entreprise',
             'loading_text' => 'Chargement des entreprises…',

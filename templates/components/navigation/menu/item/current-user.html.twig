@@ -1,11 +1,12 @@
 {% if app.user %}
 <div class="flex flex-row p-3 items-center bg-primary-50">
     <div class="mr-2">
-        <img class="rounded-full aspect-square w-10" src="{{ asset('build/images/default/profile.png') }}">
+        {% set avatar = vich_uploader_asset(app.user, 'pictureFile')|default(asset('build/images/default/profile.png')) %}
+        <img class="rounded-full aspect-square object-cover object-center w-10" src="{{ avatar }}">
     </div>
-    <div>
-        <p class="text-sm">{{ app.user.fullname }}</p>
-        <p class="text-xs text-gray-400">{{ app.user.email }}</p>
+    <div class="w-full truncate">
+        <p class="text-sm text-ellipsis overflow-hidden">{{ app.user.fullname }}</p>
+        <p class="text-xs text-ellipsis overflow-hidden text-gray-400">{{ app.user.email }}</p>
     </div>
 </div>
 {% endif %}

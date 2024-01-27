@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block form_label %}
-    <div class="flex flex-row mb-1">
+    <div class="flex flex-row">
         {{- parent() -}}
         {% if label is not same as(false) and required %}
             <span class="text-xs">*</span>
@@ -100,3 +100,58 @@
     }) -%}
     {{- parent() -}}
 {%- endblock datetime_widget -%}
+
+{% block file_widget %}
+    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set wrapperClasses = borderClasses ~ ' flex flex-row align-middle items-' %}
+    {% set fileChooserButtonClasses = 'cursor-pointer mr-4 py-2 px-4 rounded-sm border-0 text-sm font-semibold bg-primary-50 text-primary-700 hover:bg-primary-100' %}
+    {% set classes = 'hidden' %}
+    <div class="{{ wrapperClasses }} items-center" data-controller="form--file-picker">
+        <label for="{{ id }}" class="{{ fileChooserButtonClasses }}">
+            {{ attr.pickerText|default('Choisissez un fichier') }}
+        </label>
+        <span class="text-xs text-secondary-500" data-form--file-picker-target="filename">{{ attr.pickerHelpText|default('Aucun fichier choisi') }}</span>
+        {# remove file button #}
+        <button type="button" class="ml-2 text-xs text-secondary-500" data-action="form--file-picker#removeFile" data-form--file-picker-target="removeButton">
+            <i class="fas fa-times"></i>
+        </button>
+        <input class="{{ classes }}" type="{{ type }}" {{ block('widget_attributes') }} data-form--file-picker-target="input"/>
+    </div>
+{% endblock file_widget %}
+
+{%- block easy_vows_image_widget -%}
+    <div>
+        {%- if errors|length > 0 -%}
+            {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-invalid')|trim}) -%}
+        {%- endif -%}
+
+        {{- form_widget(form.file, {attr: attr}) -}}
+
+        {%- if image_uri -%}
+            {%- if form.delete is defined -%}
+                <div class="my-1 flex flex-row items-center">
+                    {{- form_widget(form.delete) -}}
+                    <div class="text-xs">
+                        {{- form_label(form.delete) -}}
+                    </div>
+                </div>
+                {% set image_preview_class = image_preview_class|merge([
+                    'aspect-square',
+                    'overflow-hidden',
+                    'object-cover',
+                    'object-center',
+                    'rounded',
+                ]) %}
+                <a href="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}" download>
+                    <img src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}" alt="" class="{{ image_preview_class|join(' ') }}" />
+                </a>
+            {%- endif -%}
+        {%- endif -%}
+
+        {%- if download_uri -%}
+            <a href="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}" download>
+                {{ translation_domain is same as(false) ? download_label : download_label|trans({}, translation_domain) }}
+            </a>
+        {%- endif -%}
+    </div>
+{%- endblock -%}

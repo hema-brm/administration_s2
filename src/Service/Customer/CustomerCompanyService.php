@@ -16,8 +16,9 @@ class CustomerCompanyService
 
     public function ensureCompany(Customer $customer): void
     {
-        if (!$customer->hasCompany() && $this->security->isGranted(IUserRole::ROLE_COMPANY)) {
-            $customer->setCompany($this->security->getUser()->getCompany());
+        $currentUserCompany = $this->security->getUser()->getCompany();
+        if (!$customer->hasCompany()) {
+            $customer->setCompany($currentUserCompany);
         }
     }
 }

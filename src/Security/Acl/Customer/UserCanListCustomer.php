@@ -16,6 +16,10 @@ class UserCanListCustomer implements AuthorizationInterface {
             return true;
         }
 
+        if (in_array(IUserRole::ROLE_EMPLOYEE, $user->getRoles())) {
+            return true;
+        }
+
         return false;
     }
 }

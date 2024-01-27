@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\User\Employee\EmployeeType;
 use App\Form\User\UserType;
 use App\Repository\UserRepository;
+use App\Service\File\FileUploadService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Service\User\Employee\AccessibleEmployeeService;
@@ -13,6 +14,8 @@ use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +53,7 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Security $security, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, FileUploadService $fileUploadService): Response
     {
         $user = new User();
         $formType = EmployeeType::class;
@@ -58,6 +61,7 @@ class EmployeeController extends AbstractController
         $options = [
             'is_admin' => $this->isAdmin,
             'mode' => EmployeeType::ADD,
+            'upload_directory' => $this->getParameter('user_profile_directory'),
         ];
 
         $form = $this->createForm($formType, $user, $options);
@@ -93,13 +97,15 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, FileUploadService $fileUploadService): Response
     {
         $formType = EmployeeType::class;
 
         $options = [
             'is_admin' => $this->isAdmin,
             'mode' => EmployeeType::EDIT,
+            'upload_directory' => $this->getParameter('user_profile_directory'),
+            'asset' => '/upload/image/user/profile/'
         ];
 
         $form = $this->createForm($formType, $user, $options);

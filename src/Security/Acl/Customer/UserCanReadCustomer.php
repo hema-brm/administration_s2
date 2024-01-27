@@ -21,6 +21,12 @@ class UserCanReadCustomer implements AuthorizationInterface {
             }
         }
 
+        if (in_array(IUserRole::ROLE_EMPLOYEE, $user->getRoles())) {
+            if ($user->getCompany() === $this->customer->getCompany()) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

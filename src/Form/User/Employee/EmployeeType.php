@@ -2,17 +2,25 @@
 
 namespace App\Form\User\Employee;
 
+use App\Entity\Employee;
 use App\Entity\User;
 use App\Form\Field\CompanyAutocompleteField;
+use App\Form\Field\EasyVowsImageType;
 use App\Security\Roles\IUserRole;
 use App\Util\Role\RoleLabel;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EmployeeType extends AbstractType
 {
@@ -44,10 +52,9 @@ class EmployeeType extends AbstractType
             ],
         ]);
 
-        $canEditPassword = ($options['is_admin'] === true)
-            || ($options['mode'] === self::ADD);
+        $showPasswordField = ($options['mode'] === self::ADD);
 
-        if ($canEditPassword) {
+        if ($showPasswordField) {
             $builder
             ->add('password', PasswordType::class, [
                 'required' => true,
@@ -78,6 +85,21 @@ class EmployeeType extends AbstractType
             $builder
             ->add('company', CompanyAutocompleteField::class);
         }
+
+        $builder
+        ->add('pictureFile', EasyVowsImageType::class, [
+            'required' => false,
+            'allow_delete' => true,
+            'download_uri' => false,
+            'attr' => [
+                'pickerText' => 'Importer',
+            ],
+            'label' => 'Photo de profil',
+            'delete_label' => 'Supprimer la photo',
+            'image_preview_class' => [
+                'max-h-40',
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -86,6 +108,8 @@ class EmployeeType extends AbstractType
             'data_class' => User::class,
             'mode' => self::ADD,
             'is_admin' => false,
+            'upload_directory' => '',
+            'asset' => '',
         ]);
     }
 }
