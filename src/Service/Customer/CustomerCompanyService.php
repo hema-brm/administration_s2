@@ -16,6 +16,10 @@ class CustomerCompanyService
 
     public function ensureCompany(Customer $customer): void
     {
+        if (empty($this->security->getUser())) {
+            return;
+        }
+
         $currentUserCompany = $this->security->getUser()->getCompany();
         if (!$customer->hasCompany()) {
             $customer->setCompany($currentUserCompany);
