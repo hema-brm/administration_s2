@@ -16,11 +16,18 @@ class UserCanDeleteCustomer implements AuthorizationInterface {
         }
 
         if (in_array(IUserRole::ROLE_COMPANY, $user->getRoles())) {
-            if ($user->getCompany() === $this->customer->getCompany()) {
-                return true;
-            }
+            return $this->hasSameCompany($user, $this->customer);
+        }
+
+        if (in_array(IUserRole::ROLE_EMPLOYEE, $user->getRoles())) {
+            return $this->hasSameCompany($user, $this->customer);
         }
 
         return false;
+    }
+
+    private function hasSameCompany(UserInterface $user, Customer $customer): bool
+    {
+        return $user->getCompany() === $customer->getCompany();
     }
 }

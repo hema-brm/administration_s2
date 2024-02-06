@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Customer;
 use App\Entity\User;
 use App\Security\Acl\Employee\UserCanCreateEmployee;
 use App\Security\Acl\Employee\UserCanDeleteEmployee;
@@ -13,14 +12,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @TODO:
- * 1. Admin can manage all customer
- * 2. Company manager can manage only his own customer
- */
 class EmployeeVoter extends Voter {
     public const LIST = 'list';
-    public const CREATE = 'create';
+    public const CREATE = 'add';
     public const READ = 'read';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
@@ -77,18 +71,18 @@ class EmployeeVoter extends Voter {
         return (new UserCanCreateEmployee())->isSatisfiedBy($user);
     }
 
-    private function canRead(UserInterface $user, Customer $customer): bool
+    private function canRead(UserInterface $user, User $employee): bool
     {
-        return (new UserCanReadEmployee($customer))->isSatisfiedBy($user);
+        return (new UserCanReadEmployee($employee))->isSatisfiedBy($user);
     }
 
-    private function canEdit(UserInterface $user, Customer $customer): bool
+    private function canEdit(UserInterface $user, User $employee): bool
     {
-        return (new UserCanEditEmployee($customer))->isSatisfiedBy($user);
+        return (new UserCanEditEmployee($employee))->isSatisfiedBy($user);
     }
 
-    private function canDelete(UserInterface $user, Customer $customer): bool
+    private function canDelete(UserInterface $user, User $employee): bool
     {
-        return (new UserCanDeleteEmployee($customer))->isSatisfiedBy($user);
+        return (new UserCanDeleteEmployee($employee))->isSatisfiedBy($user);
     }
 }

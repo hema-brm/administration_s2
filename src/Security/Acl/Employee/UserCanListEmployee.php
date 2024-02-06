@@ -8,16 +8,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class UserCanListEmployee implements AuthorizationInterface {
     public function isSatisfiedBy(UserInterface $user): bool
     {
-        if (in_array(IUserRole::ROLE_ADMIN, $user->getRoles())) {
-            return true;
-        }
+        $authorizedRoles = [
+            IUserRole::ROLE_ADMIN,
+            IUserRole::ROLE_COMPANY,
+            IUserRole::ROLE_EMPLOYEE,
+            IUserRole::ROLE_ACCOUNTANT,
+        ];
 
-        if (in_array(IUserRole::ROLE_COMPANY, $user->getRoles())) {
-            return true;
-        }
-
-        if (in_array(IUserRole::ROLE_EMPLOYEE, $user->getRoles())) {
-            return true;
+        foreach ($authorizedRoles as $authorizedRole) {
+            if (in_array($authorizedRole, $user->getRoles())) {
+                return true;
+            }
         }
 
         return false;

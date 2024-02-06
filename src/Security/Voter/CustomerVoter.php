@@ -12,14 +12,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @TODO:
- * 1. Admin can manage all customer
- * 2. Company manager can manage only his own customer
- */
 class CustomerVoter extends Voter {
     public const LIST = 'list';
-    public const CREATE = 'create';
+    public const CREATE = 'add';
     public const READ = 'read';
     public const EDIT = 'edit';
     public const DELETE = 'delete';

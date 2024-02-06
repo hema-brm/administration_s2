@@ -78,6 +78,7 @@ RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
 COPY docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
+COPY docker/php/conf.d/xdebug.ini $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
 
 COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 RUN mkdir -p /var/run/php
@@ -123,7 +124,7 @@ RUN set -eux; \
 # Dev image
 FROM app_php AS app_php_dev
 
-ENV APP_ENV=dev XDEBUG_MODE=off
+ENV APP_ENV=dev XDEBUG_MODE=debug
 VOLUME /srv/app/var/
 
 RUN rm $PHP_INI_DIR/conf.d/app.prod.ini; \

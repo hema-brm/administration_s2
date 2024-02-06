@@ -2,13 +2,14 @@
 namespace App\Security\Acl\Employee;
 
 use App\Entity\Customer;
+use App\Entity\User;
 use App\Security\Acl\AuthorizationInterface;
 use App\Security\Roles\IUserRole;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserCanEditEmployee implements AuthorizationInterface {
 
-    public function __construct(private readonly Customer $customer){}
+    public function __construct(private readonly User $employee){}
     public function isSatisfiedBy(UserInterface $user): bool
     {
         if (in_array(IUserRole::ROLE_ADMIN, $user->getRoles())) {
@@ -16,17 +17,14 @@ class UserCanEditEmployee implements AuthorizationInterface {
         }
 
         if (in_array(IUserRole::ROLE_COMPANY, $user->getRoles())) {
-            if ($user->getCompany() === $this->customer->getCompany()) {
-                return true;
-            }
-        }
-
-        if (in_array(IUserRole::ROLE_EMPLOYEE, $user->getRoles())) {
-            if ($user->getCompany() === $this->customer->getCompany()) {
-                return true;
-            }
+            return $this->hasSameCompany($user, $this->employee);
         }
 
         return false;
+    }
+
+    private function hasSameCompany(UserInterface $user, User $customer): bool
+    {
+        return $user->getCompany() === $customer->getCompany();
     }
 }

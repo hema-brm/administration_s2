@@ -47,3 +47,7 @@ clean-migration:
 
 fixtures:
 	docker compose exec php php bin/console doctrine:fixtures:load --no-interaction
+
+ensure-permissions:
+	sudo chown -R $(USER):$(USER) . \
+	&& sudo chmod -R 777 .

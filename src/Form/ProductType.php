@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Form\Field\CategoryAutocompleteField;
 use App\Form\Field\CompanyAutocompleteField;
 use App\Repository\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Security\Core\Security;
 
 
-class ProductType extends AbstractType
+class   ProductType extends AbstractType
 {
     private $categoryRepository;
     private $currentUser;
@@ -77,7 +78,7 @@ class ProductType extends AbstractType
                 ],
             ])
             
-            ->add('category', CompanyAutocompleteField::class);
+            ->add('category', CategoryAutocompleteField::class);
 
     }
 

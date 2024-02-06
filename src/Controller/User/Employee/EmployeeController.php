@@ -4,7 +4,6 @@ namespace App\Controller\User\Employee;
 
 use App\Entity\User;
 use App\Form\User\Employee\EmployeeType;
-use App\Form\User\UserType;
 use App\Repository\UserRepository;
 use App\Service\File\FileUploadService;
 use App\Service\Request\PageFromRequestService;
@@ -14,11 +13,10 @@ use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/employee', name: 'app_employee_')]
 class EmployeeController extends AbstractController
@@ -28,7 +26,7 @@ class EmployeeController extends AbstractController
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
-    private bool $isAdmin = false;
+    private bool $isAdmin;
 
     public function __construct(
         RequestQueryService $requestQueryService,
@@ -40,6 +38,7 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
+    #[IsGranted('list')]
     public function index(AccessibleEmployeeService $service, Security $security): Response
     {
         $employees = $service->findAll($this->page, self::LIMIT);
@@ -53,6 +52,7 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager, FileUploadService $fileUploadService): Response
     {
         $user = new User();

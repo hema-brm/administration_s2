@@ -74,6 +74,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $customer = new Customer();
