@@ -1,47 +1,73 @@
 {% import "@components/macros/menu.html.twig" as menuMacro %}
 
 <ul class="nav-item text-sm">
-    {{ menuMacro.item({
-        text: 'Employés',
-        icon: 'fa-user',
-        route: 'app_employee_index'
-    }) }}
-    {{ menuMacro.item({
-        text: 'Factures',
-        icon: 'fa-file-invoice-dollar',
-        route: 'app_bill_index'
-    }) }}
-    {{ menuMacro.item({
-        text: 'Devis',
-        icon: 'fa-file-invoice',
-        route: 'app_quote_index'
-
-    }) }}
-    {{ menuMacro.item({
-        text: 'Clients',
-        icon: 'fa-user',
-        route: 'app_customer_index'
-    }) }}
-    {{ menuMacro.item({
-        text: 'Paiements',
-        icon: 'fas fa-money-bill-wave',
-        route:'app_payment_index'
-    }) }}
-
-    {{ menuMacro.item({
-        text: 'Produits',
-        icon: 'fa-box',
-        route: 'app_product_index'
-    }) }}
-    {% set currentRoute = app.request.attributes.get('_route')|split('_')|slice(0, 2)|join('_') %}
-    {% if  currentRoute == 'app_product' or currentRoute ==  'app_category'%}
-        <ul>
-            {{ menuMacro.item({
-                text: 'Catégories',
-                icon: 'fa-layer-group',
-                subList : 'ml-4 text-sm',
-                route: 'app_category_index'
-            }) }}
-        </ul>
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ENTREPRISE') %}
+        {{ menuMacro.item({
+            text: 'Employés',
+            icon: 'fa-user',
+            route: 'app_employee_index'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Factures',
+            icon: 'fa-file-invoice-dollar',
+            route: 'app_bill_index'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Devis',
+            icon: 'fa-file-invoice',
+            route: 'app_quote_index'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Clients',
+            icon: 'fa-user',
+            route: 'app_customer_index'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Paiements',
+            icon: 'fas fa-money-bill-wave',
+            route:'app_payment_index'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Produits',
+            icon: 'fa-box',
+            route: 'app_product_index'
+        }) }}
+        {% set currentRoute = app.request.attributes.get('_route')|split('_')|slice(0, 2)|join('_') %}
+        {% if  currentRoute == 'app_product' or currentRoute ==  'app_category'%}
+            <ul>
+                {{ menuMacro.item({
+                    text: 'Catégories',
+                    icon: 'fa-layer-group',
+                    subList : 'ml-4 text-sm',
+                    route: 'app_category_index'
+                }) }}
+            </ul>
+        {% endif %}
+    {% elseif is_granted('ROLE_COMPTABLE') %}
+        {{ menuMacro.item({
+            text: 'Tableau de bord',
+            icon: 'fa-solid fa-chart-line',
+            route:'accountant'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Dépenses',
+            icon: 'fa-light fa-magnifying-glass-dollar',
+            route:'accountant'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Revenus',
+            icon: 'fa-solid fa-sack-dollar',
+            route:'accountant'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Suivi paiements',
+            icon: 'fa-regular fa-receipt',
+            route:'accountant'
+        }) }}
+        {{ menuMacro.item({
+            text: 'Rapports financiers',
+            icon: 'fa-regular fa-file-invoice',
+            route:'accountant'
+        }) }}
     {% endif %}
 </ul>
