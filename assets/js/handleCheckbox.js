@@ -1,6 +1,5 @@
 import Checkbox from './component/Checkbox.js';
 const listID = [
-                ['.products-checkbox', '.product-checkbox'],
                 ['.categories-checkbox', '.category-checkbox'],
              ];
 

@@ -14,7 +14,7 @@
         text: 'Liste des produits',
     }) }}
 
-    <div class="px-4">
+    <div class="px-4" data-controller="form--checkbox--post">
         <div class="flex flex-row justify-between">
             <div class="gap-2 py-2">
                 {{ form_search_macro({
@@ -27,22 +27,14 @@
             </div>
             
             <div class="flex justify-end py-2 gap-2">
+                {% include '@product/list/delete-many-button-confirm.html.twig' %}
                 {{ button_macro({
                     custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                     text:  "Nouveau produit",
                     icon: "fa-plus",
                     route : path('app_product_new')
                 }) }}
-                <div id="disable_buttons" class="hidden">
-                    {{ button_macro({
-                    id: 'delete_products',
-                    custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
-                    icon: "fa-trash",
-                    }) }}  
-                </div>
-                
             </div>
-                  
         </div>
 
         {% embed "./modal/modal_delete.html.twig" with {
@@ -52,10 +44,21 @@
 
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
-        <table class="w-full border shadow-sm">
+        <form
+            id="deleteManyProductsForm"
+            data-form--checkbox--post-target="form"
+            action="{{ path('app_product_deleteAll') }}"
+            method="POST"
+        >
+        <table
+            class="w-full border shadow-sm"
+            data-controller="form--checkbox--multiple"
+        >
             <thead>
                 <tr class="{{ borderClass }}">
-                    <th class="{{ cellPadding }} text-center"><input type="checkbox" class="products-checkbox"></th>
+                    <th class="{{ cellPadding }} text-center">
+                        <input type="checkbox" class="products-checkbox" data-form--checkbox--multiple-target="main">
+                    </th>
                     <th class="{{ cellPadding }} text-left">Reference</th>
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
@@ -72,7 +75,16 @@
                     data-link--clickable-target="element"
                     class="{{ borderClass }} hover:bg-secondary-50 text-sm"
                 >
-                    <td class="{{ cellPadding }} text-center"> <input type="checkbox" class="product-checkbox" name="{{ product.id }}" data-csrf-token="{{ csrf_token('delete' ~ product.id) }}"> </td>
+                    <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                        <input
+                            type="checkbox"
+                            class="product-checkbox"
+                            name="products[{{ product.id }}]"
+                            value="{{ csrf_token('delete' ~ product.id) }}"
+                            data-form--checkbox--multiple-target="items"
+                            data-form--checkbox--post-target="items"
+                        >
+                    </td>
                     {% if product.reference is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
@@ -109,11 +121,9 @@
             {% endfor %}
             </tbody>
         </table>
+        </form>
     </div>
 
-    
-        </tbody>
-    </table>
     <div id="product-paginator" class="flex flex-row justify-end my-2">
         {{ paginator({
             name: 'page',
@@ -126,6 +136,4 @@
             },
         }) }}
     </div>
-    
-
 {% endblock %}

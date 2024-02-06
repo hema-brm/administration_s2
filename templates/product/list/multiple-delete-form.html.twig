@@ -1,0 +1,8 @@
+<form
+        id="deleteManyProductsForm"
+        data-form--checkbox--post-target="form"
+        action="{{ path('app_product_deleteAll') }}"
+        method="POST"
+>
+    {% include '@user/employee/list/table.html.twig' %}
+</form>

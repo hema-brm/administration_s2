@@ -15,7 +15,7 @@ use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 
-#[Route('/products')]
+#[Route('/products', name: 'app_product_')]
 class ProductController extends AbstractController
 {
     private ?string $searchTerm;
@@ -34,7 +34,7 @@ class ProductController extends AbstractController
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
     }
 
-    #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ProductRepository $productRepository): Response
     {   
         if ($this->searchTerm) {
@@ -62,7 +62,7 @@ class ProductController extends AbstractController
         ]);
     }
     
-    #[Route('/new', name: 'app_product_new', methods: ['GET','POST'])]
+    #[Route('/new', name: 'new', methods: ['GET','POST'])]
     public function new(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
@@ -84,31 +84,8 @@ class ProductController extends AbstractController
         ]);
     }
 
-    
-    #[Route('/delete', name: 'app_product_deleteAll', methods: ['POST'])]
-    public function deleteMany(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
-    {
-        $productDatasJSON = $request->getContent();
-        $productDatas = json_decode($productDatasJSON, true);
-        foreach($productDatas as $productData){
-            $id = $productData['id'];
-            $token = $productData['token'];
-            $product = $productRepository->find($id);
-            if($product){
-                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
-                    $entityManager->remove($product);
-                }
-            }
-        }
-        
-        $entityManager->flush();
-        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
-
-    }
-
-
-    #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
-    #[Security('product.getCompanyId() === user.getCompany()')]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Security('product.getCompany() === user.getCompany()')]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -116,8 +93,8 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    #[Security('product.getCompanyId() === user.getCompany()')]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[Security('product.getCompany() === user.getCompany()')]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -135,4 +112,31 @@ class ProductController extends AbstractController
         ]);
     }
 
+    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    public function deleteMany(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
+    {
+        $products = $request->request->all()['products'];
+        $count = 0;
+        foreach($products as $id => $token){
+            $product = $productRepository->find($id);
+            if($product && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($product);
+                $count++;
+            }
+        }
+        $this->addFlash('success', $count.' produit(s) supprimé(s) avec succès.');
+        $entityManager->flush();
+        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function deleteOne(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($product);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
