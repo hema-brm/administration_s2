@@ -9,8 +9,9 @@
 {% block title %}Devis{% endblock %}
 
 {% block body %}
+    {{ displayFlash() }}
     {{ header({
-            text: 'Liste des devis',
+        text: 'Liste des devis',
     }) }}
      
   <div class="px-4">

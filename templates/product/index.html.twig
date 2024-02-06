@@ -9,7 +9,8 @@
 {% block title %}Produit{% endblock %}
 
 {% block body %}
- {{ header({
+    {{ displayFlash() }}
+    {{ header({
         text: 'Liste des produits',
     }) }}
 

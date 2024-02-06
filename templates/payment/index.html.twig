@@ -6,8 +6,9 @@
 {% block title %}Payment index{% endblock %}
 
 {% block body %}
+    {{ displayFlash() }}
     {{ header({
-            text: 'Liste des paiements',
+        text: 'Liste des paiements',
     }) }}
     <div class="px-4">
             <div class="flex flex-row justify-between py-2">
