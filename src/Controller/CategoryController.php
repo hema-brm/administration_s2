@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/products/category')]
+#[Route('/products/category', name: 'app_category_')]
 class CategoryController extends AbstractController
 {
-    #[Route('/', name: 'app_category_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
 
@@ -23,28 +23,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/delete', name: 'app_category_deleteAll', methods: ['POST'])]
-    public function deleteMany(Request $request, categoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
-    {
-        $categoryDatasJSON = $request->getContent();
-        $categoryDatas = json_decode($categoryDatasJSON, true);
-        
-        foreach($categoryDatas as $categoryData){
-            $id = $categoryData['id'];
-            $token = $categoryData['token'];
-            $category = $categoryRepository->find($id);
-            if($category){
-                if ($this->isCsrfTokenValid('delete'.$id, $token)) {
-                    $entityManager->remove($category);
-                }
-            } 
-        }
-        $entityManager->flush();
-        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
-
-    }
-
-     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
      public function new(Request $request, EntityManagerInterface $entityManager): Response
      {
          $category = new Category("");
@@ -65,7 +44,7 @@ class CategoryController extends AbstractController
     ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
@@ -83,5 +62,31 @@ class CategoryController extends AbstractController
         ]);
     }
 
-  
+    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    public function deleteMany(Request $request, CategoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
+    {
+        $categories = $request->request->all()['categories'];
+        $count = 0;
+        foreach($categories as $id => $token){
+            $category = $categoryRepository->find($id);
+            if($category && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($category);
+                $count++;
+            }
+        }
+        $this->addFlash('success', $count.' catégorie(s) supprimé(s) avec succès.');
+        $entityManager->flush();
+        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function deleteOne(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($category);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

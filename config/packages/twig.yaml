@@ -1,6 +1,7 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     paths:
+        '%kernel.project_dir%/templates/category': category
         '%kernel.project_dir%/templates/components': components
         '%kernel.project_dir%/templates/guidelines': guidelines
         '%kernel.project_dir%/templates/customer': customer
