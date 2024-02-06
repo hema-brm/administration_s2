@@ -11,8 +11,7 @@ const availableThemes = [
     'theme-pink',
     'theme-purple',
     'theme-indigo',
-    'theme-coffee',
-    'theme-beige'
+    'theme-coffee'
 ];
 
 export default availableThemes;

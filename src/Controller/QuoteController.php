@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\ProductQuote;
+use App\Service\Mailer;
 
 #[Route('/quote')]
 class QuoteController extends AbstractController
@@ -63,22 +64,16 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Mailer $mailer): Response
     {
         // Get the logged-in user
         $user = $this->getUser();
-
         // Assuming your User entity has a method to get the associated company
         $company = $user->getCompany();
-
         // Create a new Quote instance
         $quote = new Quote();
-        
 
         $quote->addProductQuote(new ProductQuote());
-
-
-
         // Set the company information in the Quote form
         $quote->setCompany($company);
 
@@ -91,10 +86,21 @@ class QuoteController extends AbstractController
                 $productQuote->setQuote($quote);
                 $entityManager->persist($productQuote);
             }
-        
             $entityManager->persist($quote);
             $entityManager->flush();
-        
+
+            $formData = $form->getData();
+            $customer = $formData->getCustomer();
+
+            $sendMail = $mailer->sendMail(2, $customer);
+
+            if($sendMail){
+                $this->addFlash('success', "Le mail a été envoyé avec succès.");
+            }
+            else{
+                $this->addFlash('error', "Une erreur s'est produite lors de l'envoi du mail.");
+            }
+
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
 

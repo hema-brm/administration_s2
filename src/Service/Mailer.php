@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\SendSmtpEmail;
+use App\Entity\Customer;
 
 class Mailer
 {
@@ -40,5 +41,21 @@ class Mailer
         } catch (Exception $e) {
             throw new Exception('Exception when calling TransactionalEmailsApi->sendTransacEmail: ' . $e->getMessage());
         }
+    }
+
+    public function sendMail(int $templateID ,Customer $customer): bool
+    {
+        if($customer){
+            $email = $customer->getEmail();
+            $lastname = $customer->getLastname();
+            $firstname = $customer->getFirstname();
+            $company = $customer->getCompany()->getName();
+        }
+        $sendMail = $this->sendTemplate($templateID, [['email' => $email]], [
+                                                                        'company' => $company,
+                                                                        'lastname' => $lastname,
+                                                                        'firstname' => $firstname                                                           
+                                                                    ]); 
+        return $sendMail;                                                            
     }
 }

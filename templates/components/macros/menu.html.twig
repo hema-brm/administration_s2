@@ -7,17 +7,16 @@
     {% set extractCurrentRoute = currentRoute|split('_')|slice(0, 2)|join('_') %}
     {% set extractRoute = route|split('_')|slice(0, 2)|join('_') %}
     {% set activeClass = {
-        wrapper: extractCurrentRoute == extractRoute ? 'bg-primary-50 border-r-4 border-white' : '',
-        text: extractCurrentRoute == extractRoute ? 'text-primary-100' : '',
-        icon: extractCurrentRoute == extractRoute ? 'text-primary-100 fa-solid' : ' fa-solid'
+        wrapper: extractCurrentRoute == extractRoute ? 'bg-primary-50 border-r-4 border-primary-500' : '',
+        text: extractCurrentRoute == extractRoute ? 'text-primary-500' : ''
     } %}
 
     <a href="{{ path(route) }}">
         <li class="group flex sub-nav-item py-2 px-6 hover:cursor-pointer hover:bg-primary-50 {{ activeClass.wrapper }}">
-            <div class="flex items-center group-hover:text-primary-100">
+            <div class="flex items-center group-hover:text-primary-500">
                 <div class="{{subList}} flex flex-row ">
                     <div class="w-7">
-                        <i class="{{ activeClass.icon }} {{ iconClass }}"></i>
+                        <i class="text-primary-500 fa-solid {{ iconClass }}"></i>
                     </div>
                     <span class="{{ activeClass.text }}">{{ text }}</span>
                 </div>

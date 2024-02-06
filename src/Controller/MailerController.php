@@ -10,29 +10,22 @@ use App\Entity\Customer;
 
 class MailerController extends AbstractController
 {
-
-    #[Route('/{id}/mailer', name: 'app_mailer')]
-    public function index(Mailer $mailer, Customer $customer): Response
+    public function __construct(Mailer $mailer) {
+        $this->mailer = $mailer;
+    }
+    #[Route('/{id}/mail', name: 'app_mailer')]
+    public function reminderMail(Customer $customer): Response
     {
-        if($customer){
-            $email = $customer->getEmail();
-            $lastname = $customer->getLastname();
-            $firstname = $customer->getFirstname();
-            $company = $customer->getCompany()->getName();
-        }
-        $sendMail = $mailer->sendTemplate(2, [['email' => $email]], [
-                                                                        'company' => $company,
-                                                                        'lastname' => $lastname,
-                                                                        'firstname' => $firstname                                                           
-                                                                    ]); 
-        
-        if($sendMail){
+        $mail = $this->mailer->sendMail(3, $customer);
+
+        if($mail){
             $this->addFlash('success', "Le mail a été envoyé avec succès.");
         }
         else{
             $this->addFlash('error', "Une erreur s'est produite lors de l'envoi du mail.");
         }
-         return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+
+        return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);                                     
     }
 
 }
