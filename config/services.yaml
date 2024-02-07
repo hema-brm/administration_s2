@@ -11,6 +11,12 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    App\Command\SendBillReminderCommand:
+        tags:
+            - { name: 'console.command', command : 'send:bill-reminder'} 
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+            
     App\Security\Voter\ProductVoter:
         tags: ['security.voter']
 
