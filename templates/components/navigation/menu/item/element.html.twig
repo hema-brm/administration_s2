@@ -43,17 +43,13 @@
                 }) }}
             </ul>
         {% endif %}
-    {% elseif is_granted('ROLE_COMPTABLE') %}
+    {% else %}
         {{ menuMacro.item({
             text: 'Tableau de bord',
             icon: 'fa-solid fa-chart-line',
             route:'accountant'
         }) }}
-        {{ menuMacro.item({
-            text: 'Dépenses',
-            icon: 'fa-light fa-magnifying-glass-dollar',
-            route:'accountant'
-        }) }}
+        
         {{ menuMacro.item({
             text: 'Revenus',
             icon: 'fa-solid fa-sack-dollar',
@@ -62,7 +58,7 @@
         {{ menuMacro.item({
             text: 'Suivi paiements',
             icon: 'fa-regular fa-receipt',
-            route:'accountant'
+            route:'app_payment_index'
         }) }}
         {{ menuMacro.item({
             text: 'Rapports financiers',

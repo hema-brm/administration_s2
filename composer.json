@@ -45,6 +45,7 @@
         "symfony/translation": "6.*",
         "symfony/twig-bundle": "6.*",
         "symfony/ux-autocomplete": "^2.13",
+        "symfony/ux-chartjs": "^2.14",
         "symfony/ux-dropzone": "^2.13",
         "symfony/ux-turbo": "^2.13",
         "symfony/validator": "6.*",
