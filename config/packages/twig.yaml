@@ -8,6 +8,7 @@ twig:
         '%kernel.project_dir%/templates/product': product
         '%kernel.project_dir%/templates/base': base
         '%kernel.project_dir%/templates/user': user
+        '%kernel.project_dir%/templates/quote': quote
     form_themes:
         - 'components/form/custom_theme.html.twig'
 

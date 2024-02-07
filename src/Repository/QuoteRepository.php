@@ -95,5 +95,14 @@ class QuoteRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
+    public function findLastQuote(): ?Quote
+    {
+        return $this->createQueryBuilder('q')
+            ->orderBy('q.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
 }

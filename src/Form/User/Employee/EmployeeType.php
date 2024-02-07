@@ -93,7 +93,14 @@ class EmployeeType extends AbstractType
 
         if (true === $options['is_admin']) {
             $builder
-            ->add('company', CompanyAutocompleteField::class);
+                ->add('company', CompanyAutocompleteField::class, [
+                    'required' => true,
+                    'label' => 'Entreprise',
+                    'attr' => [
+                        'placeholder' => 'Entrez le nom de l\'entreprise',
+                        'wrapper' => 'compact',
+                    ],
+                ]);
         }
 
         $builder

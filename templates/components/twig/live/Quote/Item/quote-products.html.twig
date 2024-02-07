@@ -1,0 +1,32 @@
+<h3 class="mb-1 text-lg">Liste des produits</h3>
+<button
+    data-action="live#action"
+    data-action-name="addLineItem"
+    data-loading="action(addLineItem)|addAttribute(disabled)"
+    class="text-sm mb-3 px-4 py-1 bg-primary-100 text-primary-500 rounded hover:bg-primary-200"
+>
+    <span data-loading="action(addLineItem)|show">
+        <i class="fas fa-spinner animate-spin"></i>
+    </span>
+    <i class="fas fa-plus" data-loading="action(addLineItem)|hide"></i>
+    <span>Ajouter</span>
+</button>
+
+{% if productItemsIsEmpty %}
+    <twig:Alert
+        color="secondary"
+        text="Cliquer sur le bouton 'Ajouter' pour ajouter des produits à la liste."
+        variant="small"
+        icon="fa-info-circle"
+    />
+{% endif %}
+
+{% for key, line in lineItems %}
+    <twig:Quote:Item:Creator
+        key="{{ key }}"
+        productId="{{ line.productId }}"
+        quantity="{{ line.quantity }}"
+        price="{{ line.price }}"
+        isEditing="{{ line.isEditing }}"
+    />
+{% endfor %}

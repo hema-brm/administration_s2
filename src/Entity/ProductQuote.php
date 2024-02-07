@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: "product_quote")]
@@ -24,9 +25,12 @@ class ProductQuote
     private $product;
     
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
+    #[Assert\Positive(message: 'La quantité doit être un nombre positif.')]
     private $quantity;
-    
+
+    #[ORM\Column]
+    private ?float $price = null;
 
     public function getId(): ?int
     {
@@ -71,5 +75,17 @@ class ProductQuote
     public function __toString(): string
     {
         return $this->product;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+
+        return $this;
     }
 }

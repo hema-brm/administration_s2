@@ -70,7 +70,6 @@ class EmployeeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);
             $entityManager->flush();
-            dd($user);
 
             $this->addFlash('success', 'L`employé a été créé avec succès.');
 

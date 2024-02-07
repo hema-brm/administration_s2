@@ -1,7 +1,6 @@
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
-
 {% extends '@base/app.html.twig' %}
 
 {% block title %}Devis{% endblock %}
@@ -11,16 +10,19 @@
     {{ header({
         text: 'Liste des devis',
     }) }}
-     
-  <div class="px-4" data-controller="form--checkbox--post">
-    <div class="quote_subheader">
-        {% include "quote/list/subheader.html.twig" %}
+
+    <div class="px-4" data-controller="form--checkbox--post">
+        <div class="quote_subheader">
+            {% include "quote/list/subheader.html.twig" %}
+        </div>
+
+        <div id="customer_list">
+            {% if quotes is empty %}
+                {% include "@quote/list/no-data.html.twig" %}
+            {% else %}
+                {% include "@quote/list/table.html.twig" %}
+            {% endif %}
+        </div>
     </div>
 
-    <div id="quote_list">
-            {% include "quote/list/multiple-delete-form.html.twig" %}
-    </div>
-
-   </div>
-    
 {% endblock %}

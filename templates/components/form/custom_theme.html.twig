@@ -1,11 +1,9 @@
 {% use 'form_div_layout.html.twig' %}
 {% use 'tailwind_2_layout.html.twig' %}
 
-{% set inputBaseClasses = "" %}
-
 {% block form_row %}
     {%- set row_attr = {
-        class: 'flex flex-col mb-3 text-sm'
+        class: 'flex flex-col mb-3 text-sm '  ~ (attr.class|default('')),
     } -%}
     {{- parent() -}}
 {% endblock %}
@@ -30,16 +28,37 @@
 {% endblock %}
 
 {% block text_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full border px-4 py-2 rounded-md w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50' ~ borderClasses %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
     {{- block('form_widget') -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
+{% endblock %}
+
+{% block integer_widget %}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set classes = disabledClasses ~ ' w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
 {% endblock %}
 
 {% block search_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set borderClasses = (errors|length > 0) ? 'border-danger-400' : '' %}
     {% set classes = 'p-2 leading-none outline-0 bg-secondary-50 transition-all duration-300 border focus:border-primary-300 rounded ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
@@ -49,7 +68,7 @@
 {% endblock %}
 
 {% block password_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set borderClasses = (errors|length > 0) ? 'border-danger-400' : '' %}
     {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
@@ -59,44 +78,86 @@
 {% endblock %}
 
 {%- block textarea_widget -%}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
     {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
     {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
 {%- endblock textarea_widget -%}
 
 {% block email_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
     {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
     {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
 {% endblock %}
 
 {% block money_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set classes = disabledClasses ~ ' w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses ~ ' ' %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
     {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
 {% endblock %}
 
 {% block choice_widget_collapsed %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-pointer' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set wrapper = attr.wrapper|default('') %}
+    {% set isCompact = (wrapper == 'compact') %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set baseClasses = disabledClasses ~ ' w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {% set wrapperClasses = (not isCompact) ? 'border px-4 py-2' : '' %}
+    {% set classes = baseClasses ~ ' ' ~ wrapperClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
+{% endblock %}
+
+{%- block date_widget -%}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
     {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
     {{- parent() -}}
-{% endblock %}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
+{%- endblock date_widget -%}
 
 {%- block datetime_widget -%}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50' ~ borderClasses %}
+    {% set borderClasses = (errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -104,7 +165,7 @@
 {%- endblock datetime_widget -%}
 
 {% block file_widget %}
-    {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
+    {% set borderClasses = (errors|length > 0) ? 'border-danger-400' : '' %}
     {% set wrapperClasses = borderClasses ~ ' flex flex-row align-middle items-' %}
     {% set fileChooserButtonClasses = 'cursor-pointer mr-4 py-2 px-4 rounded-sm border-0 text-sm font-semibold bg-primary-50 text-primary-700 hover:bg-primary-100' %}
     {% set classes = 'hidden' %}
@@ -158,3 +219,23 @@
         <hr class="my-2">
     </div>
 {%- endblock -%}
+
+{%- block collection_widget -%}
+    {% set borderClasses = ((errors|length > 0 or withError)) ? 'border-danger-400' : '' %}
+    {% set classes = 'mt-0 w-full outline-none border-w focus:border-b-primary-300 bg-white m-0' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+{%- endblock collection_widget -%}
+
+{% block button_widget %}
+    {% set classes = 'rounded px-2 py-1' %}
+    {%- set attr = attr|merge({
+        class: classes ~ ' ' ~ (attr.class|default('')),
+    }) -%}
+    {{- parent() -}}
+{% endblock button_widget %}

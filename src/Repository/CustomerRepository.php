@@ -63,4 +63,12 @@ class CustomerRepository extends ServiceEntityRepository
 
         return $query;
     }
+
+    public function getFirstCustomer(): ?Customer
+    {
+        return $this->createQueryBuilder('c')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

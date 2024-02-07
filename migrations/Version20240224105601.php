@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240222223925 extends AbstractMigration
+final class Version20240224105601 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -55,13 +55,12 @@ final class Version20240222223925 extends AbstractMigration
         $this->addSql('CREATE TABLE product_bill (id INT NOT NULL, bill_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_F7C93B421A8C12F5 ON product_bill (bill_id)');
         $this->addSql('CREATE INDEX IDX_F7C93B424584665A ON product_bill (product_id)');
-        $this->addSql('CREATE TABLE product_quote (id INT NOT NULL, quote_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE product_quote (id INT NOT NULL, quote_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) NOT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_CA2DB0A8DB805178 ON product_quote (quote_id)');
         $this->addSql('CREATE INDEX IDX_CA2DB0A84584665A ON product_quote (product_id)');
-        $this->addSql('CREATE TABLE quote (id INT NOT NULL, customer_id INT NOT NULL, bill_id INT DEFAULT NULL, company_id INT DEFAULT NULL, search_vector TSVECTOR DEFAULT \'\', status VARCHAR(255) NOT NULL, quote_number VARCHAR(255) NOT NULL, quote_issuance_date DATE NOT NULL, expiry_date DATE DEFAULT NULL, total_price DOUBLE PRECISION NOT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE quote (id INT NOT NULL, customer_id INT NOT NULL, bill_id INT DEFAULT NULL, status INT NOT NULL, quote_number VARCHAR(255) NOT NULL, quote_issuance_date DATE NOT NULL, expiry_date DATE DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6B71CBF49395C3F3 ON quote (customer_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6B71CBF41A8C12F5 ON quote (bill_id)');
-        $this->addSql('CREATE INDEX IDX_6B71CBF4979B1AD6 ON quote (company_id)');
         $this->addSql('CREATE TABLE reset_password_request (id INT NOT NULL, user_id INT NOT NULL, selector VARCHAR(20) NOT NULL, hashed_token VARCHAR(100) NOT NULL, requested_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, expires_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_7CE748AA76ED395 ON reset_password_request (user_id)');
         $this->addSql('COMMENT ON COLUMN reset_password_request.requested_at IS \'(DC2Type:datetime_immutable)\'');
@@ -102,7 +101,6 @@ final class Version20240222223925 extends AbstractMigration
         $this->addSql('ALTER TABLE product_quote ADD CONSTRAINT FK_CA2DB0A84584665A FOREIGN KEY (product_id) REFERENCES product (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE quote ADD CONSTRAINT FK_6B71CBF49395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE quote ADD CONSTRAINT FK_6B71CBF41A8C12F5 FOREIGN KEY (bill_id) REFERENCES bill (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE quote ADD CONSTRAINT FK_6B71CBF4979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "user" ADD CONSTRAINT FK_8D93D649979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
@@ -141,7 +139,6 @@ final class Version20240222223925 extends AbstractMigration
         $this->addSql('ALTER TABLE product_quote DROP CONSTRAINT FK_CA2DB0A84584665A');
         $this->addSql('ALTER TABLE quote DROP CONSTRAINT FK_6B71CBF49395C3F3');
         $this->addSql('ALTER TABLE quote DROP CONSTRAINT FK_6B71CBF41A8C12F5');
-        $this->addSql('ALTER TABLE quote DROP CONSTRAINT FK_6B71CBF4979B1AD6');
         $this->addSql('ALTER TABLE reset_password_request DROP CONSTRAINT FK_7CE748AA76ED395');
         $this->addSql('ALTER TABLE "user" DROP CONSTRAINT FK_8D93D649979B1AD6');
         $this->addSql('DROP TABLE bill');

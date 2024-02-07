@@ -49,7 +49,14 @@ class CustomerType extends AbstractType
             ]);
 
             if (true === $options['is_admin']) {
-                $builder->add('company', CompanyAutocompleteField::class);
+                $builder->add('company', CompanyAutocompleteField::class, [
+                    'label' => 'Entreprise',
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Entrez le nom de l\'entreprise',
+                        'wrapper' => 'compact',
+                    ],
+                ]);
             }
     }
 

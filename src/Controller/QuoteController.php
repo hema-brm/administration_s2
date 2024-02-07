@@ -7,7 +7,6 @@ use App\Entity\Bill;
 use App\Entity\ProductBill;
 use App\Form\QuoteType;
 use App\Repository\QuoteRepository;
-use App\Repository\UserRepository;
 use App\Repository\BillRepository;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
@@ -29,6 +28,7 @@ class QuoteController extends AbstractController
     private ?int $page;
 
     public const SEARCH_FORM_NAME = 'search';
+
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
@@ -43,24 +43,18 @@ class QuoteController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuoteRepository $quoteRepository): Response
     {
-    $user = $this->getUser(); // Récupère l'utilisateur connecté
-    $quotes = [];
-
-    // Vérifie si l'utilisateur est connecté
-    if ($user) {
-        // Récupère l'entreprise de l'utilisateur connecté
-        $userCompany = $user->getCompany();
-
-        // Si l'utilisateur appartient à une entreprise
-        if ($userCompany) {
-            // Récupère les factures de l'entreprise de l'utilisateur connecté
-            $quotes = $quoteRepository->findBy(['company' => $userCompany]);
+        if ($this->searchTerm) {
+            return $this->search($this->searchTerm, $quoteRepository);
         }
-    }
+        
+        $quotes = $quoteRepository->findAllWithPage($this->page, self::LIMIT); 
+        $paginatorHelper = new PaginatorHelper($this->page, count($quotes), self::LIMIT);
 
-    return $this->render('quote/index.html.twig', [
-        'quotes' => $quotes,
-    ]);
+        
+        return $this->render('quote/index.html.twig', [
+            'quotes' => $quotes,
+            'paginatorHelper' => $paginatorHelper,
+        ]);
     }
     private function search(string $searchTerm, QuoteRepository $quoteRepository): Response
     {
@@ -74,30 +68,28 @@ class QuoteController extends AbstractController
         ]);
     }
 
-    #[Route('/pdf/{id}', name: 'quote_pdf')]
+    #[Route('/pdf/{id}', name: 'pdf')]
     public function generatePdfDevis(Quote $quote, PdfService $pdf): Response
     {
 
-    $customerLastName = $quote->getCustomer()->getLastname();
-    $customerFirstName = $quote->getCustomer()->getFirstname();
-    $status = $quote->getStatus();
-    $company = $quote->getCompany();
-    $products = $quote->getProductQuotes();
+        $customerLastName = $quote->getCustomer()->getLastname();
+        $customerFirstName = $quote->getCustomer()->getFirstname();
+        $status = $quote->getStatus();
+        $company = $quote->getCustomer()->getCompany();
+        $products = $quote->getProductQuotes();
 
-    $IssuanceDate = $quote->getQuoteIssuanceDate()->format('Y-m-d');
-    $ExpiryDate = $quote->getExpiryDate()->format('Y-m-d');
+        $IssuanceDate = $quote->getQuoteIssuanceDate()->format('Y-m-d');
+        $ExpiryDate = $quote->getExpiryDate()->format('Y-m-d');
+        $discount = $quote->getDiscount();
+        $tva = $quote->getTva();
 
-    $totalPrice = $quote->getTotalPrice();
-    $discount = $quote->getDiscount();
-    $tva = $quote->getTva();
+        $total = 0;
+        $totalPriceSum = 0;
+        $subtotal = 0;
+        $tvaAmount = 0;
+        $html = "";
 
-    $total = 0;
-    $totalPriceSum = 0;
-    $subtotal = 0;
-    $tvaAmount = 0;
-    $html = "";
-
-    $html = "
+        $html = "
             <!DOCTYPE html>
             <html lang='en'>
             <head>
@@ -185,73 +177,73 @@ class QuoteController extends AbstractController
                         <tbody>               
             ";
 
-    $categories = [];
+        $categories = [];
 
-    // Regrouper les produits par catégorie
-    foreach ($quote->getProductQuotes() as $productQuote) {
+        // Regrouper les produits par catégorie
+        foreach ($quote->getProductQuotes() as $productQuote) {
 
-        $product = $productQuote->getProduct();
-        $category = $product->getCategory(); // Récupérer la catégorie du produit
+            $product = $productQuote->getProduct();
+            $category = $product->getCategory(); // Récupérer la catégorie du produit
 
-        // Ajouter la catégorie au tableau des catégories si elle n'existe pas déjà
-        if (!isset($categories[$category->getId()])) {
-            $categories[$category->getId()] = [
-                'name' => $category->getName(),
-                'products' => []
-            ];
-        }
-
-        // Ajouter le produit à la catégorie correspondante
-        $categories[$category->getId()]['products'][] = [
-            'name' => $product->getName(),
-            'quantity' => $productQuote->getQuantity(),
-            'price' => $product->getPrice(),
-            'totalPrice' => $product->getPrice() * $productQuote->getQuantity(),
-        ];
-
-        // Mise à jour du total des prix
-        $totalPriceSum += $product->getPrice() * $productQuote->getQuantity();
-    }
-
-    // Générer le HTML de la facture en affichant chaque catégorie avec ses produits
-    foreach ($categories as $categoryId => $category) {
-        // Ajouter le nom de la catégorie au HTML de la facture
-        $html .= "<tr>
-                    <td style='text-align: center;' rowspan='" . count($category['products']) . "'>{$category['name']}</td>";
-
-        // Ajouter les produits de la catégorie au HTML de la facture
-        foreach ($category['products'] as $index => $product) {
-            if ($index !== 0) {
-                $html .= "<tr>";
+            // Ajouter la catégorie au tableau des catégories si elle n'existe pas déjà
+            if (!isset($categories[$category->getId()])) {
+                $categories[$category->getId()] = [
+                    'name' => $category->getName(),
+                    'products' => []
+                ];
             }
 
-            $html .= "<td style='text-align: center;'>{$product['name']}</td>
+            // Ajouter le produit à la catégorie correspondante
+            $categories[$category->getId()]['products'][] = [
+                'name' => $product->getName(),
+                'quantity' => $productQuote->getQuantity(),
+                'price' => $product->getPrice(),
+                'totalPrice' => $product->getPrice() * $productQuote->getQuantity(),
+            ];
+
+            // Mise à jour du total des prix
+            $totalPriceSum += $product->getPrice() * $productQuote->getQuantity();
+        }
+
+        // Générer le HTML de la facture en affichant chaque catégorie avec ses produits
+        foreach ($categories as $categoryId => $category) {
+            // Ajouter le nom de la catégorie au HTML de la facture
+            $html .= "<tr>
+                    <td style='text-align: center;' rowspan='" . count($category['products']) . "'>{$category['name']}</td>";
+
+            // Ajouter les produits de la catégorie au HTML de la facture
+            foreach ($category['products'] as $index => $product) {
+                if ($index !== 0) {
+                    $html .= "<tr>";
+                }
+
+                $html .= "<td style='text-align: center;'>{$product['name']}</td>
                     <td style='text-align: center;'>{$product['quantity']}</td>
                     <td style='text-align: center;'>{$product['price']} €</td>
                     <td style='text-align: center;'>{$product['totalPrice']} €</td>
                   </tr>";
+            }
         }
-    }
 
-    // Calcul de la TVA
-    if ($tva) {
-        $tvaAmount = $totalPriceSum * ($tva / 100); // Calcul de la TVA
-    }
+        // Calcul de la TVA
+        if ($tva) {
+            $tvaAmount = $totalPriceSum * ($tva / 100); // Calcul de la TVA
+        }
 
-    // Calcul du total avec TVA
-    $totalWithTva = $totalPriceSum + $tvaAmount;
+        // Calcul du total avec TVA
+        $totalWithTva = $totalPriceSum + $tvaAmount;
 
-    // Calcul du total avec remise si elle existe
-    if ($discount) {
-        $discountAmount = $totalWithTva * ($discount / 100); // Calcul du montant de la remise
-        $totalWithDiscount = $totalWithTva - $discountAmount; // Calcul du total avec remise
-    } else {
-        $totalWithDiscount = $totalWithTva; // Si pas de remise, le total avec remise est le même que le total avec TVA
-    }
+        // Calcul du total avec remise si elle existe
+        if ($discount) {
+            $discountAmount = $totalWithTva * ($discount / 100); // Calcul du montant de la remise
+            $totalWithDiscount = $totalWithTva - $discountAmount; // Calcul du total avec remise
+        } else {
+            $totalWithDiscount = $totalWithTva; // Si pas de remise, le total avec remise est le même que le total avec TVA
+        }
 
-    // Finalisation du HTML avec les totaux
-    $html .=
-        "</tbody>
+        // Finalisation du HTML avec les totaux
+        $html .=
+            "</tbody>
             </table>
                     <div class='invoice-total'>
                         <p>Total: " . $totalPriceSum . " €</p>
@@ -276,13 +268,9 @@ class QuoteController extends AbstractController
         );
     }
 
-
-
-    #[Route('/{id}', name: 'app_quote_to_bill', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'to_bill', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function transformQuoteToBill(Request $request, $id,BillRepository $billRepository, QuoteRepository $quoteRepository,EntityManagerInterface $entityManager): Response
     {
-
-
         $quote = $quoteRepository->find($id);
         $existingBill = $billRepository->findOneBy(['quote' => $quote]);
 
@@ -303,42 +291,40 @@ class QuoteController extends AbstractController
                 return $this->redirectToRoute('app_quote_index'); // Rediriger vers la page des devis par exemple
             }else{
                 //Créer une nouvelle facture
-            $bill = new Bill();
+                $bill = new Bill();
 
-            $user = $this->getUser();
-            $company = $user->getCompany();
+                $user = $this->getUser();
+                $company = $user->getCompany();
 
-            $bill->setCustomer($quote->getCustomer());
-            $bill->setTotalPrice($quote->getTotalPrice());
-            $bill->setDiscount($quote->getDiscount());
-            $bill->setTva($quote->getTva());
-            $bill->setEntreprise($company);
-            $bill->setCreationDate(new \DateTime());
-            $bill->setBillIssuanceDate(new \DateTime());
-            $bill->setStatus('en attente');
-            $bill->setQuote($quote);
+                $bill->setCustomer($quote->getCustomer());
+                $bill->setDiscount($quote->getDiscount());
+                $bill->setTva($quote->getTva());
+                $bill->setEntreprise($company);
+                $bill->setCreationDate(new \DateTime());
+                $bill->setBillIssuanceDate(new \DateTime());
+                $bill->setStatus('en attente');
+                $bill->setQuote($quote);
 
-            foreach ($quote->getProductQuotes() as $productQuote) {
-                $productBill = new ProductBill();
-                $productBill->setProduct($productQuote->getProduct());
-                $productBill->setQuantity($productQuote->getQuantity());
-                $productBill->setBill($bill); // Associer le produit à la nouvelle facture
-                $bill->addProductBill($productBill); // Ajouter le produit à la collection de produits de la facture
-            }
+                foreach ($quote->getProductQuotes() as $productQuote) {
+                    $productBill = new ProductBill();
+                    $productBill->setProduct($productQuote->getProduct());
+                    $productBill->setQuantity($productQuote->getQuantity());
+                    $productBill->setBill($bill); // Associer le produit à la nouvelle facture
+                    $bill->addProductBill($productBill); // Ajouter le produit à la collection de produits de la facture
+                }
 
-            // Enregistrer la facture
-            $entityManager->persist($bill);
-            $entityManager->flush();
+                // Enregistrer la facture
+                $entityManager->persist($bill);
+                $entityManager->flush();
 
-            // Rediriger vers la page de la nouvelle facture
-            $this->addFlash('success', 'Le devis a été transformé en facture.');
-            return $this->redirect($request->headers->get('referer'));        }
+                // Rediriger vers la page de la nouvelle facture
+                $this->addFlash('success', 'Le devis a été transformé en facture.');
+                return $this->redirect($request->headers->get('referer'));        }
         }
 
 
     }
-
-
+    
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -350,28 +336,17 @@ class QuoteController extends AbstractController
 
         // Create a new Quote instance
         $quote = new Quote();
-        
-
-        $quote->addProductQuote(new ProductQuote());
-
-
-
-        // Set the company information in the Quote form
-        $quote->setCompany($company);
 
         // Create the form
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($quote->getProductQuotes() as $productQuote) {
-                $productQuote->setQuote($quote);
-                $entityManager->persist($productQuote);
-            }
-        
             $entityManager->persist($quote);
             $entityManager->flush();
-        
+
+            $this->addFlash('success', 'Votre devis a été créé avec succès.');
+
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -418,15 +393,13 @@ class QuoteController extends AbstractController
         return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/show', name: 'app_quote_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Quote $quote): Response
     {
         return $this->render('quote/show.html.twig', [
             'quote' => $quote,
         ]);
     }
-
-    
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
