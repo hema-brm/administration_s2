@@ -2,20 +2,21 @@
 
 namespace App\Validator\Constraint;
 
-use App\Validator\RoleValidator;
+use App\Validator\ConfirmPasswordValidator;
+use App\Validator\CurrentPasswordValidator;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class Role extends Constraint
+class ConfirmPassword extends Constraint
 {
-    public string $message = '"{{ value }}" n\'est pas un rôle valide.';
+    public string $message = 'Les mots de passe ne correspondent pas.';
     public string $mode = 'strict';
 
     public function __construct(
         string $mode = null,
         string $message = null,
         array $groups = null,
-        $payload = null
+               $payload = null
     )
     {
         parent::__construct([], $groups, $payload);
@@ -26,12 +27,12 @@ class Role extends Constraint
 
     public function getTargets(): string
     {
-        return self::PROPERTY_CONSTRAINT;
+        return self::CLASS_CONSTRAINT;
     }
 
     public function validatedBy(): string
     {
-        return RoleValidator::class;
+        return ConfirmPasswordValidator::class;
     }
 
     public function getRequiredOptions(): array

@@ -1,0 +1,21 @@
+{% embed "@components/dropdown/index.html.twig" with {
+    id: 'theme_chooser_' ~ uniqid(),
+} %}
+    {% block toggle %}
+        <div class="transform rotate-0 hover:rotate-45 duration-300 hover:bg-primary-600 px-1 rounded-full">
+            <i class="fa-solid fa-cog"></i>
+        </div>
+    {% endblock %}
+    {% block content %}
+        <div class="w-44 bg-white text-secondary-900 rounded border border-primary-200 text-xs">
+            <a class="p-2 flex items-center" href="{{ path('app_account_me_index') }}">
+                <i class="fa-solid fa-user mr-2"></i>
+                <span>Voir mon compte</span>
+            </a>
+            <a class="p-2 flex items-center" href="{{ path('app_account_me_edit') }}">
+                <i class="fa-solid fa-edit mr-2"></i>
+                <span>Modifier mon compte</span>
+            </a>
+        </div>
+    {% endblock %}
+{% endembed %}

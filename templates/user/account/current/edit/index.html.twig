@@ -1,0 +1,33 @@
+{% from "@components/macros/content.html.twig" import header %}
+{% extends '@base/app.html.twig' %}
+
+{% block title %}Modifier mon compte{% endblock %}
+
+{% block body %}
+    {{ displayFlash() }}
+    {{ header({
+        text: 'Mon compte',
+    }) }}
+
+    <div class="p-4 flex flex-row w-3/4">
+        <div id="account_tabs" class="w-80 text-sm mr-4">
+            {% set activeClass = 'personal' == tabs ? 'bg-secondary-100' : '' %}
+            <div class="{{ activeClass }} rounded">
+                <a href="{{ path('app_account_me_edit', { 'tabs': 'personal' }) }}" class="flex items-center p-2">
+                    <i class="fas fa-user mr-2"></i>
+                    <span>Informations personnelles</span>
+                </a>
+            </div>
+            {% set activeClass = 'security' == tabs ? 'bg-secondary-100' : '' %}
+            <div class="{{ activeClass }} rounded">
+                <a href="{{ path('app_account_me_edit', { 'tabs': 'security' }) }}" class="flex items-center p-2">
+                    <i class="fas fa-lock mr-2"></i>
+                    <span>Sécurité</span>
+                </a>
+            </div>
+        </div>
+        <div id="account_tabs_content" class="w-full p-4 shadow-md">
+            {{ include("@user/account/current/edit/tabs/" ~ tabs ~ ".html.twig") }}
+        </div>
+    </div>
+{% endblock %}

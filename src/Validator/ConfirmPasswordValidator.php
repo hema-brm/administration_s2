@@ -3,15 +3,16 @@
 namespace App\Validator;
 
 use App\Security\Roles\IUserRole;
+use App\Service\User\UserPasswordService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class RoleValidator extends ConstraintValidator
+class ConfirmPasswordValidator extends ConstraintValidator
 {
 
     public function __construct(
-        private readonly Security $security,
+        private readonly UserPasswordService $userPasswordService,
     )
     {
     }
@@ -22,22 +23,11 @@ class RoleValidator extends ConstraintValidator
             return false;
         }
 
-        if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
-            return true;
-        }
+        $plainPassword = $this->context->getRoot()->get($constraint->payload['field'])->getData();
 
-        $availableRoles = [
-            IUserRole::ROLE_ADMIN,
-            IUserRole::ROLE_COMPANY,
-            IUserRole::ROLE_ACCOUNTANT,
-            IUserRole::ROLE_EMPLOYEE,
-        ];
-
-        if (!in_array($value, $availableRoles)) {
+        if (!$this->userPasswordService->verifyConfirmPassword($plainPassword, $value)) {
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', implode(', ', $value))
                 ->addViolation();
-
             return false;
         }
 

@@ -15,6 +15,4 @@ class AccountantController extends AbstractController
     {
         return $this->render('accountant/accountant.html.twig');
     }
-
-    
 }

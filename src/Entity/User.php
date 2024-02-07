@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraint as EasyVowsAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -49,6 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Veuillez saisir un rôle existant.')]
+    #[EasyVowsAssert\Role(message: 'Le rôle "{{ value }}" n\'est pas valide.')]
     private array $roles = [];
 
     #[ORM\Column]
@@ -92,7 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -163,7 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -175,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -192,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(string $phoneNumber): self
+    public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
 

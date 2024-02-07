@@ -79,6 +79,7 @@ class EmployeeType extends AbstractType
                 'placeholder' => 'Veuillez choisir les rôles',
             ],
             'multiple' => true,
+
         ]);
 
         if (true === $options['is_admin']) {

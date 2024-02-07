@@ -24,11 +24,11 @@
     <tbody>
     {% for user in users %}
         <tr
-                data-controller="link--clickable"
-                data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
-                data-action="click->link--clickable#visit"
-                data-link--clickable-target="element"
-                class="{{ borderClass }} hover:bg-gray-50 text-sm"
+            data-controller="link--clickable"
+            data-link--clickable-path-value="{{ path('app_employee_show', {'id': user.id}) }}"
+            data-action="click->link--clickable#visit"
+            data-link--clickable-target="element"
+            class="{{ borderClass }} hover:bg-gray-50 text-sm"
         >
             <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
                 <input
