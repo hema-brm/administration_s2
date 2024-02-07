@@ -8,14 +8,19 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Category;
+
 
 class ProductFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     private $faker;
+    private $categoryRepository;
     
-    public function __construct()
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->faker = Factory::create();
+        $this->categoryRepository = $entityManager->getRepository(Category::class);
     }
 
     public function load(ObjectManager $manager): void
@@ -27,19 +32,26 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface, Fixt
     private function addProducts(ObjectManager $manager, int $count = 1): void
     {
         for ($i = 1; $i <= $count; $i++) {
-            $category = $this->getReference(sprintf('category-%d', $this->faker->numberBetween(1, AppFixtures::CATEGORY_COUNT)));
 
             $product = new Product();
             $product
                 ->setName("Product-$i: " . $this->faker->name())
                 ->setReference($this->faker->ean13())
-                ->setCategory($category)
-                ->setPrice($this->faker->randomFloat(2, 10, 1000))
-                ->setDescription($this->faker->paragraph)
-            ;
+                ->setPrice($this->faker->randomFloat(2, 10, 1000));
 
-            $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));
-            $product->setCompany($company);
+                $description = $this->faker->paragraph;
+                if(strlen($description)>150){
+                    $description= substr($description, 0, 150);
+                }
+                $product->setDescription($description);
+
+            $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));            $categories = $company->getCategories();
+            $randomCategoryIndex = rand(0, count($categories)-1);
+            $categories = $company->getCategories();
+            
+            $product->setCompany($company)
+                    ->setCategory($categories[$randomCategoryIndex]);
+
             $manager->persist($product);
             $this->addReference("product-$i", $product);
         }
