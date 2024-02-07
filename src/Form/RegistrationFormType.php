@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,43 +17,39 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('email', EmailType::class, [
+            'label' => 'Adresse email',
+            'required' => true,
+        ])
+        ->add('password', PasswordType::class, [
+            'label' => 'Mot de passe',
+            'required' => true,
+        ])
         ->add('firstName', TextType::class, [
-            'label' => 'First Name',
+            'label' => 'Prénom',
+            'required' => true,
         ])
         ->add('lastName', TextType::class, [
-            'label' => 'Last Name',
+            'label' => 'Nom',
+            'required' => true,
         ])
         ->add('phoneNumber', TextType::class, [
-            'label' => 'Phone Number',
+            'label' => 'Numéro de téléphone',
         ])
-        ->add('name', TextType::class, [
-            'label' => 'Company Name',
+        ->add('company', TextType::class, [
+            'label' => 'Entreprise',
+            'required' => true,
             'mapped' => false,
         ])
-        ->add('adress', TextType::class, [
-            'label' => 'Company Address',
+        ->add('address', TextType::class, [
+            'label' => 'Adresse de l\'entreprise',
             'mapped' => false,
         ])
         ->add('siretNumber', TextType::class, [
-            'label' => 'Company SIRET Number',
+            'label' => 'Numéro de SIRET',
+            'required' => true,
             'mapped' => false,
-        ])
-        ->add('email')
-        ->add('plainPassword', PasswordType::class, [
-            'mapped' => false,
-            'attr' => ['autocomplete' => 'new-password'],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a password',
-                ]),
-                new Length([
-                    'min' => 6,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    'max' => 4096,
-                ]),
-            ],
-        ])
-        ;
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

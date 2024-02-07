@@ -1,0 +1,48 @@
+{% set cellPadding = 'p-4 px-2' %}
+{% set borderClass = 'border-b border-b-secondary-200' %}
+{% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+
+<table class="w-full border shadow-sm text-sm">
+    <thead>
+    <tr class="{{ tableHeaderClasses }}">
+        <th class="{{ cellPadding }} text-left">Numéro</th>
+        <th class="{{ cellPadding }} text-left">Client</th>
+        <th class="{{ cellPadding }} text-left">Statut</th>
+        <th class="{{ cellPadding }} text-center">Date de création</th>
+        <th class="{{ cellPadding }} text-center">Date d'échéance</th>
+        <th class="{{ cellPadding }} text-right">Total</th>
+        <th class="{{ cellPadding }} text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for quote in quotes %}
+        <tr
+            data-controller="link--clickable"
+            data-link--clickable-path-value="{{ path('app_quote_show', { 'id': quote.id }) }}"
+            data-action="click->link--clickable#visit"
+            data-link--clickable-target="element"
+            class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
+        >
+            <td class="{{ cellPadding }} text-left">{{ quote.quoteNumber }}</td>
+            <td class="{{ cellPadding }} text-left">{{ quote.customer }}</td>
+            <td class="{{ cellPadding }} text-left">{{ quote.status }}</td>
+            <td class="{{ cellPadding }} text-center">{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+            <td class="{{ cellPadding }} text-center">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+            <td class="{{ cellPadding }} text-right">{{ quote.totalPrice }}</td>
+
+            <td class="{{ cellPadding }} text-right text-secondary-400">
+                <div class="flex flex-row justify-end" data-link--clickable-target="exclude">
+                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}" data-turbo-action="replace"
+                       data-link--clickable-target="exclude">
+                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="9">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
