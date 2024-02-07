@@ -1,3 +1,5 @@
+
+
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import paginator %}
@@ -62,7 +64,14 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="9">no records found</td>
+                <td colspan="7">
+                    {{ alert({
+                        text: 'Aucune facture enregistrée',
+                        color: 'warning',
+                        icon: 'fa-circle-info',
+                        variant: 'small',
+                    }) }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

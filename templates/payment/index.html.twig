@@ -1,5 +1,6 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
 
 
@@ -55,8 +56,15 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="9">no records found</td>
-                        </tr>
+                <td colspan="7">
+                    {{ alert({
+                        text: 'Aucune facture enregistrée',
+                        color: 'warning',
+                        icon: 'fa-circle-info',
+                        variant: 'small',
+                    }) }}
+                </td>
+            </tr>
                     {% endfor %}
                 </tbody>
             </table>

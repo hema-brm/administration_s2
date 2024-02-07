@@ -1,10 +1,13 @@
 <?php
 // src/Entity/Bill.php
 
+// src/Entity/Bill.php
+
 namespace App\Entity;
 
 use App\Repository\BillRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: BillRepository::class)]
 class Bill
@@ -12,28 +15,59 @@ class Bill
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $id;
+
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Customer $customer;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $CreationDate = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $totalPrice;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $numeroFacture = null;
+    private ?string $numeroFacture;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $nameClient = null;
+    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $entreprise;
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->CreationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $date): static
+    {
+        $this->CreationDate = $date;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTotalPrice(): ?float
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
+    public function getTotalPrice(): ?string
     {
         return $this->totalPrice;
     }
 
-    public function setTotalPrice(?float $totalPrice): self
+    public function setTotalPrice(?string $totalPrice): self
     {
         $this->totalPrice = $totalPrice;
         return $this;
@@ -50,14 +84,14 @@ class Bill
         return $this;
     }
 
-    public function getNameClient(): ?string
+    public function getEntreprise(): ?Company
     {
-        return $this->nameClient;
+        return $this->entreprise;
     }
 
-    public function setNameClient(?string $nameClient): self
+    public function setEntreprise(?Company $entreprise): self
     {
-        $this->nameClient = $nameClient;
+        $this->entreprise = $entreprise;
         return $this;
     }
 }
