@@ -4,8 +4,5 @@
   "build/runtime.js": "/build/runtime.js",
   "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-0c3059.css": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-0c3059.css",
   "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-0c3059.js": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-0c3059.js",
-  "build/images/default/profile.png": "/build/images/default/profile.png",
-  "build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-c47e6e.css": "/build/vendors-node_modules_tailwindcss_base_css-node_modules_tailwindcss_components_css-node_module-c47e6e.css",
-  "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-2ddb4d.css": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-2ddb4d.css",
-  "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-2ddb4d.js": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-2ddb4d.js"
+  "build/images/default/profile.png": "/build/images/default/profile.png"
 }
