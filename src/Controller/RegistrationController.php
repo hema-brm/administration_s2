@@ -31,51 +31,54 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer les données du formulaire User
-            $userData = $form->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Récupérer les données du formulaire User
+                $userData = $form->getData();
 
-            // Récupérer les données de l'company à partir du formulaire
-            $companyName = $form->get('name')->getData();
-            $companyAdress = $form->get('adress')->getData();
-            $companySiretNumber = $form->get('siretNumber')->getData();
+                // Récupérer les données de l'company à partir du formulaire
+                $companyName = $form->get('name')->getData();
+                $companyAdress = $form->get('adress')->getData();
+                $companySiretNumber = $form->get('siretNumber')->getData();
 
-            // Créer une instance d'company et lui attribuer les données du formulaire
-            $company = new Company();
-            $company->setName($companyName);
-            $company->setAddress($companyAdress);
-            $company->setSiretNumber($companySiretNumber);
+                // Créer une instance d'company et lui attribuer les données du formulaire
+                $company = new Company();
+                $company->setName($companyName);
+                $company->setAddress($companyAdress);
+                $company->setSiretNumber($companySiretNumber);
 
-            // Enregistrer l'company
-            $entityManager->persist($company);
-            $entityManager->flush();
+                // Enregistrer l'company
+                $entityManager->persist($company);
+                $entityManager->flush();
 
-            // Enregistrer l'utilisateur et associer l'company
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+                // Enregistrer l'utilisateur et associer l'company
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
 
-            $user->setCompany($company);
-            $firstName = $form->get('firstName')->getData();
-            $user->setFirstName($firstName);
-            $lastName = $form->get('lastName')->getData();
-            $user->setLastName($lastName);
-            $phoneNumber = $form->get('phoneNumber')->getData();
-            $user->setPhoneNumber($phoneNumber);
+                $user->setCompany($company);
+                $firstName = $form->get('firstName')->getData();
+                $user->setFirstName($firstName);
+                $lastName = $form->get('lastName')->getData();
+                $user->setLastName($lastName);
+                $phoneNumber = $form->get('phoneNumber')->getData();
+                $user->setPhoneNumber($phoneNumber);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Votre compte a bien été créé. Vous pouvez vous connecter.');
+                $this->addFlash('success', 'Votre compte a bien été créé. Vous pouvez vous connecter.');
 
-            return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_login');
+            }
+            $this->addFlash('error', 'Une erreur est survenue lors de la création de votre compte.');
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registrationForm' => $form,
         ]);
     }
 }
