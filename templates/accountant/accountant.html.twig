@@ -8,10 +8,10 @@
     {{ header({
         text: 'Dashboard',
     }) }}
-    <div class="container mx-auto mt-10">
-        <div class="mt-4 text-center">
-            
-            
-        </div>
+    <div>
+       <div class="w-96 h-96">
+           {{ render_chart(chart) }}
+       </div>
+
     </div>
 {% endblock %}

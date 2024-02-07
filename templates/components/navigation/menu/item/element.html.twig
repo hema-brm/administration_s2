@@ -43,7 +43,7 @@
                 }) }}
             </ul>
         {% endif %}
-    {% else %}
+    {% elseif is_granted('ROLE_COMPTABLE') %}
         {{ menuMacro.item({
             text: 'Tableau de bord',
             icon: 'fa-solid fa-chart-line',
