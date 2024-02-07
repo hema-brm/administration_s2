@@ -18,12 +18,12 @@ class RoleValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint): bool
     {
-        if (empty($value)) {
-            return false;
-        }
-
         if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
             return true;
+        }
+
+        if (empty($value)) {
+            return false;
         }
 
         $availableRoles = [
@@ -33,12 +33,15 @@ class RoleValidator extends ConstraintValidator
             IUserRole::ROLE_EMPLOYEE,
         ];
 
-        if (!in_array($value, $availableRoles)) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', implode(', ', $value))
-                ->addViolation();
+        // value is an array, verify if each value item can be found in the available roles
+        foreach ($value as $role) {
+            if (!in_array($role, $availableRoles)) {
+                $this->context->buildViolation($constraint->message)
+                    ->setParameter('{{ value }}', implode(', ', $value))
+                    ->addViolation();
 
-            return false;
+                return false;
+            }
         }
 
         return true;
