@@ -11,7 +11,7 @@ export default class extends Controller {
     }
 
     setTheme() {
-        const themeClass = localStorage.getItem('theme') || 'theme-default';
+        const themeClass = localStorage.getItem('theme') || 'theme-indigo';
         this.bodyTarget.classList.forEach(className => {
             if (className.startsWith('theme-')) {
                 this.bodyTarget.classList.remove(className);
