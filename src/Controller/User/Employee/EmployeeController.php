@@ -129,27 +129,26 @@ class EmployeeController extends AbstractController
     {
         $employees = $request->request->all()['employees'];
         $count = 0;
-        foreach($employees as $id => $token){
+        foreach ($employees as $id => $token) {
             $employee = $userRepository->find($id);
-            if($employee && $this->isCsrfTokenValid('delete'.$id, $token)){
+            if ($employee && $this->isCsrfTokenValid('delete' . $id, $token)) {
                 $entityManager->remove($employee);
                 $count++;
             }
         }
-        $this->addFlash('success', $count.' employé(s) supprimé(s) avec succès.');
-        $entityManager->flush(); 
+        $this->addFlash('success', $count . ' employé(s) supprimé(s) avec succès.');
+        $entityManager->flush();
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function deleteOne(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
     }
-
 }

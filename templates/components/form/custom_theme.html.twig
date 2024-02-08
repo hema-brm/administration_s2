@@ -2,18 +2,21 @@
 {% use 'tailwind_2_layout.html.twig' %}
 
 {% block form_row %}
+    {% set attr = attr.class|join(' ')|default('') %}
     {%- set row_attr = {
-        class: 'flex flex-col mb-3 text-sm'
+        class: 'flex flex-col mb-3 text-sm ' ~ attr
     } -%}
     {{- parent() -}}
 {% endblock %}
 
 {% block form_errors %}
-    {% set error_item_class = 'text-danger-400 text-xs' %}
+    {% set attr = attr.class|join(' ')|default('') %}
+    {% set error_item_class = 'text-danger-400 text-xs ' ~ attr %}
     {{- parent() -}}
 {% endblock %}
 
 {% block form_help %}
+    {% set attr = attr.class|join(' ')|default('') %}
     {% set help_class = 'text-secondary-500 text-xs' %}
     {{- parent() -}}
 {% endblock %}
