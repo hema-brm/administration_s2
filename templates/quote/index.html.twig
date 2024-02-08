@@ -36,33 +36,44 @@
     <table class="w-full border shadow-sm text-sm">
         <thead>
             <tr class="{{ tableHeaderClasses }}">
-                <th>N° devis</th>
-                <th>Client
-                <th>Statut</th>
-                <th>date de création</th>
-                <th>date d'échéance</th>
-                <th>Total</th>
-                <th>actions</th>
+                <th class="{{ cellPadding }} text-right">N°</th>
+                <th class="{{ cellPadding }} text-left">Client
+                <th class="{{ cellPadding }} text-left">Statut</th>
+                <th class="{{ cellPadding }} text-right">date de création</th>
+                <th class="{{ cellPadding }} text-right">date d'échéance</th>
+                <th class="{{ cellPadding }} text-right">Total</th>
+                <th class="{{ cellPadding }}"></th>
             </tr>
         </thead>
         <tbody>
         {% for quote in quotes %}
             <tr>
-                <td>{{ quote.quoteNumber }}</td>
-                <td>{{ quote.customer }}</td>
-                <td>{{ quote.status }}</td>
-                <td>{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
-                <td>{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
-                <td>{{ quote.totalPrice }}</td>
-                
-                <td>
-                    <a href="{{ path('app_quote_show', {'id': quote.id}) }}">show</a>
-                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}">edit</a>
+                <td class="{{ cellPadding }} text-right">{{ quote.quoteNumber }}</td>
+                <td class="{{ cellPadding }} text-left">{{ quote.customer }}</td>
+                <td class="{{ cellPadding }} text-left">{{ quote.status }}</td>
+                <td class="{{ cellPadding }} text-right">{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+                {% if quote.expiryDate is empty %}
+                <td class="{{ cellPadding }} text-right italic text-gray-300">null</td>
+                {% else %}
+                    <td class="{{ cellPadding }} text-right">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+                {% endif %}
+                <td class="{{ cellPadding }} text-right">{{ quote.totalPrice }}</td>
+                <td class="{{ cellPadding }} text-right text-secondary-400">
+                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}" data-link--clickable-target="exclude">
+                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                    </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="9">no records found</td>
+                <td colspan="7">
+                    {{ alert({
+                        text: 'Aucun devis enregistré',
+                        color: 'warning',
+                        icon: 'fa-circle-info',
+                        variant: 'small',
+                    }) }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
