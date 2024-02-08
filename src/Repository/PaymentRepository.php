@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Repository;
+use Doctrine\ORM\Query\Expr;
 
 use App\Entity\Payment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\ORM\Query\AST\Functions\String\DateFormat;
 
 /**
  * @extends ServiceEntityRepository<Payment>
@@ -20,6 +22,16 @@ class PaymentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Payment::class);
     }
+    public function getTotalPriceSumByMonth(): array
+    {
+        return $this->createQueryBuilder('payment') 
+            ->select("date_format(payment.datePaiement, '%Y') as year", "date_format(payment.datePaiement, '%m') as month", 'SUM(bill.totalPrice) as totalPrice')
+            ->leftJoin('payment.bill', 'bill')
+            ->where('payment.datePaiement IS NOT NULL')
+            ->groupBy('month', 'year')
+            ->getQuery()
+            ->getResult();
+        }
 
 //    /**
 //     * @return Payment[] Returns an array of Payment objects

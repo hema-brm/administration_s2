@@ -28,7 +28,7 @@ doctrine:
             CAST: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\Cast
             JSON_GET_FIELD_AS_TEXT: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\JsonGetFieldAsText
             ANY_ON_RIGHT_EXISTS_ON_LEFT: MartinGeorgiev\Doctrine\ORM\Query\AST\Functions\AnyOnTheRightExistsOnTheLeft
-            DATE_FORMAT: DoctrineExtensions\Query\Mysql\DateFormat
+            date_format: Oro\ORM\Query\AST\Functions\String\DateFormat
 
 when@test:
   doctrine:
