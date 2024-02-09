@@ -66,9 +66,14 @@ class EmployeeType extends AbstractType
         }
 
         $choices = [
+            (new RoleLabel(IUserRole::ROLE_COMPANY))->get() => RoleLabel::ROLE_COMPANY,
             (new RoleLabel(IUserRole::ROLE_EMPLOYEE))->get() => RoleLabel::ROLE_EMPLOYEE,
             (new RoleLabel(IUserRole::ROLE_ACCOUNTANT))->get() => RoleLabel::ROLE_ACCOUNTANT,
         ];
+
+        if (true === $options['is_admin']) {
+            $choices[(new RoleLabel(IUserRole::ROLE_ADMIN))->get()] = RoleLabel::ROLE_ADMIN;
+        }
 
         $builder
         ->add('roles', ChoiceType::class, [

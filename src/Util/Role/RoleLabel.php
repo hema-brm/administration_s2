@@ -21,8 +21,8 @@ class RoleLabel {
     {
         return match ($this->role) {
             self::ROLE_ADMIN => 'Administrateur',
-            self::ROLE_EMPLOYEE => 'Employé',
             self::ROLE_COMPANY => 'Gérant',
+            self::ROLE_EMPLOYEE => 'Employé',
             self::ROLE_ACCOUNTANT => 'Comptable',
             default => '',
         };

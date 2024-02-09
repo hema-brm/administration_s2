@@ -1,6 +1,7 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/macros/content.html.twig" import button_macro %}
+{% from "@components/macros/content.html.twig" import alert %}
 
 {% block title %}Nouvelle Catégorie{% endblock %}
 
@@ -78,8 +79,15 @@
 
                         </tr>
                     {% else %}
-                        <tr>
-                            <td colspan="7">Pas de résultat</td>
+                        <tr >
+                            <td colspan="7">
+                                {{ alert({
+                                text: 'Aucune catégorie n\'a été trouvée',
+                                color: 'warning',
+                                icon: 'fa-circle-info',
+                                variant: 'small',
+                                }) }}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
