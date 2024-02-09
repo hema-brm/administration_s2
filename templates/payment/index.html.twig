@@ -4,7 +4,7 @@
 {% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
-{% block title %}Paiement{% endblock %}
+{% block title %}Suivis de paiement{% endblock %}
 
 {% block body %}
     {{ displayFlash() }}
@@ -48,7 +48,7 @@
             method="POST"
             >
             <table 
-                class="w-full border shadow-sm"
+                class="w-full border shadow-sm text-sm"
                 data-controller="form--checkbox--multiple">
                 <thead>
                     <tr class="{{ tableHeaderClasses }}">
@@ -60,7 +60,7 @@
                         <th class="{{ cellPadding }} text-right">Date de paiement</th>
                         <th class="{{ cellPadding }} text-right">Date d'échéance</th>
                         <th class="{{ cellPadding }} text-right">N° Facture</th>
-                        <th class="{{ cellPadding }}"></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

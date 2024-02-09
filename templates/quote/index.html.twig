@@ -1,8 +1,6 @@
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/macros/content.html.twig" import alert %}
-{% from "@components/macros/content.html.twig" import paginator %}
-{% from "@components/macros/table.html.twig" import default as table %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
+
 
 {% extends '@base/app.html.twig' %}
 
@@ -14,70 +12,19 @@
         text: 'Liste des devis',
     }) }}
      
-  <div class="px-4">
-    <div class="flex flex-row justify-between py-2">
-            {{ form_search_macro({
-                id: 'form-search-customer',
-                action: path('app_quote_index'),
-                placeholder: 'Rechercher',
-                name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
-                value: searchTerm|default(''),
-            }) }}
-            <a href="{{ path('app_quote_new') }}">
-                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Nouveau devis</span>
-                </button>
-            </a>
+  <div class="px-4" data-controller="form--checkbox--post">
+    <div class="quote_subheader">
+        {% include "quote/list/subheader.html.twig" %}
     </div>
-    {% set cellPadding = 'p-4 px-2' %}
-    {% set borderClass = 'border-b border-b-secondary-200' %}
-    {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
-    <table class="w-full border shadow-sm text-sm">
-        <thead>
-            <tr class="{{ tableHeaderClasses }}">
-                <th class="{{ cellPadding }} text-right">N°</th>
-                <th class="{{ cellPadding }} text-left">Client
-                <th class="{{ cellPadding }} text-left">Statut</th>
-                <th class="{{ cellPadding }} text-right">date de création</th>
-                <th class="{{ cellPadding }} text-right">date d'échéance</th>
-                <th class="{{ cellPadding }} text-right">Total</th>
-                <th class="{{ cellPadding }}"></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for quote in quotes %}
-            <tr>
-                <td class="{{ cellPadding }} text-right">{{ quote.quoteNumber }}</td>
-                <td class="{{ cellPadding }} text-left">{{ quote.customer }}</td>
-                <td class="{{ cellPadding }} text-left">{{ quote.status }}</td>
-                <td class="{{ cellPadding }} text-right">{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
-                {% if quote.expiryDate is empty %}
-                <td class="{{ cellPadding }} text-right italic text-gray-300">null</td>
-                {% else %}
-                    <td class="{{ cellPadding }} text-right">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
-                {% endif %}
-                <td class="{{ cellPadding }} text-right">{{ quote.totalPrice }}</td>
-                <td class="{{ cellPadding }} text-right text-secondary-400">
-                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}" data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                    </a>
-                </td>
-            </tr>
+
+    <div id="quote_list">
+        {% if quotes is empty %}
+            {% include "quote/list/no-data.html.twig" %}
         {% else %}
-            <tr>
-                <td colspan="7">
-                    {{ alert({
-                        text: 'Aucun devis enregistré',
-                        color: 'warning',
-                        icon: 'fa-circle-info',
-                        variant: 'small',
-                    }) }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% include "quote/list/multiple-delete-form.html.twig" %}
+        {% endif %}
+    </div>
+
    </div>
     
 {% endblock %}
