@@ -15,16 +15,21 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un nom.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 70, nullable: true)]
+    #[Assert\Length(max: 70, maxMessage: 'La reference ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $reference = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Assert\Length(max: 150, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez saisir un prix')]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
