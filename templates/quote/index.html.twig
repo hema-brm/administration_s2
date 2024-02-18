@@ -1,6 +1,8 @@
 {% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import alert %}
+{% from "@components/macros/content.html.twig" import paginator %}
+{% from "@components/macros/table.html.twig" import default as table %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
-
 
 {% extends '@base/app.html.twig' %}
 
@@ -12,19 +14,59 @@
         text: 'Liste des devis',
     }) }}
      
-  <div class="px-4" data-controller="form--checkbox--post">
-    <div class="quote_subheader">
-        {% include "quote/list/subheader.html.twig" %}
+  <div class="px-4">
+    <div class="flex flex-row justify-between py-2">
+            {{ form_search_macro({
+                id: 'form-search-customer',
+                action: path('app_quote_index'),
+                placeholder: 'Rechercher',
+                name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
+                value: searchTerm|default(''),
+            }) }}
+            <a href="{{ path('app_quote_new') }}">
+                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nouveau devis</span>
+                </button>
+            </a>
     </div>
-
-    <div id="quote_list">
-        {% if quotes is empty %}
-            {% include "quote/list/no-data.html.twig" %}
+    {% set cellPadding = 'p-4 px-2' %}
+    {% set borderClass = 'border-b border-b-secondary-200' %}
+    {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+    <table class="w-full border shadow-sm text-sm">
+        <thead>
+            <tr class="{{ tableHeaderClasses }}">
+                <th>N° devis</th>
+                <th>Client
+                <th>Statut</th>
+                <th>date de création</th>
+                <th>date d'échéance</th>
+                <th>Total</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in quotes %}
+            <tr>
+                <td>{{ quote.quoteNumber }}</td>
+                <td>{{ quote.customer }}</td>
+                <td>{{ quote.status }}</td>
+                <td>{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+                <td>{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+                <td>{{ quote.totalPrice }}</td>
+                
+                <td>
+                    <a href="{{ path('app_quote_show', {'id': quote.id}) }}">show</a>
+                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}">edit</a>
+                </td>
+            </tr>
         {% else %}
-            {% include "quote/list/multiple-delete-form.html.twig" %}
-        {% endif %}
-    </div>
-
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
    </div>
     
 {% endblock %}
