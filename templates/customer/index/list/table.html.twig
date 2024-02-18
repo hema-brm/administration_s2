@@ -8,7 +8,7 @@
             <th class="{{ cellPadding }} text-right">#</th>
             <th class="{{ cellPadding }} text-left">Email</th>
             <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
-            <th class="{{ cellPadding }} text-left">Téléphone</th>
+            <th class="{{ cellPadding }} text-right">Téléphone</th>
             {% if showCompany %}
                 <th class="{{ cellPadding }} text-left">Entreprise</th>
             {% endif %}
@@ -22,13 +22,25 @@
             data-link--clickable-path-value="{{ path('app_customer_show', {'id': customer.id}) }}"
             data-action="click->link--clickable#visit"
             data-link--clickable-target="element"
-            class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500">
-            <td class="{{ cellPadding }} text-right">{{ loop.index + offset }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
+            class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
+            >
+            
+            <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                <input
+                    type="checkbox"
+                    class="customer-checkbox"
+                    name="customers[{{ customer.id }}]"
+                    value="{{ csrf_token('delete' ~ customer.id) }}"
+                    data-form--checkbox--multiple-target="items"
+                    data-form--checkbox--post-target="items"
+                >
+            </td>
+
+            <td class="{{ cellPadding }} text-left">{{ customer.getEmail() }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.getFullname() }}</td>
+            <td class="{{ cellPadding }} text-right">{{ customer.getPhoneWithSpace() }}</td>
             {% if showCompany %}
-                <td class="{{ cellPadding }} text-left">{{ customer.company.name }}</td>
+                <td class="{{ cellPadding }} text-left">{{ customer.getCompany().getName() }}</td>
             {% endif %}
             <td class="{{ cellPadding }} text-right text-secondary-400">
                 <div class="flex flex-row justify-end" data-link--clickable-target="exclude">
