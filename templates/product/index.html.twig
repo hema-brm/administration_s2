@@ -27,13 +27,16 @@
             </div>
             
             <div class="flex justify-end py-2 gap-2">
-                {% include '@product/list/delete-many-button-confirm.html.twig' %}
-                {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    text:  "Nouveau produit",
-                    icon: "fa-plus",
-                    route : path('app_product_new')
-                }) }}
+                
+                {% if is_granted('ROLE_ENTREPRISE') %}
+                    {% include '@product/list/delete-many-button-confirm.html.twig' %}
+                    {{ button_macro({
+                        custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
+                        text:  "Nouveau produit",
+                        icon: "fa-plus",
+                        route : path('app_product_new')
+                    }) }}
+                {% endif %}
             </div>
         </div>
 
@@ -96,11 +99,14 @@
                     {% endif %}
 
                     <td class="{{ cellPadding }} text-left max-w-[20px] truncate">{{ product.price/100 }}</td>
-                    <td class="{{ cellPadding }} text-right text-secondary-400">
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
-                            <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                        </a>
-                    </td>
+
+                    {% if is_granted('ROLE_ENTREPRISE') %}
+                        <td class="{{ cellPadding }} text-right text-secondary-400">
+                            <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
+                                <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                            </a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% else %}
                 <tr>

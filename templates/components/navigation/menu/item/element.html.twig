@@ -1,11 +1,23 @@
 {% import "@components/macros/menu.html.twig" as menuMacro %}
 
 <ul class="nav-item text-sm">
+
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ menuMacro.item({
+            text: 'Tableau de bord',
+            icon: 'fa-house',
+            route: 'app_dashboard_admin'
+        }) }}
+    {% endif %}
+
+    {% if is_granted('ROLE_ENTREPRISE') %}
     {{ menuMacro.item({
         text: 'Employés',
         icon: 'fa-user',
         route: 'app_employee_index'
     }) }}
+    {% endif %}
+    
     {{ menuMacro.item({
         text: 'Factures',
         icon: 'fa-file-invoice-dollar',
