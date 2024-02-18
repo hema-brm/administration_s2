@@ -17,13 +17,9 @@
     <div class="px-4" data-controller="form--checkbox--post">
         <div class="flex flex-row justify-between">
             <div class="gap-2 py-2">
-                {{ form_search_macro({
-                    id: 'form-search-product',
-                    action: path('app_product_index'),
-                    placeholder: 'Rechercher',
-                    name: constant('App\\Controller\\ProductController::SEARCH_FORM_NAME'),
-                    value: searchTerm|default(''),
-                }) }}
+                {% include "components/input/macros/searchBar.html.twig" with {
+                    form: form
+                } only %}
             </div>
             
             <div class="flex justify-end py-2 gap-2">

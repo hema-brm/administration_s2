@@ -14,6 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
+use App\Model\SearchData;
+use App\Form\SearchType;
 
 #[Route('/products', name: 'app_product_')]
 class ProductController extends AbstractController
@@ -37,28 +39,42 @@ class ProductController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ProductRepository $productRepository): Response
     {   
-        if ($this->searchTerm) {
-            return $this->search($this->searchTerm, $productRepository);
-        }
+        /*if ($this->searchTerm) {
+            return $this->search();
+        }*/
 
         $products = $productRepository->findAllWithPage($this->page, self::LIMIT); 
         $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
+        
+        $searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid){
+            dd($searchData);
+        }
 
         return $this->render('product/index.html.twig', [
             'products' => $products,
+            'form' => $form->createView(),
             'paginatorHelper' => $paginatorHelper,
         ]);
     }
 
-    private function search(string $searchTerm, ProductRepository $productRepository): Response
+    private function search(): Response
     {
-        $products =  $productRepository->search($searchTerm, $this->page, self::LIMIT);
-        $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
+        $searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid){
+            dd($searchData);
+        }
+        //$paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
 
         return $this->render('product/index.html.twig', [
             'searchTerm' => $searchTerm,
             'products' => $products,
-            'paginatorHelper' => $paginatorHelper,
+            //'paginatorHelper' => $paginatorHelper,
         ]);
     }
     
