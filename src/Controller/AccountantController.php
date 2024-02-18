@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Repository\PaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,10 @@ class AccountantController extends AbstractController
      * @Route("/accountant", name="accountant")
      */
     public function accountant(ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository): Response
-    {   
-        
+    {
+
         $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
-        
+
         $labels = [];
         $data = array_fill(1, 12, 0);
 
@@ -27,7 +28,7 @@ class AccountantController extends AbstractController
             $month = (int) $payment['month'];
             $data[$month] = $payment['totalPrice'];
         }
-        
+
 
         $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
         $chart->setData([
@@ -44,21 +45,19 @@ class AccountantController extends AbstractController
         $chart->setOptions([
             'scales' => [
                 'y' => [
-                    'suggestedMin' => 0,  
-                    'suggestedMax' => 1000, 
-                    'title' => [ 
+                    'title' => [
                         'display' => true,
                         'text' => 'Total (€)',
                     ],
                 ],
                 'x' => [
-                    'title' => [ // Add title for x-axis
+                    'title' => [
                         'display' => true,
                         'text' => 'Mois',
                     ],
                 ],
             ],
-            
+            'maintainAspectRatio' => false,
         ]);
 
         return $this->render('accountant/accountant.html.twig', [
