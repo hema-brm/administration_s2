@@ -1,4 +1,10 @@
-{% include '@user/employee/list/delete-many-button-confirm.html.twig' %}
+
+{% embed "./modal/delete-many-button-confirm.html.twig" with {
+    formAction : 'app_employee_deleteAll',
+    customFormId : 'deleteManyEmployeesForm',
+    text: 'Êtes-vous sûrs de vouloir supprimer ce(s) employé(s) ?',
+} %}
+{% endembed %}
 
 <div class="flex flex-row items-center justify-between py-2">
     <a href="{{ path('app_employee_new') }}">

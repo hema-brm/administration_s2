@@ -2,19 +2,26 @@
 {% set borderClass = 'border-b border-b-secondary-200' %}
 {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
 
-<table class="w-full border shadow-sm text-sm">
+<table 
+    class="w-full border shadow-sm text-sm"
+    data-controller="form--checkbox--multiple">
+
     <thead>
     <tr class="{{ tableHeaderClasses }}">
-        <th class="{{ cellPadding }} text-left">Numéro</th>
+        <th class="{{ cellPadding }} text-center">
+            <input type="checkbox" class="quotes-checkbox" data-form--checkbox--multiple-target="main">
+        </th>
+        <th class="{{ cellPadding }} text-center">N° devis</th>
         <th class="{{ cellPadding }} text-left">Client</th>
         <th class="{{ cellPadding }} text-left">Statut</th>
-        <th class="{{ cellPadding }} text-center">Date de création</th>
-        <th class="{{ cellPadding }} text-center">Date d'échéance</th>
+        <th class="{{ cellPadding }} text-right">Date de création</th>
+        <th class="{{ cellPadding }} text-right">Date d'échéance</th>
         <th class="{{ cellPadding }} text-right">Total</th>
         <th class="{{ cellPadding }} text-right">Actions</th>
     </tr>
     </thead>
     <tbody>
+    {% set offset = paginatorHelper.offset %}
     {% for quote in quotes %}
         <tr
             data-controller="link--clickable"
@@ -23,11 +30,21 @@
             data-link--clickable-target="element"
             class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
         >
-            <td class="{{ cellPadding }} text-left">{{ quote.quoteNumber }}</td>
+            <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                <input
+                    type="checkbox"
+                    class="quote-checkbox"
+                    name="quotes[{{ quote.id }}]"
+                    value="{{ csrf_token('delete' ~ quote.id) }}"
+                    data-form--checkbox--multiple-target="items"
+                    data-form--checkbox--post-target="items"
+                >
+            </td>
+            <td class="{{ cellPadding }} text-center">{{ quote.quoteNumber }}</td>
             <td class="{{ cellPadding }} text-left">{{ quote.customer }}</td>
             <td class="{{ cellPadding }} text-left">{{ quote.status }}</td>
-            <td class="{{ cellPadding }} text-center">{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
-            <td class="{{ cellPadding }} text-center">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
+            <td class="{{ cellPadding }} text-right">{{ quote.quoteIssuanceDate ? quote.quoteIssuanceDate|date('Y-m-d') : '' }}</td>
+            <td class="{{ cellPadding }} text-right">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
             <td class="{{ cellPadding }} text-right">{{ quote.totalPrice }}</td>
 
             <td class="{{ cellPadding }} text-right text-secondary-400">
@@ -38,10 +55,6 @@
                     </a>
                 </div>
             </td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="9">no records found</td>
         </tr>
     {% endfor %}
     </tbody>

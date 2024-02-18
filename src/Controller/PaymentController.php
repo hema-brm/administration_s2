@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/payment')]
+#[Route('/payment', name: 'app_payment_')]
 class PaymentController extends AbstractController
 {
-    #[Route('/', name: 'app_payment_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(PaymentRepository $paymentRepository): Response
     {
         return $this->render('payment/index.html.twig', [
@@ -23,7 +23,7 @@ class PaymentController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_payment_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $payment = new Payment();
@@ -51,7 +51,7 @@ class PaymentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_payment_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Payment $payment): Response
     {
         return $this->render('payment/show.html.twig', [
@@ -59,7 +59,7 @@ class PaymentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_payment_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PaymentEditType::class, $payment);
@@ -79,7 +79,24 @@ class PaymentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_payment_delete', methods: ['POST'])]
+    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    public function deleteMany(Request $request, PaymentRepository $paymentRepository, EntityManagerInterface $entityManager): Response
+    {
+        $payments = $request->request->all()['payments'];
+        $count = 0;
+        foreach($payments as $id => $token){
+            $payment = $paymentRepository->find($id);
+            if($payment && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($payment);
+                $count++;
+            }
+        }
+        $this->addFlash('success', $count.' suivi(s) de paiement(s) supprimé(s) avec succès.');
+        $entityManager->flush();
+        return $this->redirectToRoute('app_payment_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$payment->getId(), $request->request->get('_token'))) {
