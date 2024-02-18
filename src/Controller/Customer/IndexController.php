@@ -145,23 +145,6 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
-    public function deleteMany(Request $request, CustomerRepository $customerRepository, EntityManagerInterface $entityManager): Response
-    {
-        $customers = $request->request->all()['customers'];
-        $count = 0;
-        foreach($customers as $id => $token){
-            $customer = $customerRepository->find($id);
-            if($customer && $this->isCsrfTokenValid('delete'.$id, $token)){
-                $entityManager->remove($customer);
-                $count++;
-            }
-        }
-        $this->addFlash('success', $count.' client(s) supprimé(s) avec succès.');
-        $entityManager->flush();
-        return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
-    }
-
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('delete', 'customer')]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response

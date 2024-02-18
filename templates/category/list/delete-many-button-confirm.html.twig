@@ -1,14 +1,7 @@
-
-{% set formAction = formAction|default('') %}
-{% set customFormId = customFormId|default('') %}
-{% set text = text|default('Êtes-vous sûrs de vouloir supprimer ces éléments ?') %}
-
-
 {% embed '@components/container/modal/confirm.html.twig' with {
-    formAction: path(formAction),
-    customFormId: customFormId,
+    formAction: path('app_category_deleteAll'),
+    customFormId: 'deleteManyCategoriesForm',
 } %}
-
     {% block trigger %}
         <div id="disable_buttons" class="hidden" data-form--checkbox--post-target="button">
             {% from "@components/macros/content.html.twig" import button_macro %}
@@ -21,7 +14,7 @@
     {% endblock %}
     {% block content %}
         <div class="text-center text-sm">
-            <p class="font-medium text-gray-900">{{text}}</p>
+            <p class="font-medium text-gray-900">Êtes-vous sûr de vouloir supprimer les catégories sélectionnés ?</p>
             <div class="flex justify-center text-center">
                 <small class="text-secondary-500">
                     <i class="fas fa-warning text-warning-500"></i> Attention, cette action est irréversible.

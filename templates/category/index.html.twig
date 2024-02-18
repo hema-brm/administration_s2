@@ -16,12 +16,7 @@
         <a href="{{ path('app_product_new') }}">Retour</a>
     </div>
     <div class="w-1/2 flex flex-row justify-end py-2 gap-2">
-        {% embed "./modal/delete-many-button-confirm.html.twig" with {
-            formAction : 'app_category_deleteAll',
-            customFormId : 'deleteManyCategoriesForm',
-            text: 'Êtes-vous sûrs de vouloir supprimer ce(s) catégorie(s) ?',
-        } %}
-        {% endembed %}
+        {% include '@category/list/delete-many-button-confirm.html.twig' %}
         {{ button_macro({
             custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
             text:  "Nouvelle catégorie",
@@ -51,7 +46,7 @@
                     action="{{ path('app_category_deleteAll') }}"
                     method="POST"
             >
-                <table class="w-full border shadow-sm text-sm" data-controller="form--checkbox--multiple">
+                <table class="w-full border shadow-sm" data-controller="form--checkbox--multiple">
                     <thead>
                     <tr class="{{ borderClass }}">
                         <th class="{{ cellPadding }} text-center">
