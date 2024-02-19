@@ -6,6 +6,8 @@ use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'L\'adresse email est déjà utilisée par un autre compte.')]
@@ -37,6 +39,10 @@ class Customer
 
     #[ORM\Column(length: 20, nullable: true)]
     #[Assert\Length(max: 20, maxMessage: 'Le numéro de téléphone ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Regex(
+        pattern:"/^(\+\d{1,3}\s?)?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/",
+        message:"Le numéro de téléphone n'est pas valide."
+    )]
     private ?string $phone = null;
 
     // Add tsvector column, used for full text search
@@ -46,6 +52,14 @@ class Customer
     #[ORM\ManyToOne(targetEntity: Company::class ,inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
     private Company $company;
+
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Quote::class, orphanRemoval: true)]
+    private Collection $quote;
+
+    public function __construct()
+    {
+        $this->quote = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,6 +124,31 @@ class Customer
         return $this->phone;
     }
 
+    public function getPhoneWithSpace(): ?string
+    {
+        $phone = $this->phone;
+        $validPhone = '';
+        if(strlen($phone) == 10){
+            for($i = 0; $i<strlen($phone); $i += 2){
+                $validPhone .= substr($phone, $i, 2);
+                if($i != strlen($phone)-2){
+                    $validPhone .= ' ';
+                }
+            }
+        }else{
+            $indSize = strlen($phone) - 10;
+            $validPhone .= substr($phone, 0, $indSize).' ';
+            for($i = $indSize; $i<strlen($phone); $i += 2){
+                $validPhone .= substr($phone, $i, 2);
+                if($i != strlen($phone)-2){
+                    $validPhone .= ' ';
+                }
+            }
+        }
+
+        return $validPhone;
+    }
+
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
@@ -144,6 +183,16 @@ class Customer
     public function hasCompany(): bool
     {
         return isset($this->company);
+    }
+
+    public function getQuote(): Collection
+    {
+        return $this->quote;
+    }
+
+    public function setQuote(Collection $quote): void
+    {
+        $this->quote = $quote;
     }
 
     public function __toString(): string

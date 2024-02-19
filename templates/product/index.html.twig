@@ -27,7 +27,12 @@
             </div>
             
             <div class="flex justify-end py-2 gap-2">
-                {% include '@product/list/delete-many-button-confirm.html.twig' %}
+                {% embed "./modal/delete-many-button-confirm.html.twig" with {
+                    formAction : 'app_product_deleteAll',
+                    customFormId : 'deleteManyProductsForm',
+                    text: 'Êtes-vous sûrs de vouloir supprimer ce(s) produit(s) ?',
+                } %}
+                {% endembed %}
                 {{ button_macro({
                     custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
                     text:  "Nouveau produit",
@@ -39,6 +44,7 @@
 
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
+        {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
         <form
             id="deleteManyProductsForm"
             data-form--checkbox--post-target="form"
@@ -46,11 +52,11 @@
             method="POST"
         >
         <table
-            class="w-full border shadow-sm"
+            class="w-full border shadow-sm text-sm"
             data-controller="form--checkbox--multiple"
         >
             <thead>
-                <tr class="{{ borderClass }}">
+                <tr class="{{ tableHeaderClasses }}">
                     <th class="{{ cellPadding }} text-center">
                         <input type="checkbox" class="products-checkbox" data-form--checkbox--multiple-target="main">
                     </th>
@@ -58,7 +64,7 @@
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
                     <th class="{{ cellPadding }} text-left">Description</th>
-                    <th class="{{ cellPadding }} text-left">Prix</th>
+                    <th class="{{ cellPadding }} text-right">Prix (€)</th>
                     <th class="{{ cellPadding }}"></th>
                 </tr>
             </thead>
@@ -80,22 +86,22 @@
                             data-form--checkbox--post-target="items"
                         >
                     </td>
-                    {% if product.reference is empty %}
+                    {% if product.getReference() is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
-                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.reference }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.getReference() }}</td>
                     {% endif %}
 
-                    <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.name }}</td>
-                    <td class="{{ cellPadding }} text-left  max-w-[100px] truncate">{{ product.category }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.getName() }}</td>
+                        <td class="{{ cellPadding }} text-left  max-w-[100px] truncate">{{ product.getCategory() }}</td>
 
-                    {% if product.description is empty %}
+                    {% if product.getDescription() is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
-                        <td class="{{ cellPadding }} text-left max-w-[150px] truncate" >{{ product.description }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[150px] truncate" >{{ product.getDescription() }}</td>
                     {% endif %}
 
-                    <td class="{{ cellPadding }} text-left max-w-[20px] truncate">{{ product.price/100 }}</td>
+                    <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.getPrice() }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
                             <i class="fa-solid fa-edit hover:text-warning-500"></i>

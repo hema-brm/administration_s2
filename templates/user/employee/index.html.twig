@@ -14,10 +14,6 @@
         <div class="flex flex-row justify-end items-center py-2 gap-2">
             {% include '@user/employee/list/subheader.html.twig' %}
         </div>
-        {% if users is empty %}
-            {% include "@user/employee/list/no-data.html.twig" %}
-        {% else %}
             {% include '@user/employee/list/multiple-delete-form.html.twig' %}
-        {% endif %}
     </div>
 {% endblock %}

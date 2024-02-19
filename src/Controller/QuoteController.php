@@ -15,14 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\ProductQuote;
 
-#[Route('/quote')]
+#[Route('/quote', name: 'app_quote_')]
 class QuoteController extends AbstractController
 {
     private ?string $searchTerm;
     private ?int $page;
 
     public const SEARCH_FORM_NAME = 'search';
-
     const PAGE_PARAM_NAME = 'page';
     const LIMIT = 10;
 
@@ -34,7 +33,7 @@ class QuoteController extends AbstractController
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
     }
 
-    #[Route('/', name: 'app_quote_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuoteRepository $quoteRepository): Response
     {
         if ($this->searchTerm) {
@@ -62,7 +61,7 @@ class QuoteController extends AbstractController
         ]);
     }
     
-    #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Get the logged-in user
@@ -105,7 +104,7 @@ class QuoteController extends AbstractController
         ]);
     }
     
-    #[Route('/{id}/edit', name: 'app_quote_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(QuoteType::class, $quote);
@@ -123,9 +122,26 @@ class QuoteController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    public function deleteMany(Request $request, QuoteRepository $quoteRepository, EntityManagerInterface $entityManager): Response
+    {
+        $quotes = $request->request->all()['quotes'];
+        $count = 0;
+        foreach($quotes as $id => $token){
+            $quote = $quoteRepository->find($id);
+            if($quote && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($quote);
+                $count++;
+            }
+        }
+        $this->addFlash('success', $count.' devis(s) supprimé(s) avec succès.');
+        $entityManager->flush();
+        return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
+    }
     
 
-    #[Route('/{id}', name: 'app_quote_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Quote $quote): Response
     {
         return $this->render('quote/show.html.twig', [
@@ -135,7 +151,7 @@ class QuoteController extends AbstractController
 
     
 
-    #[Route('/{id}', name: 'app_quote_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {

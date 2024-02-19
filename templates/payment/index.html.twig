@@ -1,17 +1,19 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
+{% from "@components/macros/content.html.twig" import alert %}
+{% from "@components/macros/content.html.twig" import button_macro %}
 
-
-{% block title %}Payment index{% endblock %}
+{% block title %}Suivis de paiement{% endblock %}
 
 {% block body %}
     {{ displayFlash() }}
     {{ header({
         text: 'Liste des paiements',
     }) }}
-    <div class="px-4">
-            <div class="flex flex-row justify-between py-2">
+    <div class="px-4" data-controller="form--checkbox--post">
+            <div class="flex flex-row justify-between">
+                <div class="gap-2 py-2">
                     {{ form_search_macro({
                         id: 'form-search-customer',
                         action: path('app_customer_index'),
@@ -19,49 +21,91 @@
                         name: constant('App\\Controller\\Customer\\IndexController::SEARCH_FORM_NAME'),
                         value: searchTerm|default(''),
                     }) }}
-                    <a href="{{ path('app_payment_new') }}">
-                        <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-                                <i class="fa-solid fa-plus"></i>
-                                <span>Nouveau paiement</span>
-                        </button>
-                    </a>
+                </div>
+
+                <div class="flex justify-end py-2 gap-2">
+                    {% embed "./modal/delete-many-button-confirm.html.twig" with {
+                        formAction : 'app_payment_deleteAll',
+                        customFormId : 'deleteManyPaymentsForm',
+                        text: 'Êtes-vous sûrs de vouloir supprimer ce(s) suivi(s) de paiement(s) ?',
+                    } %}
+                    {% endembed %}
+                    {{ button_macro({
+                        custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
+                        text:  "Nouveau paiement",
+                        icon: "fa-plus",
+                        route : path('app_payment_new')
+                    }) }}
+                </div>
             </div>
             {% set cellPadding = 'p-4 px-2' %}
-            {% set borderClass = 'border-b border-b-gray-200' %}
+            {% set borderClass = 'border-b border-b-secondary-200' %}
             {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
-            <table class="w-full border shadow-sm">
+            <form
+            id="deleteManyPaymentsForm"
+            data-form--checkbox--post-target="form"
+            action="{{ path('app_payment_deleteAll') }}"
+            method="POST"
+            >
+            <table 
+                class="w-full border shadow-sm text-sm"
+                data-controller="form--checkbox--multiple">
                 <thead>
                     <tr class="{{ tableHeaderClasses }}">
+                        <th class="{{ cellPadding }} text-center">
+                            <input type="checkbox" class="payments-checkbox" data-form--checkbox--multiple-target="main">
+                        </th>
                         <th class="{{ cellPadding }} text-left">Client</th>
+                        <th class="{{ cellPadding }} text-right">N° Facture</th>
                         <th class="{{ cellPadding }} text-left">Status</th>
-                        <th class="{{ cellPadding }} text-left">Date de paiement</th>
-                        <th class="{{ cellPadding }} text-left">Date d'échéance</th>
-                        <th class="{{ cellPadding }} text-left">N° Facture</th>
-                        <th class="{{ cellPadding }} text-left">Actions</th>
+                        <th class="{{ cellPadding }} text-right">Date de paiement</th>
+                        <th class="{{ cellPadding }} text-right">Date d'échéance</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for payment in payments %}
-                        <tr class="{{ borderClass }}">
+                        <tr data-controller="link--clickable"
+                        data-link--clickable-path-value="{{ path('app_payment_show', {'id': payment.id}) }}"
+                        data-action="click->link--clickable#visit"
+                        data-link--clickable-target="element"
+                        class="{{ borderClass }} hover:bg-secondary-50 text-sm"
+                        >
+                            <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                                <input
+                                    type="checkbox"
+                                    class="payment-checkbox"
+                                    name="payments[{{ payment.id }}]"
+                                    value="{{ csrf_token('delete' ~ payment.id) }}"
+                                    data-form--checkbox--multiple-target="items"
+                                    data-form--checkbox--post-target="items"
+                                >
+                            </td>
                             <td class="{{ cellPadding }} text-left">{{ payment.bill.nameClient }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.status }}</td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.bill.numeroFacture }}</td>
-                            <td>
-                                <a href="{{ path('app_payment_show', {'id': payment.id}) }}" class="text-primary-500">Voir</a>
-                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" class="text-primary-500 ml-2">Modifier</a>
+                            <td class="{{ cellPadding }} text-right">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
+                            <td class="{{ cellPadding }} text-right">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
+                            <td class="{{ cellPadding }} text-right">{{ payment.bill.numeroFacture }}</td>
+                            <td class="{{ cellPadding }} text-right text-secondary-400">
+                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" data-link--clickable-target="exclude">
+                                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                                </a>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="9">no records found</td>
+                            <td colspan="7">
+                                {{ alert({
+                                    text: 'Aucun paiement enregistré',
+                                    color: 'warning',
+                                    icon: 'fa-circle-info',
+                                    variant: 'small',
+                                }) }}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            
-        
+            </form> 
     </div>
 {% endblock %}

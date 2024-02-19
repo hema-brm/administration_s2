@@ -46,6 +46,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[ORM\Column(length: 20, nullable: true)]
     #[Assert\Length(max: 20, maxMessage: 'Le numéro de téléphone ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Regex(
+        pattern:"/^(\+\d{1,3}\s?)?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/",
+        message:"Le numéro de téléphone n'est pas valide."
+    )]
     private ?string $phoneNumber = null;
 
     #[ORM\Column]
@@ -192,6 +196,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
+    }
+
+    public function getPhoneWithSpace(): ?string
+    {
+        $phone = $this->phoneNumber;
+        $validPhone = '';
+        if(strlen($phone) == 10){
+            for($i = 0; $i<strlen($phone); $i += 2){
+                $validPhone .= substr($phone, $i, 2);
+                if($i != strlen($phone)-2){
+                    $validPhone .= ' ';
+                }
+            }
+        }else{
+            $indSize = strlen($phone) - 10;
+            $validPhone .= substr($phone, 0, $indSize).' ';
+            for($i = $indSize; $i<strlen($phone); $i += 2){
+                $validPhone .= substr($phone, $i, 2);
+                if($i != strlen($phone)-2){
+                    $validPhone .= ' ';
+                }
+            }
+        }
+        return $validPhone;
     }
 
     public function setPhoneNumber(?string $phoneNumber): self

@@ -22,6 +22,7 @@ use Symfony\UX\Dropzone\Form\DropzoneType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
+
 class EmployeeType extends AbstractType
 {
     public const ADD = 'add';
@@ -50,6 +51,13 @@ class EmployeeType extends AbstractType
             'attr' => [
                 'placeholder' => 'Entrez l\'adresse email',
             ],
+        ])
+        ->add('phoneNumber', TextType::class, [
+            'required' => true,
+            'label' => 'Numéro de téléphone',
+            'attr' => [
+                'placeholder' => 'Entrez le numéro de téléphone',
+            ],
         ]);
 
         $showPasswordField = ($options['mode'] === self::ADD);
@@ -66,6 +74,7 @@ class EmployeeType extends AbstractType
         }
 
         $choices = [
+            (new RoleLabel(IUserRole::ROLE_COMPANY))->get() => RoleLabel::ROLE_COMPANY,
             (new RoleLabel(IUserRole::ROLE_EMPLOYEE))->get() => RoleLabel::ROLE_EMPLOYEE,
             (new RoleLabel(IUserRole::ROLE_ACCOUNTANT))->get() => RoleLabel::ROLE_ACCOUNTANT,
         ];
