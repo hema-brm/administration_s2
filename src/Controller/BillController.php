@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Bill;
 use App\Form\BillType;
 use App\Repository\BillRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +16,30 @@ use Symfony\Component\Routing\Annotation\Route;
 class BillController extends AbstractController
 {
     #[Route('/', name: 'app_bill_index', methods: ['GET'])]
-    public function index(BillRepository $billRepository): Response
+    public function index(BillRepository $billRepository, UserRepository $userRepository): Response
     {
-        return $this->render('bill/index.html.twig', [
-            'bills' => $billRepository->findAll(),
-        ]);
+    $user = $this->getUser(); // Récupère l'utilisateur connecté
+    $bills = [];
+
+    // Vérifie si l'utilisateur est connecté
+    if ($user) {
+        // Récupère l'entreprise de l'utilisateur connecté
+        $userCompany = $user->getCompany();
+
+        // Si l'utilisateur appartient à une entreprise
+        if ($userCompany) {
+            // Récupère les factures de l'entreprise de l'utilisateur connecté
+            $bills = $billRepository->findBy(['entreprise' => $userCompany]);
+        }
     }
+
+    return $this->render('bill/index.html.twig', [
+        'bills' => $bills,
+    ]);
+    }
+
+
+    
 
     #[Route('/new', name: 'app_bill_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

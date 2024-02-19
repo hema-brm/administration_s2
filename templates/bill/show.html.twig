@@ -5,17 +5,55 @@
 
 
 {% block body %}
-    <h1>Bill</h1>
+    <h1>Facture</h1>
 
     <table class="table">
         <tbody>
             <tr>
                 <th>Prix total</th>
-                <td>{{ bill.totalPrice }}</td>
+                <td>{{ bill.id }}</td>
             </tr>
             <tr>
                 <th>Nom du client</th>
+                <td>{{ bill.customer }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ bill.status }}</td>
+            </tr>
+            <tr>
+                <th>Numéro de facture</th>
                 <td>{{ bill.numeroFacture }}</td>
+            </tr>
+            <tr>
+                <th>Date d'échéance</th>
+                <td>{{ bill.billIssuanceDate ? bill.billIssuanceDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Prix total</th>
+                <td>{{ bill.totalPrice }}</td>
+            </tr>
+            <tr>
+                <th>Remise</th>
+                <td>{{ bill.discount }}</td>
+            </tr>
+            <tr>
+                <th>TVA</th>
+                <td>{{ bill.tva }}</td>
+            </tr>
+            <tr>
+                <th>Produits</th>
+                <td>
+                    {% if bill.productBills is not empty %}
+                        <ul>
+                            {% for productBill in bill.productBills %}
+                                <li>{{ productBill.product.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Aucun produit n'est associé à cette facture.
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>

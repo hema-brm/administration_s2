@@ -2,7 +2,7 @@
 {% from "@components/macros/content.html.twig" import button_macro %}
 {% extends '@base/app.html.twig' %}
 
-{% block title %}Nouvelle liste{% endblock %}
+{% block title %}Nouvelle facture{% endblock %}
 
 {% block body %}
     {{ header({
@@ -14,6 +14,7 @@
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_bill_index') }}">Retour à la liste</a>
         </div>
+
 
     <div class="p-4 shadow-md w-1/2 border rounded">
             <div class="text-sm">

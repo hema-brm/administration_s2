@@ -1,6 +1,6 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
-{% block title %}New Quote{% endblock %}
+{% block title %}Nouveau devis{% endblock %}
 
 {% block body %}
     {{ displayFlash() }}
@@ -14,7 +14,7 @@
     <div class="bg-secondary-100 p-8 rounded-lg shadow-md mt-5 m-6">
         <div class=" mb-7">
           <h2>{{ company.getName() }}</h2>
-          <h2>{{ company.getAdress() }}</h2>
+          <h2>{{ company.getAddress() }}</h2>
         </div>
         {{ include('quote/_form.html.twig') }}
     </div>
