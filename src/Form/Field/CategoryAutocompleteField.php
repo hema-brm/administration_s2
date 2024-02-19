@@ -7,10 +7,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
 use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\Security;
 
 #[AsEntityAutocompleteField]
 class CategoryAutocompleteField extends AbstractType
 {
+    private $currentUser;
+
+    public function __construct(Security $security)
+    {
+        $this->currentUser = $security->getUser(); 
+    }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -25,6 +34,11 @@ class CategoryAutocompleteField extends AbstractType
             'choice_label' => 'name',
             'multiple' => false,
             'autocomplete' => true,
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')
+                    ->andWhere('c.company = :company')
+                    ->setParameter('company', $this->currentUser->getCompany());
+            },
         ]);
     }
 

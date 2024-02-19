@@ -64,7 +64,7 @@
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
                     <th class="{{ cellPadding }} text-left">Description</th>
-                    <th class="{{ cellPadding }} text-right">Prix</th>
+                    <th class="{{ cellPadding }} text-right">Prix (€)</th>
                     <th class="{{ cellPadding }}"></th>
                 </tr>
             </thead>
@@ -86,22 +86,22 @@
                             data-form--checkbox--post-target="items"
                         >
                     </td>
-                    {% if product.reference is empty %}
+                    {% if product.getReference() is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
-                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.reference }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.getReference() }}</td>
                     {% endif %}
 
-                    <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.name }}</td>
-                    <td class="{{ cellPadding }} text-left  max-w-[100px] truncate">{{ product.category }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[100px] truncate">{{ product.getName() }}</td>
+                        <td class="{{ cellPadding }} text-left  max-w-[100px] truncate">{{ product.getCategory() }}</td>
 
-                    {% if product.description is empty %}
+                    {% if product.getDescription() is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
-                        <td class="{{ cellPadding }} text-left max-w-[150px] truncate" >{{ product.description }}</td>
+                        <td class="{{ cellPadding }} text-left max-w-[150px] truncate" >{{ product.getDescription() }}</td>
                     {% endif %}
 
-                    <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.price/100 }}</td>
+                    <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.getPrice() }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
                             <i class="fa-solid fa-edit hover:text-warning-500"></i>

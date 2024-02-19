@@ -51,7 +51,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $user = (new User())
                 ->setFirstName($this->faker->firstName())
                 ->setLastName($this->faker->lastName())
-                ->setPhoneNumber($this->faker->phoneNumber())
+                ->setPhoneNumber($this->faker->regexify('/^(\+\d{2,3})?0\d{1}\d{2}\d{2}\d{2}\d{2}$/'))
                 ->setEmail("owner-$i@gmail.com")
                 ->setRoles(['ROLE_ENTREPRISE']);
 
@@ -72,7 +72,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $user = (new User())
                 ->setFirstName($this->faker->firstName())
                 ->setLastName($this->faker->lastName())
-                ->setPhoneNumber($this->faker->phoneNumber())
+                ->setPhoneNumber($this->faker->regexify('/^(\+\d{2,3})?0\d{1}\d{2}\d{2}\d{2}\d{2}$/'))
                 ->setEmail("employee-$i@gmail.com")
                 ->setRoles(['ROLE_EMPLOYEE']);
 

@@ -35,7 +35,7 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface, Fix
             $customer->setFirstName($this->faker->firstName());
             $customer->setLastName($this->faker->lastName());
             $customer->setEmail($this->faker->email());
-            $customer->setPhone($this->faker->phoneNumber());
+            $customer->setPhone($this->faker->regexify('/^(\+\d{2,3})?0\d{1}\d{2}\d{2}\d{2}\d{2}$/'));
             $customer->setAddress($this->faker->address());
 
             $company = $this->getReference(sprintf('company-%d', $this->faker->numberBetween(1, AppFixtures::COMPANY_COUNT)));

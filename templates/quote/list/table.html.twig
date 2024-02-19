@@ -17,7 +17,7 @@
         <th class="{{ cellPadding }} text-right">Date de création</th>
         <th class="{{ cellPadding }} text-right">Date d'échéance</th>
         <th class="{{ cellPadding }} text-right">Total</th>
-        <th class="{{ cellPadding }} text-right">Actions</th>
+        <th class="{{ cellPadding }} text-right"></th>
     </tr>
     </thead>
     <tbody>
@@ -56,6 +56,12 @@
                 </div>
             </td>
         </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">
+            {% include "quote/list/no-data.html.twig" %}
+            </td>
+        </tr>        
     {% endfor %}
     </tbody>
 </table>

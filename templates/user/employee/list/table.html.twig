@@ -12,8 +12,8 @@
                 <input type="checkbox" class="users-checkbox" data-form--checkbox--multiple-target="main">
             </th>
             <th class="{{ cellPadding }} text-left">Email</th>
-            <th class="{{ cellPadding }} text-left">Nom et prénoms</th>
-            <th class="{{ cellPadding }} text-left">Téléphone</th>
+            <th class="{{ cellPadding }} text-left">Nom et prénom</th>
+            <th class="{{ cellPadding }} text-right">Téléphone</th>
             {% if showCompany %}
                 <th class="{{ cellPadding }} text-left">Entreprise</th>
             {% endif %}
@@ -42,7 +42,7 @@
             </td>
             <td class="{{ cellPadding }} text-left">{{ user.email }}</td>
             <td class="{{ cellPadding }} text-left">{{ user.fullName }}</td>
-            <td class="{{ cellPadding }} text-left">{{ user.phoneNumber }}</td>
+            <td class="{{ cellPadding }} text-right">{{ user.getPhoneWithSpace()  }}</td>
             {% if showCompany %}
                 <td class="{{ cellPadding }} text-left">{{ user.company.name }}</td>
             {% endif %}

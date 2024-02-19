@@ -12,8 +12,8 @@
                 <input type="checkbox" class="customers-checkbox" data-form--checkbox--multiple-target="main">
             </th>
             <th class="{{ cellPadding }} text-left">Email</th>
-            <th class="{{ cellPadding }} text-left">Nom et Prénoms</th>
-            <th class="{{ cellPadding }} text-left">Téléphone</th>
+            <th class="{{ cellPadding }} text-left">Nom et Prénom</th>
+            <th class="{{ cellPadding }} text-right">Téléphone</th>
             {% if showCompany %}
                 <th class="{{ cellPadding }} text-left">Entreprise</th>
             {% endif %}
@@ -29,7 +29,7 @@
             data-link--clickable-target="element"
             class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
             >
-            
+
             <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
                 <input
                     type="checkbox"
@@ -41,11 +41,11 @@
                 >
             </td>
 
-            <td class="{{ cellPadding }} text-left">{{ customer.email }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.fullname }}</td>
-            <td class="{{ cellPadding }} text-left">{{ customer.phone }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.getEmail() }}</td>
+            <td class="{{ cellPadding }} text-left">{{ customer.getFullname() }}</td>
+            <td class="{{ cellPadding }} text-right">{{ customer.getPhoneWithSpace() }}</td>
             {% if showCompany %}
-                <td class="{{ cellPadding }} text-left">{{ customer.company.name }}</td>
+                <td class="{{ cellPadding }} text-left">{{ customer.getCompany().getName() }}</td>
             {% endif %}
             <td class="{{ cellPadding }} text-right text-secondary-400">
                     <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" data-turbo-action="replace" data-link--clickable-target="exclude">
