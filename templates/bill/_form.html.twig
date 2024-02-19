@@ -1,4 +1,38 @@
+{% from "@components/macros/content.html.twig" import button_macro %}
+{% set button_classes = button_classes|default([]) %}
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    
+    {{ form_start(form) }}
+    {{form_row(form.customer)}}
+    {{ form_row(form.status) }}
+    {{form_row(form.numeroFacture)}}
+    {{form_row(form.billIssuanceDate)}}
+    {{form_row(form.totalPrice)}}
+
+
+    <div id="product-quotes" data-prototype="{{ form_widget(form.productBills.vars.prototype)|e('html_attr') }}">
+        {% for productBillForm in form.productBills %}
+            <div class="product-quote">
+                {{ form_row(productBillForm.product) }}
+                {{ form_row(productBillForm.quantity) }}
+            </div>
+        {% endfor %}
+    </div>
+    <button id="add-product-quote" type="button" class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
+       <i class="fa-solid fa-plus"></i>
+        <span>Ajouter un produit</span>
+    </button>
+
+    {{form_row(form.discount)}}
+    {{form_row(form.tva)}}
+    
+    <div class="flex flex-row-reverse">
+        {{ button_macro({
+            text: button_label|default('Enregistrer'),
+            custom_classes: button_classes,
+        }) }}
+    </div>
+
+    <script src="{{ asset('assets/js/addProductQuote.js') }}"></script>
 {{ form_end(form) }}

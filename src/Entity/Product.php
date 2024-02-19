@@ -43,6 +43,11 @@ class Product
     #[ORM\JoinColumn(nullable: true)]
     private ?Quote $quote = null;
 
+    #[ORM\ManyToOne(targetEntity: Bill::class, inversedBy: 'productBills')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Bill $bill = null;
+
+
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
 

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240206132756 extends AbstractMigration
+final class Version20240210160617 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,6 @@ final class Version20240206132756 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TSVECTOR');
-        $this->addSql('ALTER TABLE expenses ALTER total DROP NOT NULL');
         $this->addSql('ALTER TABLE product ALTER search_vector TYPE TSVECTOR');
         $this->addSql('ALTER TABLE quote ALTER search_vector TYPE TSVECTOR');
     }
@@ -30,9 +29,8 @@ final class Version20240206132756 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE product ALTER search_vector TYPE TEXT');
-        $this->addSql('ALTER TABLE quote ALTER search_vector TYPE TEXT');
-        $this->addSql('ALTER TABLE expenses ALTER total SET NOT NULL');
         $this->addSql('ALTER TABLE customer ALTER search_vector TYPE TEXT');
+        $this->addSql('ALTER TABLE quote ALTER search_vector TYPE TEXT');
+        $this->addSql('ALTER TABLE product ALTER search_vector TYPE TEXT');
     }
 }

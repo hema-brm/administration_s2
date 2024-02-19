@@ -7,7 +7,7 @@
 
 {% extends '@base/app.html.twig' %}
 
-{% block title %}Bill index{% endblock %}
+{% block title %}Factures{% endblock %}
 
 
 {% block body %}
@@ -38,7 +38,7 @@
     {% set borderClass = 'border-b border-b-secondary-200' %}
     {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
 
-    <div class="px-4">
+    <div class="px-4 m-10">
     <table class="w-full border shadow-sm text-sm">
         <thead>
             <tr class="{{ tableHeaderClasses }}">
@@ -55,11 +55,12 @@
                 <td class="p-4 text-center">{{ bill.id }}</td>
                 <td class="p-4 text-center">{{ bill.totalPrice }}</td>
                 <td class="p-4 text-center">{{ bill.customer }}</td>
-                <td class="p-4 text-center">{{ 'now'|date('Y-m-d') }}</td>
+                <td class="p-4 text-center">{{ bill.billIssuanceDate ? bill.billIssuanceDate|date('Y-m-d') : ''  }}</td>
                 <td class="{{ cellPadding }} text-right text-secondary-400">
                     <a href="{{ path('app_bill_edit', {'id': bill.id}) }}" data-link--clickable-target="exclude">
                         <i class="fa-solid fa-edit hover:text-warning-500"></i>
                     </a>
+                    <a href="{{ path('app_bill_show', {'id': bill.id}) }}">show</a>
                 </td>
             </tr>
         {% else %}
