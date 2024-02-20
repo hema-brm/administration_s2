@@ -21,33 +21,6 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
-    public function findLateInThreeDaysBills()
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.dateEcheance = :threeDaysLater')
-            ->setParameter('threeDaysLater', new \DateTime('+3 days')) // Par exemple, considérer les factures dont le paiement est en retard de plus de 30 jours
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findDeadlineBills()
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.dateEcheance = :currentDate')
-            ->setParameter('currentDate', new \DateTime()) // Par exemple, considérer les factures dont le paiement est en retard de plus de 30 jours
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findLateBills()
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.dateEcheance < :currentDate')
-            ->setParameter('currentDate', new \DateTime()) // Par exemple, considérer les factures dont le paiement est en retard de plus de 30 jours
-            ->getQuery()
-            ->getResult();
-    }
-
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
 //     */
