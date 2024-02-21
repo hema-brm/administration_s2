@@ -1,6 +1,8 @@
 {% use 'form_div_layout.html.twig' %}
 {% use 'tailwind_2_layout.html.twig' %}
 
+{% set inputBaseClasses = "" %}
+
 {% block form_row %}
     {%- set row_attr = {
         class: 'flex flex-col mb-3 text-sm'
@@ -14,22 +16,22 @@
 {% endblock %}
 
 {% block form_help %}
-    {% set help_class = 'text-secondary-500 text-xs' %}
+    {% set help_class = 'mt-1 text-secondary-500 text-xs' %}
     {{- parent() -}}
 {% endblock %}
 
 {% block form_label %}
-    <div class="flex flex-row">
+    <div class="flex flex-row mb-1">
         {{- parent() -}}
         {% if label is not same as(false) and required %}
-            <span class="text-xs">*</span>
+            <span class="text-xs ml-1">*</span>
         {% endif %}
     </div>
 {% endblock %}
 
 {% block text_widget %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -38,7 +40,7 @@
 
 {% block search_widget %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'p-2 leading-none outline-0 bg-secondary-50 transition-all duration-300 border focus:border-primary-300 rounded' ~ borderClasses %}
+    {% set classes = 'p-2 leading-none outline-0 bg-secondary-50 transition-all duration-300 border focus:border-primary-300 rounded ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -48,7 +50,7 @@
 
 {% block password_widget %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -58,7 +60,7 @@
 
 {%- block textarea_widget -%}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -67,7 +69,7 @@
 
 {% block email_widget %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -76,7 +78,7 @@
 
 {% block money_widget %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 ' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -85,7 +87,7 @@
 
 {% block choice_widget_collapsed %}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 bg-white' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -94,7 +96,7 @@
 
 {%- block datetime_widget -%}
     {% set borderClasses = (errors|length > 0) ? 'border-b-danger-400' : '' %}
-    {% set classes = 'w-full mb-1 border-b outline-none border-w focus:border-b-primary-300 bg-white' ~ borderClasses %}
+    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}

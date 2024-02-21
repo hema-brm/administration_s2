@@ -2,6 +2,20 @@
 
 {% block content %}
     <body class="text-secondary-700 theme-indigo bg-primary-500">
-        {% block body %}{% endblock %}
+        {{ displayFlash() }}
+        <div class="wrapper bg-gradient-to-r from-white to-indigo-300 h-screen flex flex-row items-center justify-center">
+            {% set widthClass = width|default('1/2') %}
+            <div class="bg-indigo-700 flex flex-row rounded-lg shadow-2xl overflow-clip w-{{ widthClass }}">
+                {# Left: image #}
+                <div class="w-1/2 p-5 relative flex">
+                    <img src="{{ asset('build/images/default/login.png') }}" alt="image factures"
+                         class="w-full object-contain">
+                </div>
+                {# Right: Login Form #}
+                <div class="bg-white w-1/2 flex flex-row items-center justify-center">
+                    {% block form %}{% endblock form %}
+                </div>
+            </div>
+        </div>
     </body>
 {% endblock %}

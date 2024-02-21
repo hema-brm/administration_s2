@@ -1,108 +1,42 @@
 {% extends '@base/public.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}EasyVows{% endblock %}
 
-{% block body %}
-    <style>
-        body {
-            background-color: #1E90FF;
-            padding-top: 200px;
-            padding-bottom: 150px;
-        }
-    </style>
-    <div class="flex justify-center items-center h-screen ">
-        <div class="w-full max-w-md bg-secondary-100 p-4 rounded-md mx-auto">
-            <h1 class="text-2xl font-bold mb-6 text-center">Inscription</h1>
+{% set width = '3/4' %}
 
-            {{ form_start(registrationForm) }}
-            <div class="grid gap-4">
-                {{ form_row(registrationForm.firstName, {
-                    label: 'Nom'
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': 'Entrez votre nom'
-                    }
+{% block form %}
+    <div class="w-full p-5">
+        <h1 class="text-4xl font-bold text-center mb-5">
+            Easy Vows
+        </h1>
 
-                }) }}
-                {{ form_row(registrationForm.lastName, {
-                    label: 'Prénom'
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm ' ,
-                        'placeholder': 'Entrez votre prénom'
-                    }
+        {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.firstName) }}
+        {{ form_row(registrationForm.lastName) }}
+        {{ form_row(registrationForm.phoneNumber) }}
+        {{ form_row(registrationForm.company) }}
+        {{ form_row(registrationForm.address) }}
+        {{ form_row(registrationForm.siretNumber) }}
 
-                }) }}
-                {{ form_row(registrationForm.phoneNumber, {
-                    label: 'Numéro de téléphone'
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': 'Entrez votre numéro de téléphone'
-                    }
-                }) }}
-                {{ form_row(registrationForm.company, {
-                    label: "Nom de l'Entreprise"
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': 'Entrez le nom de votre Entreprise'
-                    }
-                }) }}
-                {{ form_row(registrationForm.address, {
-                    'label': "Adresse de l'Entreprise",
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': "Entrez l'adresse de votre Entreprise"
-                    }
-                }) }}
-                {{ form_row(registrationForm.siretNumber, {
-                    label: "Numéro Siret de l'Entreprise"
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': 'Entrez le nom Siret de votre Entreprise'
-                    }
-                }) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.password) }}
 
-                {% if registrationForm.email.vars.errors|length > 0 %}
-                    <div class="mb-1 bg-danger-100 border border-danger-400 text-danger-700 px-4 py-3 rounded relative"
-                         role="alert">
-                        <strong class="font-bold">Un compte existe déjà avec cette adresse e-mail</strong>
-                    </div>
-                {% endif %}
-                {{ form_row(registrationForm.email, {
-                    label: 'Adresse e-mail'
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm'  ,
-                        'placeholder': 'Entrez votre adresse e-mail'
-                    }
-                }) }}
-                {{ form_row(registrationForm.password, {
-                    label: 'Mot de passe'
-                    ,
-                    'attr': {
-                        'class': 'border p-2 rounded-md w-full text-sm' ,
-                        'placeholder': 'Entrez un mot de passe'
-                    }
-                }) }}
-
-            </div>
-            <div class="flex justify-center mt-4">
-                <button type="submit"
-                        class="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded">
-                    S'inscrire
-                </button>
-            </div>
-
-            <div class="text-center mt-4">
-                <a href="{{ path('app_login') }}" class="text-primary-500 hover:text-primary-700">Se connecter</a>
-            </div>
-
-            {{ form_end(registrationForm) }}
-
+        <div class="flex justify-center mt-2 w-full">
+            <button class="bg-indigo-700 w-1/2 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded"
+                    type="submit">
+                S'inscrire
+            </button>
         </div>
+
+        <div class="text-center mt-2">
+            <p class="text-secondary-500 text-sm">Vous avez déjà un compte ?</p>
+            <a href="{{ path('app_login') }}"
+               class="text-primary-500 text-sm hover:text-primary-700 font-semibold">
+                <i class="fas fa-arrow-left mr-1"></i>
+                <span>Connectez-vous</span>
+            </a>
+        </div>
+
+        {{ form_end(registrationForm) }}
     </div>
-{% endblock %}
+{% endblock form %}

@@ -19,34 +19,58 @@ class RegistrationFormType extends AbstractType
         $builder
         ->add('email', EmailType::class, [
             'label' => 'Adresse email',
+            'attr' => [
+                'placeholder' => 'Entrez l\'adresse email',
+            ],
             'required' => true,
         ])
         ->add('password', PasswordType::class, [
             'label' => 'Mot de passe',
+            'attr' => [
+                'placeholder' => 'Entrez le mot de passe',
+            ],
             'required' => true,
         ])
         ->add('firstName', TextType::class, [
             'label' => 'Prénom',
+            'attr' => [
+                'placeholder' => 'Entrez votre prénom',
+            ],
             'required' => true,
         ])
         ->add('lastName', TextType::class, [
             'label' => 'Nom',
+            'attr' => [
+                'placeholder' => 'Entrez votre nom',
+            ],
             'required' => true,
         ])
         ->add('phoneNumber', TextType::class, [
             'label' => 'Numéro de téléphone',
+            'attr' => [
+                'placeholder' => 'Entrez votre numéro de téléphone',
+            ],
         ])
         ->add('company', TextType::class, [
             'label' => 'Entreprise',
             'required' => true,
             'mapped' => false,
+            'attr' => [
+                'placeholder' => 'Entrez le nom de votre l\'entreprise',
+            ],
         ])
         ->add('address', TextType::class, [
             'label' => 'Adresse de l\'entreprise',
+            'attr' => [
+                'placeholder' => 'Entrez l\'adresse de votre entreprise',
+            ],
             'mapped' => false,
         ])
         ->add('siretNumber', TextType::class, [
-            'label' => 'Numéro de SIRET',
+            'label' => 'Numéro SIRET',
+            'attr' => [
+                'placeholder' => 'Entrez le numéro SIRET de votre entreprise',
+            ],
             'required' => true,
             'mapped' => false,
         ]);
