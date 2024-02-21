@@ -11,7 +11,9 @@
 
     <div id="menu_body-wrapper" class="flex">
         {% block menu %}
+           
             {% include "@components/navigation/menu/index.html.twig" %}
+            
         {% endblock %}
         <div id="page-content" class="flex-1">
             {% block body %}{% endblock %}

@@ -15,6 +15,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 class UserAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -23,10 +25,13 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private $urlGenerator;
+    private $security;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->security = $security;
     }
 
     public function authenticate(Request $request): Passport
@@ -46,9 +51,12 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName = null): ?Response
-{
-    return new RedirectResponse($this->urlGenerator->generate('app_employee_index'));
-}
+    {
+        if ($this->security->isGranted('ROLE_COMPTABLE')) {
+            return new RedirectResponse($this->urlGenerator->generate('accountant'));
+        }
+        return new RedirectResponse($this->urlGenerator->generate('app_employee_index'));
+    }
 
     protected function getLoginUrl(Request $request): string
     {

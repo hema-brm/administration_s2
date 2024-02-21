@@ -42,13 +42,13 @@ security:
         ROLE_EMPLOYEE:
             - ROLE_COMPTABLE
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/products, roles: ROLE_EMPLOYEE }
-        - { path: ^/employee, roles: ROLE_ENTREPRISE }
+      - { path: ^/admin, roles: ROLE_ADMIN }
+      # - { path: ^/profile, roles: ROLE_USER }
+      - { path: ^/products, roles: ROLE_ENTREPRISE }
+      - { path: ^/employee, roles: ROLE_ENTREPRISE }
 
 when@test:
     security:

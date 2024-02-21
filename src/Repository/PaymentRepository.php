@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query\Expr;
+
 use App\Entity\Payment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Oro\ORM\Query\AST\Functions\String\DateFormat;
 
 /**
  * @extends ServiceEntityRepository<Payment>
@@ -20,29 +23,16 @@ class PaymentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Payment::class);
     }
-
-//    /**
-//     * @return Payment[] Returns an array of Payment objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Payment
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getTotalPriceSumByMonth(): array
+    {
+        return $this->createQueryBuilder('payment')
+            ->select("date_format(payment.datePaiement, '%Y') as year", "date_format(payment.datePaiement, '%m') as month", 'SUM(bill.totalPrice) as totalPrice')
+            ->leftJoin('payment.bill', 'bill')
+            ->where('payment.datePaiement IS NOT NULL')
+            ->andWhere('payment.status = :status')
+            ->setParameter('status', 'terminé')
+            ->groupBy('month', 'year')
+            ->getQuery()
+            ->getResult();
+    }
 }
