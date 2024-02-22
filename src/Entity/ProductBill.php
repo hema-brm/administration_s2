@@ -72,4 +72,9 @@ class ProductBill
     {
         return $this->product;
     }
+
+    public function getTotal(): float
+    {
+        return $this->getQuantity() * $this->getProduct()->getPrice();
+    }
 }

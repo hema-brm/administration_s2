@@ -193,7 +193,17 @@ public function setQuote(?Quote $quote): self
 
     public function getTotalPrice(): ?string
     {
-        return $this->totalPrice;
+        // Initialiser le total à 0
+        $total = 0;
+
+        // Parcourir tous les ProductBills associés à cette facture
+        foreach ($this->getProductBills() as $productBill) {
+            // Ajouter le total de chaque produit au total général
+            $total += $productBill->getTotal();
+        }
+
+        // Retourner le total sous forme de chaîne de caractères
+        return strval($total);
     }
 
     public function setTotalPrice(?string $totalPrice): self

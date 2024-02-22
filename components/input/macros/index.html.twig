@@ -1,0 +1,14 @@
+{% macro form_search_macro(params) %}
+    <form id="{{ params.id }}" action="{{ params.action }}" method="GET" class="flex items-center space-x-2">
+        <input type="search" name="{{ params.name }}" placeholder="{{ params.placeholder }}" value="{{ params.value }}" class="p-2 border rounded focus:outline-none focus:border-primary-500">
+        <select name="filter" class="p-2 border rounded focus:outline-none focus:border-primary-500">
+            <option value="month">Par mois</option>
+            <option value="week">Par semaine</option>
+            <option value="day">Par jour</option>
+        </select>
+        <button type="submit" class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
+            <i class="fa-solid fa-search"></i>
+            <span>Rechercher</span>
+        </button>
+    </form>
+{% endmacro %}
