@@ -169,16 +169,16 @@ class Bill
     }
 
     public function getQuote(): ?Quote
-{
-    return $this->quote;
-}
+    {
+        return $this->quote;
+    }
 
-public function setQuote(?Quote $quote): self
-{
-    $this->quote = $quote;
-    $this->quote_number = $quote ? $quote->getId() : null; // Utilisez getId() ou une autre méthode pour obtenir l'ID de la citation
-    return $this;
-}
+    public function setQuote(?Quote $quote): self
+    {
+        $this->quote = $quote;
+        $this->quote_number = $quote ? $quote->getId() : null; // Utilisez getId() ou une autre méthode pour obtenir l'ID de la citation
+        return $this;
+    }
 
     public function getQuoteNumber(): ?string
     {
@@ -193,7 +193,17 @@ public function setQuote(?Quote $quote): self
 
     public function getTotalPrice(): ?string
     {
-        return $this->totalPrice;
+        // Initialiser le total à 0
+        $total = 0;
+
+        // Parcourir tous les ProductBills associés à cette facture
+        foreach ($this->getProductBills() as $productBill) {
+            // Ajouter le total de chaque produit au total général
+            $total += $productBill->getTotal();
+        }
+
+        // Retourner le total sous forme de chaîne de caractères
+        return strval($total);
     }
 
     public function setTotalPrice(?string $totalPrice): self

@@ -10,7 +10,7 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Prix total</th>
+                <th>Id</th>
                 <td>{{ bill.id }}</td>
             </tr>
             <tr>
@@ -61,6 +61,11 @@
     <a href="{{ path('app_bill_index') }}">retour à la liste</a>
 
     <a href="{{ path('app_bill_edit', {'id': bill.id}) }}">edit</a>
+
+    <a href="{{ path('facture_pdf', {'id': bill.id}) }}" >pdf</a>
+
+
+
 
 
 

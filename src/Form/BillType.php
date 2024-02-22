@@ -39,11 +39,6 @@ class BillType extends AbstractType
             'attr' => [
                 'placeholder' => ' ',
         ],])
-        ->add('totalPrice', IntegerType::class, [
-            'label' => 'Prix total: ',
-            'attr' => [
-                'placeholder' => ' ',
-        ],])
         ->add('discount', IntegerType::class, [
             'label' => 'Remise: ',
             'attr' => [

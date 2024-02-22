@@ -18,6 +18,7 @@
         text: 'Listes des factures',
     }) }}
 
+
     <div class="px-4">
     <div class="flex flex-row justify-between py-2">
             {{ form_search_macro({
@@ -53,12 +54,12 @@
         {% for bill in bills %}
             <tr class="border-b hover:bg-gray-50 text-sm">
                 <td class="p-4 text-center">{{ bill.id }}</td>
-                <td class="p-4 text-center">{{ bill.totalPrice }}</td>
+                <td class="p-4 text-center">{{ bill.TotalPrice }}</td>
                 <td class="p-4 text-center">{{ bill.customer }}</td>
-                <td class="p-4 text-center">{{ bill.billIssuanceDate ? bill.billIssuanceDate|date('Y-m-d') : ''  }}</td>
-                <td class="{{ cellPadding }} text-right text-secondary-400">
+                <td class="p-4 text-center">{{ bill.CreationDate ? bill.CreationDate|date('Y-m-d') : ''  }}</td>
+                <td class="{{ cellPadding }} p-4 text-center text-secondary-400">
                     <a href="{{ path('app_bill_edit', {'id': bill.id}) }}" data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                        <i class="fa-solid fa-edit hover:text-warning-500 mr-4"></i>
                     </a>
                     <a href="{{ path('app_bill_show', {'id': bill.id}) }}">show</a>
                 </td>

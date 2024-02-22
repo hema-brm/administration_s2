@@ -44,11 +44,6 @@ class QuoteType extends AbstractType
             ],])
             ->add('quote_issuance_date')
             ->add('expiry_date')
-            ->add('total_price', IntegerType::class, [
-                'label' => 'Prix total: ',
-                'attr' => [
-                    'placeholder' => ' ',
-            ],])
             ->add('discount', IntegerType::class, [
                 'label' => 'Remise: ',
                 'attr' => [

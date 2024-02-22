@@ -62,5 +62,7 @@
 
     <a href="{{ path('app_quote_to_bill', {'id': quote.id}) }}">Transformer en facture</a>
 
+    <a href="{{ path('quote_pdf', {'id': quote.id}) }}" >pdf</a>
+
     {{ include('quote/_delete_form.html.twig') }}
 {% endblock %}
