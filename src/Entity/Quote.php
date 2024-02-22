@@ -25,6 +25,7 @@ class Quote
     #[ORM\Column(length: 255)]
     private ?string $quote_number = null;
 
+
     #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $quote_issuance_date = null;
 
@@ -43,6 +44,10 @@ class Quote
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
+    #[ORM\OneToOne(targetEntity: Bill::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Bill $bill = null;
 
     
 
@@ -215,6 +220,17 @@ class Quote
     public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
+        return $this;
+    }
+
+    public function getBill(): ?Bill
+    {
+        return $this->bill;
+    }
+
+    public function setBill(?Bill $bill): self
+    {
+        $this->bill = $bill;
         return $this;
     }
 }

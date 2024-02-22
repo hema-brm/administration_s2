@@ -30,6 +30,49 @@ class QuoteRepository extends ServiceEntityRepository
         $this->fullSearchQuery = $fullSearchQuery;
     }
 
+    public function findByMonth(\DateTimeInterface $date): array
+    {
+        $startDate = new \DateTime($date->format('Y-m-01 00:00:00'));
+        $endDate = new \DateTime($date->format('Y-m-t 23:59:59'));
+
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quoteIssuanceDate BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Méthode pour trouver les devis par semaine
+    public function findByWeek(\DateTimeInterface $date): array
+    {
+        $startDate = new \DateTime($date->format('Y-m-d 00:00:00'));
+        $endDate = new \DateTime($date->format('Y-m-d 23:59:59'));
+        $startDate->modify('last monday');
+        $endDate->modify('next sunday');
+
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quoteIssuanceDate BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Méthode pour trouver les devis par jour
+    public function findByDay(\DateTimeInterface $date): array
+    {
+        $startDate = new \DateTime($date->format('Y-m-d 00:00:00'));
+        $endDate = new \DateTime($date->format('Y-m-d 23:59:59'));
+
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quoteIssuanceDate BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function search(string $search, int $page = 1, int $limit = 10): Paginator 
     {
         $query = $this->fullSearchQuery

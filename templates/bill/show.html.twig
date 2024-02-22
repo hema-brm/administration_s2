@@ -1,0 +1,73 @@
+{% extends '@base/app.html.twig' %}
+
+
+{% block title %}Bill{% endblock %}
+
+
+{% block body %}
+    <h1>Facture</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bill.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom du client</th>
+                <td>{{ bill.customer }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ bill.status }}</td>
+            </tr>
+            <tr>
+                <th>Numéro de facture</th>
+                <td>{{ bill.numeroFacture }}</td>
+            </tr>
+            <tr>
+                <th>Date d'échéance</th>
+                <td>{{ bill.billIssuanceDate ? bill.billIssuanceDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Prix total</th>
+                <td>{{ bill.totalPrice }}</td>
+            </tr>
+            <tr>
+                <th>Remise</th>
+                <td>{{ bill.discount }}</td>
+            </tr>
+            <tr>
+                <th>TVA</th>
+                <td>{{ bill.tva }}</td>
+            </tr>
+            <tr>
+                <th>Produits</th>
+                <td>
+                    {% if bill.productBills is not empty %}
+                        <ul>
+                            {% for productBill in bill.productBills %}
+                                <li>{{ productBill.product.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Aucun produit n'est associé à cette facture.
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bill_index') }}">retour à la liste</a>
+
+    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}">edit</a>
+
+    <a href="{{ path('facture_pdf', {'id': bill.id}) }}" >pdf</a>
+
+
+
+
+
+
+    {{ include('bill/_delete_form.html.twig') }}
+{% endblock %}

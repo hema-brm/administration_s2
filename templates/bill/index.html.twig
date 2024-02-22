@@ -1,14 +1,83 @@
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/macros/content.html.twig" import alert %}
+{% from "@components/macros/content.html.twig" import paginator %}
+{% from "@components/macros/table.html.twig" import default as table %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
+
 
 {% extends '@base/app.html.twig' %}
 
 {% block title %}Factures{% endblock %}
 
+
 {% block body %}
-    <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold text-center">Les factures</h1>
-        <div class="mt-4 flex flex-col">
-            
-        </div>
+
+{% from "@components/macros/content.html.twig" import header, button_macro %}
+
+    {{ header({
+        text: 'Listes des factures',
+    }) }}
+
+
+    <div class="px-4">
+    <div class="flex flex-row justify-between py-2">
+            {{ form_search_macro({
+                id: 'form-search-customer',
+                action: path('app_bill_index'),
+                placeholder: 'Rechercher',
+                name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
+                value: searchTerm|default(''),
+            }) }}
+            <a href="{{ path('app_bill_new') }}">
+                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nouvelle facture</span>
+                </button>
+            </a>
     </div>
-    
+    {% set cellPadding = 'p-4 px-2' %}
+    {% set borderClass = 'border-b border-b-secondary-200' %}
+    {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+
+    <div class="px-4 m-10">
+    <table class="w-full border shadow-sm text-sm">
+        <thead>
+            <tr class="{{ tableHeaderClasses }}">
+                <th>N° facture</th>
+                <th>Prix total</th>
+                <th>Nom du client</th>
+                <th>Date de création</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bill in bills %}
+            <tr class="border-b hover:bg-gray-50 text-sm">
+                <td class="p-4 text-center">{{ bill.id }}</td>
+                <td class="p-4 text-center">{{ bill.TotalPrice }}</td>
+                <td class="p-4 text-center">{{ bill.customer }}</td>
+                <td class="p-4 text-center">{{ bill.CreationDate ? bill.CreationDate|date('Y-m-d') : ''  }}</td>
+                <td class="{{ cellPadding }} p-4 text-center text-secondary-400">
+                    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}" data-link--clickable-target="exclude">
+                        <i class="fa-solid fa-edit hover:text-warning-500 mr-4"></i>
+                    </a>
+                    <a href="{{ path('app_bill_show', {'id': bill.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">
+                    {{ alert({
+                        text: 'Aucune facture enregistrée',
+                        color: 'warning',
+                        icon: 'fa-circle-info',
+                        variant: 'small',
+                    }) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
 {% endblock %}
