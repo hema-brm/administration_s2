@@ -34,7 +34,7 @@ export default class extends Controller {
     }
 
     confirm() {
-        navigator.submitForm(this.getForm());
+                navigator.submitForm(this.getForm());
         this.close();
     }
 

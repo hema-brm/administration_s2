@@ -1,5 +1,11 @@
 <div class="flex flex-row items-center justify-between py-2">
     <div class="flex flex-row justify-end items-center py-2 gap-2">
+        {% embed "./modal/confirmation-email-sending.html.twig" with {
+            formAction : 'app_mailer_reminderManyEmail',
+            customFormId : 'sendManyEmailForm',
+            } %}
+        {% endembed %}
+
         {% embed "./modal/delete-many-button-confirm.html.twig" with {
             formAction : 'app_quote_deleteAll',
             customFormId : 'deleteManyQuotesForm',

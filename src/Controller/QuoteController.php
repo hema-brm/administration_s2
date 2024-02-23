@@ -20,6 +20,7 @@ use App\Entity\ProductQuote;
 use App\Service\PdfService;
 use Dompdf\Dompdf;
 use DateTime;
+use App\Controller\MailerController;
 
 #[Route('/quote', name: 'app_quote_')]
 class QuoteController extends AbstractController
@@ -326,7 +327,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer): Response
     {
         // Get the logged-in user
         $user = $this->getUser();
@@ -347,6 +348,12 @@ class QuoteController extends AbstractController
 
             $this->addFlash('success', 'Votre devis a été créé avec succès.');
 
+            
+            $formData = $form->getData();
+            $customer = $formData->getCustomer();
+
+            $mailer->newQuoteCreateEmail($customer);
+        
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -381,6 +388,7 @@ class QuoteController extends AbstractController
     {
         $quotes = $request->request->all()['quotes'];
         $count = 0;
+        dd($request);
         foreach($quotes as $id => $token){
             $quote = $quoteRepository->find($id);
             if($quote && $this->isCsrfTokenValid('delete'.$id, $token)){
