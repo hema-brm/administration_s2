@@ -45,6 +45,10 @@ class AccountantController extends AbstractController
         $chart->setOptions([
             'scales' => [
                 'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 500,
+                    ],
                     'title' => [
                         'display' => true,
                         'text' => 'Total (€)',
