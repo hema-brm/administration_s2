@@ -8,9 +8,13 @@
     {{ header({
         text: 'Dashboard',
     }) }}
-    <div class="h-1/2 w-1/2">
-       <div class="h-full">
+    <div class="flex">
+       <div class="w-1/2">
            {{ render_chart(chart) }}
        </div>
+       <div class="w-1/2">
+           {{ render_chart(doughnutChart) }}
+       </div>
     </div>
+
 {% endblock %}

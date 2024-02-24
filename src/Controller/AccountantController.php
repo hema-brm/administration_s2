@@ -36,8 +36,8 @@ class AccountantController extends AbstractController
             'datasets' => [
                 [
                     'label' => 'Total Price',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
+                    'backgroundColor' => 'rgb(144, 213, 79)',
+                    'borderColor' => 'rgb(255, 255, 255)',
                     'data' => $data,
                 ],
             ],
@@ -61,11 +61,52 @@ class AccountantController extends AbstractController
                     ],
                 ],
             ],
+            'plugins' => [
+                'legend' => [
+                    'position' => 'top',
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => 'Revenus',
+                ],
+            ],
+            'maintainAspectRatio' => false,
+        ]);
+
+        // Data for the doughnut chart
+        $doughnutData = $paymentRepository->getTotalPriceSumByCategory();
+        $doughnutLabels = ['En retard', 'Terminé', 'En cours'];
+
+        $doughnutValues = array_column($doughnutData, 'totalPrice');
+        $doughnutBackgroundColors = ['rgb(255, 99, 132)', 'rgb(144, 213, 79)', 'rgb(255, 205, 86)'];
+
+        // Create the doughnut chart
+        $doughnutChart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+        $doughnutChart->setData([
+            'labels' => $doughnutLabels,
+            'datasets' => [
+                [
+                    'data' => $doughnutValues,
+                    'backgroundColor' => $doughnutBackgroundColors,
+                ],
+            ],
+        ]);
+        $doughnutChart->setOptions([
+            'plugins' => [
+                'legend' => [
+                    'position' => 'top',
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => 'Etat des paiements',
+                ],
+            ],
             'maintainAspectRatio' => false,
         ]);
 
         return $this->render('accountant/accountant.html.twig', [
             'chart' => $chart,
+            'doughnutChart' => $doughnutChart,
         ]);
     }
 }
