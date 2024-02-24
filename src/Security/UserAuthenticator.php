@@ -52,10 +52,12 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName = null): ?Response
     {
-        if ($this->security->isGranted('ROLE_COMPTABLE')) {
+
+        if ($this->security->isGranted('ROLE_ENTREPRISE')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_employee_index'));
+        } else if ($this->security->isGranted('ROLE_COMPTABLE')) {
             return new RedirectResponse($this->urlGenerator->generate('accountant'));
         }
-        return new RedirectResponse($this->urlGenerator->generate('app_employee_index'));
     }
 
     protected function getLoginUrl(Request $request): string

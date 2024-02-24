@@ -1,0 +1,42 @@
+{% extends '@base/app.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
+
+{% block title %}Rapport{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Rapport',
+    }) }}
+    <form id="periodForm" action="{{ path('report') }}" method="GET">
+        <select name="period" onchange="document.getElementById('periodForm').submit()">
+            <option value="month" {% if app.request.query.get('period', 'month') == 'month' %}selected{% endif %}>Rapport du mois</option>
+            <option value="year" {% if app.request.query.get('period', 'month') == 'year' %}selected{% endif %}>Rapport de l'année</option>
+        </select>
+    </form>
+    <div class="flex shadow-md bg-gray-100 m-6 p-3 rounded-md">
+       <div class="w-1/2">
+           {{ render_chart(chart) }}
+       </div>
+       <div class="w-1/2">
+           {{ render_chart(doughnutChart) }}
+       </div>
+    </div>
+    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+      <p>products and categories data</p>
+      {# <h2>Données sur les produits et les catégories</h2>
+      <ul>
+        <li><strong>Total des ventes par produit:</strong></li>
+        {% for product, sales in product_sales %}
+          <li>{{ product.name }}: {{ sales }}</li>
+        {% endfor %}
+      </ul>
+      <h3>Total des ventes par catégorie:</h3>
+      <ul>
+        {% for category, sales in category_sales %}
+          <li>{{ category.name }}: {{ sales }}</li>
+        {% endfor %}
+      </ul> #}
+    </div>
+
+{% endblock %}

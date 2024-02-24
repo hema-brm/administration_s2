@@ -38,7 +38,7 @@ class Bill
     #[ORM\JoinColumn(name: "quote_id", referencedColumnName: "id", nullable: true)]
     private ?Quote $quote;
 
-    #[ORM\Column(length: 255,nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $quote_number = null;
 
     #[ORM\Column(nullable: true)]

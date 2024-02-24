@@ -35,6 +35,19 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTotalPriceSumByYear(): array
+    {
+        return $this->createQueryBuilder('payment')
+            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", 'SUM(bill.totalPrice) as totalPrice')
+            ->leftJoin('payment.bill', 'bill')
+            ->where('payment.datePaiement IS NOT NULL')
+            ->andWhere('payment.status = :status')
+            ->setParameter('status', 'terminé')
+            ->groupBy('year')
+            ->getQuery()
+            ->getResult();
+    }
     public function getTotalPriceSumByCategory(): array
     {
         return $this->createQueryBuilder('payment')
