@@ -64,11 +64,10 @@
         {% set customerLastName = quote.getCustomer().getLastname() %}
         {% set customerFirstName = quote.getCustomer().getFirstname() %}
         {% set status = quote.getStatus() %}
-        {% set company = quote.getCompany() %}
+        {% set company = quote.getCustomer().getCompany() %}
         {% set products = quote.getProductQuotes() %}
         {% set IssuanceDate = quote.getQuoteIssuanceDate().format('Y-m-d') %}
         {% set expiryDate = (quote.getExpiryDate() is null ? null : quote.getExpiryDate().format('Y-m-d'))  %}
-        {% set totalPrice = quote.getTotalPrice() %}
         {% set discount = quote.getDiscount() %}
         {% set tva = quote.getTva() %}
 
