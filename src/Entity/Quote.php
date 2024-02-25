@@ -26,7 +26,6 @@ class Quote
     private int $status = 0;
 
     #[ORM\Column(length: 255, unique: true, nullable: false)]
-    #[Assert\Unique(message: 'Ce numéro de devis est déjà utilisé.')]
     private ?string $quote_number = null;
 
     #[ORM\Column(type: 'date')]

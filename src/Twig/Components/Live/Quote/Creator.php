@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -150,7 +149,7 @@ class Creator extends AbstractController
     }
 
     #[LiveAction]
-    public function saveQuote(Request $request, EntityManagerInterface $entityManager, Session $session)
+    public function saveQuote(EntityManagerInterface $entityManager, Session $session)
     {
         if (!$this->canSaveQuote()) {
             $this->addFlash('warning', 'Veuillez remplir tous les champs obligatoires et ajouter des produits pour enregistrer le devis.');
