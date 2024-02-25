@@ -14,6 +14,7 @@
             attr: {
                 'class': 'w-1/2',
                 'data-model': 'quote_number',
+                'value': quote_number,
                 'with_error': _errors.has('quote_number') ? true : false,
                 'error_text': _errors.has('quote_number') ? _errors.get('quote_number') : '',
             }
@@ -23,7 +24,7 @@
     <div class="flex flex-row items-start">
         {{ form_row(form.quote_issuance_date, {
             attr: {
-                class: 'w-1/2 mr-4',
+                'class': 'w-1/2 mr-4',
                 'data-model': 'quote_issuance_date',
                 'with_error': _errors.has('quote_issuance_date') ? true : false,
                 'error_text': _errors.has('quote_issuance_date') ? _errors.get('quote_issuance_date') : '',
@@ -31,7 +32,7 @@
         }) }}
         {{ form_row(form.expiry_date, {
             attr: {
-                class: 'w-1/2',
+                'class': 'w-1/2',
                 'data-model': 'expiry_date',
                 'with_error': _errors.has('expiry_date') ? true : false,
                 'error_text': _errors.has('expiry_date') ? _errors.get('expiry_date') : '',
@@ -43,16 +44,18 @@
         <div class="flex w-1/2 mr-4">
             {{ form_row(form.discount, {
                 attr: {
-                    class: 'w-full mr-4',
+                    'class': 'w-full mr-4',
                     'data-model': 'discount',
+                    'value': discount,
                     'with_error': _errors.has('discount') ? true : false,
                     'error_text': _errors.has('discount') ? _errors.get('discount') : '',
                 }
             }) }}
             {{ form_row(form.tva, {
                 attr: {
-                    class: 'w-full',
+                    'class': 'w-full',
                     'data-model': 'tva',
+                    'value': tva,
                     'with_error': _errors.has('tva') ? true : false,
                     'error_text': _errors.has('tva') ? _errors.get('tva') : '',
                 }
@@ -61,8 +64,9 @@
         <div class="flex w-1/2">
             {{ form_row(form.status, {
                 attr: {
-                    class: 'w-full',
+                    'class': 'w-full',
                     'data-model': 'status',
+                    'value': status,
                     'with_error': _errors.has('status') ? true : false,
                     'error_text': _errors.has('status') ? _errors.get('status') : '',
                 }

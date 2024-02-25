@@ -221,6 +221,7 @@
 {%- endblock -%}
 
 {%- block collection_widget -%}
+    {% set withError = attr.with_error|default(false) %}
     {% set borderClasses = ((errors|length > 0 or withError)) ? 'border-danger-400' : '' %}
     {% set classes = 'mt-0 w-full outline-none border-w focus:border-b-primary-300 bg-white m-0' ~ borderClasses %}
     {%- set attr = attr|merge({

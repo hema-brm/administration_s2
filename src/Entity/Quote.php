@@ -25,7 +25,8 @@ class Quote
     #[ORM\Column(nullable: false)]
     private int $status = 0;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true, nullable: false)]
+    #[Assert\Unique(message: 'Ce numéro de devis est déjà utilisé.')]
     private ?string $quote_number = null;
 
     #[ORM\Column(type: 'date')]
@@ -42,6 +43,7 @@ class Quote
 
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Customer $customer;
 
     #[ORM\OneToOne(targetEntity: Bill::class)]
@@ -124,7 +126,7 @@ class Quote
         return $this->quote_issuance_date;
     }
 
-    public function setQuoteIssuanceDate(\DateTimeInterface $quote_issuance_date): static
+    public function setQuoteIssuanceDate(?\DateTimeInterface $quote_issuance_date): static
     {
         $this->quote_issuance_date = $quote_issuance_date;
 
@@ -191,15 +193,5 @@ class Quote
     {
         $this->bill = $bill;
         return $this;
-    }
-
-    #[Assert\Callback]
-    public function validate(ExecutionContextInterface $context, mixed $payload): void
-    {
-        if ($this->expiry_date < $this->quote_issuance_date) {
-            $context->buildViolation('La date d\'expiration doit être supérieure à la date d\'émission.')
-                ->atPath('expiry_date')
-                ->addViolation();
-        }
     }
 }

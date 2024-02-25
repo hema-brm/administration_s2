@@ -104,5 +104,12 @@ class QuoteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-
+    public function findQuoteByNumber(string $quoteNumber): ?Quote
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quote_number = :quoteNumber')
+            ->setParameter('quoteNumber', $quoteNumber)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

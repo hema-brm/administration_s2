@@ -6,10 +6,12 @@ use App\Entity\Product;
 use App\Entity\Quote;
 use App\Form\QuoteType;
 use App\Service\Quote\QuoteCreatorService;
+use App\Validator\Constraint as EasyVowsAssert;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -41,14 +43,18 @@ class Creator extends AbstractController
 
     #[LiveProp(writable: true)]
     #[Assert\NotNull(message: 'Vous devez choisir un numéro de devis.')]
+    #[Assert\Length(min: 3, max: 255, minMessage: 'Le numéro de devis doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le numéro de devis doit contenir au maximum {{ limit }} caractères.')]
+    #[EasyVowsAssert\QuoteNumberConstraint(message: 'Le numéro de devis "{{ value }}" est déjà utilisé.')]
     public ?string $quote_number = null;
 
     #[LiveProp(writable: true)]
-    #[Assert\GreaterThanOrEqual(value: 0, message: 'La remise doit être supérieur ou égale à 0.')]
+    #[Assert\PositiveOrZero(message: 'La remise doit être supérieur ou égale à 0.')]
+    #[Assert\LessThanOrEqual(value: 100, message: 'La remise doit être inférieur ou égale à 100.')]
     public ?float $discount = 0.0;
 
     #[LiveProp(writable: true)]
-    #[Assert\GreaterThanOrEqual(value: 0, message: 'La TVA doit être supérieur ou égale à 0.')]
+    #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
+    #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
     public ?float $tva = 0.0;
 
     #[LiveProp(writable: true)]
@@ -144,7 +150,7 @@ class Creator extends AbstractController
     }
 
     #[LiveAction]
-    public function saveQuote(EntityManagerInterface $entityManager, Session $session)
+    public function saveQuote(Request $request, EntityManagerInterface $entityManager, Session $session)
     {
         if (!$this->canSaveQuote()) {
             $this->addFlash('warning', 'Veuillez remplir tous les champs obligatoires et ajouter des produits pour enregistrer le devis.');

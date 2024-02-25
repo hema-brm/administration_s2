@@ -83,6 +83,9 @@ class QuoteType extends AbstractType
                 'attr' => [
                     'placeholder' => 'TVA',
                 ],
+                'constraints' => [
+                    new Assert\GreaterThan(200, message: 'test'),
+                ],
             ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
