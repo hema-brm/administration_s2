@@ -5,6 +5,10 @@ namespace App\Service;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\String\UnicodeString;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 
 class PdfService
 {
@@ -24,9 +28,28 @@ class PdfService
         $this->domPdf->loadHtml($html);
         $this->domPdf->render();
         $this->domPdf->stream("facture.pdf", [
-            'Attachement' => true
+            'Attachment' => true
         ]);
     }
+
+    public function savePdf(string $html, string $filename = 'devis.pdf')
+    {
+        $pdfContent = $this->generatePdfContent($html);
+        $response = new Response($pdfContent);
+
+        // Ajouter les en-têtes pour forcer le téléchargement
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    
+        // Enregistrer le PDF dans le dossier tmp_pdf
+        $filePath = __DIR__ . '/../../tmp_pdf/' . $filename;
+        file_put_contents($filePath, $pdfContent);
+
+        // Retourner la réponse et le chemin du fichier enregistré
+        return [$response, $filePath];
+       
+    }
+
 
     public function generatePdfContent(string $html): string
     {

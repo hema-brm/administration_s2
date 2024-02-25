@@ -69,122 +69,18 @@ class QuoteController extends AbstractController
         ]);
     }
 
-    #[Route('/pdf/{id}', name: 'pdf')]
-    public function generatePdfDevis(Quote $quote, PdfService $pdf): Response
-    {
-
-        $customerLastName = $quote->getCustomer()->getLastname();
-        $customerFirstName = $quote->getCustomer()->getFirstname();
-        $status = $quote->getStatus();
-        $company = $quote->getCustomer()->getCompany();
-        $products = $quote->getProductQuotes();
-
-        $IssuanceDate = $quote->getQuoteIssuanceDate()->format('Y-m-d');
-        $ExpiryDate = $quote->getExpiryDate()->format('Y-m-d');
-        $discount = $quote->getDiscount();
-        $tva = $quote->getTva();
-
-        $total = 0;
-        $totalPriceSum = 0;
-        $subtotal = 0;
-        $tvaAmount = 0;
-        $html = "";
-
-        $html = "
-            <!DOCTYPE html>
-            <html lang='en'>
-            <head>
-                <meta charset='UTF-8'>
-                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                <title>Devis</title>
-                <style>
-                    body {
-                        text-align: center;
-                        font-family: 'Times New Roman', Times, serif;
-                    }
-                    .invoice {
-                        margin: 0 auto;
-                        padding: 20px;
-                        border: 1px solid #ccc;
-                        max-width: 800px; 
-                    }
-                    .invoice h2 {
-                        margin-bottom: 20px;
-                    }
-                    .invoice-details {
-                        text-align: left;
-                        margin-bottom: 20px;
-                    }
-                    .invoice-details p {
-                        margin: 5px 0;
-                    }
-                    .invoice-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 20px;
-                    }
-                    .invoice-table th, .invoice-table td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-                    .invoice-table th:nth-child(1),
-                    .invoice-table td:nth-child(1) {
-                        width: 40%; 
-                    }
-                    .invoice-table th:nth-child(2),
-                    .invoice-table td:nth-child(2) {
-                        width: 15%; 
-                    }
-                    .invoice-table th:nth-child(3),
-                    .invoice-table td:nth-child(3) {
-                        width: 20%; 
-                    }
-                    .invoice-table th:nth-child(4),
-                    .invoice-table td:nth-child(4) {
-                        width: 25%; 
-                    }
-                    .invoice-total {
-                        margin-top: 20px;
-                    }
-                    .invoice-total p {
-                        margin: 5px 0;
-                        font-weight: bold;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class='invoice'>
-                    <h2>Devis</h2>
-                    <div class='invoice-details'>
-                        <p>Client: <strong> $customerLastName $customerFirstName </strong></p>
-                        <p>Date d'échéance: <strong> " . $IssuanceDate . "</strong> </p>
-                        <p>Date d'expriration: <strong> " . $ExpiryDate . "</strong> </p>
-                        <p>Statut du devis:<strong>  $status </strong> </p>
-                        <p style='text-align: center;'>----------------------------------------------------------------------------------------------------------------------------------</p>
-                        <p>Entreprise:<strong>  $company </strong> </p>
-                        <p>TVA:<strong>  $tva % </strong> </p>
-                        <p>Réduction:<strong>  $discount % </strong> </p>
-                    </div>
-                    <table class='invoice-table'>
-                        <thead>
-                        <tr>
-                            <th>Catégorie</th>
-                            <th>Produit</th>
-                            <th>Quantité</th>
-                            <th>Prix unitaire</th>
-                            <th>Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>               
-            ";
-
+    public function generateHtml(Quote $quote) : string{
+        
         $categories = [];
+        $tva = $quote->getTva();
 
         // Regrouper les produits par catégorie
         foreach ($quote->getProductQuotes() as $productQuote) {
-
+    
             $product = $productQuote->getProduct();
             $category = $product->getCategory(); // Récupérer la catégorie du produit
+            $totalPriceSum = 0;
+            $discount = $quote->getDiscount();
 
             // Ajouter la catégorie au tableau des catégories si elle n'existe pas déjà
             if (!isset($categories[$category->getId()])) {
@@ -193,7 +89,6 @@ class QuoteController extends AbstractController
                     'products' => []
                 ];
             }
-
             // Ajouter le produit à la catégorie correspondante
             $categories[$category->getId()]['products'][] = [
                 'name' => $product->getName(),
@@ -201,37 +96,15 @@ class QuoteController extends AbstractController
                 'price' => $product->getPrice(),
                 'totalPrice' => $product->getPrice() * $productQuote->getQuantity(),
             ];
-
+    
             // Mise à jour du total des prix
             $totalPriceSum += $product->getPrice() * $productQuote->getQuantity();
         }
 
-        // Générer le HTML de la facture en affichant chaque catégorie avec ses produits
-        foreach ($categories as $categoryId => $category) {
-            // Ajouter le nom de la catégorie au HTML de la facture
-            $html .= "<tr>
-                    <td style='text-align: center;' rowspan='" . count($category['products']) . "'>{$category['name']}</td>";
-
-            // Ajouter les produits de la catégorie au HTML de la facture
-            foreach ($category['products'] as $index => $product) {
-                if ($index !== 0) {
-                    $html .= "<tr>";
-                }
-
-                $html .= "<td style='text-align: center;'>{$product['name']}</td>
-                    <td style='text-align: center;'>{$product['quantity']}</td>
-                    <td style='text-align: center;'>{$product['price']} €</td>
-                    <td style='text-align: center;'>{$product['totalPrice']} €</td>
-                  </tr>";
-            }
-        }
-
-        // Calcul de la TVA
         if ($tva) {
-            $tvaAmount = $totalPriceSum * ($tva / 100); // Calcul de la TVA
+            $tvaAmount = $totalPriceSum * ($tva / 100);
         }
 
-        // Calcul du total avec TVA
         $totalWithTva = $totalPriceSum + $tvaAmount;
 
         // Calcul du total avec remise si elle existe
@@ -241,23 +114,25 @@ class QuoteController extends AbstractController
         } else {
             $totalWithDiscount = $totalWithTva; // Si pas de remise, le total avec remise est le même que le total avec TVA
         }
+        
+        $html = $this->renderView('pdf/quote-template-pdf.html.twig', [
+            'quote' => $quote,
+            'categories' => $categories,
+            'totalPriceSum' => $totalPriceSum,
+            'totalWithTva' => $totalWithTva,
+            'totalWithDiscount' => $totalWithDiscount
+            
+        ]);
 
-        // Finalisation du HTML avec les totaux
-        $html .=
-            "</tbody>
-            </table>
-                    <div class='invoice-total'>
-                        <p>Total: " . $totalPriceSum . " €</p>
-                        <p>Total avec TVA: " . $totalWithTva .  " €</p>
-                        <p>Total avec remise: " . $totalWithDiscount .  " €</p>
-                    </div>
-                </div>
-        </body>
-     </html>";
+        return $html;
+    }
 
+    #[Route('/pdf/{id}', name: 'pdf')]
+    public function generatePdfDevis(Quote $quote, PdfService $pdf): Response
+    {
+        $html = $this->generateHtml($quote);
         // Générer le PDF à partir du contenu HTML
         $pdfContent = $pdf->generatePdfContent($html);
-
         // Retourner le PDF en tant que réponse HTTP
         return new Response(
             $pdfContent,
@@ -327,7 +202,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer, PdfService $pdfService): Response
     {
         // Get the logged-in user
         $user = $this->getUser();
@@ -352,7 +227,7 @@ class QuoteController extends AbstractController
             $formData = $form->getData();
             $customer = $formData->getCustomer();
 
-            $mailer->newQuoteCreateEmail($customer);
+            $mailer->newQuoteCreateEmail($customer, $quote, $pdfService, $this);
         
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -388,7 +263,6 @@ class QuoteController extends AbstractController
     {
         $quotes = $request->request->all()['quotes'];
         $count = 0;
-        dd($request);
         foreach($quotes as $id => $token){
             $quote = $quoteRepository->find($id);
             if($quote && $this->isCsrfTokenValid('delete'.$id, $token)){
@@ -401,7 +275,7 @@ class QuoteController extends AbstractController
         return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'show', methods: ['GET'])]
     public function show(Quote $quote): Response
     {
         return $this->render('quote/show.html.twig', [

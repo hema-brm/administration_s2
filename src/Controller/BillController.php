@@ -35,6 +35,9 @@ class BillController extends AbstractController
         $this->kernel = $kernel;
     }
 
+    public function generateHtml(Quote $quote) : string {
+    }
+
 
     #[Route('/pdf/{id}', name: 'facture_pdf')]
 public function generatePdfFacture(Bill $bill, PdfService $pdf): Response

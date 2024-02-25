@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Devis</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .invoice {
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            max-width: 800px; 
+        }
+        .invoice h2 {
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .invoice-details p {
+            margin: 5px 0;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .invoice-table th:nth-child(1),
+        .invoice-table td:nth-child(1) {
+            width: 40%; 
+        }
+        .invoice-table th:nth-child(2),
+        .invoice-table td:nth-child(2) {
+            width: 15%; 
+        }
+        .invoice-table th:nth-child(3),
+        .invoice-table td:nth-child(3) {
+            width: 20%; 
+        }
+        .invoice-table th:nth-child(4),
+        .invoice-table td:nth-child(4) {
+            width: 25%; 
+        }
+        .invoice-total {
+        margin-top: 20px;
+        }
+        .invoice-total p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+    <body>
+
+        {% set customerLastName = quote.getCustomer().getLastname() %}
+        {% set customerFirstName = quote.getCustomer().getFirstname() %}
+        {% set status = quote.getStatus() %}
+        {% set company = quote.getCompany() %}
+        {% set products = quote.getProductQuotes() %}
+        {% set IssuanceDate = quote.getQuoteIssuanceDate().format('Y-m-d') %}
+        {% set expiryDate = (quote.getExpiryDate() is null ? null : quote.getExpiryDate().format('Y-m-d'))  %}
+        {% set totalPrice = quote.getTotalPrice() %}
+        {% set discount = quote.getDiscount() %}
+        {% set tva = quote.getTva() %}
+
+        <div class='invoice'>
+            <h2>Devis</h2>
+            <div class='invoice-details'>
+                <p>Client: <strong> {{ customerLastName }} {{ customerFirstName }} </strong></p>
+                <p>Date d'échéance: <strong> {{IssuanceDate}}</strong> </p>
+
+                {% if expiryDate is not empty %}   
+                        <p>Date d'expiration: <strong> {{expiryDate}} </strong> </p>";
+                {% endif %}
+                <p>Statut du devis:<strong>  {{status}} </strong> </p>
+                <p style='text-align: center;'>----------------------------------------------------------------------------------------------------------------------------------</p>
+                <p>Entreprise:<strong>  {{company}} </strong> </p>
+                <p>TVA:<strong>  {{tva}} % </strong> </p>
+                <p>Réduction:<strong>  {{discount}} % </strong> </p>
+            </div>
+            <table class='invoice-table'>
+                <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+            <tbody>  
+                {% for category in categories %}
+                {% for product in category.products %}
+                    <tr>
+                        {% if loop.index == 1 %}
+                            <td style='text-align: center;' rowspan='{{ category.products|length }}'>{{ category.name }}</td>
+                        {% endif %}
+                        <td style='text-align: center;'>{{ product.name }}</td>
+                        <td style='text-align: center;'>{{ product.quantity }}</td>
+                        <td style='text-align: center;'>{{ product.price }} €</td>
+                        <td style='text-align: center;'>{{ product.totalPrice }} €</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+            </table>
+                    <div class='invoice-total'>
+                        <p>Total: {{totalPriceSum}} €</p>
+                        <p>Total avec TVA: {{totalWithTva}} €</p>
+                        <p>Total avec remise: {{totalWithDiscount}} €</p>
+                    </div>
+                </div>
+        </body>
+     </html>

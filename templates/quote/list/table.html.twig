@@ -5,7 +5,6 @@
 <table 
     class="w-full border shadow-sm text-sm"
     data-controller="form--checkbox--multiple"
-    data-controller="form--radio--post">
 
 
     <thead>
@@ -28,7 +27,7 @@
             data-controller="link--clickable"
             data-link--clickable-path-value="{{ path('app_quote_show', { 'id': quote.id }) }}"
             data-action="click->link--clickable#visit"
-            data-link--clickable-target="element"
+            data-link--clickable-target="element" 
             class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
         >
             <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
@@ -39,7 +38,6 @@
                     value="{{ csrf_token('delete' ~ quote.id) }}"
                     data-form--checkbox--multiple-target="items"
                     data-form--checkbox--post-target="items"
-                    data-form--radio--post-target="items"
                 >
             </td>
             <td class="{{ cellPadding }} text-center">{{ quote.quoteNumber }}</td>
@@ -49,15 +47,19 @@
             <td class="{{ cellPadding }} text-right">{{ quote.expiryDate ? quote.expiryDate|date('Y-m-d') : '' }}</td>
 
             <td class="{{ cellPadding }} text-right text-secondary-400">
-                <div class="flex flex-row justify-end gap-5" data-link--clickable-target="exclude">
-                    <a href="{{ path('app_mailer_reminderEmail', {'id': quote.customer.getId()} ) }}" data-turbo-action="replace"
-                        data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-envelope hover:text-warning-500"></i>
-                    </a>
+                <div class="flex flex-row justify-end gap-3" data-link--clickable-target="exclude">
+
+                    {{ include("components/navigation/bar/item/mailing-choice.html.twig", {
+                        firstRoute: path('app_mailer_quoteReminderEmail', {'customer': quote.customer.getId()}),
+                        secondRoute: path('app_mailer_quoteReplayEmail', {'customer': quote.customer.getId(), 'quote': quote.getId()}),
+                        firstChoiceText: "Envoyer le 1er mail de rappel",
+                        secondChoiceText: "Renvoyer le devis en PDF",
+                    }) }}
+                        
                     <a href="{{ path('app_quote_edit', {'id': quote.id}) }}" data-turbo-action="replace"
                        data-link--clickable-target="exclude">
                         <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                    </a>
+                    </a>                    
                 </div>
             </td>
         </tr>
