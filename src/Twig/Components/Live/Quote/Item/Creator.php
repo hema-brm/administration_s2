@@ -144,6 +144,12 @@ class Creator extends AbstractController
         return $data;
     }
 
+    #[PostMount]
+    public function postMount(): void
+    {
+        // No operation
+    }
+
     #[LiveListener('product_selection_has_been_changed')]
     public function onProductChanged()
     {
@@ -182,10 +188,6 @@ class Creator extends AbstractController
 
     private function refreshTotal(): void
     {
-        $total = $this->price * $this->quantity;
-        if ($total < 0) {
-            $total = 0;
-        }
-        $this->total = $total;
+        $this->total = ProductQuote::_getTotal($this->price, $this->quantity);
     }
 }

@@ -17,19 +17,21 @@ use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
+use Symfony\UX\LiveComponent\Attribute\PreReRender;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\UX\TwigComponent\Attribute\PostMount;
 use Symfony\UX\TwigComponent\Attribute\PreMount;
 
 #[AsLiveComponent]
 class Creator extends AbstractController
 {
     use DefaultActionTrait;
-    use ComponentWithFormTrait;
     use ValidatableComponentTrait;
+    use ComponentWithFormTrait;
 
     #[LiveProp(writable: true)]
     #[Assert\Valid]
@@ -43,7 +45,9 @@ class Creator extends AbstractController
     #[LiveProp(writable: true)]
     #[Assert\NotNull(message: 'Vous devez choisir un numéro de devis.')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'Le numéro de devis doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le numéro de devis doit contenir au maximum {{ limit }} caractères.')]
-    #[EasyVowsAssert\QuoteNumberConstraint(message: 'Le numéro de devis "{{ value }}" est déjà utilisé.')]
+    /**
+     * @TODO Add EasyVowsAssert\QuoteNumberConstraint constraint later to work with edit mode.
+     */
     public ?string $quote_number = null;
 
     #[LiveProp(writable: true)]
@@ -75,6 +79,15 @@ class Creator extends AbstractController
 
     public bool $savedSuccessfully = false;
 
+    private const FIELD_TO_VALIDATE = [
+        'customerId',
+        'quote_issuance_date',
+        'expiry_date',
+        'discount',
+        'tva',
+        'status',
+    ];
+
     public function __construct(
         private readonly QuoteCreatorService $quoteCreatorService,
     )
@@ -103,43 +116,91 @@ class Creator extends AbstractController
 
     private function postQuoteSaving(): RedirectResponse
     {
-        $this->addFlash('success', 'Votre devis a été créée avec succès.');
+        $this->addFlash('success', 'Votre devis a été enregistré avec succès.');
         $this->savedSuccessfully = true;
         return $this->redirectToRoute('app_quote_show', [
             'id' => $this->quoteData->getId(),
         ]);
     }
 
-    private function ensureDefaultCustomer(): void
+    private function ensureDefaultCustomer(?Quote $quote = null): void
     {
-        $this->customerId = $this->quoteCreatorService->getDefaultCustomer()->getId();
+        $this->customerId = $this->quoteCreatorService->getDefaultCustomer($quote)->getId();
     }
 
-    private function setDefaultData(): void
+    private function setDefaultData(?Quote $quote = null): void
     {
-        $this->setDefaultQuoteNumber();
-        $this->setDefaultDates();
+        $this->setDefaultQuoteNumber($quote);
+        $this->setDefaultDates($quote);
+        $this->setDefaultDiscount($quote);
+        $this->setDefaultTva($quote);
+        $this->setDefaultStatus($quote);
+        $this->setDefaultProductQuotes($quote);
     }
 
-    private function setDefaultDates(): void
+    private function setDefaultDates(?Quote $quote = null): void
     {
         $this->quoteCreatorService->setDefaultDates(
             $this->quote_issuance_date,
-            $this->expiry_date
+            $this->expiry_date,
+            $quote,
         );
     }
 
-    private function setDefaultQuoteNumber(): void
+    private function setDefaultDiscount(?Quote $quote = null): void
     {
-        $this->quote_number = $this->quoteCreatorService->getDefaultQuoteNumber();
+        $quoteExists = !empty($quote) && $quote->hasId();
+        $this->discount = $quoteExists ? $quote->getDiscount() : 0.0;
+    }
+
+    private function setDefaultTva(?Quote $quote = null): void
+    {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        $this->tva = $quoteExists ? $quote->getTva() : 0.0;
+    }
+
+    private function setDefaultStatus(?Quote $quote = null): void
+    {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        $this->status = $quoteExists ? $quote->getStatus() : Quote::STATUS_DRAFT;
+    }
+
+    private function setDefaultQuoteNumber(?Quote $quote = null): void
+    {
+        $this->quote_number = $this->quoteCreatorService->getDefaultQuoteNumber($quote);
+    }
+
+    private function setDefaultProductQuotes(?Quote $quote = null): void
+    {
+        $this->quoteCreatorService->setDefaultProductQuotes(
+            $quote,
+            $this->lineItems,
+        );
+    }
+
+    #[PreReRender]
+    public function onEachUpdate(): void
+    {
+
     }
 
     #[PreMount]
     public function preMount(array $data): array
     {
-        $this->ensureDefaultCustomer();
-        $this->setDefaultData();
+        $this->initializeQuoteData();
         return $data;
+    }
+
+    #[PostMount]
+    public function postMount()
+    {
+        $this->initializeQuoteData();
+    }
+
+    private function initializeQuoteData(): void
+    {
+        $this->ensureDefaultCustomer($this->quoteData);
+        $this->setDefaultData($this->quoteData);
     }
 
     #[LiveAction]
@@ -200,9 +261,32 @@ class Creator extends AbstractController
     }
 
     #[ExposeInTemplate]
+    public function isEditing(): bool
+    {
+        return $this->quoteData->hasId();
+    }
+
+    #[ExposeInTemplate('_isValid')]
     public function canSaveQuote(): bool
     {
         return $this->quoteCreatorService->canSaveQuote($this->lineItems);
+    }
+
+    #[ExposeInTemplate('_hasErrors')]
+    public function hasErrors(): bool
+    {
+        foreach (self::FIELD_TO_VALIDATE as $field) {
+            if ($this->getErrors($field)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #[ExposeInTemplate('_allValid')]
+    public function isValid(): bool
+    {
+        return !$this->hasErrors() && $this->canSaveQuote();
     }
 
     #[ExposeInTemplate]
