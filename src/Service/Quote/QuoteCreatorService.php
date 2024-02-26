@@ -299,7 +299,7 @@ class QuoteCreatorService {
 
         $editableStatuses = [
             Quote::STATUS_DRAFT,
-            Quote::STATUS_ACCEPTED,
+            Quote::STATUS_SENT,
             Quote::STATUS_REFUSED,
         ];
 
