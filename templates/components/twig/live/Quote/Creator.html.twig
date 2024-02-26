@@ -11,36 +11,52 @@
         {% include '@components/twig/live/Quote/quote-recap.html.twig' %}
     </div>
     {% endif %}
-    {% if not canSaveQuote %}
+    {% if not _isValid %}
         <div class="mb-3">
             <twig:Alert
                 color="warning"
-                text="Veuillez remplir tous les champs obligatoires et rajouter des produits pour enregistrer le devis."
+                text="Veuillez rajouter des produits pour enregistrer le devis."
                 icon="fa-warning"
                 variant="small"
             />
         </div>
     {% endif %}
+    {% if _hasErrors %}
+        <div class="mb-3">
+            <twig:Alert
+                color="danger"
+                text="Veuillez corriger les erreurs avant de sauvegarder le devis."
+                icon="fa-times-circle"
+                variant="small"
+            />
+        </div>
+    {% endif %}
     <div class="flex flex-row justify-end">
-        {% set buttonClass = 'text-white px-4 py-2 rounded text-sm' %}
-        {% if canSaveQuote %}
+        {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
+        {% if _allValid %}
             {% set buttonClass = buttonClass ~ ' bg-primary-500 hover:bg-primary-700 cursor-pointer' %}
+            {% set textClass = '' %}
         {% else %}
-            {% set buttonClass = buttonClass ~ ' bg-gray-400 cursor-not-allowed' %}
+            {% set buttonClass = buttonClass ~ ' bg-gray-400 cursor-not-allowed pointer-events-none' %}
+            {% set textClass = 'line-through' %}
         {% endif %}
         <button
-            {{ (canSaveQuote) ? '' : 'disabled' }}
+            {{ (_allValid) ? '' : 'disabled="disabled"' }}
             data-action="live#action"
             data-action-name="saveQuote"
             class="{{ buttonClass }}"
         >
-            <span data-loading="show">
-                <i class="fas fa-spinner animate-spin"></i>
+            <div class="mr-2">
+                <span data-loading="show">
+                    <i class="fas fa-spinner animate-spin"></i>
+                </span>
+                <span data-loading="hide">
+                    <i class="fas fa-save"></i>
+                </span>
+            </div>
+            <span class="flex {{ textClass }}">
+                Sauvegarder
             </span>
-            <span data-loading="hide">
-                <i class="fas fa-save"></i>
-            </span>
-            Sauvegarder
         </button>
     </div>
 </div>

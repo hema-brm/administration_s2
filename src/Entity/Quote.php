@@ -43,7 +43,7 @@ class Quote
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
-    private ?Customer $customer;
+    private ?Customer $customer = null;
 
     #[ORM\OneToOne(targetEntity: Bill::class)]
     #[ORM\JoinColumn(nullable: true)]
@@ -192,5 +192,10 @@ class Quote
     {
         $this->bill = $bill;
         return $this;
+    }
+
+    public function hasId(): bool
+    {
+        return $this->id !== null;
     }
 }

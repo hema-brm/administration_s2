@@ -88,4 +88,19 @@ class ProductQuote
 
         return $this;
     }
+
+    public static function _getTotal($price, $quantity): float
+    {
+        $total = $price * $quantity;
+        if ($total < 0) {
+            $total = 0;
+        }
+
+        return $total;
+    }
+
+    public function getTotal(): float
+    {
+        return self::_getTotal($this->price, $this->quantity);
+    }
 }

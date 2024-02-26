@@ -19,16 +19,28 @@ class QuoteCreatorService {
         private readonly QuoteRepository $quoteRepository,
     ) {}
 
-    private static function setDefaultIssuanceDate(?\DateTime &$defaultIssuanceDate): void
+    private static function setDefaultIssuanceDate(?\DateTime &$defaultIssuanceDate, ?Quote $quote = null): void
     {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        if ($quoteExists) {
+            $defaultIssuanceDate = $quote->getQuoteIssuanceDate();
+            return;
+        }
         $defaultIssuanceDate = new \DateTime();
     }
 
     private static function setDefaultExpiryDate(
         ?\DateTimeInterface $issuanceDate,
-        ?\DateTime &$expiryDate
+        ?\DateTime &$expiryDate,
+        ?Quote $quote = null
     ): void
     {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        if ($quoteExists) {
+            $expiryDate = $quote->getExpiryDate();
+            return;
+        }
+
         if (empty($issuanceDate))
         {
             $expiryDate = new \DateTime();
@@ -39,15 +51,22 @@ class QuoteCreatorService {
 
     public function setDefaultDates(
         ?\DateTimeInterface &$issuanceDate,
-        ?\DateTime &$expiryDate
+        ?\DateTime &$expiryDate,
+        ?Quote $quote = null
     ): void
     {
-        self::setDefaultIssuanceDate($issuanceDate);
-        self::setDefaultExpiryDate($issuanceDate, $expiryDate);
+        self::setDefaultIssuanceDate($issuanceDate, $quote);
+        self::setDefaultExpiryDate($issuanceDate, $expiryDate, $quote);
     }
 
-    public function getDefaultQuoteNumber(): string
+    public function getDefaultQuoteNumber(?Quote $quote = null): string
     {
+        $quoteExists = !empty($quote) && $quote->hasId();
+
+        if ($quoteExists) {
+            return $quote->getQuoteNumber();
+        }
+
         $lastQuote = $this->quoteRepository->findLastQuote();
         $now = (new \DateTime())->format('Ymd');
 
@@ -59,8 +78,13 @@ class QuoteCreatorService {
         return $now . ($lastQuote->getId() + 1);
     }
 
-    public function getDefaultCustomer(): ?Customer
+    public function getDefaultCustomer(?Quote $quote = null): ?Customer
     {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        if ($quoteExists) {
+            return $quote->getCustomer();
+        }
+
         return $this->customerRepository->getFirstCustomer();
     }
 
@@ -83,6 +107,26 @@ class QuoteCreatorService {
             'total' => 0.0,
             'isEditing' => true,
         ];
+    }
+
+    public function setDefaultProductQuotes(
+        ?Quote $quote = null,
+        array &$lineItems = null,
+    ): void
+    {
+        $quoteExists = !empty($quote) && $quote->hasId();
+        if ($quoteExists) {
+            $productQuotes = $quote->getProductQuotes();
+            foreach ($productQuotes as $productQuote) {
+                $lineItems[] = [
+                    'productId' => $productQuote->getProduct()->getId(),
+                    'quantity' => $productQuote->getQuantity(),
+                    'price' => $productQuote->getPrice(),
+                    'total' => ProductQuote::_getTotal($productQuote->getPrice(), $productQuote->getQuantity()),
+                    'isEditing' => false,
+                ];
+            }
+        }
     }
 
     public function removeLineItem(array &$lineItems, int $key): void
@@ -122,10 +166,11 @@ class QuoteCreatorService {
         $lineItems[$key]['total'] = $total;
     }
 
-    private function ensurePresentProductQuote(?Quote $quoteData): void
+    private function ensurePresentProductQuote(?Quote $quoteData, array &$lineItems): void
     {
+
         foreach ($quoteData->getProductQuotes() as $key => $item) {
-            if (!isset($this->lineItems[$key])) {
+            if (!isset($lineItems[$key])) {
                 $quoteData->removeProductQuote($item);
             }
         }
@@ -137,14 +182,14 @@ class QuoteCreatorService {
             $productQuoteItem = $quoteData->getProductQuotes()->get($key);
             if (null === $productQuoteItem) {
                 $productQuoteItem = new ProductQuote();
-                $entityManager->persist($productQuoteItem);
+                $product = $this->findProduct($lineItem['productId']);
+                $productQuoteItem->setProduct($product);
+                $productQuoteItem->setQuantity($lineItem['quantity']);
+                $productQuoteItem->setPrice($lineItem['price']);
+                $productQuoteItem->setQuote($quoteData);
                 $quoteData->addProductQuote($productQuoteItem);
             }
-
-            $product = $this->findProduct($lineItem['productId']);
-            $productQuoteItem->setProduct($product);
-            $productQuoteItem->setQuantity($lineItem['quantity']);
-            $productQuoteItem->setPrice($lineItem['price']);
+            $entityManager->persist($productQuoteItem);
         }
     }
 
@@ -158,7 +203,7 @@ class QuoteCreatorService {
         float $discount,
         float $tva,
         int $status,
-
+        array &$lineItems,
     ): void
     {
         $customer = $this->findCustomer($customerId);
@@ -170,6 +215,8 @@ class QuoteCreatorService {
         $quoteData->setStatus($status);
         $quoteData->setQuoteIssuanceDate($issuanceDate);
         $quoteData->setExpiryDate($expiryDate);
+
+        $this->setProductQuoteItems($entityManager, $quoteData, $lineItems);
 
         $entityManager->persist($quoteData);
         $entityManager->flush();
@@ -185,12 +232,11 @@ class QuoteCreatorService {
         float $discount,
         float $tva,
         int $status,
-        array &$lineItems
+        array &$lineItems,
     ): void
     {
-        $this->ensurePresentProductQuote($quoteData);
-        $this->setProductQuoteItems($entityManager, $quoteData, $lineItems);
-        $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $tva, $status);
+        $this->ensurePresentProductQuote($quoteData, $lineItems);
+        $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $tva, $status, $lineItems);
     }
 
     private function areAnyLineItemsEditing(array $lineItems): bool
