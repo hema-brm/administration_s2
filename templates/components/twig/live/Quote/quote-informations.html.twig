@@ -8,6 +8,7 @@
                 'data-model': 'customerId',
                 'with_error': _errors.has('customerId') ? true : false,
                 'error_text': _errors.has('customerId') ? _errors.get('customerId') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
         {{ form_row(form.quote_number, {
@@ -17,6 +18,7 @@
                 'value': quote_number,
                 'with_error': _errors.has('quote_number') ? true : false,
                 'error_text': _errors.has('quote_number') ? _errors.get('quote_number') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
     </div>
@@ -28,6 +30,7 @@
                 'data-model': 'quote_issuance_date',
                 'with_error': _errors.has('quote_issuance_date') ? true : false,
                 'error_text': _errors.has('quote_issuance_date') ? _errors.get('quote_issuance_date') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
         {{ form_row(form.expiry_date, {
@@ -36,6 +39,7 @@
                 'data-model': 'expiry_date',
                 'with_error': _errors.has('expiry_date') ? true : false,
                 'error_text': _errors.has('expiry_date') ? _errors.get('expiry_date') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
     </div>
@@ -45,19 +49,21 @@
             {{ form_row(form.discount, {
                 attr: {
                     'class': 'w-full mr-4',
-                    'data-model': 'discount',
+                    'data-model': 'debounce(300)|discount',
                     'value': discount,
                     'with_error': _errors.has('discount') ? true : false,
                     'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
             {{ form_row(form.tva, {
                 attr: {
                     'class': 'w-full',
-                    'data-model': 'tva',
+                    'data-model': 'debounce(300)|tva',
                     'value': tva,
                     'with_error': _errors.has('tva') ? true : false,
                     'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
         </div>
@@ -69,6 +75,7 @@
                     'value': status,
                     'with_error': _errors.has('status') ? true : false,
                     'error_text': _errors.has('status') ? _errors.get('status') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
         </div>

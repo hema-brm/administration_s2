@@ -4,22 +4,26 @@
             <td class="px-2 text-right">Total HT</td>
             <td class=" py-2 px-2 text-right text-normal">{{ this.totals.total|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
         </tr>
+        {% if _hasTaxRateValue %}
         <tr class="border">
             <td class="px-2 text-right">TVA ({{ this.tva }}%)</td>
             <td class=" py-2 px-2 text-right text-normal">{{ this.totals.totalTva|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
         </tr>
+        {% endif %}
         <tr class="border">
             <td class="px-2 text-right">Total TTC</td>
             <td class=" py-2 px-2 text-right font-bold text-normal text-primary-500">{{ this.totals.totalTTC|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
         </tr>
+        {% if _hasDiscountValue %}
         <tr class="border">
             <td class="px-2 text-right">Réduction ({{ this.discount }}%)</td>
             <td class=" py-2 px-2 text-right font-bold text-normal text-success-500">-{{ this.totals.totalDiscount|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
         </tr>
+        {% endif %}
     </table>
     <table class="w-full">
     <tr class="border text-base">
-        <td class="py-4 px-2 text-right font-bold">Montant total :</td>
+        <td class="py-4 px-2 text-right font-bold">Montant total</td>
         <td class="py-4 px-2 text-right font-bold">{{ this.totals.grandTotal|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
     </tr>
     </table>

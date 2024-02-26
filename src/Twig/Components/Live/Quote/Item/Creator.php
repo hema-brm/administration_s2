@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Entity\ProductQuote;
 use App\Form\ProductQuoteType;
 use App\Repository\ProductRepository;
+use App\Service\Quote\QuoteCreatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -49,6 +50,9 @@ class Creator extends AbstractController
     public bool $isEditing = false;
 
     #[LiveProp]
+    public string $mode = 'create';
+
+    #[LiveProp]
     public ?ProductQuote $initialFormData = null;
 
     #[LiveProp(writable: true)]
@@ -58,7 +62,9 @@ class Creator extends AbstractController
     #[LiveProp(writable: true)]
     public bool $itemPriceHasBeenEdited = false;
 
-    public function __construct(private ProductRepository $productRepository)
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+    )
     {
 
     }
@@ -121,6 +127,12 @@ class Creator extends AbstractController
         $quantityError = $this->getErrors('quantity');
 
         return !empty($productError) || !empty($quantityError);
+    }
+
+    #[ExposeInTemplate('_canSaveItems')]
+    public function canSaveItems(): bool
+    {
+        return $this->mode != QuoteCreatorService::READONLY_MODE;
     }
 
     private function setDefaultProduct(): void

@@ -28,9 +28,11 @@
 {% endblock %}
 
 {% block text_widget %}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
     {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
-    {% set classes = 'w-full border px-4 py-2 rounded-md w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {% set classes = disabledClasses ~ ' w-full border px-4 py-2 rounded-md w-full text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}
@@ -42,6 +44,22 @@
 {% endblock %}
 
 {% block integer_widget %}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
+    {% set withError = attr.with_error|default(false) %}
+    {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
+    {% set classes = disabledClasses ~ ' w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {%- set attr = attr|merge({
+        class: classes
+    }) -%}
+    {{- parent() -}}
+    {% set errorText = attr.error_text|default('') %}
+    {% if errorText %}
+        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% endif %}
+{% endblock %}
+
+{% block number_widget %}
     {% set isDisabled = attr.disabled|default(false) %}
     {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
@@ -142,9 +160,11 @@
 {% endblock %}
 
 {%- block date_widget -%}
+    {% set isDisabled = attr.disabled|default(false) %}
+    {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
     {% set borderClasses = (withError or errors|length > 0) ? 'border-danger-400' : '' %}
-    {% set classes = 'w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
+    {% set classes = disabledClasses ~ ' w-full border px-4 py-2 rounded-md text-sm outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:ring-opacity-50 ' ~ borderClasses %}
     {%- set attr = attr|merge({
         class: classes
     }) -%}

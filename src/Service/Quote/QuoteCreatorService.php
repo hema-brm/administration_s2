@@ -13,6 +13,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class QuoteCreatorService {
 
+    public const CREATE_MODE = 'create';
+    public const EDIT_MODE = 'edit';
+    public const READONLY_MODE = 'readonly';
+
     public function __construct(
         private readonly CustomerRepository $customerRepository,
         private readonly ProductRepository $productRepository,
@@ -49,7 +53,7 @@ class QuoteCreatorService {
         $expiryDate = \DateTime::createFromInterface($issuanceDateTmp->add(new \DateInterval('P3M')));
     }
 
-    public function setDefaultDates(
+    public static function setDefaultDates(
         ?\DateTimeInterface &$issuanceDate,
         ?\DateTime &$expiryDate,
         ?Quote $quote = null
@@ -98,7 +102,7 @@ class QuoteCreatorService {
         return $this->productRepository->find($id);
     }
 
-    public function addLineItem(array &$lineItems): void
+    public static function addLineItem(array &$lineItems): void
     {
         $lineItems[] = [
             'productId' => null,
@@ -109,7 +113,7 @@ class QuoteCreatorService {
         ];
     }
 
-    public function setDefaultProductQuotes(
+    public static function setDefaultProductQuotes(
         ?Quote $quote = null,
         array &$lineItems = null,
     ): void
@@ -129,7 +133,7 @@ class QuoteCreatorService {
         }
     }
 
-    public function removeLineItem(array &$lineItems, int $key): void
+    public static function removeLineItem(array &$lineItems, int $key): void
     {
         if (!isset($lineItems[$key])) {
             return;
@@ -138,7 +142,7 @@ class QuoteCreatorService {
         unset($lineItems[$key]);
     }
 
-    public function onLineItemEditModeChange(array &$lineItems, int $key, bool $isEditing): void
+    public static function onLineItemEditModeChange(array &$lineItems, int $key, bool $isEditing): void
     {
         if (!isset($lineItems[$key])) {
             return;
@@ -239,7 +243,7 @@ class QuoteCreatorService {
         $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $tva, $status, $lineItems);
     }
 
-    private function areAnyLineItemsEditing(array $lineItems): bool
+    private static function areAnyLineItemsEditing(array $lineItems): bool
     {
         foreach ($lineItems as $lineItem) {
             if ($lineItem['isEditing']) {
@@ -250,17 +254,18 @@ class QuoteCreatorService {
         return false;
     }
 
-    public function productItemsIsEmpty(array $lineItems): bool
+    public static function productItemsIsEmpty(array $lineItems): bool
     {
         return empty($lineItems);
     }
 
     public function canSaveQuote(array $lineItems): bool
     {
-        return !$this->areAnyLineItemsEditing($lineItems) && !$this->productItemsIsEmpty($lineItems);
+        return (!self::areAnyLineItemsEditing($lineItems))
+            && (!self::productItemsIsEmpty($lineItems));
     }
 
-    public function getTotals(
+    public static function getTotals(
         array $lineItems,
         ?float $discount,
         ?float $tva,
@@ -284,6 +289,25 @@ class QuoteCreatorService {
             'totalDiscount' => $totalDiscount,
             'grandTotal' => $totalTTC - $totalDiscount,
         ];
+    }
+
+    public static function getMode(?Quote $quote = null): string
+    {
+        if (empty($quote) || !$quote->hasId()) {
+            return self::CREATE_MODE;
+        }
+
+        $editableStatuses = [
+            Quote::STATUS_DRAFT,
+            Quote::STATUS_ACCEPTED,
+            Quote::STATUS_REFUSED,
+        ];
+
+        if (in_array($quote->getStatus(), $editableStatuses)) {
+            return self::EDIT_MODE;
+        }
+
+        return self::READONLY_MODE;
     }
 
 }

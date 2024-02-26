@@ -1,4 +1,5 @@
 <h3 class="mb-1 text-lg">Liste des produits</h3>
+{% if not _isReadOnlyMode %}
 <button
     data-action="live#action"
     data-action-name="addLineItem"
@@ -11,6 +12,7 @@
     <i class="fas fa-plus" data-loading="action(addLineItem)|hide"></i>
     <span>Ajouter</span>
 </button>
+{% endif %}
 
 {% if productItemsIsEmpty %}
     <twig:Alert
@@ -28,5 +30,6 @@
         quantity="{{ line.quantity }}"
         price="{{ line.price }}"
         isEditing="{{ line.isEditing }}"
+        mode="{{ _mode }}"
     />
 {% endfor %}

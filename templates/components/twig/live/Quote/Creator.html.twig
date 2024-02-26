@@ -1,10 +1,20 @@
 <div {{ attributes }}>
     {{ displayFlash() }}
+    {% if _isReadOnlyMode %}
+        <div class="mb-3">
+            <twig:Alert
+                color="warning"
+                text="Vous êtes en mode lecture seule. Vous ne pouvez plus modifier ce devis car il a déjà été envoyé."
+                icon="fa-warning"
+                variant="small"
+            />
+        </div>
+    {% endif %}
     <div class="border shadow-lg p-4 mb-4">
         {% include '@components/twig/live/Quote/quote-informations.html.twig' %}
     </div>
     <div class="border shadow p-4 mb-3">
-        {% include '@components/twig/live/Quote/Item/quote-products.html.twig' %}
+        {% include '@components/twig/live/Quote/quote-products.html.twig' %}
     </div>
     {% if not productItemsIsEmpty %}
     <div class="flex justify-end mb-3 bg-white">
@@ -31,7 +41,8 @@
             />
         </div>
     {% endif %}
-    <div class="flex flex-row justify-end">
+    {% if not _isReadOnlyMode %}
+    <div class="flex flex-row justify-end mb-3">
         {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
         {% if _allValid %}
             {% set buttonClass = buttonClass ~ ' bg-primary-500 hover:bg-primary-700 cursor-pointer' %}
@@ -59,4 +70,5 @@
             </span>
         </button>
     </div>
+    {% endif %}
 </div>

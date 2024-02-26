@@ -9,6 +9,7 @@ use App\Form\Field\CustomerAutocompleteField;
 use App\Util\Quote\Status\QuoteStatusLabel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -72,16 +73,22 @@ class QuoteType extends AbstractType
                 ],
                 'data' => $defaultData['expiry_date'],
             ])
-            ->add('discount', IntegerType::class, [
-                'label' => 'Remise',
+            ->add('discount', NumberType::class, [
+                'label' => 'Remise (%)',
                 'attr' => [
-                    'placeholder' => 'Remise',
+                    'placeholder' => 'Remise (%)',
+                    'min' => '0',
+                    'max' => '100',
+                    'step' => '0.01',
                 ],
             ])
-            ->add('tva', IntegerType::class, [
-                'label' => 'TVA',
+            ->add('tva', NumberType::class, [
+                'label' => 'TVA (%)',
                 'attr' => [
-                    'placeholder' => 'TVA',
+                    'placeholder' => 'TVA (%)',
+                    'min' => '0',
+                    'max' => '100',
+                    'step' => '0.01',
                 ],
             ])
             ->add('status', ChoiceType::class, [

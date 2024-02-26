@@ -53,12 +53,12 @@ class Creator extends AbstractController
     #[LiveProp(writable: true)]
     #[Assert\PositiveOrZero(message: 'La remise doit être supérieur ou égale à 0.')]
     #[Assert\LessThanOrEqual(value: 100, message: 'La remise doit être inférieur ou égale à 100.')]
-    public ?float $discount = 0.0;
+    public ?float $discount;
 
     #[LiveProp(writable: true)]
     #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
     #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
-    public ?float $tva = 0.0;
+    public ?float $tva;
 
     #[LiveProp(writable: true)]
     #[Assert\Choice(choices: [0, 1, 2, 3], message: 'Le statut choisi est invalide.')]
@@ -140,7 +140,7 @@ class Creator extends AbstractController
 
     private function setDefaultDates(?Quote $quote = null): void
     {
-        $this->quoteCreatorService->setDefaultDates(
+        $this->quoteCreatorService::setDefaultDates(
             $this->quote_issuance_date,
             $this->expiry_date,
             $quote,
@@ -150,13 +150,13 @@ class Creator extends AbstractController
     private function setDefaultDiscount(?Quote $quote = null): void
     {
         $quoteExists = !empty($quote) && $quote->hasId();
-        $this->discount = $quoteExists ? $quote->getDiscount() : 0.0;
+        $this->discount = $quoteExists ? $quote->getDiscount() : null;
     }
 
     private function setDefaultTva(?Quote $quote = null): void
     {
         $quoteExists = !empty($quote) && $quote->hasId();
-        $this->tva = $quoteExists ? $quote->getTva() : 0.0;
+        $this->tva = $quoteExists ? $quote->getTva() : null;
     }
 
     private function setDefaultStatus(?Quote $quote = null): void
@@ -172,7 +172,7 @@ class Creator extends AbstractController
 
     private function setDefaultProductQuotes(?Quote $quote = null): void
     {
-        $this->quoteCreatorService->setDefaultProductQuotes(
+        $this->quoteCreatorService::setDefaultProductQuotes(
             $quote,
             $this->lineItems,
         );
@@ -206,12 +206,16 @@ class Creator extends AbstractController
     #[LiveAction]
     public function addLineItem(): void
     {
-        $this->quoteCreatorService->addLineItem($this->lineItems);
+        $this->quoteCreatorService::addLineItem($this->lineItems);
     }
 
     #[LiveAction]
     public function saveQuote(EntityManagerInterface $entityManager, Session $session)
     {
+        if (QuoteCreatorService::READONLY_MODE == $this->getMode()) {
+            $this->addFlash('warning', 'Vous ne pouvez pas enregistrer un devis en mode lecture seule.');
+            return;
+        }
         if (!$this->canSaveQuote()) {
             $this->addFlash('warning', 'Veuillez remplir tous les champs obligatoires et ajouter des produits pour enregistrer le devis.');
             return;
@@ -239,13 +243,13 @@ class Creator extends AbstractController
     #[LiveListener('removeLineItem')]
     public function removeLineItem(#[LiveArg] int $key): void
     {
-        $this->quoteCreatorService->removeLineItem($this->lineItems, $key);
+        $this->quoteCreatorService::removeLineItem($this->lineItems, $key);
     }
 
     #[LiveListener('line_item:change_edit_mode')]
     public function onLineItemEditModeChange(#[LiveArg] int $key, #[LiveArg] $isEditing): void
     {
-        $this->quoteCreatorService->onLineItemEditModeChange($this->lineItems, $key, $isEditing);
+        $this->quoteCreatorService::onLineItemEditModeChange($this->lineItems, $key, $isEditing);
     }
 
     #[LiveListener('line_item:save')]
@@ -257,7 +261,23 @@ class Creator extends AbstractController
         #[LiveArg] float $total,
     ): void
     {
+        if (QuoteCreatorService::READONLY_MODE == $this->getMode()) {
+            $this->addFlash('warning', 'Vous ne pouvez pas modifier un devis en mode lecture seule.');
+            return;
+        }
         $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $price, $total);
+    }
+
+    #[ExposeInTemplate('_mode')]
+    public function getMode(): string
+    {
+        return $this->quoteCreatorService::getMode($this->quoteData);
+    }
+
+    #[ExposeInTemplate('_isReadOnlyMode')]
+    public function isReadOnlyMode(): bool
+    {
+        return QuoteCreatorService::READONLY_MODE == $this->getMode();
     }
 
     #[ExposeInTemplate]
@@ -298,10 +318,22 @@ class Creator extends AbstractController
     #[ExposeInTemplate]
     public function getTotals(): array
     {
-        return $this->quoteCreatorService->getTotals(
+        return $this->quoteCreatorService::getTotals(
             $this->lineItems,
             $this->discount,
             $this->tva,
         );
+    }
+
+    #[ExposeInTemplate('_hasTaxRateValue')]
+    public function hasTaxRateValue(): bool
+    {
+        return $this->tva > 0;
+    }
+
+    #[ExposeInTemplate('_hasDiscountValue')]
+    public function hasDiscountValue(): bool
+    {
+        return $this->discount > 0;
     }
 }
