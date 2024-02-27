@@ -77,6 +77,9 @@ class Creator extends AbstractController
     #[LiveProp]
     public array $lineItems = [];
 
+    #[LiveProp]
+    public string $viewMode = 'create';
+
     public bool $savedSuccessfully = false;
 
     private const FIELD_TO_VALIDATE = [

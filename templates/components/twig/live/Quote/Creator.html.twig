@@ -1,6 +1,6 @@
 <div {{ attributes }}>
     {{ displayFlash() }}
-    {% if _isReadOnlyMode %}
+    {% if _isReadOnlyMode and 'show' != viewMode %}
         <div class="mb-3">
             <twig:Alert
                 color="warning"

@@ -21,13 +21,6 @@
 
     <div class="px-4">
     <div class="flex flex-row justify-between py-2">
-            {{ form_search_macro({
-                id: 'form-search-customer',
-                action: path('app_bill_index'),
-                placeholder: 'Rechercher',
-                name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
-                value: searchTerm|default(''),
-            }) }}
             <a href="{{ path('app_bill_new') }}">
                 <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
                     <i class="fa-solid fa-plus"></i>

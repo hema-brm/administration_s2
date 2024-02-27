@@ -1,0 +1,49 @@
+{% set has_action = route is not empty and route != '#' %}
+{% set custom_classes = customClasses %}
+{% set disabled = disabled|default(false) %}
+{% set bool = disabled ? 'disabled':'' %}
+{% set attr = attr|default([]) %}
+
+    {% if 'secondary' == variant %}
+        {% set backgroundColor = 'bg-' ~ color ~ '-100' %}
+        {% set textColor = 'text-' ~ color ~ '-500' %}
+    {% else %}
+        {% set backgroundColor = 'bg-' ~ color ~ '-500' %}
+        {% set textColor = 'text-' ~ textColor %}
+    {% endif %}
+
+    {# Initialize button classes #}
+    {% set button_classes = [
+        backgroundColor,
+        textColor,
+        'rounded',
+        'p-2',
+        'text-sm',
+        'transition-all',
+        'ease-out',
+    ] %}
+    {% if custom_classes is not empty %}
+        {% set button_classes = button_classes|merge(custom_classes) %}
+    {% endif %}
+    {% set button_classes = button_classes|join(' ') %}
+
+    {% set str_attr = '' %}
+
+    {% for key, value in attr %}
+        {% set str_attr = str_attr ~ ' ' ~ key ~ '="' ~ value|raw ~ '"' %}
+    {% endfor %}
+
+    {% if has_action %}
+        <a href="{{ route }}">
+    {% endif %}
+
+    <button id="{{id}}" class="{{ button_classes }}" onclick="{{onClick}}" {{bool}} {{ str_attr|raw }}>
+        <i class="fa-solid {{ icon }}"></i>
+        {% if text is not empty %}
+            {{ text }}
+        {% endif %}
+    </button>
+
+    {% if has_action %}
+</a>
+{% endif %}

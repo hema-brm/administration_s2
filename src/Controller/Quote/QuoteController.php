@@ -66,7 +66,7 @@ class QuoteController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'to_bill', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'to_bill', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function transformQuoteToBill(Request $request, $id,BillRepository $billRepository, QuoteRepository $quoteRepository,EntityManagerInterface $entityManager): Response
     {
         $quote = $quoteRepository->find($id);
@@ -117,7 +117,8 @@ class QuoteController extends AbstractController
 
                 // Rediriger vers la page de la nouvelle facture
                 $this->addFlash('success', 'Le devis a été transformé en facture.');
-                return $this->redirect($request->headers->get('referer'));        }
+                return $this->redirect($request->headers->get('referer') ?? 'app_quote_index');
+            }
         }
 
 
