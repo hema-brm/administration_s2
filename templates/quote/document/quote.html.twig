@@ -1,0 +1,95 @@
+{% extends 'base/base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<body>
+{% set customer = quote.getCustomer() %}
+{% set status = quote.getStatus() %}
+{% set company = quote.getCustomer().getCompany() %}
+{% set products = quote.getProductQuotes() %}
+{% set IssuanceDate = quote.getQuoteIssuanceDate().format('Y-m-d') %}
+{% set expiryDate = (quote.getExpiryDate() is null ? null : quote.getExpiryDate().format('Y-m-d')) %}
+{% set discount = quote.getDiscount() %}
+{% set tva = quote.getTva() %}
+
+<div style="font-size: medium">
+    <h1># Devis [{{ quote.getQuoteNumber() }}]</h1>
+
+    <div style="margin-bottom: 1rem">
+        <table style="width: 100%; background-color: #ebebeb; padding: 1rem; border-radius: .5rem;">
+            <tr>
+                <td>Entreprise: {{ company.getName() }}</td>
+                <td style="text-align: right;">Emis le: {{ IssuanceDate }}</td>
+            </tr>
+            <tr>
+                <td>Client: {{ customer.fullName }}</td>
+                <td style="text-align: right;">Expire le: {{ expiryDate|default('non défini') }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-bottom: 1rem">
+    <table style="width: 100%; border-radius: .5rem; font-size: medium">
+        {% set cellStyle = 'border: 1px solid #ebebeb; padding: .5rem' %}
+        <thead>
+        <tr>
+            <th style="{{ cellStyle }}">Catégorie</th>
+            <th style="{{ cellStyle }}">Produit</th>
+            <th style="{{ cellStyle }}">Quantité</th>
+            <th style="{{ cellStyle }}">Prix unitaire</th>
+            <th style="{{ cellStyle }}">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            {% for product in category.products %}
+                <tr>
+                    {% if loop.index == 1 %}
+                        <td style="{{ cellStyle }}"
+                            rowspan='{{ category.products|length }}'>{{ category.name }}</td>
+                    {% endif %}
+                    <td style="{{ cellStyle }}">{{ product.name }}</td>
+                    <td style="{{ cellStyle }}">{{ product.quantity }}</td>
+                    <td style="{{ cellStyle }}">{{ product.price }} €</td>
+                    <td style="{{ cellStyle }}">{{ product.totalPrice }} €</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <div style="font-size: medium;">
+        <table style="width: 50%; border-radius: .5rem; float: right">
+            {% set cellStyle = 'border: 1px solid #ebebeb; padding: .5rem; text-align: right' %}
+            {% set cellStyleRight = cellStyle ~ '; font-style: bold;' %}
+            <tr>
+                <td style="{{ cellStyle }}">Total:</td>
+                <td style="{{ cellStyleRight }}">{{ totalPriceSum }} €</td>
+            </tr>
+            <tr>
+                <td style="{{ cellStyle }}">Total avec TVA:</td>
+                <td style="{{ cellStyleRight }}">{{ totalWithTva }} €</td>
+            </tr>
+            <tr>
+                <td style="{{ cellStyle }}">Total avec remise:</td>
+                <td style="{{ cellStyleRight }}">{{ totalWithDiscount }} €</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+{% endblock %}

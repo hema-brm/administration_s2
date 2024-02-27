@@ -1,15 +1,14 @@
 <?php
 namespace App\Controller;
+use App\Controller\Quote\QuoteController;
+use App\Entity\Bill;
+use App\Entity\Customer;
+use App\Entity\Quote;
+use App\Service\Mailer;
+use App\Service\PdfService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\Mailer;
-use App\Entity\Customer;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpClient\HttpClient;
-use App\Entity\Quote;
-use App\Service\PdfService;
-use App\Entity\Bill;
 
 
 #[Route(name: 'app_mailer_')]
