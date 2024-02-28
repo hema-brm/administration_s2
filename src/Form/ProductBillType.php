@@ -2,6 +2,7 @@
 // ProductQuoteType.php
 namespace App\Form;
 
+use App\Form\Field\ProductAutocompleteField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,11 +16,19 @@ class ProductBillType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('product', EntityType::class, [
-                'class' => Product::class,
-                'choice_label' => 'name',
+            ->add('product', ProductAutocompleteField::class, [
+                'label' => 'Choisissez un produit',
+                'attr' => [
+                    'placeholder' => 'Choisissez un produit',
+                    'wrapper' => 'compact',
+                ],
             ])
-            ->add('quantity', IntegerType::class);
+            ->add('quantity', IntegerType::class, [
+                'label' => 'Quantité',
+                'attr' => [
+                    'placeholder' => 'Entrez la quantité',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

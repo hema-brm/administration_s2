@@ -37,8 +37,8 @@ class RegistrationController extends AbstractController
                 $userData = $form->getData();
 
                 // Récupérer les données de l'company à partir du formulaire
-                $companyName = $form->get('company')->getData();
-                $companyAdress = $form->get('address')->getData();
+                $companyName = $form->get('name')->getData();
+                $companyAdress = $form->get('adress')->getData();
                 $companySiretNumber = $form->get('siretNumber')->getData();
 
                 // Créer une instance d'company et lui attribuer les données du formulaire

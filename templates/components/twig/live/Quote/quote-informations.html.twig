@@ -1,0 +1,83 @@
+<div>
+    <h3 class="mb-3 text-lg">Informations du devis</h3>
+    <div class="flex flex-row items-start">
+        {{ form_row(form.customer, {
+            attr: {
+                'class': 'w-1/2 mr-4',
+                'value': customerId,
+                'data-model': 'customerId',
+                'with_error': _errors.has('customerId') ? true : false,
+                'error_text': _errors.has('customerId') ? _errors.get('customerId') : '',
+                'disabled': _isReadOnlyMode ? true : false,
+            }
+        }) }}
+        {{ form_row(form.quote_number, {
+            attr: {
+                'class': 'w-1/2',
+                'data-model': 'quote_number',
+                'value': quote_number,
+                'with_error': _errors.has('quote_number') ? true : false,
+                'error_text': _errors.has('quote_number') ? _errors.get('quote_number') : '',
+                'disabled': _isReadOnlyMode ? true : false,
+            }
+        }) }}
+    </div>
+
+    <div class="flex flex-row items-start">
+        {{ form_row(form.quote_issuance_date, {
+            attr: {
+                'class': 'w-1/2 mr-4',
+                'data-model': 'quote_issuance_date',
+                'with_error': _errors.has('quote_issuance_date') ? true : false,
+                'error_text': _errors.has('quote_issuance_date') ? _errors.get('quote_issuance_date') : '',
+                'disabled': _isReadOnlyMode ? true : false,
+            }
+        }) }}
+        {{ form_row(form.expiry_date, {
+            attr: {
+                'class': 'w-1/2',
+                'data-model': 'expiry_date',
+                'with_error': _errors.has('expiry_date') ? true : false,
+                'error_text': _errors.has('expiry_date') ? _errors.get('expiry_date') : '',
+                'disabled': _isReadOnlyMode ? true : false,
+            }
+        }) }}
+    </div>
+
+    <div class="flex flex-row">
+        <div class="flex w-1/2 mr-4">
+            {{ form_row(form.discount, {
+                attr: {
+                    'class': 'w-full mr-4',
+                    'data-model': 'debounce(300)|discount',
+                    'value': discount,
+                    'with_error': _errors.has('discount') ? true : false,
+                    'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
+                }
+            }) }}
+            {{ form_row(form.tva, {
+                attr: {
+                    'class': 'w-full',
+                    'data-model': 'debounce(300)|tva',
+                    'value': tva,
+                    'with_error': _errors.has('tva') ? true : false,
+                    'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
+                }
+            }) }}
+        </div>
+        <div class="flex w-1/2">
+            {{ form_row(form.status, {
+                attr: {
+                    'class': 'w-full',
+                    'data-model': 'status',
+                    'value': status,
+                    'with_error': _errors.has('status') ? true : false,
+                    'error_text': _errors.has('status') ? _errors.get('status') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
+                }
+            }) }}
+        </div>
+    </div>
+</div>

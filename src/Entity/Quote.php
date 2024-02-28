@@ -6,25 +6,27 @@ use App\Repository\QuoteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
+    public const STATUS_DRAFT = 0;
+    public const STATUS_SENT = 1;
+    public const STATUS_ACCEPTED = 2;
+    public const STATUS_REFUSED = 3;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
-    private ?string $searchVector = null;
+    #[ORM\Column(nullable: false)]
+    private int $status = 0;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true, nullable: false)]
     private ?string $quote_number = null;
-
 
     #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $quote_issuance_date = null;
@@ -32,71 +34,34 @@ class Quote
     #[ORM\Column(type: 'date', nullable: true)]
     private ?\DateTimeInterface $expiry_date = null;
 
-    #[ORM\Column]
-    private ?float $total_price = null;
+    #[ORM\Column(nullable: true)]
+    private ?float $discount = 0.0;
 
     #[ORM\Column(nullable: true)]
-    private ?float $discount = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $tva = null;
+    private ?float $tva = 0.0;
 
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Customer $customer = null;
 
     #[ORM\OneToOne(targetEntity: Bill::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?Bill $bill = null;
 
-    
-
     #[ORM\OneToMany(mappedBy: "quote", targetEntity: ProductQuote::class, cascade: ["persist", "remove"])]
     private Collection $productQuotes;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Company $company = null;
-
-    public function getSearchVector(): ?string
-    {
-        return $this->searchVector;
-    }
-
-    public function setSearchVector(?string $searchVector): static
-    {
-        $this->searchVector = $searchVector;
-
-        return $this;
-    }
-    
-    public function getCompany(): ?Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): self
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-    
     public function __construct()
     {
         $this->productQuotes = new ArrayCollection();
     }
-
 
     public function getProductQuotes(): Collection
     {
         return $this->productQuotes;
     }
 
-    /**
-     * @param ProductQuote $productQuote
-     * @return $this
-     */
     public function addProductQuote(ProductQuote $productQuote): self
     {
         if (!$this->productQuotes->contains($productQuote)) {
@@ -148,7 +113,7 @@ class Quote
         return $this->quote_number;
     }
 
-    public function setQuoteNumber(string $quote_number): static
+    public function setQuoteNumber(?string $quote_number): static
     {
         $this->quote_number = $quote_number;
 
@@ -160,7 +125,7 @@ class Quote
         return $this->quote_issuance_date;
     }
 
-    public function setQuoteIssuanceDate(\DateTimeInterface $quote_issuance_date): static
+    public function setQuoteIssuanceDate(?\DateTimeInterface $quote_issuance_date): static
     {
         $this->quote_issuance_date = $quote_issuance_date;
 
@@ -174,22 +139,17 @@ class Quote
 
     public function setExpiryDate(?\DateTimeInterface $expiry_date): static
     {
+        // must be greater than the issuance date
+
+        if ($expiry_date < $this->quote_issuance_date) {
+            throw new \InvalidArgumentException('The expiry date must be greater than the issuance date.');
+        }
+
         $this->expiry_date = $expiry_date;
 
         return $this;
     }
 
-    public function getTotalPrice(): ?float
-    {
-        return $this->total_price;
-    }
-
-    public function setTotalPrice(float $total_price): static
-    {
-        $this->total_price = $total_price;
-
-        return $this;
-    }
     public function getDiscount(): ?float
     {
         return $this->discount;
@@ -232,5 +192,10 @@ class Quote
     {
         $this->bill = $bill;
         return $this;
+    }
+
+    public function hasId(): bool
+    {
+        return $this->id !== null;
     }
 }

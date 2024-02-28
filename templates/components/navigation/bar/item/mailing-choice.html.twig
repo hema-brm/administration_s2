@@ -1,0 +1,33 @@
+{% set thirdRoute = thirdRoute|default('') %}
+{% set thirdChoiceText = thirdChoiceText|default('') %}
+
+{% embed "@components/dropdown/index.html.twig" with {
+    id: 'theme_chooser_' ~ uniqid(),
+} %}
+    {% block toggle %}
+        <div  data-controller="link--clickable" 
+              data-turbo-action="replace"
+              data-link--clickable-target="exclude" 
+              class="transform rotate-0 hover:rotate-45 duration-300 hover:bg-primary-600 px-1 rounded-full">
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+    {% endblock %}
+    {% block content %}
+        <div class="w-44 bg-white text-secondary-900 rounded border border-primary-200 text-xs">
+            <a class="p-2 flex justify-center hover:bg-primary-200 items-center" href="{{ firstRoute }}">
+                <span> {{firstChoiceText}} </span>
+            </a>
+            <div class="border border-gray-100 h-full ml-4 mr-4"></div>
+            <a class="p-2 flex justify-center hover:bg-primary-200 items-center" href="{{ secondRoute }}">
+                <span > {{secondChoiceText}} </span>
+            </a>
+
+            {% if thirdRoute %}
+                <div class="border border-gray-100 h-full ml-4 mr-4"></div>
+                <a class="p-2 flex justify-center hover:bg-primary-200 items-center" href="{{ thirdRoute }}">
+                    <span > {{thirdChoiceText}} </span>
+                </a>
+            {% endif %}
+        </div>
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,115 @@
+{# Set alert types #}
+    {% set type = {
+        primary: {
+            backgroundColor: 'bg-primary-100',
+            textColor: 'text-primary-500',
+            borderColor: 'border-primary-200',
+        },
+        secondary: {
+            backgroundColor: 'bg-secondary-100',
+            textColor: 'text-secondary-700',
+            borderColor: 'border-secondary-200',
+        },
+        success: {
+            backgroundColor: 'bg-success-100',
+            textColor: 'text-success-700',
+            borderColor: 'border-success-200',
+        },
+        danger: {
+            backgroundColor: 'bg-danger-100',
+            textColor: 'text-danger-500',
+            borderColor: 'border-danger-200',
+        },
+        warning: {
+            backgroundColor: 'bg-warning-100',
+            textColor: 'text-warning-700',
+            borderColor: 'border-warning-200',
+        },
+        info: {
+            backgroundColor: 'bg-info-100',
+            textColor: 'text-info-600',
+            borderColor: 'border-info-200',
+        },
+    } %}
+
+    {% set variants = {
+        small: {
+            padding: 'p-2',
+            fontSize: 'text-sm',
+        },
+        normal: {
+            padding: 'p-3',
+            fontSize: 'text-base',
+        },
+        large: {
+            padding: 'p-4',
+            fontSize: 'text-lg',
+        },
+    } %}
+
+    {# Define colors #}
+    {% set color = color|default('primary') %}
+    {% set backgroundColor = type[color].backgroundColor %}
+    {% set textColor = type[color].textColor %}
+    {% set borderColor = type[color].borderColor %}
+
+    {# Define variants #}
+    {% set variant = variant|default('normal') %}
+    {% set padding = variants[variant].padding %}
+    {% set fontSize = variants[variant].fontSize %}
+
+    {# Set wrapper classes #}
+    {% set contentClasses = [
+        padding,
+        fontSize,
+        'text-center',
+    ] %}
+
+    {# Set border classes #}
+    {% set borderClasses = [
+        'border',
+    ] %}
+
+    {# Set color classes #}
+    {% set colorClasses = [
+        backgroundColor,
+        textColor,
+        borderColor,
+    ] %}
+
+    {# Merge all wrapper classes #}
+    {% set wrapperClasses = contentClasses|merge(borderClasses)|merge(colorClasses) %}
+    {% set wrapperClasses = wrapperClasses|join(' ') %}
+
+    {# Icon classes #}
+    {% set icon = (icon is defined and icon is not empty)
+        ? icon
+        : ''
+    %}
+
+    {# Set border classes #}
+    {% set borderClasses = [
+        'border',
+    ] %}
+
+    {# Set color classes #}
+    {% set colorClasses = [
+        backgroundColor,
+        textColor,
+        borderColor,
+    ] %}
+
+    {# Merge all wrapper classes #}
+    {% set wrapperClasses = contentClasses|merge(borderClasses)|merge(colorClasses) %}
+    {% set wrapperClasses = wrapperClasses|join(' ') %}
+
+    {# Icon classes #}
+    {% set icon = (icon is defined and icon is not empty)
+        ? icon
+        : ''
+    %}
+
+<div class="{{ wrapperClasses }}">
+    <i class="fa-solid {{ icon }}"></i>
+    {{ text|default('') }}
+</div>

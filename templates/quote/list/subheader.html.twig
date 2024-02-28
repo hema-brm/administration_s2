@@ -1,14 +1,4 @@
-{% from "@components/input/macros/index.html.twig" import form_search_macro %}
-
 <div class="flex flex-row items-center justify-between py-2">
-    {{ form_search_macro({
-        id: 'form-search-quote',
-        action: path('app_quote_index'),
-        placeholder: 'Rechercher',
-        name: constant('App\\Controller\\QuoteController::SEARCH_FORM_NAME'),
-        value: searchTerm|default(''),
-    }) }}
-
     <div class="flex flex-row justify-end items-center py-2 gap-2">
         {% embed "./modal/delete-many-button-confirm.html.twig" with {
             formAction : 'app_quote_deleteAll',
@@ -16,7 +6,7 @@
             text: 'Êtes-vous sûrs de vouloir supprimer ce(s) devi(s) ?',
             } %}
         {% endembed %}
-        
+
         <a href="{{ path('app_quote_new') }}">
             <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
                 <i class="fa-solid fa-plus"></i>
@@ -24,5 +14,4 @@
             </button>
         </a>
     </div>
-    
 </div>
