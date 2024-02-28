@@ -75,7 +75,7 @@ class Creator extends AbstractController
     public array $lineItems = [];
 
     #[LiveProp]
-    public string $viewMode = 'create';
+    public string $mode = 'create';
 
     public bool $savedSuccessfully = false;
 
@@ -222,6 +222,7 @@ class Creator extends AbstractController
         }
         $this->ensureErrorMessageBeforeSaving();
         $this->validate();
+
         $this->clearFlashBag($session);
 
         try {
@@ -276,13 +277,19 @@ class Creator extends AbstractController
     #[ExposeInTemplate('_mode')]
     public function getMode(): string
     {
-        return $this->quoteCreatorService::getMode($this->quoteData);
+        return $this->mode;
     }
 
     #[ExposeInTemplate('_isReadOnlyMode')]
     public function isReadOnlyMode(): bool
     {
-        return QuoteCreatorService::READONLY_MODE == $this->getMode();
+        return ('show' == $this->mode);
+    }
+
+    #[ExposeInTemplate('_cannotEdit')]
+    public function cannotEdit(): bool
+    {
+        return ('edit' == $this->mode) && (Quote::STATUS_ACCEPTED == $this->quoteData->getStatus());
     }
 
     #[ExposeInTemplate]

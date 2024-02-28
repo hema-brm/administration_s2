@@ -104,8 +104,11 @@ class QuoteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findQuoteByNumber(string $quoteNumber): ?Quote
+    public function findQuoteByNumber(?string $quoteNumber = ''): ?Quote
     {
+        if (empty($quoteNumber)) {
+            return null;
+        }
         return $this->createQueryBuilder('q')
             ->andWhere('q.quote_number = :quoteNumber')
             ->setParameter('quoteNumber', $quoteNumber)

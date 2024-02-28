@@ -33,14 +33,15 @@ class BillType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'label' => 'Status de la facture:',
                 'choices' => [
-                    'Validé' => 'validée',
-                    'En attente' => 'en attente',
-                    'Refusé' => 'refusée',
+                    'Brouillon' => 0, // 'Draft' => 'draft'
+                    'Validé' => 1,
+                    'En attente' => 2,
+                    'Refusé' => 3,
                 ],
                 'expanded' => true,
                 'multiple' => false,
             ])
-            ->add('numeroFacture', IntegerType::class, [
+            ->add('bill_number', IntegerType::class, [
                 'label' => 'N° de la facture: ',
                 'attr' => [
                     'placeholder' => 'Entrez le numéro de la facture',

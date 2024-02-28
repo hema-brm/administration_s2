@@ -1,10 +1,10 @@
 <div {{ attributes }}>
     {{ displayFlash() }}
-    {% if _isReadOnlyMode and 'show' != viewMode %}
+    {% if _cannotEdit is same as true %}
         <div class="mb-3">
             <twig:Alert
                 color="warning"
-                text="Vous êtes en mode lecture seule. Vous ne pouvez plus modifier ce devis car il a déjà été accepté."
+                text="Vous ne pouvez plus modifier ce devis car il a déjà été accepté."
                 icon="fa-warning"
                 variant="small"
             />
