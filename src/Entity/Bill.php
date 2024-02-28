@@ -56,6 +56,26 @@ class Bill
     #[ORM\OneToMany(mappedBy: "bill", targetEntity: ProductBill::class, cascade: ["persist", "remove"])]
     private Collection $productBills;
 
+    #[ORM\OneToOne(mappedBy: 'bill', targetEntity: Payment::class)]
+    private ?Payment $payment = null;
+
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
+
+        // Set the bill reference on the payment entity
+        if ($payment !== null) {
+            $payment->setBill($this);
+        }
+
+        return $this;
+    }
     public function getStatus(): ?string
     {
         return $this->status;

@@ -20,6 +20,9 @@ class ReportController extends AbstractController
      */
     public function report(Request $request, ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, SalesReportService $salesReportService): Response
     {
+        $productSalesByMonth = $salesReportService->getProductSalesByMonth();
+        $productSalesByYear = $salesReportService->getProductSalesByYear();
+
         $timePeriod = $request->query->get('period', 'month');
         switch ($timePeriod) {
             case 'year':
@@ -182,6 +185,8 @@ class ReportController extends AbstractController
         return $this->render('accountant/report.html.twig', [
             'chart' => $chart,
             'doughnutChart' => $doughnutChart,
+            'productSalesByMonth' => $productSalesByMonth,
+            'productSalesByYear' => $productSalesByYear,
         ]);
     }
 }

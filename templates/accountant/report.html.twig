@@ -22,21 +22,53 @@
            {{ render_chart(doughnutChart) }}
        </div>
     </div>
+    
     <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
-      <p>products and categories data</p>
-      <h2>Données sur les produits et les catégories</h2>
-      {# <ul>
-        <li><strong>Total des ventes par produit:</strong></li>
-        {% for product, sales in product_sales %}
-          <li>{{ product.name }}: {{ sales }}</li>
-        {% endfor %}
-      </ul>
-      <h3>Total des ventes par catégorie:</h3>
-      <ul>
-        {% for category, sales in category_sales %}
-          <li>{{ category.name }}: {{ sales }}</li>
-        {% endfor %}
-      </ul> #}
+        <h2>Ventes par produit (par mois)</h2>
+        <table class="table-auto">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Mois</th>
+                    <th>Nombre de produits vendus</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for productSale in productSalesByMonth %}
+                    <tr>
+                        <td>{{ productSale.product.name }}</td>
+                        <td>{{ productSale.month }}</td>
+                        <td>{{ productSale.quantity }}</td>
+                        <td>{{ productSale.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+        <h2>Ventes par produit (par année)</h2>
+        <table class="table-auto">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Année</th>
+                    <th>Nombre de produits vendus</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for productSale in productSalesByYear %}
+                    <tr>
+                        <td>{{ productSale.product.name }}</td>
+                        <td>{{ productSale.year }}</td>
+                        <td>{{ productSale.quantity }}</td>
+                        <td>{{ productSale.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endblock %}
