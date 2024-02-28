@@ -7,7 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraint as EasyVowsAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\UX\LiveComponent\Attribute\LiveProp;
 
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
@@ -23,21 +25,34 @@ class Quote
     private ?int $id = null;
 
     #[ORM\Column(nullable: false)]
+    #[LiveProp(writable: true)]
+    #[Assert\Choice(choices: [0, 1, 2, 3], message: 'Le statut choisi est invalide.')]
     private int $status = 0;
 
     #[ORM\Column(length: 255, unique: true, nullable: false)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un numéro de devis.')]
+    #[Assert\Length(min: 3, max: 255, minMessage: 'Le numéro de devis doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le numéro de devis doit contenir au maximum {{ limit }} caractères.')]
+    #[EasyVowsAssert\QuoteNumberConstraint(message: 'Le numéro de devis {{ value }} est déjà utilisé.')]
     private ?string $quote_number = null;
 
     #[ORM\Column(type: 'date')]
+    #[Assert\NotNull(message: 'Vous devez choisir une date d\'émission.')]
+    #[Assert\LessThan(propertyPath: 'expiry_date', message: 'La date d\'émission doit être inférieur à la date d\'expiration.')]
     private ?\DateTimeInterface $quote_issuance_date = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
+    #[Assert\NotNull(message: 'Vous devez choisir une date d\'expiration.')]
+    #[Assert\GreaterThan(propertyPath: 'quote_issuance_date', message: 'La date d\'expiration doit être supérieur à la date d\'émission.')]
     private ?\DateTimeInterface $expiry_date = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'La remise doit être supérieur ou égale à 0.')]
+    #[Assert\LessThanOrEqual(value: 100, message: 'La remise doit être inférieur ou égale à 100.')]
     private ?float $discount = 0.0;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
+    #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
     private ?float $tva = 0.0;
 
     #[ORM\ManyToOne(targetEntity: Customer::class)]
@@ -47,9 +62,11 @@ class Quote
 
     #[ORM\OneToOne(targetEntity: Bill::class)]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?Bill $bill = null;
 
     #[ORM\OneToMany(mappedBy: "quote", targetEntity: ProductQuote::class, cascade: ["persist", "remove"])]
+    #[Assert\Valid]
     private Collection $productQuotes;
 
     public function __construct()

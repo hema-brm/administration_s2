@@ -43,11 +43,8 @@ class Creator extends AbstractController
     public ?int $customerId = null;
 
     #[LiveProp(writable: true)]
-    #[Assert\NotNull(message: 'Vous devez choisir un numéro de devis.')]
+    #[Assert\NotNull(message: 'Vous devez saisir un numéro de devis.')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'Le numéro de devis doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le numéro de devis doit contenir au maximum {{ limit }} caractères.')]
-    /**
-     * @TODO Add EasyVowsAssert\QuoteNumberConstraint constraint later to work with edit mode.
-     */
     public ?string $quote_number = null;
 
     #[LiveProp(writable: true)]
@@ -241,7 +238,7 @@ class Creator extends AbstractController
                 $this->lineItems,
             );
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement du devis.');
+            $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_quote_index');
         }
 
