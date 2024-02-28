@@ -53,12 +53,12 @@ class Creator extends AbstractController
     #[LiveProp(writable: true)]
     #[Assert\PositiveOrZero(message: 'La remise doit être supérieur ou égale à 0.')]
     #[Assert\LessThanOrEqual(value: 100, message: 'La remise doit être inférieur ou égale à 100.')]
-    public ?float $discount;
+    public ?float $discount = 0.0;
 
     #[LiveProp(writable: true)]
     #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
     #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
-    public ?float $tva;
+    public ?float $tva = 0.0;
 
     #[LiveProp(writable: true)]
     #[Assert\Choice(choices: [0, 1, 2, 3], message: 'Le statut choisi est invalide.')]
@@ -153,13 +153,13 @@ class Creator extends AbstractController
     private function setDefaultDiscount(?Quote $quote = null): void
     {
         $quoteExists = !empty($quote) && $quote->hasId();
-        $this->discount = $quoteExists ? $quote->getDiscount() : null;
+        $this->discount = $quoteExists ? $quote->getDiscount() : 0.0;
     }
 
     private function setDefaultTva(?Quote $quote = null): void
     {
         $quoteExists = !empty($quote) && $quote->hasId();
-        $this->tva = $quoteExists ? $quote->getTva() : null;
+        $this->tva = $quoteExists ? $quote->getTva() : 0.0;
     }
 
     private function setDefaultStatus(?Quote $quote = null): void
@@ -227,18 +227,23 @@ class Creator extends AbstractController
         $this->validate();
         $this->clearFlashBag($session);
 
-        $this->quoteCreatorService->saveQuote(
-            $entityManager,
-            $this->quoteData,
-            $this->customerId,
-            $this->quote_number,
-            $this->quote_issuance_date,
-            $this->expiry_date,
-            $this->discount,
-            $this->tva,
-            $this->status,
-            $this->lineItems,
-        );
+        try {
+            $this->quoteCreatorService->saveQuote(
+                $entityManager,
+                $this->quoteData,
+                $this->customerId,
+                $this->quote_number,
+                $this->quote_issuance_date,
+                $this->expiry_date,
+                $this->discount,
+                $this->tva,
+                $this->status,
+                $this->lineItems,
+            );
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement du devis.');
+            return $this->redirectToRoute('app_quote_index');
+        }
 
         return $this->postQuoteSaving();
     }

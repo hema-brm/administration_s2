@@ -50,11 +50,12 @@ class QuoteType extends AbstractType
             ])
             ->add('quote_number', TextType::class, [
                 'label' => 'Numéro',
+                'help' => 'Le numéro de devis doit être unique.',
                 'attr' => [
                     'placeholder' => 'Numéro',
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Vous devez choisir un numéro de devis baby.'),
+                    new Assert\NotBlank(message: 'Vous devez choisir un numéro de devis.'),
                 ],
             ])
             ->add('quote_issuance_date', DateType::class, [
@@ -74,18 +75,22 @@ class QuoteType extends AbstractType
                 'data' => $defaultData['expiry_date'],
             ])
             ->add('discount', NumberType::class, [
-                'label' => 'Remise (%)',
+                'label' => 'Remise',
+                'help' => 'Remise en pourcentage. Exemple: 10 pour 10% de remise.',
+                'required' => false,
                 'attr' => [
-                    'placeholder' => 'Remise (%)',
+                    'placeholder' => 'Remise',
                     'min' => '0',
                     'max' => '100',
                     'step' => '0.01',
                 ],
             ])
             ->add('tva', NumberType::class, [
-                'label' => 'TVA (%)',
+                'label' => 'TVA',
+                'required' => false,
+                'help' => 'TVA en pourcentage. Exemple: 20 pour 20% de TVA.',
                 'attr' => [
-                    'placeholder' => 'TVA (%)',
+                    'placeholder' => 'TVA',
                     'min' => '0',
                     'max' => '100',
                     'step' => '0.01',

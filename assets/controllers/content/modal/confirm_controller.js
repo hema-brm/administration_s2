@@ -34,11 +34,12 @@ export default class extends Controller {
     }
 
     confirm() {
-                navigator.submitForm(this.getForm());
+        navigator.submitForm(this.getForm());
         this.close();
     }
 
     getForm() {
+        console.log('AYO', this.customFormIdValue, this.formTarget);
         if (this.customFormIdValue) {
             return document.getElementById(this.customFormIdValue);
         }
