@@ -49,7 +49,11 @@
             icon: 'fa-solid fa-chart-line',
             route:'accountant'
         }) }}
-        
+        {{ menuMacro.item({
+            text: 'Factures',
+            icon: 'fa-file-invoice-dollar',
+            route: 'app_bill_index'
+        }) }}
         {{ menuMacro.item({
             text: 'Suivi paiements',
             icon: 'fa-regular fa-receipt',

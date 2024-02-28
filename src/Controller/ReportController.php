@@ -89,7 +89,7 @@ class ReportController extends AbstractController
                 break;
             default:
                 // Default to month
-                $salesData = $salesReportService->generateSalesReport()['product_sales'];
+                //$salesData = $salesReportService->generateSalesReport()['product_sales'];
                 $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
                 $labels = [];
                 $data = array_fill(1, 12, 0);
