@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components\Live\Quote\Item;
+namespace App\Controller\Quote\Live\QuoteCreator;
 
 use App\Entity\Product;
 use App\Entity\ProductQuote;
@@ -9,24 +9,21 @@ use App\Repository\ProductRepository;
 use App\Service\Quote\QuoteCreatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\LiveResponder;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 use Symfony\UX\TwigComponent\Attribute\PreMount;
-use Symfony\UX\TwigComponent\Event\PreRenderEvent;
 
 #[AsLiveComponent]
-class Creator extends AbstractController
+class Item extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentWithFormTrait;
@@ -132,7 +129,7 @@ class Creator extends AbstractController
     #[ExposeInTemplate('_canSaveItems')]
     public function canSaveItems(): bool
     {
-        return $this->mode != QuoteCreatorService::READONLY_MODE;
+        return $this->mode != 'show';
     }
 
     private function setDefaultProduct(): void

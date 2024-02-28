@@ -24,7 +24,7 @@
 {% endif %}
 
 {% for key, line in lineItems %}
-    <twig:Quote:Item:Creator
+    <twig:QuoteCreator:Item
         key="{{ key }}"
         productId="{{ line.productId }}"
         quantity="{{ line.quantity }}"
