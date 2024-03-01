@@ -14,8 +14,13 @@
         text: 'Liste des produits',
     }) }}
 
-    <div class="px-4" data-controller="form--checkbox--post">
+    {% set margin = isGTCompany ? '' : 'mt-14' %}
+
+    <div class="px-4 {{margin}}" data-controller="form--checkbox--post">
+        
         <div class="flex flex-row justify-between">
+            
+            {% if isGTCompany %}
             <div class="gap-2 py-2">
                 {{ form_search_macro({
                     id: 'form-search-product',
@@ -39,8 +44,10 @@
                     icon: "fa-plus",
                     route : path('app_product_new')
                 }) }}
-            </div>
+            </div> 
+            {% endif %}
         </div>
+       
 
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
@@ -58,7 +65,9 @@
             <thead>
                 <tr class="{{ tableHeaderClasses }}">
                     <th class="{{ cellPadding }} text-center">
+                        {% if isGTCompany %}
                         <input type="checkbox" class="products-checkbox" data-form--checkbox--multiple-target="main">
+                        {% endif %}
                     </th>
                     {% if showCompany %}
                         <th class="{{ cellPadding }} text-left">Entreprise</th>
@@ -80,6 +89,7 @@
                     class="{{ borderClass }} hover:bg-secondary-50 text-sm"
                 >
                     <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                        {% if isGTCompany %}
                         <input
                             type="checkbox"
                             class="product-checkbox"
@@ -89,6 +99,8 @@
                             data-form--checkbox--post-target="items"
                             >
                         </td>
+                        {% endif %}
+
                     {% if showCompany %}
                         <td class="{{ cellPadding }} text-left">{{ product.company.getName() }}</td>
                     {% endif %}
@@ -109,14 +121,16 @@
 
                     <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.getPrice() }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
+                        {% if isGTCompany %}
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
                             <i class="fa-solid fa-edit hover:text-warning-500"></i>
                         </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">
+                    <td colspan="10">
                         {{ alert({
                             text: 'Aucun produit enregistré',
                             color: 'warning',
