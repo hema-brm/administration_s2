@@ -21,6 +21,37 @@ class BillRepository extends ServiceEntityRepository
         parent::__construct($registry, Bill::class);
     }
 
+    public function findByMonth(int $month, int $year): array
+{
+    $startDate = new \DateTime("$year-$month-01");
+    $endDate = new \DateTime("$year-$month-01");
+    $endDate->modify('last day of this month');
+
+    return $this->createQueryBuilder('b')
+        ->andWhere('b.CreationDate BETWEEN :start AND :end')
+        ->setParameter('start', $startDate)
+        ->setParameter('end', $endDate)
+        ->getQuery()
+        ->getResult();
+}
+
+
+
+public function findByYear(int $year): array
+{
+    $startDate = new \DateTime("$year-01-01");
+    $endDate = new \DateTime("$year-12-31");
+
+    return $this->createQueryBuilder('b')
+        ->andWhere('b.CreationDate BETWEEN :start AND :end')
+        ->setParameter('start', $startDate)
+        ->setParameter('end', $endDate)
+        ->getQuery()
+        ->getResult();
+}
+
+
+
 //    /**
 //     * @return Bill[] Returns an array of Bill objects
 //     */

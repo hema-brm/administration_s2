@@ -18,7 +18,7 @@ class SalesReportService
     public function generateSalesReport(): array
     {
         // Query to get product sales data
-        $productSalesQuery = $this->entityManager->createQuery('
+            $productSalesQuery = $this->entityManager->createQuery('
             SELECT p.name AS product_name, 
                    SUBSTRING(b.billIssuanceDate, 1, 4) AS year, 
                    SUBSTRING(b.billIssuanceDate, 6, 2) AS month, 

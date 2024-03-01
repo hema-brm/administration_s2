@@ -27,15 +27,15 @@
       <h2>Données sur les produits et les catégories</h2>
       <ul>
         <li><strong>Total des ventes par produit:</strong></li>
-        {% for product, sales in product_sales %}
+        {#{% for product, sales in product_sales %}
           <li>{{ product.name }}: {{ sales }}</li>
-        {% endfor %}
+        {% endfor %}#}
       </ul>
       <h3>Total des ventes par catégorie:</h3>
       <ul>
-        {% for category, sales in category_sales %}
+        {#{% for category, sales in category_sales %}
           <li>{{ category.name }}: {{ sales }}</li>
-        {% endfor %}
+        {% endfor %}#}
       </ul>
     </div>
 

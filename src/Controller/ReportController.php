@@ -21,7 +21,7 @@ class ReportController extends AbstractController
     public function report(Request $request, ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, SalesReportService $salesReportService): Response
     {
         $timePeriod = $request->query->get('period', 'month');
-        switch ($timePeriod) {
+        switch ($timePeriod) { 
             case 'year':
                 // $salesData = $salesReportService->generateSalesReport()['product_sales'];
                 $paymentsData = $paymentRepository->getTotalPriceSumByYear();
@@ -89,7 +89,7 @@ class ReportController extends AbstractController
                 break;
             default:
                 // Default to month
-                $salesData = $salesReportService->generateSalesReport()['product_sales'];
+               // $salesData = $salesReportService->generateSalesReport()['product_sales'];
                 $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
                 $labels = [];
                 $data = array_fill(1, 12, 0);

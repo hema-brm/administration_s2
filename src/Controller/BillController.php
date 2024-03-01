@@ -35,6 +35,27 @@ class BillController extends AbstractController
         $this->kernel = $kernel;
     }
 
+    #[Route('/filtre/{period}', name: 'filtre', methods: ['GET'])]
+    public function filtre(Request $request, $period, BillRepository $billRepository): Response
+    {
+        if ($period === 'month') {
+            $month = $request->query->get('month_value'); // Récupérer le mois de la requête GET
+            $year = $request->query->get('year_value'); // Récupérer l'année de la requête GET
+            $bills = $billRepository->findByMonth($month, $year); // Appeler la méthode avec le mois et l'année
+        } elseif ($period === 'year') {
+            $year = $request->query->get('year_value'); // Récupérer l'année de la requête GET
+            $bills = $billRepository->findByYear($year); // Appeler la méthode avec l'année
+        } else {
+            // Gérer les cas où le période n'est ni "month" ni "year", peut-être une erreur 404 ou redirection
+            // Pour cet exemple, nous redirigeons vers la page d'accueil
+            return $this->redirectToRoute('homepage');
+        }
+    
+        return $this->render('bill/index.html.twig', [
+            'bills' => $bills,
+        ]);
+    }
+    
 
     #[Route('/pdf/{id}', name: 'facture_pdf')]
 public function generatePdfFacture(Bill $bill, PdfService $pdf): Response

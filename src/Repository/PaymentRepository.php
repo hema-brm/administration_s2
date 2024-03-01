@@ -23,6 +23,7 @@ class PaymentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Payment::class);
     }
+    
     public function getTotalPriceSumByMonth(): array
     {
         return $this->createQueryBuilder('payment')

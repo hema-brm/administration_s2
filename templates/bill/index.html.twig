@@ -19,6 +19,24 @@
     }) }}
 
 
+    <form id="monthForm" action="{{ path('filtre', {'period': 'month'}) }}" method="GET">
+    <select name="month_value" onchange="document.getElementById('monthForm').submit()">
+        <option value="1" {% if app.request.query.get('month_value') == '1' %}selected{% endif %}>Janvier</option>
+        <option value="2" {% if app.request.query.get('month_value') == '2' %}selected{% endif %}>Févrie r</option>
+        <!-- Ajouter les autres mois -->
+    </select>
+</form>
+
+<form id="yearForm" action="{{ path('filtre', {'period': 'year'}) }}" method="GET">
+    <select name="year_value" onchange="document.getElementById('yearForm').submit()">
+        <option value="2022" {% if app.request.query.get('year_value') == '2022' %}selected{% endif %}>2022</option>
+        <option value="2023" {% if app.request.query.get('year_value') == '2023' %}selected{% endif %}>2023</option>
+        <!-- Ajouter les autres années -->
+    </select>
+</form>
+
+
+
     <div class="px-4">
     <div class="flex flex-row justify-between py-2">
             {{ form_search_macro({
