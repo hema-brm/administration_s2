@@ -10,11 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-<<<<<<<< HEAD:migrations/Version20240301115512.php
-final class Version20240301115512 extends AbstractMigration
-========
-final class Version20240301150217 extends AbstractMigration
->>>>>>>> 38a3f832 (Edit Bill):migrations/Version20240301150217.php
+final class Version20240301173559 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -60,7 +56,7 @@ final class Version20240301150217 extends AbstractMigration
         $this->addSql('CREATE TABLE product_quote (id INT NOT NULL, quote_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) NOT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_CA2DB0A8DB805178 ON product_quote (quote_id)');
         $this->addSql('CREATE INDEX IDX_CA2DB0A84584665A ON product_quote (product_id)');
-        $this->addSql('CREATE TABLE quote (id INT NOT NULL, customer_id INT NOT NULL, bill_id INT DEFAULT NULL, status INT NOT NULL, quote_number VARCHAR(255) NOT NULL, quote_issuance_date DATE NOT NULL, expiry_date DATE DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE quote (id INT NOT NULL, customer_id INT NOT NULL, bill_id INT DEFAULT NULL, status INT NOT NULL, quote_number VARCHAR(255) NOT NULL, quote_issuance_date DATE NOT NULL, expiry_date DATE DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6B71CBF4AC28B117 ON quote (quote_number)');
         $this->addSql('CREATE INDEX IDX_6B71CBF49395C3F3 ON quote (customer_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6B71CBF41A8C12F5 ON quote (bill_id)');

@@ -52,11 +52,6 @@ class QuoteCreator extends AbstractController
     public ?float $discount = 0.0;
 
     #[LiveProp(writable: true)]
-    #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
-    #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
-    public ?float $tva = 0.0;
-
-    #[LiveProp(writable: true)]
     #[Assert\Choice(choices: [0, 1, 2, 3], message: 'Le statut choisi est invalide.')]
     public ?int $status = null;
 
@@ -83,7 +78,6 @@ class QuoteCreator extends AbstractController
         'quote_issuance_date',
         'expiry_date',
         'discount',
-        'tva',
         'status',
     ];
 
@@ -132,7 +126,6 @@ class QuoteCreator extends AbstractController
         $this->setDefaultQuoteNumber($quote);
         $this->setDefaultDates($quote);
         $this->setDefaultDiscount($quote);
-        $this->setDefaultTva($quote);
         $this->setDefaultStatus($quote);
         $this->setDefaultProductQuotes($quote);
     }
@@ -150,12 +143,6 @@ class QuoteCreator extends AbstractController
     {
         $quoteExists = !empty($quote) && $quote->hasId();
         $this->discount = $quoteExists ? $quote->getDiscount() : 0.0;
-    }
-
-    private function setDefaultTva(?Quote $quote = null): void
-    {
-        $quoteExists = !empty($quote) && $quote->hasId();
-        $this->tva = $quoteExists ? $quote->getTva() : 0.0;
     }
 
     private function setDefaultStatus(?Quote $quote = null): void
@@ -233,7 +220,6 @@ class QuoteCreator extends AbstractController
                 $this->quote_issuance_date,
                 $this->expiry_date,
                 $this->discount,
-                $this->tva,
                 $this->status,
                 $this->lineItems,
             );
@@ -332,14 +318,7 @@ class QuoteCreator extends AbstractController
         return $this->quoteCreatorService::getTotals(
             $this->lineItems,
             $this->discount,
-            $this->tva,
         );
-    }
-
-    #[ExposeInTemplate('_hasTaxRateValue')]
-    public function hasTaxRateValue(): bool
-    {
-        return $this->tva > 0;
     }
 
     #[ExposeInTemplate('_hasDiscountValue')]

@@ -78,17 +78,6 @@ class QuoteType extends AbstractType
                     'step' => '0.01',
                 ],
             ])
-            ->add('tva', NumberType::class, [
-                'label' => 'TVA',
-                'required' => false,
-                'help' => 'TVA en pourcentage. Exemple: 20 pour 20% de TVA.',
-                'attr' => [
-                    'placeholder' => 'TVA',
-                    'min' => '0',
-                    'max' => '100',
-                    'step' => '0.01',
-                ],
-            ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
                 'choices' => QuoteStatusLabel::all(),

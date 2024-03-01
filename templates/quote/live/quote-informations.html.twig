@@ -56,18 +56,6 @@
                     'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
-            {{ form_row(form.tva, {
-                attr: {
-                    'class': 'w-full',
-                    'data-model': 'debounce(300)|tva',
-                    'value': tva,
-                    'with_error': _errors.has('tva') ? true : false,
-                    'error_text': _errors.has('tva') ? _errors.get('tva') : '',
-                    'disabled': _isReadOnlyMode ? true : false,
-                }
-            }) }}
-        </div>
-        <div class="flex w-1/2">
             {{ form_row(form.status, {
                 attr: {
                     'class': 'w-full',

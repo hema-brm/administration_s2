@@ -202,7 +202,6 @@ class QuoteCreatorService {
         \DateTimeInterface $issuanceDate,
         \DateTimeInterface $expiryDate,
         float $discount,
-        float $tva,
         int $status,
         array &$lineItems,
     ): void
@@ -212,7 +211,6 @@ class QuoteCreatorService {
         $quoteData->setCustomer($customer);
         $quoteData->setQuoteNumber($quoteNumber);
         $quoteData->setDiscount($discount);
-        $quoteData->setTva($tva);
         $quoteData->setStatus($status);
         $quoteData->setQuoteIssuanceDate($issuanceDate);
         $quoteData->setExpiryDate($expiryDate);
@@ -231,13 +229,12 @@ class QuoteCreatorService {
         \DateTimeInterface $issuanceDate,
         \DateTimeInterface $expiryDate,
         float $discount,
-        float $tva,
         int $status,
         array &$lineItems,
     ): void
     {
         $this->removeExistingProductQuotes($entityManager, $quoteData, $lineItems);
-        $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $tva, $status, $lineItems);
+        $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $status, $lineItems);
     }
 
     private static function areAnyLineItemsEditing(array $lineItems): bool
@@ -265,7 +262,6 @@ class QuoteCreatorService {
     public static function getTotals(
         array $lineItems,
         ?float $discount,
-        ?float $tva,
     ): array
     {
         $total = 0;
@@ -274,14 +270,12 @@ class QuoteCreatorService {
             $total += $lineItem['total'];
         }
 
-        $totalTva = $total * ($tva / 100);
         $totalDiscount = $total * ($discount / 100);
 
-        $totalTTC = $total + $totalTva;
+        $totalTTC = $total;
 
         return [
             'total' => $total,
-            'totalTva' => $totalTva,
             'totalTTC' => $totalTTC,
             'totalDiscount' => $totalDiscount,
             'grandTotal' => $totalTTC - $totalDiscount,

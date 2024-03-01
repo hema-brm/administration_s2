@@ -36,9 +36,6 @@ class Quote
     #[ORM\Column(nullable: true)]
     private ?float $discount = 0.0;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $tva = 0.0;
-
     #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
@@ -160,17 +157,7 @@ class Quote
 
         return $this;
     }
-    public function getTva(): ?float
-    {
-        return $this->tva;
-    }
 
-    public function setTVA(float $tva): static
-    {
-        $this->tva = $tva;
-
-        return $this;
-    }
     public function getCustomer(): ?Customer
     {
         return $this->customer;
