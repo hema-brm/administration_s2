@@ -27,6 +27,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
+use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
 class BillCreator extends AbstractController
@@ -70,6 +71,15 @@ class BillCreator extends AbstractController
 
     #[LiveProp]
     public array $productBillData = [];
+
+    #[LiveProp]
+    public float $total = 0.0;
+
+    #[LiveProp]
+    public $totalDiscount = 0.0;
+
+    #[LiveProp]
+    public float $totalWithDiscount = 0.0;
 
     private const FIELD_TO_VALIDATE = [
         'customer',
@@ -171,10 +181,16 @@ class BillCreator extends AbstractController
         }
     }
 
+    #[PostMount]
+    public function postMount()
+    {
+        $this->refreshTotal();
+    }
+
     #[PreReRender]
     public function preRender(): void
     {
-        //$this->refreshBillData();
+        $this->refreshTotal();
     }
 
     #[LiveAction]
@@ -206,7 +222,8 @@ class BillCreator extends AbstractController
         return ('show' == $this->mode);
     }
 
-    private function productBillsIsEmpty(): bool
+    #[ExposeInTemplate('_productItemsIsEmpty')]
+    public function productBillsIsEmpty(): bool
     {
         return empty($this->productBillData);
     }
@@ -243,6 +260,40 @@ class BillCreator extends AbstractController
     public function isValid(): bool
     {
         return !$this->hasErrors() && $this->canSaveBill();
+    }
+
+    #[ExposeInTemplate('_hasDiscountValue')]
+    public function hasDiscountValue(): bool
+    {
+        return $this->discount > 0;
+    }
+
+    public function _getTotal(): float
+    {
+        $total = 0.0;
+        foreach ($this->productBillData as $lineItem) {
+            if ($lineItem['isEditing']) {
+                continue;
+            }
+            $price = $lineItem['price'];
+            $quantity = $lineItem['quantity'];
+            $tva = $lineItem['tva'];
+            $discount = $lineItem['discount'];
+
+            $totalHT = $price * $quantity;
+            $totalTva = $totalHT * ($tva / 100);
+            $totalDiscount = $totalHT * ($discount / 100);
+
+            $total += $totalHT + $totalTva - $totalDiscount;
+        }
+        return $total;
+    }
+
+    private function refreshTotal(): void
+    {
+        $this->total = $this->_getTotal();
+        $this->totalDiscount = $this->total * ($this->discount / 100);
+        $this->totalWithDiscount = $this->total - $this->totalDiscount;
     }
 
 }

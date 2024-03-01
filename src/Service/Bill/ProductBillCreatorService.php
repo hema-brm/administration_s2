@@ -37,7 +37,7 @@ class ProductBillCreatorService {
             'price' => $newProductBill->getPrice(),
             'tva' => $newProductBill->getTva(),
             'discount' => 0.0,
-            'total' => $newProductBill->getRealTotal(),
+            'total' => $newProductBill->getTotal(),
             'isEditing' => true,
         ];
     }
