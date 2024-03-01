@@ -10,10 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\SecurityBundle\Security;
 
 
@@ -37,9 +37,12 @@ class ProductController extends AbstractController
         $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
         $this->isAdmin = $security->isGranted('ROLE_ADMIN');
+        $this->isGTCompany = $security->isGranted('ROLE_ENTREPRISE');
+
     }
 
     #[Route('/', name: 'index', methods: ['GET', 'POST'])]
+    // #[IsGranted('view')]
     public function index(Request $request, ProductRepository $productRepository): Response
     {   
         if ($this->searchTerm) {
@@ -53,6 +56,8 @@ class ProductController extends AbstractController
             'products' => $products,
             'paginatorHelper' => $paginatorHelper,
             'showCompany' => $this->isAdmin,
+            'isGTCompany' => $this->isGTCompany,
+            
         ]);
     }
 
@@ -69,6 +74,7 @@ class ProductController extends AbstractController
     }
     
     #[Route('/new', name: 'new', methods: ['GET','POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
@@ -91,16 +97,17 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    #[Security('product.getCompany() === user.getCompany()')]
+    #[IsGranted('read', 'product')]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'isGTCompany' => $this->isGTCompany
         ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    #[Security('product.getCompany() === user.getCompany()')]
+    #[IsGranted('edit', 'product')]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -136,6 +143,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted('delete', 'product')]
     public function deleteOne(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {

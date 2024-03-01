@@ -15,6 +15,7 @@
         <i class="fa-solid fa-arrow-left mr-1"></i>
         <a href="{{ path('app_product_new') }}">Retour</a>
     </div>
+    {% if isGTCompany %}
     <div class="w-1/2 flex flex-row justify-end py-2 gap-2">
         {% include '@category/list/delete-many-button-confirm.html.twig' %}
         {{ button_macro({
@@ -24,15 +25,8 @@
             route : path('app_category_new')
         }) }}
 
-        <div id="disable_buttons" class="hidden">
-            {{ button_macro({
-                id: 'delete_categories',
-                custom_classes: ["group", "rounded", "p-2", "bg-danger-50", "text-danger-500",  "transition-all", "ease-in-out", "hover:bg-danger-500", "hover:text-white"],
-                icon: "fa-trash",
-            }) }}
-        </div>
-
     </div>
+    {% endif %}
 
     {% set cellPadding = 'p-4 px-2' %}
     {% set borderClass = 'border-b border-b-gray-200' %}
@@ -50,9 +44,14 @@
                     <thead>
                     <tr class="{{ borderClass }}">
                         <th class="{{ cellPadding }} text-center">
+                            {% if isGTCompany %}
                             <input type="checkbox" class="categories-checkbox" data-form--checkbox--multiple-target="main">
+                            {% endif %}
                         </th>
                         <th class="{{ cellPadding }} text-left">Nom</th>
+                        {% if showCompany %}
+                            <th class="{{ cellPadding }} text-left">Entreprise</th>
+                        {% endif %}
                         <th class="{{ cellPadding }}"></th>
                     </tr>
                     </thead>
@@ -60,6 +59,7 @@
                     {% for category in categories %}
                         <tr class="{{ borderClass }} hover:bg-gray-50 text-sm">
                             <td class="{{ cellPadding }} text-center">
+                                {% if isGTCompany %}
                                 <input
                                     type="checkbox"
                                     class="product-checkbox"
@@ -68,18 +68,26 @@
                                     data-form--checkbox--multiple-target="items"
                                     data-form--checkbox--post-target="items"
                                 />
+                                {% endif %}
                             </td>
                             <td class="{{ cellPadding }} text-left">{{ category.getName() }}</td>
+                            {% if showCompany %}
+                                <td class="{{ cellPadding }} text-left">{{ category.company.getName() }}</td>
+                            {% endif %}
+                            
                             <td class="{{ cellPadding }} text-right text-gray-400">
+                                {% if isGTCompany %}
                                 <a href="{{ path('app_category_edit', {'id': category.id}) }}">
                                     <i class="fa-solid fa-edit hover:text-warning-500"></i>
                                 </a>
+                                {% endif %}
                             </td>
+                           
 
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="8">
+                            <td colspan="9">
                             {% include "@category/list/no-data.html.twig" %}
                             </td>
                         </tr>     

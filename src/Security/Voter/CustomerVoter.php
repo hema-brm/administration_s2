@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CustomerVoter extends Voter {
-    public const LIST = 'list';
+    public const VIEW = 'view';
     public const CREATE = 'add';
     public const READ = 'read';
     public const EDIT = 'edit';
@@ -22,7 +22,7 @@ class CustomerVoter extends Voter {
     protected function supports(string $attribute, mixed $subject): bool
     {
         if (in_array($attribute, [
-            self::LIST,
+            self::VIEW,
             self::CREATE,
         ])) {
             return true;
@@ -52,7 +52,7 @@ class CustomerVoter extends Voter {
         }
 
         return match ($attribute) {
-            self::LIST => $this->canList($user),
+            self::VIEW => $this->canView($user),
             self::CREATE => $this->canCreate($user),
             self::READ => $this->canRead($user, $subject),
             self::EDIT => $this->canEdit($user, $subject),
@@ -61,7 +61,7 @@ class CustomerVoter extends Voter {
         };
     }
 
-    private function canList(UserInterface $user): bool
+    private function canView(UserInterface $user): bool
     {
         return (new UserCanListCustomer())->isSatisfiedBy($user);
     }

@@ -43,7 +43,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    #[IsGranted('list')]
+    #[IsGranted('view')]
     public function index(AccessibleCustomerService $customerService): Response
     {
         $customers = $customerService->findAll($this->page, self::LIMIT);

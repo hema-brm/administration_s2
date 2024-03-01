@@ -2,24 +2,22 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Product;
+use App\Entity\Category;
 use App\Security\Roles\IUserRole;
 use function PHPUnit\Framework\matches;
-use App\Security\Acl\Product\UserCanEditProduct;
-use App\Security\Acl\Product\UserCanListProduct;
-use App\Security\Acl\Product\UserCanReadProduct;
-use App\Security\Acl\Product\UserCanCreateProduct;
-use App\Security\Acl\Product\UserCanDeleteProduct;
+use App\Security\Acl\Category\UserCanEditCategory;
+use App\Security\Acl\Category\UserCanListCategory;
+use App\Security\Acl\Category\UserCanCreateCategory;
+use App\Security\Acl\Category\UserCanDeleteCategory;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class ProductVoter extends Voter
+class CategoryVoter extends Voter
 {
     public const VIEW = 'view';
     public const CREATE = 'add';
-    public const READ = 'read';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
 
@@ -32,12 +30,11 @@ class ProductVoter extends Voter
             return true;
         }
 
-        if (!$subject instanceof Product) {
+        if (!$subject instanceof Category) {
             return false;
         }
 
         if (in_array($attribute, [
-            self::READ,
             self::EDIT,
             self::DELETE,
         ])) {
@@ -58,7 +55,6 @@ class ProductVoter extends Voter
         return match ($attribute) {
             self::VIEW => $this->canView($user),
             self::CREATE => $this->canCreate($user),
-            self::READ => $this->canRead($user, $subject),
             self::EDIT => $this->canEdit($user, $subject),
             self::DELETE => $this->canDelete($user, $subject),
             default => false,
@@ -67,26 +63,21 @@ class ProductVoter extends Voter
 
     private function canView(UserInterface $user): bool
     {
-        return (new UserCanListProduct())->isSatisfiedBy($user);
+        return (new UserCanListCategory())->isSatisfiedBy($user);
     }
 
     private function canCreate(UserInterface $user): bool
     {
-        return (new UserCanCreateProduct())->isSatisfiedBy($user);
+        return (new UserCanCreateCategory())->isSatisfiedBy($user);
     }
 
-    private function canRead(UserInterface $user, Product $product): bool
+    private function canEdit(UserInterface $user, Category $category): bool
     {
-        return (new UserCanReadProduct($product))->isSatisfiedBy($user);
+        return (new UserCanEditCategory($category))->isSatisfiedBy($user);
     }
 
-    private function canEdit(UserInterface $user, Product $product): bool
+    private function canDelete(UserInterface $user, Category $category): bool
     {
-        return (new UserCanEditProduct($product))->isSatisfiedBy($user);
-    }
-
-    private function canDelete(UserInterface $user, Product $product): bool
-    {
-        return (new UserCanDeleteProduct($product))->isSatisfiedBy($user);
+        return (new UserCanDeleteCategory($category))->isSatisfiedBy($user);
     }
 }
