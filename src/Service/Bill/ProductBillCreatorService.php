@@ -36,6 +36,7 @@ class ProductBillCreatorService {
             'quantity' => $newProductBill->getQuantity(),
             'price' => $newProductBill->getPrice(),
             'tva' => $newProductBill->getTva(),
+            'discount' => 0.0,
             'total' => $newProductBill->getRealTotal(),
             'isEditing' => true,
         ];
@@ -50,6 +51,7 @@ class ProductBillCreatorService {
         $productBill->setQuantity($data['quantity']);
         $productBill->setPrice($data['price']);
         $productBill->setTva($data['tva']);
+        $productBill->setDiscount($data['discount']);
 
         return $productBill;
     }
@@ -80,6 +82,11 @@ class ProductBillCreatorService {
     public function getDefaultTva(): float
     {
         return Product::DEFAULT_TAX_RATE;
+    }
+
+    public function getDefaultDiscount(): float
+    {
+        return 0.0;
     }
 
     public static function getTotalTTC(float $price, int $quantity, float $tva): float

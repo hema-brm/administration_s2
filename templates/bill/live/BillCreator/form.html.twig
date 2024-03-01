@@ -39,6 +39,7 @@
             </div>
             <div class="mr-2">
                 {{ form_row(form.tva, {
+                    label : '% TVA ~ ' ~ totalTVA ~ '€',
                     attr: {
                         'data-model': 'tva',
                         'with_error': _errors.has('tva') ? true : false,
@@ -48,10 +49,24 @@
                     }
                 }) }}
             </div>
+            <div class="mr-2">
+                {{ form_row(form.discount, {
+                    label : '% Remise ~ ' ~ totalDiscount ~ '€',
+                    attr: {
+                        'data-model': 'discount',
+                        'with_error': _errors.has('discount') ? true : false,
+                        'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                        'error_text_position': 'top',
+                        'disabled': isEditing ? false : true,
+                    }
+                }) }}
+            </div>
             <div class="mr-2 cursor-not-allowed">
                 {{ form_row(form.total, {
                     attr: {
                         'data-model': 'total',
+                        'disabled': true,
+                        'class': 'cursor-not-allowed',
                     }
                 }) }}
             </div>

@@ -37,9 +37,16 @@ class ProductBillType extends AbstractType
                 ],
             ])
             ->add('tva', NumberType::class, [
-                'label' => 'TVA',
+                'label' => 'TVA (%)',
                 'attr' => [
-                    'placeholder' => 'TVA',
+                    'placeholder' => 'TVA (%)',
+                ],
+                'required' => false,
+            ])
+            ->add('discount', NumberType::class, [
+                'label' => 'Remise (%)',
+                'attr' => [
+                    'placeholder' => 'Remise (%)',
                 ],
                 'required' => false,
             ])
