@@ -79,9 +79,14 @@ class Item extends AbstractController
         $this->total = $this->productBillCreatorService->getDefaultTotal();
     }
 
-    private function changeEditMode(bool $isEditing): void
+    private function changeEditMode(bool $isEditing,  LiveResponder $responder): void
     {
         $this->isEditing = $isEditing;
+
+        $responder->emitUp('product_bill_item:change_edit_mode', [
+            'key' => $this->key,
+            'isEditing' => $this->isEditing,
+        ]);
     }
 
     #[PreReRender]
@@ -107,14 +112,14 @@ class Item extends AbstractController
             'price' => $this->price,
         ]);
 
-        $this->changeEditMode(false);
+        $this->changeEditMode(false, $responder);
         $this->addFlash('info', 'Produit ajouté au facture.');
     }
 
     #[LiveAction]
-    public function edit(): void
+    public function edit(LiveResponder $responder): void
     {
-        $this->changeEditMode(true);
+        $this->changeEditMode(true, $responder);
     }
 
     #[LiveListener('product_bill:product_selection_change')]

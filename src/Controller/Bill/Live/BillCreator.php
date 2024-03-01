@@ -76,6 +76,15 @@ class BillCreator extends AbstractController
     #[LiveProp]
     public array $productBillData = [];
 
+    private const FIELD_TO_VALIDATE = [
+        'customer',
+        'billNumber',
+        'billIssuanceDate',
+        'discount',
+        'tva',
+        'status',
+    ];
+
 
     public function __construct(
         private readonly BillCreatorService $billCreatorService,
@@ -111,13 +120,13 @@ class BillCreator extends AbstractController
     public function saveBill(EntityManagerInterface $entityManager, Session $session)
     {
         $this->validate();
-        $this->refreshBillData();
+        $this->refreshBillData($entityManager);
 
         try {
             $entityManager->persist($this->billData);
             $entityManager->flush();
         } catch (\Exception $e) {
-            $this->addFlash('danger', 'Erreur lors de l\'enregistrement de la facture.');
+            $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_bill_index');
         }
 
@@ -135,18 +144,18 @@ class BillCreator extends AbstractController
         #[LiveArg] float $price,
     ): void
     {
-        $this->refreshBillData();
-
-        $this->setProductBillItem($key, [
+        $data = [
             'productId' => $productId,
             'quantity' => $quantity,
             'price' => $price,
             'total' => $quantity * $price,
             'isEditing' => false,
-        ]);
+        ];
+
+        $this->setProductBillItem($key, $data);
     }
 
-    private function refreshBillData(): void
+    private function refreshBillData(EntityManagerInterface $entityManager): void
     {
         $this->billData->setCustomer($this->customer);
         $this->billData->setBillNumber($this->billNumber);
@@ -155,9 +164,14 @@ class BillCreator extends AbstractController
         $this->billData->setDiscount($this->discount);
         $this->billData->setTva($this->tva);
 
-        foreach ($this->productBillData as $productBillDatum) {
-            $productBill = $this->productBillCreatorService->createProductBill($productBillDatum);
-            $this->billData->addProductBill($productBill);
+        $existingProductBills = $this->billData->getProductBills();
+        foreach ($existingProductBills as $productBill) {
+            $this->billData->removeProductBill($productBill);
+            $entityManager->remove($productBill);
+        }
+
+        foreach ($this->productBillData as $data) {
+            $this->billData->addProductBill($this->productBillCreatorService->createProductBill($data));
         }
     }
 
@@ -178,6 +192,12 @@ class BillCreator extends AbstractController
         $this->productBillData[$index] = $data;
     }
 
+    #[LiveListener('product_bill_item:change_edit_mode')]
+    public function onLineItemEditModeChange(#[LiveArg] int $key, #[LiveArg] $isEditing): void
+    {
+        $this->productBillData[$key]['isEditing'] = $isEditing;
+    }
+
     #[LiveListener('product_bill_item:remove')]
     public function removeProductBillItem(#[LiveArg] int $index): void
     {
@@ -188,6 +208,45 @@ class BillCreator extends AbstractController
     public function isReadOnlyMode(): bool
     {
         return ('show' == $this->mode);
+    }
+
+    private function productBillsIsEmpty(): bool
+    {
+        return empty($this->productBillData);
+    }
+
+    #[ExposeInTemplate('_hasPendingProductBill')]
+    public function hasPendingProductBill(): bool
+    {
+        foreach ($this->productBillData as $productBill) {
+            if ($productBill['isEditing']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #[ExposeInTemplate('_canSaveBill')]
+    public function canSaveBill(): bool
+    {
+        return !$this->productBillsIsEmpty() && !$this->hasPendingProductBill();
+    }
+
+    #[ExposeInTemplate('_hasErrors')]
+    public function hasErrors(): bool
+    {
+        foreach (self::FIELD_TO_VALIDATE as $field) {
+            if ($this->getErrors($field)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #[ExposeInTemplate('_allValid')]
+    public function isValid(): bool
+    {
+        return !$this->hasErrors() && $this->canSaveBill();
     }
 
 }

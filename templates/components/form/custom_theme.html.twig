@@ -28,6 +28,8 @@
 {% endblock %}
 
 {% block text_widget %}
+    {% set errorTextPosition = attr.error_text_position|default('bottom') %}
+    {% set errorText = attr.error_text|default('') %}
     {% set isDisabled = attr.disabled|default(false) %}
     {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
@@ -36,14 +38,22 @@
     {%- set attr = attr|merge({
         class: classes
     }) -%}
+    {% if errorTextPosition == 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
+    {% endif %}
     {{- block('form_widget') -}}
-    {% set errorText = attr.error_text|default('') %}
-    {% if errorText %}
-        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% if errorTextPosition != 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block integer_widget %}
+    {% set errorTextPosition = attr.error_text_position|default('bottom') %}
+    {% set errorText = attr.error_text|default('') %}
     {% set isDisabled = attr.disabled|default(false) %}
     {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
@@ -52,14 +62,22 @@
     {%- set attr = attr|merge({
         class: classes
     }) -%}
+    {% if errorTextPosition == 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
+    {% endif %}
     {{- parent() -}}
-    {% set errorText = attr.error_text|default('') %}
-    {% if errorText %}
-        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% if errorTextPosition != 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block number_widget %}
+    {% set errorTextPosition = attr.error_text_position|default('bottom') %}
+    {% set errorText = attr.error_text|default('') %}
     {% set isDisabled = attr.disabled|default(false) %}
     {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
@@ -68,10 +86,16 @@
     {%- set attr = attr|merge({
         class: classes
     }) -%}
+    {% if errorTextPosition == 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
+    {% endif %}
     {{- parent() -}}
-    {% set errorText = attr.error_text|default('') %}
-    {% if errorText %}
-        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% if errorTextPosition != 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -124,6 +148,8 @@
 {% endblock %}
 
 {% block money_widget %}
+    {% set errorTextPosition = attr.error_text_position|default('bottom') %}
+    {% set errorText = attr.error_text|default('') %}
     {% set isDisabled = attr.disabled|default(false) %}
     {% set disabledClasses = isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-text' %}
     {% set withError = attr.with_error|default(false) %}
@@ -132,10 +158,16 @@
     {%- set attr = attr|merge({
         class: classes
     }) -%}
+    {% if errorTextPosition == 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
+    {% endif %}
     {{- parent() -}}
-    {% set errorText = attr.error_text|default('') %}
-    {% if errorText %}
-        <p class="text-danger-400 text-xs">{{ errorText }}</p>
+    {% if errorTextPosition != 'top' %}
+        {% if errorText %}
+            <p class="text-danger-400 text-xs">{{ errorText }}</p>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

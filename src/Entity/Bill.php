@@ -136,9 +136,19 @@ class Bill
         return $this;
     }
 
-    public function setProductBills(Collection $productBills): self
+    public function setProductBills(?Collection $productBills = null): self
     {
+        if (empty($productBills)) {
+            $productBills = new ArrayCollection();
+        }
+
         $this->productBills = $productBills;
+        return $this;
+    }
+
+    public function clearProductBills(): self
+    {
+        $this->productBills->clear();
 
         return $this;
     }

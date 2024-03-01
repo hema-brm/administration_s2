@@ -7,14 +7,45 @@
     <div class="border shadow p-4 mb-3">
         {% include '@bill/live/product-bill.html.twig' %}
     </div>
+    {% if _hasPendingProductBill %}
+        <div class="mb-3">
+            <twig:Alert
+                color="info"
+                text="Veuillez sauvegarder tous les produits pour sauvegarder la facture."
+                icon="fa-info-circle"
+                variant="small"
+            />
+        </div>
+    {% endif %}
+    {% if _hasErrors %}
+        <div class="mb-3">
+            <twig:Alert
+                color="danger"
+                text="Veuillez corriger les erreurs avant de sauvegarder la facture."
+                icon="fa-times-circle"
+                variant="small"
+            />
+        </div>
+    {% endif %}
     {% if not _isReadOnlyMode %}
     <div class="flex flex-row justify-end mb-3">
         {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
+        {% set action = 'live#action' %}
+        {% set actionName = 'saveBill' %}
         {% set textClass = '' %}
+        {% if _allValid %}
+            {% set buttonClass = buttonClass ~ ' bg-primary-500 hover:bg-primary-700 cursor-pointer' %}
+        {% else %}
+            {% set buttonClass = buttonClass ~ ' bg-gray-400 cursor-not-allowed pointer-events-none' %}
+            {% set textClass = 'line-through' %}
+            {% set action = '#' %}
+            {% set actionName = '#' %}
+        {% endif %}
         <button
-                data-action="live#action"
-                data-action-name="saveBill"
-                class="{{ buttonClass }} bg-primary-500"
+            {{ (_allValid) ? '' : 'disabled="disabled"' }}
+            data-action="{{ action }}"
+            data-action-name="{{ actionName }}"
+            class="{{ buttonClass }}"
         >
             <div class="mr-2">
                 <span data-loading="show">
