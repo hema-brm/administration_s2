@@ -1,0 +1,29 @@
+<h3 class="mb-1 text-lg">Liste des produits</h3>
+
+{% if not _isReadOnlyMode %}
+<button
+        data-action="live#action"
+        data-action-name="addProductBillItem"
+        data-loading="action(addProductBillItem)|addAttribute(disabled)"
+        class="text-sm mb-3 px-4 py-1 bg-primary-100 text-primary-500 rounded hover:bg-primary-200"
+>
+    <span data-loading="action(addProductBillItem)|show">
+        <i class="fas fa-spinner animate-spin"></i>
+    </span>
+    <i class="fas fa-plus" data-loading="action(addProductBillItem)|hide"></i>
+    <span>Ajouter</span>
+</button>
+{% endif %}
+
+{% for key, item in productBillData %}
+    <twig:BillCreator:Item
+        :key="key"
+        :productId="item.productId"
+        :quantity="item.quantity"
+        :tva="item.tva"
+        :price="item.price"
+        :total="item.total"
+        :isEditing="item.isEditing"
+        :mode="mode"
+    />
+{% endfor %}

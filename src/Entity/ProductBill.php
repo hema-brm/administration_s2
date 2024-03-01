@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "product_bill")]
 class ProductBill
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
@@ -21,12 +22,19 @@ class ProductBill
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $product;
-    
+    private Product $product;
 
     #[ORM\Column(nullable: true)]
-    private $quantity;
-    
+    private int $quantity = 1;
+
+    #[ORM\Column(type: 'float')]
+    private float $price;
+
+    #[ORM\Column(type: 'float')]
+    private ?float $tva = 0.0;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $discount = 0.0;
 
     public function getId(): ?int
     {
@@ -62,8 +70,11 @@ class ProductBill
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(?int $quantity = null): self
     {
+        if (empty($quantity)) {
+            $quantity = 1;
+        }
         $this->quantity = $quantity;
 
         return $this;
@@ -73,8 +84,70 @@ class ProductBill
         return $this->product;
     }
 
-    public function getTotal(): float
+    public function getPrice(): float
     {
-        return $this->getQuantity() * $this->getProduct()->getPrice();
+        return $this->price;
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function getTotalHT(): float
+    {
+        return $this->quantity * $this->price;
+    }
+
+    public function getTotalTVA(): float
+    {
+        return $this->getTotalHT() * ($this->tva / 100);
+    }
+
+    public function getTotalTTC(): float
+    {
+        return $this->getTotalHT() + $this->getTotalTVA();
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotalHT() * ($this->discount / 100);
+    }
+
+    public function getRealTotal(): float
+    {
+        return $this->getTotalTTC() - $this->getTotalDiscount();
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(?float $tva = null): static
+    {
+        if ($tva === null) {
+            $tva = Product::DEFAULT_TAX_RATE;
+        }
+        $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getDiscount(): ?float
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(?float $discount): static
+    {
+        $this->discount = $discount;
+
+        return $this;
+    }
+
+    public function hasId(): bool
+    {
+        return !empty($this->id);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components\Live\Quote\Item;
+namespace App\Controller\Quote\Live\QuoteCreator;
 
 use App\Entity\Product;
 use App\Entity\ProductQuote;
@@ -9,24 +9,21 @@ use App\Repository\ProductRepository;
 use App\Service\Quote\QuoteCreatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\LiveResponder;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 use Symfony\UX\TwigComponent\Attribute\PreMount;
-use Symfony\UX\TwigComponent\Event\PreRenderEvent;
 
 #[AsLiveComponent]
-class Creator extends AbstractController
+class Item extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentWithFormTrait;
@@ -43,8 +40,19 @@ class Creator extends AbstractController
     #[Assert\Positive(message: 'La quantité doit être un nombre positif.')]
     public int $quantity = 1;
 
+    #[LiveProp(writable: true)]
+    #[Assert\Range(
+        notInRangeMessage: 'La TVA doit être comprise entre {{ min }} et {{ max }}.',
+        min: 0,
+        max: 100,
+    )]
+    public float $tva;
+
     #[LiveProp]
     public float $total = 0.0;
+
+    #[LiveProp]
+    public float $totalHT = 0.0;
 
     #[LiveProp]
     public bool $isEditing = false;
@@ -97,6 +105,7 @@ class Creator extends AbstractController
             'key' => $this->key,
             'product' => $this->product->getId(),
             'quantity' => $this->quantity,
+            'tva' => $this->tva,
             'price' => $this->price,
             'total' => $this->total,
         ]);
@@ -120,6 +129,12 @@ class Creator extends AbstractController
         ]);
     }
 
+    #[ExposeInTemplate('_totalHT')]
+    public function getTotalHT(): float
+    {
+        return $this->quantity * $this->price;
+    }
+
     #[ExposeInTemplate]
     public function lineItemsHasErrors()
     {
@@ -132,7 +147,7 @@ class Creator extends AbstractController
     #[ExposeInTemplate('_canSaveItems')]
     public function canSaveItems(): bool
     {
-        return $this->mode != QuoteCreatorService::READONLY_MODE;
+        return $this->mode != 'show';
     }
 
     private function setDefaultProduct(): void
@@ -142,18 +157,6 @@ class Creator extends AbstractController
                 'id' => 'ASC'
             ]);
         }
-    }
-
-    #[PreMount]
-    public function preMount(array $data): array
-    {
-        $this->setDefaultProduct();
-
-        $data['productId'] = $this->product->getId();
-        $data['price'] = $this->product->getPrice();
-        $data['total'] = $this->product->getPrice();
-
-        return $data;
     }
 
     #[PostMount]
@@ -180,14 +183,18 @@ class Creator extends AbstractController
         if ($this->price == $this->product->getPrice()) {
             return;
         }
-
         $this->refreshTotal();
-
         $this->itemPriceHasBeenEdited = true;
     }
 
     #[LiveListener('product_selection_has_been_changed')]
     public function onProductSelectionChanged(): void
+    {
+        $this->refreshTotal();
+    }
+
+    #[LiveListener('product_tva_has_been_changed')]
+    public function onProductTvaChange(): void
     {
         $this->refreshTotal();
     }
@@ -200,6 +207,6 @@ class Creator extends AbstractController
 
     private function refreshTotal(): void
     {
-        $this->total = ProductQuote::_getTotal($this->price, $this->quantity);
+        $this->total = ProductQuote::_getTotal($this->price, $this->quantity, $this->tva);
     }
 }

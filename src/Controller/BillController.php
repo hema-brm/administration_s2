@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Bill;
+use App\Entity\Customer;
 use App\Form\BillType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
@@ -258,9 +259,8 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         // Si l'utilisateur appartient à une entreprise
         if ($userCompany) {
             // Récupère les factures de l'entreprise de l'utilisateur connecté
-            $bills = $billRepository->findBy(['entreprise' => $userCompany]);
+            $bills = $billRepository->findBy([]);
         }
-
 
     }
 
@@ -278,15 +278,6 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         $bill = new Bill();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
-
-        $user = $this->getUser();
-
-        // Récupérer l'entreprise associée à l'utilisateur connecté
-        $entreprise = $user->getCompany();
-
-        $bill->setEntreprise($entreprise);
-
-        $bill->setCreationDate(new DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($bill);

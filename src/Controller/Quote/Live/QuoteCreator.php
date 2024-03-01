@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Twig\Components\Live\Quote;
+namespace App\Controller\Quote\Live;
 
 use App\Entity\Product;
 use App\Entity\Quote;
 use App\Form\QuoteType;
 use App\Service\Quote\QuoteCreatorService;
-use App\Validator\Constraint as EasyVowsAssert;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -22,12 +22,11 @@ use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 use Symfony\UX\TwigComponent\Attribute\PreMount;
 
 #[AsLiveComponent]
-class Creator extends AbstractController
+class QuoteCreator extends AbstractController
 {
     use DefaultActionTrait;
     use ValidatableComponentTrait;
@@ -43,22 +42,14 @@ class Creator extends AbstractController
     public ?int $customerId = null;
 
     #[LiveProp(writable: true)]
-    #[Assert\NotNull(message: 'Vous devez choisir un numéro de devis.')]
+    #[Assert\NotNull(message: 'Vous devez saisir un numéro de devis.')]
     #[Assert\Length(min: 3, max: 255, minMessage: 'Le numéro de devis doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le numéro de devis doit contenir au maximum {{ limit }} caractères.')]
-    /**
-     * @TODO Add EasyVowsAssert\QuoteNumberConstraint constraint later to work with edit mode.
-     */
     public ?string $quote_number = null;
 
     #[LiveProp(writable: true)]
     #[Assert\PositiveOrZero(message: 'La remise doit être supérieur ou égale à 0.')]
     #[Assert\LessThanOrEqual(value: 100, message: 'La remise doit être inférieur ou égale à 100.')]
-    public ?float $discount;
-
-    #[LiveProp(writable: true)]
-    #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
-    #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
-    public ?float $tva;
+    public ?float $discount = 0.0;
 
     #[LiveProp(writable: true)]
     #[Assert\Choice(choices: [0, 1, 2, 3], message: 'Le statut choisi est invalide.')]
@@ -78,7 +69,7 @@ class Creator extends AbstractController
     public array $lineItems = [];
 
     #[LiveProp]
-    public string $viewMode = 'create';
+    public string $mode = 'create';
 
     public bool $savedSuccessfully = false;
 
@@ -87,7 +78,6 @@ class Creator extends AbstractController
         'quote_issuance_date',
         'expiry_date',
         'discount',
-        'tva',
         'status',
     ];
 
@@ -136,7 +126,6 @@ class Creator extends AbstractController
         $this->setDefaultQuoteNumber($quote);
         $this->setDefaultDates($quote);
         $this->setDefaultDiscount($quote);
-        $this->setDefaultTva($quote);
         $this->setDefaultStatus($quote);
         $this->setDefaultProductQuotes($quote);
     }
@@ -153,13 +142,7 @@ class Creator extends AbstractController
     private function setDefaultDiscount(?Quote $quote = null): void
     {
         $quoteExists = !empty($quote) && $quote->hasId();
-        $this->discount = $quoteExists ? $quote->getDiscount() : null;
-    }
-
-    private function setDefaultTva(?Quote $quote = null): void
-    {
-        $quoteExists = !empty($quote) && $quote->hasId();
-        $this->tva = $quoteExists ? $quote->getTva() : null;
+        $this->discount = $quoteExists ? $quote->getDiscount() : 0.0;
     }
 
     private function setDefaultStatus(?Quote $quote = null): void
@@ -209,7 +192,7 @@ class Creator extends AbstractController
     #[LiveAction]
     public function addLineItem(): void
     {
-        $this->quoteCreatorService::addLineItem($this->lineItems);
+        $this->quoteCreatorService->addLineItem($this->lineItems);
     }
 
     #[LiveAction]
@@ -225,20 +208,25 @@ class Creator extends AbstractController
         }
         $this->ensureErrorMessageBeforeSaving();
         $this->validate();
+
         $this->clearFlashBag($session);
 
-        $this->quoteCreatorService->saveQuote(
-            $entityManager,
-            $this->quoteData,
-            $this->customerId,
-            $this->quote_number,
-            $this->quote_issuance_date,
-            $this->expiry_date,
-            $this->discount,
-            $this->tva,
-            $this->status,
-            $this->lineItems,
-        );
+        try {
+            $this->quoteCreatorService->saveQuote(
+                $entityManager,
+                $this->quoteData,
+                $this->customerId,
+                $this->quote_number,
+                $this->quote_issuance_date,
+                $this->expiry_date,
+                $this->discount,
+                $this->status,
+                $this->lineItems,
+            );
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_quote_index');
+        }
 
         return $this->postQuoteSaving();
     }
@@ -261,6 +249,7 @@ class Creator extends AbstractController
         #[LiveArg] Product $product,
         #[LiveArg] float $price,
         #[LiveArg] int $quantity,
+        #[LiveArg] float $tva,
         #[LiveArg] float $total,
     ): void
     {
@@ -268,19 +257,25 @@ class Creator extends AbstractController
             $this->addFlash('warning', 'Vous ne pouvez pas modifier un devis en mode lecture seule.');
             return;
         }
-        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $price, $total);
+        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $tva, $price, $total);
     }
 
     #[ExposeInTemplate('_mode')]
     public function getMode(): string
     {
-        return $this->quoteCreatorService::getMode($this->quoteData);
+        return $this->mode;
     }
 
     #[ExposeInTemplate('_isReadOnlyMode')]
     public function isReadOnlyMode(): bool
     {
-        return QuoteCreatorService::READONLY_MODE == $this->getMode();
+        return ('show' == $this->mode);
+    }
+
+    #[ExposeInTemplate('_cannotEdit')]
+    public function cannotEdit(): bool
+    {
+        return ('edit' == $this->mode) && (Quote::STATUS_ACCEPTED == $this->quoteData->getStatus());
     }
 
     #[ExposeInTemplate]
@@ -324,14 +319,7 @@ class Creator extends AbstractController
         return $this->quoteCreatorService::getTotals(
             $this->lineItems,
             $this->discount,
-            $this->tva,
         );
-    }
-
-    #[ExposeInTemplate('_hasTaxRateValue')]
-    public function hasTaxRateValue(): bool
-    {
-        return $this->tva > 0;
     }
 
     #[ExposeInTemplate('_hasDiscountValue')]

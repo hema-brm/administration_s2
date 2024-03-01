@@ -4,6 +4,9 @@ namespace App\Form;
 
 use App\Form\Field\ProductAutocompleteField;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -16,11 +19,15 @@ class ProductBillType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('product', ProductAutocompleteField::class, [
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
                 'label' => 'Choisissez un produit',
+            ])
+            ->add('price', MoneyType::class, [
+                'label' => 'Prix',
+                'currency' => null,
                 'attr' => [
-                    'placeholder' => 'Choisissez un produit',
-                    'wrapper' => 'compact',
+                    'placeholder' => 'Prix',
                 ],
             ])
             ->add('quantity', IntegerType::class, [
@@ -28,7 +35,25 @@ class ProductBillType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez la quantité',
                 ],
+            ])
+            ->add('tva', NumberType::class, [
+                'label' => 'TVA',
+                'attr' => [
+                    'placeholder' => 'TVA',
+                ],
+                'required' => false,
+            ])
+            ->add('total', MoneyType::class, [
+                'label' => 'Total',
+                'currency' => null,
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Total',
+                    'disabled' => 'disabled',
+                ],
+                'mapped' => false,
             ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

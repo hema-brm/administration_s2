@@ -56,9 +56,13 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Quote::class, orphanRemoval: true)]
     private Collection $quote;
 
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Bill::class, orphanRemoval: true)]
+    private Collection $bills;
+
     public function __construct()
     {
         $this->quote = new ArrayCollection();
+        $this->bills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -198,5 +202,35 @@ class Customer
     public function __toString(): string
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * @return Collection<int, Bill>
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bill $bill): static
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills->add($bill);
+            $bill->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bill $bill): static
+    {
+        if ($this->bills->removeElement($bill)) {
+            // set the owning side to null (unless already changed)
+            if ($bill->getCustomer() === $this) {
+                $bill->setCustomer(null);
+            }
+        }
+
+        return $this;
     }
 }

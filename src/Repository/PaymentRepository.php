@@ -26,7 +26,7 @@ class PaymentRepository extends ServiceEntityRepository
     public function getTotalPriceSumByMonth(): array
     {
         return $this->createQueryBuilder('payment')
-            ->select("date_format(payment.datePaiement, '%Y') as year", "date_format(payment.datePaiement, '%m') as month", 'SUM(bill.totalPrice) as totalPrice')
+            ->select("date_format(payment.datePaiement, '%Y') as year", "date_format(payment.datePaiement, '%m') as month")
             ->leftJoin('payment.bill', 'bill')
             ->where('payment.datePaiement IS NOT NULL')
             ->andWhere('payment.status = :status')

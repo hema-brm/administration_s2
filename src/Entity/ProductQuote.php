@@ -32,6 +32,9 @@ class ProductQuote
     #[ORM\Column]
     private ?float $price = null;
 
+    #[ORM\Column]
+    private ?float $tva = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,18 +92,31 @@ class ProductQuote
         return $this;
     }
 
-    public static function _getTotal($price, $quantity): float
+    public static function _getTotal($price, $quantity, $tva): float
     {
-        $total = $price * $quantity;
+        $totalHT = $price * $quantity;
+        $totalTva = $totalHT * ($tva / 100);
+        $total = $totalHT + $totalTva;
         if ($total < 0) {
             $total = 0;
         }
-
         return $total;
     }
 
     public function getTotal(): float
     {
-        return self::_getTotal($this->price, $this->quantity);
+        return self::_getTotal($this->price, $this->quantity, $this->tva);
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
+
+        return $this;
     }
 }
