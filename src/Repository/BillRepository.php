@@ -21,6 +21,16 @@ class BillRepository extends ServiceEntityRepository
         parent::__construct($registry, Bill::class);
     }
 
+    public function findByDateRange(\DateTime $start, \DateTime $end): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.CreationDate BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByMonth(int $month, int $year): array
 {
     $startDate = new \DateTime("$year-$month-01");

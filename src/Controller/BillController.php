@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Bill;
+use App\Form\BillPeriodBetweenDateType;
 use App\Form\BillType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
@@ -278,15 +279,34 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
             // Récupère les factures de l'entreprise de l'utilisateur connecté
             $bills = $billRepository->findBy(['entreprise' => $userCompany]);
         }
-
-
     }
+
+    $dateRangeForm = $this->createForm(BillPeriodBetweenDateType::class);
 
     return $this->render('bill/index.html.twig', [
         'bills' => $bills,
+        'dateRangeForm' => $dateRangeForm->createView(),
     ]);
     }
 
+    #[Route('/filter', name: 'app_bill_index_filter', methods: ['GET'])]
+    public function searchByDates(Request $request, BillRepository $billRepository): Response
+    {
+        $allParams = $request->query->all();
+        $dateRangeParams = $allParams['bill_period_between_date'];
+
+        $startDateTime = new DateTime($dateRangeParams['start']);
+        $endDateTime = new DateTime($dateRangeParams['end']);
+
+        $bills = $billRepository->findByDateRange($startDateTime, $endDateTime);
+
+        $dateRangeForm = $this->createForm(BillPeriodBetweenDateType::class);
+
+        return $this->render('bill/index.html.twig', [
+            'bills' => $bills,
+            'dateRangeForm' => $dateRangeForm->createView(),
+        ]);
+    }
 
 
 
