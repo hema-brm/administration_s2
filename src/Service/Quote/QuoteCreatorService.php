@@ -102,13 +102,15 @@ class QuoteCreatorService {
         return $this->productRepository->find($id);
     }
 
-    public static function addLineItem(array &$lineItems): void
+    public function addLineItem(array &$lineItems): void
     {
+        $defaultProduct = $this->productRepository->getFirstProduct();
+
         $lineItems[] = [
-            'productId' => null,
+            'productId' => $defaultProduct->getId(),
             'quantity' => 1,
-            'price' => 0.0,
-            'total' => 0.0,
+            'price' => $defaultProduct->getPrice(),
+            'total' => $defaultProduct->getPrice(),
             'isEditing' => true,
         ];
     }
@@ -170,29 +172,24 @@ class QuoteCreatorService {
         $lineItems[$key]['total'] = $total;
     }
 
-    private function ensurePresentProductQuote(?Quote $quoteData, array &$lineItems): void
+    private function removeExistingProductQuotes(EntityManagerInterface $entityManager,?Quote $quoteData, array &$lineItems): void
     {
-
         foreach ($quoteData->getProductQuotes() as $key => $item) {
-            if (!isset($lineItems[$key])) {
-                $quoteData->removeProductQuote($item);
-            }
+            $quoteData->removeProductQuote($item);
+            $entityManager->remove($item);
         }
     }
 
     private function setProductQuoteItems(EntityManagerInterface $entityManager, ?Quote $quoteData, array &$lineItems): void
     {
         foreach ($lineItems as $key => $lineItem) {
-            $productQuoteItem = $quoteData->getProductQuotes()->get($key);
-            if (null === $productQuoteItem) {
-                $productQuoteItem = new ProductQuote();
-                $product = $this->findProduct($lineItem['productId']);
-                $productQuoteItem->setProduct($product);
-                $productQuoteItem->setQuantity($lineItem['quantity']);
-                $productQuoteItem->setPrice($lineItem['price']);
-                $productQuoteItem->setQuote($quoteData);
-                $quoteData->addProductQuote($productQuoteItem);
-            }
+            $productQuoteItem = new ProductQuote();
+            $product = $this->findProduct($lineItem['productId']);
+            $productQuoteItem->setProduct($product);
+            $productQuoteItem->setQuantity($lineItem['quantity']);
+            $productQuoteItem->setPrice($lineItem['price']);
+            $productQuoteItem->setQuote($quoteData);
+            $quoteData->addProductQuote($productQuoteItem);
             $entityManager->persist($productQuoteItem);
         }
     }
@@ -239,7 +236,7 @@ class QuoteCreatorService {
         array &$lineItems,
     ): void
     {
-        $this->ensurePresentProductQuote($quoteData, $lineItems);
+        $this->removeExistingProductQuotes($entityManager, $quoteData, $lineItems);
         $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $tva, $status, $lineItems);
     }
 

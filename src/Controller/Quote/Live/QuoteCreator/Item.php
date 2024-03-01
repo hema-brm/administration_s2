@@ -141,17 +141,17 @@ class Item extends AbstractController
         }
     }
 
-    #[PreMount]
-    public function preMount(array $data): array
-    {
-        $this->setDefaultProduct();
-
-        $data['productId'] = $this->product->getId();
-        $data['price'] = $this->product->getPrice();
-        $data['total'] = $this->product->getPrice();
-
-        return $data;
-    }
+//    #[PreMount]
+//    public function preMount(array $data): array
+//    {
+//        $this->setDefaultProduct();
+//
+//        $data['productId'] = $this->product->getId();
+//        $data['price'] = $this->product->getPrice();
+//        $data['total'] = $this->product->getPrice();
+//
+//        return $data;
+//    }
 
     #[PostMount]
     public function postMount(): void

@@ -20,7 +20,6 @@
                         'data-model': 'price',
                         'data-action': "live#emit",
                         'data-event': 'product_price_has_been_edited',
-                        'value': product.price,
                         'with_error': _errors.has('price') ? true : false,
                         'error_text': _errors.has('price') ? _errors.get('price') : '',
                         'error_text_position': 'top',
@@ -34,7 +33,6 @@
                         'data-model': 'quantity',
                         'data-action': "live#emit",
                         'data-event': 'product_quantity_has_been_edited',
-                        'value': quantity,
                         'with_error': _errors.has('quantity') ? true : false,
                         'error_text': _errors.has('quantity') ? _errors.get('quantity') : '',
                         'error_text_position': 'top',
@@ -46,7 +44,6 @@
                 {{ form_row(form.total, {
                     attr: {
                         'data-model': 'total',
-                        'value': total,
                         'disabled': true,
                         'class': 'cursor-not-allowed'
                     }

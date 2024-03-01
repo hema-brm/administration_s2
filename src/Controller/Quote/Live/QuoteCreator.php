@@ -205,7 +205,7 @@ class QuoteCreator extends AbstractController
     #[LiveAction]
     public function addLineItem(): void
     {
-        $this->quoteCreatorService::addLineItem($this->lineItems);
+        $this->quoteCreatorService->addLineItem($this->lineItems);
     }
 
     #[LiveAction]
