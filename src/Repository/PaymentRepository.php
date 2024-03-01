@@ -2,12 +2,9 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\Query\Expr;
-
 use App\Entity\Payment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Oro\ORM\Query\AST\Functions\String\DateFormat;
 
 /**
  * @extends ServiceEntityRepository<Payment>
@@ -23,11 +20,13 @@ class PaymentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Payment::class);
     }
+
     public function getTotalPriceSumByMonth(): array
     {
         return $this->createQueryBuilder('payment')
-            ->select("date_format(payment.datePaiement, '%Y') as year", "date_format(payment.datePaiement, '%m') as month")
+            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", "DATE_FORMAT(payment.datePaiement, '%m') as month", 'SUM(productBill.price) as totalPrice')
             ->leftJoin('payment.bill', 'bill')
+            ->leftJoin('bill.productBills', 'productBill')
             ->where('payment.datePaiement IS NOT NULL')
             ->andWhere('payment.status = :status')
             ->setParameter('status', 'terminé')
@@ -39,8 +38,9 @@ class PaymentRepository extends ServiceEntityRepository
     public function getTotalPriceSumByYear(): array
     {
         return $this->createQueryBuilder('payment')
-            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", 'SUM(bill.totalPrice) as totalPrice')
+            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", 'SUM(productBill.price) as totalPrice')
             ->leftJoin('payment.bill', 'bill')
+            ->leftJoin('bill.productBills', 'productBill')
             ->where('payment.datePaiement IS NOT NULL')
             ->andWhere('payment.status = :status')
             ->setParameter('status', 'terminé')
@@ -48,11 +48,13 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function getTotalPriceSumByCategory(): array
     {
         return $this->createQueryBuilder('payment')
-            ->select('payment.status as category', 'SUM(bill.totalPrice) as totalPrice')
+            ->select('payment.status as category', 'SUM(productBill.price) as totalPrice')
             ->leftJoin('payment.bill', 'bill')
+            ->leftJoin('bill.productBills', 'productBill')
             ->where('payment.datePaiement IS NOT NULL')
             ->groupBy('category')
             ->getQuery()
