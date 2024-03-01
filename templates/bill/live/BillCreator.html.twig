@@ -7,7 +7,7 @@
     <div class="border shadow p-4 mb-3">
         {% include '@bill/live/product-bill.html.twig' %}
     </div>
-
+    {% if not _isReadOnlyMode %}
     <div class="flex flex-row justify-end mb-3">
         {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
         {% set textClass = '' %}
@@ -29,4 +29,5 @@
             </span>
         </button>
     </div>
+    {% endif %}
 </div>

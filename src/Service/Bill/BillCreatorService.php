@@ -92,6 +92,30 @@ class BillCreatorService {
         return 0.0;
     }
 
+    public function getDefaultProductBills(?Bill $bill = null): array
+    {
+        $billExists = !empty($bill) && $bill->hasId();
+        $productBills = [];
+        if ($billExists) {
+            foreach ($bill->getProductBills() as $productBill) {
+                $productBills[] = $this->generateProductBillData($productBill);
+            }
+        }
+
+        return $productBills;
+    }
+
+    private function generateProductBillData(ProductBill $productBill): array
+    {
+        return [
+            'productId' => $productBill->getProduct()->getId(),
+            'quantity' => $productBill->getQuantity(),
+            'price' => $productBill->getPrice(),
+            'total' => $productBill->getTotal(),
+            'isEditing' => false,
+        ];
+    }
+
     public function hydrateBill(array $data): Bill
     {
         $bill = new Bill();

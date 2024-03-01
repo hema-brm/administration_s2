@@ -1,70 +1,23 @@
 {% extends '@base/app.html.twig' %}
-
+{% from "@components/macros/content.html.twig" import header %}
 
 {% block title %}Bill{% endblock %}
 
 
 {% block body %}
     {{ displayFlash() }}
-    <h1>Facture</h1>
+    {{ header({
+        text: 'Facture',
+    }) }}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ bill.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom du client</th>
-                <td>{{ bill.customer }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ bill.status }}</td>
-            </tr>
-            <tr>
-                <th>Numéro de facture</th>
-                <td>{{ bill.billNumber }}</td>
-            </tr>
-            <tr>
-                <th>Date d'échéance</th>
-                <td>{{ bill.billIssuanceDate ? bill.billIssuanceDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Remise</th>
-                <td>{{ bill.discount }}</td>
-            </tr>
-            <tr>
-                <th>TVA</th>
-                <td>{{ bill.tva }}</td>
-            </tr>
-            <tr>
-                <th>Produits</th>
-                <td>
-                    {% if bill.productBills is not empty %}
-                        <ul>
-                            {% for productBill in bill.productBills %}
-                                <li>{{ productBill.product.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        Aucun produit n'est associé à cette facture.
-                    {% endif %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="p-4">
+        <div class="flex flex-row items-center justify-start mb-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+            <i class="fa-solid fa-arrow-left mr-1"></i>
+            <a href="{{ path('app_bill_index') }}">Retour à la liste</a>
+        </div>
 
-    <a href="{{ path('app_bill_index') }}">retour à la liste</a>
-
-    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}">edit</a>
-
-    <a href="{{ path('facture_pdf', {'id': bill.id}) }}" >pdf</a>
-
-
-
-
-
-
-    {{ include('bill/_delete_form.html.twig') }}
+        <div class="px-4">
+            <twig:BillCreator :bill="bill" mode="show" />
+        </div>
+    </div>
 {% endblock %}

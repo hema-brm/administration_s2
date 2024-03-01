@@ -18,6 +18,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\LiveResponder;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 
 #[AsLiveComponent]
 class Item extends AbstractController
@@ -49,6 +50,9 @@ class Item extends AbstractController
     #[LiveProp]
     #[Assert\Positive(message: 'Veuillez vérifier la quantité et le prix.')]
     public float $total;
+
+    #[LiveProp]
+    public string $mode = 'create';
 
     public function __construct(
         private readonly ProductBillCreatorService $productBillCreatorService,
@@ -117,6 +121,12 @@ class Item extends AbstractController
     public function onProductSelectionChange(): void
     {
         $this->price = $this->product->getPrice();
+    }
+
+    #[ExposeInTemplate('_canSave')]
+    public function canSaveItems(): bool
+    {
+        return $this->mode != 'show';
     }
 
 }

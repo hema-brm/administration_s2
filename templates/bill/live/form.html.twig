@@ -7,6 +7,7 @@
                 'data-model': 'customer',
                 'with_error': _errors.has('customer') ? true : false,
                 'error_text': _errors.has('customer') ? _errors.get('customer') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
 
@@ -16,6 +17,7 @@
                 'data-model': 'billNumber',
                 'with_error': _errors.has('billNumber') ? true : false,
                 'error_text': _errors.has('billNumber') ? _errors.get('billNumber') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
     </div>
@@ -27,6 +29,7 @@
                 'data-model': 'billIssuanceDate',
                 'with_error': _errors.has('billIssuanceDate') ? true : false,
                 'error_text': _errors.has('billIssuanceDate') ? _errors.get('billIssuanceDate') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
         {{ form_row(form.status, {
@@ -35,6 +38,7 @@
                 'data-model': 'status',
                 'with_error': _errors.has('status') ? true : false,
                 'error_text': _errors.has('status') ? _errors.get('status') : '',
+                'disabled': _isReadOnlyMode ? true : false,
             }
         }) }}
     </div>
@@ -47,6 +51,7 @@
                     'data-model': 'debounce(300)|discount',
                     'with_error': _errors.has('discount') ? true : false,
                     'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
             {{ form_row(form.tva, {
@@ -55,6 +60,7 @@
                     'data-model': 'debounce(300)|tva',
                     'with_error': _errors.has('tva') ? true : false,
                     'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                    'disabled': _isReadOnlyMode ? true : false,
                 }
             }) }}
         </div>

@@ -26,6 +26,7 @@ use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 
 #[AsLiveComponent]
 class BillCreator extends AbstractController
@@ -98,6 +99,7 @@ class BillCreator extends AbstractController
         $this->status = $this->billCreatorService->getDefaultBillStatus($this->billData);
         $this->discount = $this->billCreatorService->getDefaultDiscount($this->billData);
         $this->tva = $this->billCreatorService->getDefaultTVA($this->billData);
+        $this->productBillData = $this->billCreatorService->getDefaultProductBills($this->billData);
     }
 
     protected function instantiateForm(): FormInterface
@@ -180,6 +182,12 @@ class BillCreator extends AbstractController
     public function removeProductBillItem(#[LiveArg] int $index): void
     {
         unset($this->productBillData[$index]);
+    }
+
+    #[ExposeInTemplate('_isReadOnlyMode')]
+    public function isReadOnlyMode(): bool
+    {
+        return ('show' == $this->mode);
     }
 
 }

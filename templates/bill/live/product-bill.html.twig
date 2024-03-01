@@ -1,5 +1,6 @@
 <h3 class="mb-1 text-lg">Liste des produits</h3>
 
+{% if not _isReadOnlyMode %}
 <button
         data-action="live#action"
         data-action-name="addProductBillItem"
@@ -12,6 +13,7 @@
     <i class="fas fa-plus" data-loading="action(addProductBillItem)|hide"></i>
     <span>Ajouter</span>
 </button>
+{% endif %}
 
 {% for key, item in productBillData %}
     <twig:BillCreator:Item
@@ -21,5 +23,6 @@
         :price="item.price"
         :total="item.total"
         :isEditing="item.isEditing"
+        :mode="mode"
     />
 {% endfor %}

@@ -7,6 +7,7 @@
             'data-event': 'product_bill:product_selection_change',
             'with_error': _errors.has('product') ? true : false,
             'error_text': _errors.has('product') ? _errors.get('product') : '',
+            'disabled': isEditing ? false : true,
         }
     }) }}
 </div>
@@ -18,6 +19,7 @@
                     'data-model': 'debounce(300)|price',
                     'with_error': _errors.has('price') ? true : false,
                     'error_text': _errors.has('price') ? _errors.get('price') : '',
+                    'disabled': isEditing ? false : true,
                 }
             }) }}
         </div>
@@ -27,6 +29,7 @@
                     'data-model': 'quantity',
                     'with_error': _errors.has('quantity') ? true : false,
                     'error_text': _errors.has('quantity') ? _errors.get('quantity') : '',
+                    'disabled': isEditing ? false : true,
                 }
             }) }}
         </div>
@@ -39,6 +42,7 @@
         </div>
     </div>
 
+    {% if _canSave %}
     <div class="flex flex-row">
         {% if isEditing %}
             <button
@@ -76,4 +80,5 @@
             <i class="fas fa-times"></i>
         </button>
     </div>
+    {% endif %}
 </div>
