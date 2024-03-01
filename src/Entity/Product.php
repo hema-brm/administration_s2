@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
+    public const DEFAULT_TAX_RATE = 20;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

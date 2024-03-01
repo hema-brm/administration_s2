@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "product_bill")]
 class ProductBill
 {
-    public const DEFAULT_TAX_RATE = 20.0;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -128,7 +127,7 @@ class ProductBill
     public function setTva(?float $tva = null): static
     {
         if ($tva === null) {
-            $tva = self::DEFAULT_TAX_RATE;
+            $tva = Product::DEFAULT_TAX_RATE;
         }
         $this->tva = $tva;
 

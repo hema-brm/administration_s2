@@ -109,8 +109,9 @@ class QuoteCreatorService {
         $lineItems[] = [
             'productId' => $defaultProduct->getId(),
             'quantity' => 1,
+            'tva' => Product::DEFAULT_TAX_RATE,
             'price' => $defaultProduct->getPrice(),
-            'total' => $defaultProduct->getPrice(),
+            'total' => ProductQuote::_getTotal($defaultProduct->getPrice(), 1, Product::DEFAULT_TAX_RATE),
             'isEditing' => true,
         ];
     }
@@ -127,8 +128,9 @@ class QuoteCreatorService {
                 $lineItems[] = [
                     'productId' => $productQuote->getProduct()->getId(),
                     'quantity' => $productQuote->getQuantity(),
+                    'tva' => $productQuote->getTva(),
                     'price' => $productQuote->getPrice(),
-                    'total' => ProductQuote::_getTotal($productQuote->getPrice(), $productQuote->getQuantity()),
+                    'total' => ProductQuote::_getTotal($productQuote->getPrice(), $productQuote->getQuantity(), $productQuote->getTva()),
                     'isEditing' => false,
                 ];
             }
@@ -158,6 +160,7 @@ class QuoteCreatorService {
         int $key,
         Product $product,
         int $quantity,
+        float $tva,
         float $price,
         float $total
     ): void
@@ -169,6 +172,7 @@ class QuoteCreatorService {
         $lineItems[$key]['productId'] = $product->getId();
         $lineItems[$key]['price'] = $price;
         $lineItems[$key]['quantity'] = $quantity;
+        $lineItems[$key]['tva'] = $tva;
         $lineItems[$key]['total'] = $total;
     }
 
@@ -187,6 +191,7 @@ class QuoteCreatorService {
             $product = $this->findProduct($lineItem['productId']);
             $productQuoteItem->setProduct($product);
             $productQuoteItem->setQuantity($lineItem['quantity']);
+            $productQuoteItem->setTva($lineItem['tva']);
             $productQuoteItem->setPrice($lineItem['price']);
             $productQuoteItem->setQuote($quoteData);
             $quoteData->addProductQuote($productQuoteItem);

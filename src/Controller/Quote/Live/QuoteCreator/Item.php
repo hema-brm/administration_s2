@@ -40,8 +40,19 @@ class Item extends AbstractController
     #[Assert\Positive(message: 'La quantité doit être un nombre positif.')]
     public int $quantity = 1;
 
+    #[LiveProp(writable: true)]
+    #[Assert\Range(
+        notInRangeMessage: 'La TVA doit être comprise entre {{ min }} et {{ max }}.',
+        min: 0,
+        max: 100,
+    )]
+    public float $tva;
+
     #[LiveProp]
     public float $total = 0.0;
+
+    #[LiveProp]
+    public float $totalHT = 0.0;
 
     #[LiveProp]
     public bool $isEditing = false;
@@ -94,6 +105,7 @@ class Item extends AbstractController
             'key' => $this->key,
             'product' => $this->product->getId(),
             'quantity' => $this->quantity,
+            'tva' => $this->tva,
             'price' => $this->price,
             'total' => $this->total,
         ]);
@@ -115,6 +127,12 @@ class Item extends AbstractController
             'key' => $this->key,
             'isEditing' => $this->isEditing,
         ]);
+    }
+
+    #[ExposeInTemplate('_totalHT')]
+    public function getTotalHT(): float
+    {
+        return $this->quantity * $this->price;
     }
 
     #[ExposeInTemplate]
@@ -165,14 +183,18 @@ class Item extends AbstractController
         if ($this->price == $this->product->getPrice()) {
             return;
         }
-
         $this->refreshTotal();
-
         $this->itemPriceHasBeenEdited = true;
     }
 
     #[LiveListener('product_selection_has_been_changed')]
     public function onProductSelectionChanged(): void
+    {
+        $this->refreshTotal();
+    }
+
+    #[LiveListener('product_tva_has_been_changed')]
+    public function onProductTvaChange(): void
     {
         $this->refreshTotal();
     }
@@ -185,6 +207,6 @@ class Item extends AbstractController
 
     private function refreshTotal(): void
     {
-        $this->total = ProductQuote::_getTotal($this->price, $this->quantity);
+        $this->total = ProductQuote::_getTotal($this->price, $this->quantity, $this->tva);
     }
 }

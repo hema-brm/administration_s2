@@ -29,7 +29,7 @@ class ProductBillCreatorService {
         $newProductBill = $this->generateDefaultProductBill();
         $price = $newProductBill->getProduct()->getPrice();
         $newProductBill->setPrice($price);
-        $newProductBill->setTva(ProductBill::DEFAULT_TAX_RATE);
+        $newProductBill->setTva(Product::DEFAULT_TAX_RATE);
 
         return [
             'productId' => $newProductBill->getProduct()->getId(),
@@ -79,7 +79,7 @@ class ProductBillCreatorService {
 
     public function getDefaultTva(): float
     {
-        return ProductBill::DEFAULT_TAX_RATE;
+        return Product::DEFAULT_TAX_RATE;
     }
 
     public static function getTotalTTC(float $price, int $quantity, float $tva): float

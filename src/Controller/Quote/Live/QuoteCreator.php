@@ -249,6 +249,7 @@ class QuoteCreator extends AbstractController
         #[LiveArg] Product $product,
         #[LiveArg] float $price,
         #[LiveArg] int $quantity,
+        #[LiveArg] float $tva,
         #[LiveArg] float $total,
     ): void
     {
@@ -256,7 +257,7 @@ class QuoteCreator extends AbstractController
             $this->addFlash('warning', 'Vous ne pouvez pas modifier un devis en mode lecture seule.');
             return;
         }
-        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $price, $total);
+        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $tva, $price, $total);
     }
 
     #[ExposeInTemplate('_mode')]

@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -48,12 +49,29 @@ class ProductQuoteType extends AbstractType
                     ),
                 ]
             ])
-            ->add('total', MoneyType::class, [
-                'label' => 'Total',
+            ->add('tva', NumberType::class, [
+                'label' => 'TVA (%)',
+                'attr' => [
+                    'placeholder' => 'TVA (%)',
+                ],
+                'required' => false,
+            ])
+            ->add('totalHT', MoneyType::class, [
+                'label' => 'Total HT',
                 'currency' => null,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Total',
+                    'placeholder' => 'Total HT',
+                    'disabled' => 'disabled',
+                ],
+                'mapped' => false,
+            ])
+            ->add('total', MoneyType::class, [
+                'label' => 'Total TTC',
+                'currency' => null,
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Total TTC',
                     'disabled' => 'disabled',
                 ],
                 'mapped' => false,

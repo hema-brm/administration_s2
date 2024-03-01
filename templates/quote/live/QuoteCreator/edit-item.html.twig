@@ -40,6 +40,28 @@
                     }
                 }) }}
             </div>
+            <div class="mr-2">
+                {{ form_row(form.tva, {
+                    attr: {
+                        'data-model': 'tva',
+                        'data-action': "live#emit",
+                        'data-event': 'product_tva_has_been_changed',
+                        'with_error': _errors.has('tva') ? true : false,
+                        'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                        'error_text_position': 'top',
+                        'disabled': isEditing ? false : true,
+                    }
+                }) }}
+            </div>
+            <div class="mr-2 cursor-not-allowed">
+                {{ form_row(form.totalHT, {
+                    attr: {
+                        'data-model': 'totalHT',
+                        'disabled': true,
+                        'class': 'cursor-not-allowed'
+                    }
+                }) }}
+            </div>
             <div class="mr-2 cursor-not-allowed">
                 {{ form_row(form.total, {
                     attr: {
