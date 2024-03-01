@@ -35,6 +35,9 @@ class ProductQuote
     #[ORM\Column]
     private ?float $tva = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $discount = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,20 +95,43 @@ class ProductQuote
         return $this;
     }
 
-    public static function _getTotal($price, $quantity, $tva): float
+    public function getTotalHT(): float
     {
-        $totalHT = $price * $quantity;
-        $totalTva = $totalHT * ($tva / 100);
-        $total = $totalHT + $totalTva;
-        if ($total < 0) {
-            $total = 0;
-        }
-        return $total;
+        return $this->quantity * $this->price;
+    }
+
+    public function getTotalTva(): float
+    {
+        return $this->getTotalHT() * ($this->tva / 100);
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotalHT() * ($this->discount / 100);
     }
 
     public function getTotal(): float
     {
-        return self::_getTotal($this->price, $this->quantity, $this->tva);
+        $total = $this->getTotalHT() + $this->getTotalTva() - $this->getTotalDiscount();
+        if ($total < 0) {
+            $total = 0;
+        }
+
+        return $total;
+    }
+
+    public static function _getTotal($price, $quantity, $tva, $discount = 0): float
+    {
+        $totalHT = $price * $quantity;
+        $totalTva = $totalHT * ($tva / 100);
+        $totalDiscount = $totalHT * ($discount / 100);
+
+        $total = $totalHT + $totalTva - $totalDiscount;
+        if ($total < 0) {
+            $total = 0;
+        }
+
+        return $total;
     }
 
     public function getTva(): ?float
@@ -116,6 +142,18 @@ class ProductQuote
     public function setTva(float $tva): static
     {
         $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getDiscount(): ?float
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(?float $discount): static
+    {
+        $this->discount = $discount;
 
         return $this;
     }

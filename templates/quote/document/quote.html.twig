@@ -23,7 +23,6 @@
 {% set IssuanceDate = quote.getQuoteIssuanceDate().format('Y-m-d') %}
 {% set expiryDate = (quote.getExpiryDate() is null ? null : quote.getExpiryDate().format('Y-m-d')) %}
 {% set discount = quote.getDiscount() %}
-{% set tva = quote.getTva() %}
 
 <div style="font-size: medium">
     <h1># Devis [{{ quote.getQuoteNumber() }}]</h1>
@@ -50,21 +49,31 @@
             <th style="{{ cellStyle }}">Produit</th>
             <th style="{{ cellStyle }}">Quantité</th>
             <th style="{{ cellStyle }}">Prix unitaire</th>
+            <th style="{{ cellStyle }}">TVA</th>
+            <th style="{{ cellStyle }}">Remise</th>
             <th style="{{ cellStyle }}">Total</th>
         </tr>
         </thead>
         <tbody>
-        {% for category in categories %}
-            {% for product in category.products %}
+        {% for products in categories %}
+            {% for product in products %}
                 <tr>
                     {% if loop.index == 1 %}
                         <td style="{{ cellStyle }}"
-                            rowspan='{{ category.products|length }}'>{{ category.name }}</td>
+                            rowspan='{{ products|length }}'>{{ product.name }}</td>
                     {% endif %}
-                    <td style="{{ cellStyle }}">{{ product.name }}</td>
+                    <td style="{{ cellStyle }}">{{ product.product }}</td>
                     <td style="{{ cellStyle }}">{{ product.quantity }}</td>
-                    <td style="{{ cellStyle }}">{{ product.price }} €</td>
-                    <td style="{{ cellStyle }}">{{ product.totalPrice }} €</td>
+                    <td style="{{ cellStyle }}">
+                        {{ product.price|format_currency('EUR', {rounding_mode: 'floor'}) }}
+                    </td>
+                    <td style="{{ cellStyle }}">
+                         <small>{{ product.tvaAmount|format_currency('EUR', {rounding_mode: 'floor'}) }} ({{ product.tva }}%)</small>
+                    </td>
+                    <td style="{{ cellStyle }}">
+                        <small>{{ product.discountAmount|format_currency('EUR', {rounding_mode: 'floor'}) }} ({{ product.discount }}%)</small>
+                    </td>
+                    <td style="{{ cellStyle }}">{{ product.total|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -78,15 +87,15 @@
             {% set cellStyleRight = cellStyle ~ '; font-style: bold;' %}
             <tr>
                 <td style="{{ cellStyle }}">Total:</td>
-                <td style="{{ cellStyleRight }}">{{ totalPriceSum }} €</td>
+                <td style="{{ cellStyleRight }}">{{ quote.total }} €</td>
             </tr>
             <tr>
-                <td style="{{ cellStyle }}">Total avec TVA:</td>
-                <td style="{{ cellStyleRight }}">{{ totalWithTva }} €</td>
+                <td style="{{ cellStyle }}">Total des réductions</td>
+                <td style="{{ cellStyleRight }}">{{ quote.totalDiscount }} €</td>
             </tr>
             <tr>
                 <td style="{{ cellStyle }}">Total avec remise:</td>
-                <td style="{{ cellStyleRight }}">{{ totalWithDiscount }} €</td>
+                <td style="{{ cellStyleRight }}">{{ quote.totalWithDiscount }} €</td>
             </tr>
         </table>
     </div>

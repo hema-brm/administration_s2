@@ -10,10 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
+use Symfony\Bundle\SecurityBundle\Security;
+
+
 
 #[Route('/products', name: 'app_product_')]
 class ProductController extends AbstractController
@@ -28,10 +31,12 @@ class ProductController extends AbstractController
 
     public function __construct(
         RequestQueryService $requestQueryService,
-        PageFromRequestService $pageFromRequestService
+        PageFromRequestService $pageFromRequestService,
+        Security $security,
     ) {
         $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+        $this->isAdmin = $security->isGranted('ROLE_ADMIN');
     }
 
     #[Route('/', name: 'index', methods: ['GET', 'POST'])]
@@ -47,6 +52,7 @@ class ProductController extends AbstractController
         return $this->render('product/index.html.twig', [
             'products' => $products,
             'paginatorHelper' => $paginatorHelper,
+            'showCompany' => $this->isAdmin,
         ]);
     }
 

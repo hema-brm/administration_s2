@@ -19,6 +19,7 @@ use Symfony\UX\LiveComponent\LiveResponder;
 use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
+use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
 class Item extends AbstractController
@@ -58,9 +59,29 @@ class Item extends AbstractController
     )]
     public float $tva;
 
+    #[LiveProp(writable: true)]
+    #[Assert\Range(
+        notInRangeMessage: 'La remise doit être comprise entre {{ min }} et {{ max }}.',
+        min: 0,
+        max: 100,
+    )]
+    public float $discount;
+
     #[LiveProp]
     #[Assert\Positive(message: 'Veuillez vérifier la quantité et le prix.')]
     public float $total;
+
+    #[LiveProp]
+    public float $totalHT = 0.0;
+
+    #[LiveProp]
+    public float $totalTTC = 0.0;
+
+    #[LiveProp]
+    public float $totalTVA = 0.0;
+
+    #[LiveProp]
+    public float $totalDiscount = 0.0;
 
     #[LiveProp]
     public string $mode = 'create';
@@ -77,6 +98,37 @@ class Item extends AbstractController
         $this->setDefaultData();
     }
 
+    #[PostMount]
+    public function postMount(): void
+    {
+        $this->refreshTotal();
+    }
+
+    public function getTotalHT(): float
+    {
+        return $this->quantity * $this->price;
+    }
+
+    public function getTotalTTC(): float
+    {
+        return $this->getTotalHT() * (1 + $this->tva / 100);
+    }
+
+    public function getTotalTVA(): float
+    {
+        return $this->getTotalHT() * ($this->tva / 100);
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotalHT() * ($this->discount / 100);
+    }
+
+    public function getTotal(): float
+    {
+        return $this->getTotalTTC() - $this->getTotalDiscount();
+    }
+
     protected function instantiateForm(): FormInterface
     {
         return $this->createForm(ProductBillType::class, $this->productBill);
@@ -87,8 +139,10 @@ class Item extends AbstractController
         $this->product = $this->productBillCreatorService->getDefaultProduct($this->productId);
         $this->quantity = $this->productBillCreatorService->getDefaultQuantity();
         $this->tva = $this->productBillCreatorService->getDefaultTva();
+        $this->discount = $this->productBillCreatorService->getDefaultDiscount();
         $this->price = $this->productBillCreatorService->getDefaultPrice();
-        $this->total = $this->productBillCreatorService->getDefaultTotal();
+
+        $this->refreshTotal();
     }
 
     private function changeEditMode(bool $isEditing,  LiveResponder $responder): void
@@ -104,12 +158,7 @@ class Item extends AbstractController
     #[PreReRender]
     public function preReRender(): void
     {
-        $this->refreshData();
-    }
-
-    private function refreshData(): void
-    {
-        $this->total = $this->productBillCreatorService::getTotalTTC($this->price, $this->quantity, $this->tva);
+        $this->refreshTotal();
     }
 
     #[LiveAction]
@@ -122,6 +171,7 @@ class Item extends AbstractController
             'productId' => $this->product->getId(),
             'quantity' => $this->quantity,
             'tva' => $this->tva,
+            'discount' => $this->discount,
             'price' => $this->price,
         ]);
 
@@ -145,6 +195,15 @@ class Item extends AbstractController
     public function canSaveItems(): bool
     {
         return $this->mode != 'show';
+    }
+
+    private function refreshTotal()
+    {
+        $this->total = $this->getTotal();
+        $this->totalHT = $this->getTotalHT();
+        $this->totalTTC = $this->getTotalTTC();
+        $this->totalTVA = $this->getTotalTVA();
+        $this->totalDiscount = $this->getTotalDiscount();
     }
 
 }

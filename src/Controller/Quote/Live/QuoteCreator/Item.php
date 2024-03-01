@@ -14,6 +14,7 @@ use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
+use Symfony\UX\LiveComponent\Attribute\PreReRender;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\LiveResponder;
@@ -48,11 +49,28 @@ class Item extends AbstractController
     )]
     public float $tva;
 
+    #[LiveProp(writable: true)]
+    #[Assert\Range(
+        notInRangeMessage: 'La remise doit être comprise entre {{ min }} et {{ max }}.',
+        min: 0,
+        max: 100,
+    )]
+    public float $discount;
+
     #[LiveProp]
     public float $total = 0.0;
 
     #[LiveProp]
     public float $totalHT = 0.0;
+
+    #[LiveProp]
+    public float $totalTTC = 0.0;
+
+    #[LiveProp]
+    public float $totalTVA = 0.0;
+
+    #[LiveProp]
+    public float $totalDiscount = 0.0;
 
     #[LiveProp]
     public bool $isEditing = false;
@@ -101,16 +119,18 @@ class Item extends AbstractController
 
         $this->addFlash('info', 'Produit ajouté au devis.');
 
+
+        $this->changeEditMode(false, $responder);
+
         $responder->emitUp('line_item:save', [
             'key' => $this->key,
             'product' => $this->product->getId(),
             'quantity' => $this->quantity,
             'tva' => $this->tva,
+            'discount' => $this->discount,
             'price' => $this->price,
             'total' => $this->total,
         ]);
-
-        $this->changeEditMode(false, $responder);
     }
 
     #[LiveAction]
@@ -129,10 +149,34 @@ class Item extends AbstractController
         ]);
     }
 
-    #[ExposeInTemplate('_totalHT')]
     public function getTotalHT(): float
     {
         return $this->quantity * $this->price;
+    }
+
+    public function getTotalTTC(): float
+    {
+        return $this->getTotalHT() * (1 + $this->tva / 100);
+    }
+
+    public function getTotalTVA(): float
+    {
+        return $this->getTotalHT() * ($this->tva / 100);
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotalHT() * ($this->discount / 100);
+    }
+
+    public function getTotal(): float
+    {
+        $total = $this->getTotalHT() + $this->getTotalTVA() - $this->getTotalDiscount();
+        if ($total < 0) {
+            $total = 0;
+        }
+
+        return $total;
     }
 
     #[ExposeInTemplate]
@@ -162,7 +206,21 @@ class Item extends AbstractController
     #[PostMount]
     public function postMount(): void
     {
-        // No operation
+        $this->initTotals();
+    }
+
+    #[PreReRender]
+    public function onEachUpdate(): void
+    {
+        $this->initTotals();
+    }
+
+    private function initTotals(): void
+    {
+        $this->totalHT = $this->getTotalHT();
+        $this->totalTVA = $this->getTotalTVA();
+        $this->totalDiscount = $this->getTotalDiscount();
+        $this->total = $this->getTotalTTC();
     }
 
     #[LiveListener('product_selection_has_been_changed')]
@@ -207,6 +265,6 @@ class Item extends AbstractController
 
     private function refreshTotal(): void
     {
-        $this->total = ProductQuote::_getTotal($this->price, $this->quantity, $this->tva);
+        $this->total = ProductQuote::_getTotal($this->price, $this->quantity, $this->tva, $this->discount);
     }
 }

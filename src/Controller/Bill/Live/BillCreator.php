@@ -135,6 +135,7 @@ class BillCreator extends AbstractController
         #[LiveArg] int $productId,
         #[LiveArg] int $quantity,
         #[LiveArg] float $tva,
+        #[LiveArg] float $discount,
         #[LiveArg] float $price,
     ): void
     {
@@ -143,6 +144,7 @@ class BillCreator extends AbstractController
             'quantity' => $quantity,
             'price' => $price,
             'tva' => $tva,
+            'discount' => $discount,
             'total' => $quantity * $price,
             'isEditing' => false,
         ];

@@ -1,12 +1,15 @@
 {% import "@components/macros/menu.html.twig" as menuMacro %}
 
 <ul class="nav-item text-sm">
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ENTREPRISE') %}
+    {% if is_granted('ROLE_ENTREPRISE') or is_granted('ROLE_ADMIN') %}
         {{ menuMacro.item({
             text: 'Employés',
             icon: 'fa-user',
             route: 'app_employee_index'
         }) }}
+    {% endif %}
+
+    {% if is_granted('ROLE_EMPLOYEE') %}
         {{ menuMacro.item({
             text: 'Factures',
             icon: 'fa-file-invoice-dollar',
@@ -43,7 +46,8 @@
                 }) }}
             </ul>
         {% endif %}
-    {% elseif is_granted('ROLE_COMPTABLE') %}
+    {% endif %}
+    {% if not is_granted('ROLE_EMPLOYEE') %}
         {{ menuMacro.item({
             text: 'Tableau de bord',
             icon: 'fa-solid fa-chart-line',
