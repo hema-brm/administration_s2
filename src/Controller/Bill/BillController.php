@@ -1,27 +1,20 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Bill;
 
+use App\Controller\Quote;
 use App\Entity\Bill;
-use App\Entity\Customer;
 use App\Form\BillType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
+use App\Service\PdfService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
-use App\Service\PdfService;
-use Dompdf\Dompdf;
-use DateTime;
-
-
-
+use Symfony\Component\Routing\Annotation\Route;
 
 
 #[Route('/bill')]

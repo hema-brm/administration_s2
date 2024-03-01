@@ -16,6 +16,13 @@
         </div>
         <div>
             <twig:Button
+                    text="PDF"
+                    color="secondary"
+                    route="{{ path('facture_pdf', {'id': bill.id}) }}"
+                    icon="fa-file-pdf"
+                    variant="secondary"
+            />
+            <twig:Button
                 text="Modifier"
                 color="warning"
                 textColor="secondary-700"
