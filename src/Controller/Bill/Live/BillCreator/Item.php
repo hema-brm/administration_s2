@@ -40,12 +40,23 @@ class Item extends AbstractController
     public Product $product;
 
     #[LiveProp(writable: true)]
+    public int $productId;
+
+    #[LiveProp(writable: true)]
     #[Assert\Positive(message: 'La quantité doit être un nombre positif.')]
     public int $quantity;
 
     #[LiveProp(writable: true)]
     #[Assert\GreaterThanOrEqual(value: 0, message: 'Le prix ne doit pas être négatif.')]
     public float $price;
+
+    #[LiveProp(writable: true)]
+    #[Assert\Range(
+        notInRangeMessage: 'La TVA doit être comprise entre {{ min }} et {{ max }}.',
+        min: 0,
+        max: 100,
+    )]
+    public float $tva;
 
     #[LiveProp]
     #[Assert\Positive(message: 'Veuillez vérifier la quantité et le prix.')]
@@ -60,8 +71,9 @@ class Item extends AbstractController
     {
     }
 
-    public function mount(): void
+    public function mount(int $productId): void
     {
+        $this->productId = $productId;
         $this->setDefaultData();
     }
 
@@ -72,9 +84,9 @@ class Item extends AbstractController
 
     private function setDefaultData(): void
     {
-        $product = $this->productBillCreatorService->getDefaultProduct();
-        $this->product = $product;
+        $this->product = $this->productBillCreatorService->getDefaultProduct($this->productId);
         $this->quantity = $this->productBillCreatorService->getDefaultQuantity();
+        $this->tva = $this->productBillCreatorService->getDefaultTva();
         $this->price = $this->productBillCreatorService->getDefaultPrice();
         $this->total = $this->productBillCreatorService->getDefaultTotal();
     }
@@ -97,7 +109,7 @@ class Item extends AbstractController
 
     private function refreshData(): void
     {
-        $this->total = $this->quantity * $this->price;
+        $this->total = $this->productBillCreatorService::getTotalTTC($this->price, $this->quantity, $this->tva);
     }
 
     #[LiveAction]
@@ -109,6 +121,7 @@ class Item extends AbstractController
             'key' => $this->key,
             'productId' => $this->product->getId(),
             'quantity' => $this->quantity,
+            'tva' => $this->tva,
             'price' => $this->price,
         ]);
 

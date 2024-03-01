@@ -16,14 +16,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BillCreatorService {
 
-    public const CREATE_MODE = 'create';
-    public const EDIT_MODE = 'edit';
-    public const READONLY_MODE = 'readonly';
-
     public function __construct(
         private readonly BillRepository $billRepository,
         private readonly CustomerRepository $customerRepository,
-        private readonly ProductRepository $productRepository,
     ) {}
 
     public function getDefaultBillNumber(?Bill $bill = null): int|string
@@ -82,60 +77,28 @@ class BillCreatorService {
         return 0.0;
     }
 
-    public function getDefaultTva(?Bill $bill = null): float
-    {
-        $billExists = !empty($bill) && $bill->hasId();
-        if ($billExists) {
-            return $bill->getTva();
-        }
-
-        return 0.0;
-    }
-
     public function getDefaultProductBills(?Bill $bill = null): array
     {
         $billExists = !empty($bill) && $bill->hasId();
         $productBills = [];
         if ($billExists) {
             foreach ($bill->getProductBills() as $productBill) {
-                $productBills[] = $this->generateProductBillData($productBill);
+                $productBills[] = $this->generateProductBillDataArray($productBill);
             }
         }
 
         return $productBills;
     }
 
-    private function generateProductBillData(ProductBill $productBill): array
+    private function generateProductBillDataArray(ProductBill $productBill): array
     {
         return [
             'productId' => $productBill->getProduct()->getId(),
             'quantity' => $productBill->getQuantity(),
             'price' => $productBill->getPrice(),
-            'total' => $productBill->getTotal(),
+            'tva' => $productBill->getTva(),
+            'total' => $productBill->getRealTotal(),
             'isEditing' => false,
-        ];
-    }
-
-    public function hydrateBill(array $data): Bill
-    {
-        $bill = new Bill();
-        $bill->setBillNumber($data['billNumber']);
-        $bill->setBillIssuanceDate(\DateTime::createFromFormat('d-m-Y', $data['billIssuanceDate']));
-        $bill->setStatus($data['status']);
-        $bill->setDiscount($data['discount']);
-        $bill->setTva($data['tva']);
-
-        return $bill;
-    }
-
-    public function dehydrateBill(Bill $bill): array
-    {
-        return [
-            'billNumber' => $bill->getBillNumber(),
-            'billIssuanceDate' => ($bill->getBillIssuanceDate())->format('d-m-Y'),
-            'status' => $bill->getStatus(),
-            'discount' => $bill->getDiscount(),
-            'tva' => $bill->getTVA(),
         ];
     }
 

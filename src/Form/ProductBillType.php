@@ -36,6 +36,13 @@ class ProductBillType extends AbstractType
                     'placeholder' => 'Entrez la quantité',
                 ],
             ])
+            ->add('tva', NumberType::class, [
+                'label' => 'TVA',
+                'attr' => [
+                    'placeholder' => 'TVA',
+                ],
+                'required' => false,
+            ])
             ->add('total', MoneyType::class, [
                 'label' => 'Total',
                 'currency' => null,

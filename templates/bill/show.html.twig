@@ -9,15 +9,23 @@
     {{ header({
         text: 'Facture',
     }) }}
-
-    <div class="p-4">
-        <div class="flex flex-row items-center justify-start mb-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+    <div class= "flex flex-row items-center justify-between mb-4 m-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+        <div>
             <i class="fa-solid fa-arrow-left mr-1"></i>
-            <a href="{{ path('app_bill_index') }}">Retour à la liste</a>
+            <a href="{{ path('app_quote_index') }}">Retour à la liste</a>
         </div>
+        <div>
+            <twig:Button
+                text="Modifier"
+                color="warning"
+                textColor="secondary-700"
+                route="{{ path('app_bill_edit', {'id': bill.id}) }}"
+                icon="fa-pen"
+            />
+        </div>
+    </div>
 
-        <div class="px-4">
-            <twig:BillCreator :bill="bill" mode="show" />
-        </div>
+    <div class="px-4">
+        <twig:BillCreator :bill="bill" mode="show" />
     </div>
 {% endblock %}

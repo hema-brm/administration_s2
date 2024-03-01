@@ -30,9 +30,6 @@ class Bill
     #[ORM\Column(nullable: true)]
     private ?float $discount = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $tva = null;
-
     #[ORM\Column(length: 255)]
     private ?int $status = null;
 
@@ -84,17 +81,6 @@ class Bill
     public function setDiscount(?float $discount = 0.0): static
     {
         $this->discount = $discount;
-
-        return $this;
-    }
-    public function getTva(): ?float
-    {
-        return $this->tva;
-    }
-
-    public function setTVA(?float $tva = 0.0): static
-    {
-        $this->tva = $tva;
 
         return $this;
     }
@@ -196,6 +182,15 @@ class Bill
     public function hasId(): bool
     {
         return isset($this->id);
+    }
+
+    public function getTotalHT(): float
+    {
+        $totalHT = 0.0;
+        foreach ($this->getProductBills() as $productBill) {
+            $totalHT += $productBill->getTotal();
+        }
+        return $totalHT;
     }
 
 }

@@ -10,7 +10,11 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
+<<<<<<<< HEAD:migrations/Version20240301115512.php
 final class Version20240301115512 extends AbstractMigration
+========
+final class Version20240301150217 extends AbstractMigration
+>>>>>>>> 38a3f832 (Edit Bill):migrations/Version20240301150217.php
 {
     public function getDescription(): string
     {
@@ -32,7 +36,7 @@ final class Version20240301115512 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE quote_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE reset_password_request_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE bill (id INT NOT NULL, quote_id INT DEFAULT NULL, customer_id INT NOT NULL, bill_number VARCHAR(255) DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, status INT NOT NULL, bill_issuance_date DATE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE bill (id INT NOT NULL, quote_id INT DEFAULT NULL, customer_id INT NOT NULL, bill_number VARCHAR(255) DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, status INT NOT NULL, bill_issuance_date DATE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_7A2119E3DB805178 ON bill (quote_id)');
         $this->addSql('CREATE INDEX IDX_7A2119E39395C3F3 ON bill (customer_id)');
         $this->addSql('CREATE TABLE category (id INT NOT NULL, company_id INT DEFAULT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
@@ -50,7 +54,7 @@ final class Version20240301115512 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_D34A04AD979B1AD6 ON product (company_id)');
         $this->addSql('CREATE INDEX IDX_D34A04ADDB805178 ON product (quote_id)');
         $this->addSql('CREATE INDEX IDX_D34A04AD1A8C12F5 ON product (bill_id)');
-        $this->addSql('CREATE TABLE product_bill (id INT NOT NULL, bill_id INT NOT NULL, product_id INT NOT NULL, quantity INT DEFAULT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE product_bill (id INT NOT NULL, bill_id INT NOT NULL, product_id INT NOT NULL, quantity INT DEFAULT NULL, price DOUBLE PRECISION NOT NULL, tva DOUBLE PRECISION NOT NULL, discount DOUBLE PRECISION DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_F7C93B421A8C12F5 ON product_bill (bill_id)');
         $this->addSql('CREATE INDEX IDX_F7C93B424584665A ON product_bill (product_id)');
         $this->addSql('CREATE TABLE product_quote (id INT NOT NULL, quote_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) NOT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');

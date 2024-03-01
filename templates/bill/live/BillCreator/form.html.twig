@@ -1,6 +1,6 @@
 {{ displayFlash() }}
 <div class="flex flex-row items-end">
-    <div class="w-1/3 mr-4 flex flex-row">
+    <div class="w-1/3 mr-4">
         {{ form_row(form.product, {
             attr: {
                 'data-model': 'product',
@@ -32,6 +32,17 @@
                         'data-model': 'quantity',
                         'with_error': _errors.has('quantity') ? true : false,
                         'error_text': _errors.has('quantity') ? _errors.get('quantity') : '',
+                        'error_text_position': 'top',
+                        'disabled': isEditing ? false : true,
+                    }
+                }) }}
+            </div>
+            <div class="mr-2">
+                {{ form_row(form.tva, {
+                    attr: {
+                        'data-model': 'tva',
+                        'with_error': _errors.has('tva') ? true : false,
+                        'error_text': _errors.has('tva') ? _errors.get('tva') : '',
                         'error_text_position': 'top',
                         'disabled': isEditing ? false : true,
                     }

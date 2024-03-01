@@ -26,15 +26,17 @@ class ProductBillCreatorService {
 
     public function generateDefaultProductBillData(): array
     {
-        $product = $this->getDefaultProduct();
-        $quantity = $this->getDefaultQuantity();
-        $price = $product->getPrice();
+        $newProductBill = $this->generateDefaultProductBill();
+        $price = $newProductBill->getProduct()->getPrice();
+        $newProductBill->setPrice($price);
+        $newProductBill->setTva(ProductBill::DEFAULT_TAX_RATE);
 
         return [
-            'productId' => $product->getId(),
-            'quantity' => $quantity,
-            'price' => $price,
-            'total' => $quantity * $price,
+            'productId' => $newProductBill->getProduct()->getId(),
+            'quantity' => $newProductBill->getQuantity(),
+            'price' => $newProductBill->getPrice(),
+            'tva' => $newProductBill->getTva(),
+            'total' => $newProductBill->getRealTotal(),
             'isEditing' => true,
         ];
     }
@@ -42,16 +44,21 @@ class ProductBillCreatorService {
     public function createProductBill(array $data): ProductBill
     {
         $productBill = new ProductBill();
+
         $product = $this->productRepository->find($data['productId']);
         $productBill->setProduct($product);
         $productBill->setQuantity($data['quantity']);
         $productBill->setPrice($data['price']);
+        $productBill->setTva($data['tva']);
 
         return $productBill;
     }
 
-    public function getDefaultProduct(): Product
+    public function getDefaultProduct(?int $id = null): Product
     {
+        if ($id) {
+            return $this->productRepository->find($id);
+        }
         return $this->productRepository->getFirstProduct();
     }
 
@@ -68,6 +75,19 @@ class ProductBillCreatorService {
     public function getDefaultTotal(): float
     {
         return 0.0;
+    }
+
+    public function getDefaultTva(): float
+    {
+        return ProductBill::DEFAULT_TAX_RATE;
+    }
+
+    public static function getTotalTTC(float $price, int $quantity, float $tva): float
+    {
+        $totalHT = $price * $quantity;
+        $totalTTC = $totalHT * ($tva / 100);
+
+        return $totalHT + $totalTTC;
     }
 
 }

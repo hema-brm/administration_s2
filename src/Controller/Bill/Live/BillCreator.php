@@ -65,11 +65,6 @@ class BillCreator extends AbstractController
     public float $discount;
 
     #[LiveProp(writable: true)]
-    #[Assert\PositiveOrZero(message: 'La TVA doit être supérieur ou égale à 0.')]
-    #[Assert\LessThanOrEqual(value: 100, message: 'La TVA doit être inférieur ou égale à 100.')]
-    public float $tva;
-
-    #[LiveProp(writable: true)]
     #[Assert\Choice(choices: [0, 1], message: 'Le statut choisi est invalide.')]
     public int $status;
 
@@ -81,7 +76,6 @@ class BillCreator extends AbstractController
         'billNumber',
         'billIssuanceDate',
         'discount',
-        'tva',
         'status',
     ];
 
@@ -107,7 +101,6 @@ class BillCreator extends AbstractController
         $this->billIssuanceDate = $this->billCreatorService->getDefaultBillIssuanceDate($this->billData);
         $this->status = $this->billCreatorService->getDefaultBillStatus($this->billData);
         $this->discount = $this->billCreatorService->getDefaultDiscount($this->billData);
-        $this->tva = $this->billCreatorService->getDefaultTVA($this->billData);
         $this->productBillData = $this->billCreatorService->getDefaultProductBills($this->billData);
     }
 
@@ -141,6 +134,7 @@ class BillCreator extends AbstractController
         #[LiveArg] int $key,
         #[LiveArg] int $productId,
         #[LiveArg] int $quantity,
+        #[LiveArg] float $tva,
         #[LiveArg] float $price,
     ): void
     {
@@ -148,6 +142,7 @@ class BillCreator extends AbstractController
             'productId' => $productId,
             'quantity' => $quantity,
             'price' => $price,
+            'tva' => $tva,
             'total' => $quantity * $price,
             'isEditing' => false,
         ];
@@ -162,7 +157,6 @@ class BillCreator extends AbstractController
         $this->billData->setBillIssuanceDate($this->billIssuanceDate);
         $this->billData->setStatus($this->status);
         $this->billData->setDiscount($this->discount);
-        $this->billData->setTva($this->tva);
 
         $existingProductBills = $this->billData->getProductBills();
         foreach ($existingProductBills as $productBill) {

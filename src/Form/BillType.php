@@ -54,12 +54,6 @@ class BillType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez la remise',
                 ],])
-            ->add('tva', NumberType::class, [
-                'label' => 'TVA',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Entrez la TVA',
-                ],])
             ->add('productBills', CollectionType::class, [
                 'entry_type' => ProductBillType::class,
                 'entry_options' => ['label' => false],
