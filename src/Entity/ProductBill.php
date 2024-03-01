@@ -21,12 +21,13 @@ class ProductBill
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $product;
-    
+    private Product $product;
 
     #[ORM\Column(nullable: true)]
-    private $quantity;
-    
+    private int $quantity;
+
+    #[ORM\Column(type: 'float')]
+    private float $price;
 
     public function getId(): ?int
     {
@@ -73,8 +74,13 @@ class ProductBill
         return $this->product;
     }
 
-    public function getTotal(): float
+    public function getPrice(): float
     {
-        return $this->getQuantity() * $this->getProduct()->getPrice();
+        return $this->price;
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
     }
 }

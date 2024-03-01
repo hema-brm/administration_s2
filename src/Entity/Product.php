@@ -1,5 +1,5 @@
 <?php
-//Product.php
+//BillCreator.php
 namespace App\Entity;
 
 use App\Repository\ProductRepository;

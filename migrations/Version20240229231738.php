@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240228221502 extends AbstractMigration
+final class Version20240229231738 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -32,9 +32,9 @@ final class Version20240228221502 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE quote_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE reset_password_request_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE bill (id INT NOT NULL, customer_id INT NOT NULL, quote_id INT DEFAULT NULL, bill_number VARCHAR(255) DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, status INT NOT NULL, bill_issuance_date DATE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE INDEX IDX_7A2119E39395C3F3 ON bill (customer_id)');
+        $this->addSql('CREATE TABLE bill (id INT NOT NULL, quote_id INT DEFAULT NULL, customer_id INT NOT NULL, bill_number VARCHAR(255) DEFAULT NULL, discount DOUBLE PRECISION DEFAULT NULL, tva DOUBLE PRECISION DEFAULT NULL, status INT NOT NULL, bill_issuance_date DATE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_7A2119E3DB805178 ON bill (quote_id)');
+        $this->addSql('CREATE INDEX IDX_7A2119E39395C3F3 ON bill (customer_id)');
         $this->addSql('CREATE TABLE category (id INT NOT NULL, company_id INT DEFAULT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_64C19C1979B1AD6 ON category (company_id)');
         $this->addSql('CREATE TABLE company (id INT NOT NULL, name VARCHAR(255) NOT NULL, siret_number VARCHAR(20) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
@@ -50,7 +50,7 @@ final class Version20240228221502 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_D34A04AD979B1AD6 ON product (company_id)');
         $this->addSql('CREATE INDEX IDX_D34A04ADDB805178 ON product (quote_id)');
         $this->addSql('CREATE INDEX IDX_D34A04AD1A8C12F5 ON product (bill_id)');
-        $this->addSql('CREATE TABLE product_bill (id INT NOT NULL, bill_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE product_bill (id INT NOT NULL, bill_id INT NOT NULL, product_id INT NOT NULL, quantity INT DEFAULT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_F7C93B421A8C12F5 ON product_bill (bill_id)');
         $this->addSql('CREATE INDEX IDX_F7C93B424584665A ON product_bill (product_id)');
         $this->addSql('CREATE TABLE product_quote (id INT NOT NULL, quote_id INT NOT NULL, product_id INT NOT NULL, quantity VARCHAR(255) NOT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
@@ -82,8 +82,8 @@ final class Version20240228221502 extends AbstractMigration
         $$ LANGUAGE plpgsql;');
         $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
-        $this->addSql('ALTER TABLE bill ADD CONSTRAINT FK_7A2119E39395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE bill ADD CONSTRAINT FK_7A2119E3DB805178 FOREIGN KEY (quote_id) REFERENCES quote (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE bill ADD CONSTRAINT FK_7A2119E39395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE category ADD CONSTRAINT FK_64C19C1979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE customer ADD CONSTRAINT FK_81398E09979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE expenses ADD CONSTRAINT FK_2496F35B4584665A FOREIGN KEY (product_id) REFERENCES product (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -118,8 +118,8 @@ final class Version20240228221502 extends AbstractMigration
         $this->addSql('DROP SEQUENCE quote_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE reset_password_request_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
-        $this->addSql('ALTER TABLE bill DROP CONSTRAINT FK_7A2119E39395C3F3');
         $this->addSql('ALTER TABLE bill DROP CONSTRAINT FK_7A2119E3DB805178');
+        $this->addSql('ALTER TABLE bill DROP CONSTRAINT FK_7A2119E39395C3F3');
         $this->addSql('ALTER TABLE category DROP CONSTRAINT FK_64C19C1979B1AD6');
         $this->addSql('ALTER TABLE customer DROP CONSTRAINT FK_81398E09979B1AD6');
         $this->addSql('ALTER TABLE expenses DROP CONSTRAINT FK_2496F35B4584665A');

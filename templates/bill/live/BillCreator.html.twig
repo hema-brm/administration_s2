@@ -1,0 +1,32 @@
+<div {{ attributes }}>
+    {{ displayFlash() }}
+    <div class="border shadow-lg p-4 mb-4">
+        {% include '@bill/live/form.html.twig' %}
+    </div>
+
+    <div class="border shadow p-4 mb-3">
+        {% include '@bill/live/product-bill.html.twig' %}
+    </div>
+
+    <div class="flex flex-row justify-end mb-3">
+        {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
+        {% set textClass = '' %}
+        <button
+                data-action="live#action"
+                data-action-name="saveBill"
+                class="{{ buttonClass }} bg-primary-500"
+        >
+            <div class="mr-2">
+                <span data-loading="show">
+                    <i class="fas fa-spinner animate-spin"></i>
+                </span>
+                <span data-loading="hide">
+                    <i class="fas fa-save"></i>
+                </span>
+            </div>
+            <span class="flex {{ textClass }}">
+                Sauvegarder
+            </span>
+        </button>
+    </div>
+</div>

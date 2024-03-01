@@ -15,24 +15,8 @@
             <a href="{{ path('app_bill_index') }}">Retour à la liste</a>
         </div>
 
-
-    <div class="p-4 shadow-md w-1/2 border rounded">
-            <div class="text-sm">
-                {% include('bill/_form.html.twig') with {
-                    button_label: 'Ajouter',
-                    button_classes: [
-                        'rounded',
-                          'p-2',
-                          'bg-primary-500',
-                          'text-white',
-                          'text-sm',
-                          'transition-all',
-                          'ease-out',
-                          'hover:bg-primary-600',
-                          'ml-2',
-                    ]
-                } %}
-            </div>
+        <div class="px-4">
+            <twig:BillCreator :bill="bill" mode="create" />
         </div>
     </div>
 {% endblock %}

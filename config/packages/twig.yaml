@@ -9,6 +9,7 @@ twig:
         '%kernel.project_dir%/templates/base': base
         '%kernel.project_dir%/templates/user': user
         '%kernel.project_dir%/templates/quote': quote
+        '%kernel.project_dir%/templates/bill': bill
     form_themes:
         - 'components/form/custom_theme.html.twig'
 

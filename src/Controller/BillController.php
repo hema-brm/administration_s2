@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Bill;
+use App\Entity\Customer;
 use App\Form\BillType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;

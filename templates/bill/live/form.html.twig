@@ -1,0 +1,62 @@
+<div>
+    <h3 class="mb-3 text-lg">Informations de la facture</h3>
+    <div class="flex flex-row items-start">
+        {{ form_row(form.customer, {
+            attr: {
+                'class': 'w-1/2 mr-4',
+                'data-model': 'customer',
+                'with_error': _errors.has('customer') ? true : false,
+                'error_text': _errors.has('customer') ? _errors.get('customer') : '',
+            }
+        }) }}
+
+        {{ form_row(form.bill_number, {
+            attr: {
+                'class': 'w-1/2',
+                'data-model': 'billNumber',
+                'with_error': _errors.has('billNumber') ? true : false,
+                'error_text': _errors.has('billNumber') ? _errors.get('billNumber') : '',
+            }
+        }) }}
+    </div>
+
+    <div class="flex flex-row items-start">
+        {{ form_row(form.billIssuanceDate, {
+            attr: {
+                'class': 'w-1/2 mr-4',
+                'data-model': 'billIssuanceDate',
+                'with_error': _errors.has('billIssuanceDate') ? true : false,
+                'error_text': _errors.has('billIssuanceDate') ? _errors.get('billIssuanceDate') : '',
+            }
+        }) }}
+        {{ form_row(form.status, {
+            attr: {
+                'class': 'w-1/2',
+                'data-model': 'status',
+                'with_error': _errors.has('status') ? true : false,
+                'error_text': _errors.has('status') ? _errors.get('status') : '',
+            }
+        }) }}
+    </div>
+
+    <div class="flex flex-row">
+        <div class="flex w-1/2 mr-4">
+            {{ form_row(form.discount, {
+                attr: {
+                    'class': 'w-full mr-4',
+                    'data-model': 'debounce(300)|discount',
+                    'with_error': _errors.has('discount') ? true : false,
+                    'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                }
+            }) }}
+            {{ form_row(form.tva, {
+                attr: {
+                    'class': 'w-full',
+                    'data-model': 'debounce(300)|tva',
+                    'with_error': _errors.has('tva') ? true : false,
+                    'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                }
+            }) }}
+        </div>
+    </div>
+</div>

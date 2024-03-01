@@ -12,14 +12,13 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 #[ORM\Entity(repositoryClass: BillRepository::class)]
 class Bill
 {
+    public const STATUS_DRAFT = 0;
+    public const STATUS_SENT = 1;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id;
-
-    #[ORM\ManyToOne(targetEntity: Customer::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Customer $customer;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $billNumber;
@@ -43,13 +42,20 @@ class Bill
     #[ORM\OneToMany(mappedBy: "bill", targetEntity: ProductBill::class, cascade: ["persist", "remove"])]
     private Collection $productBills;
 
+    #[ORM\ManyToOne(inversedBy: 'bills')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Customer $customer = null;
+
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(?int $status = null): static
     {
+        if (empty($status)) {
+            $status = self::STATUS_DRAFT;
+        }
         $this->status = $status;
 
         return $this;
@@ -60,8 +66,11 @@ class Bill
         return $this->billIssuanceDate;
     }
 
-    public function setBillIssuanceDate(\DateTimeInterface $billIssuanceDate): static
+    public function setBillIssuanceDate(?\DateTimeInterface $billIssuanceDate): static
     {
+        if (empty($billIssuanceDate)) {
+            $billIssuanceDate = new \DateTime();
+        }
         $this->billIssuanceDate = $billIssuanceDate;
 
         return $this;
@@ -72,7 +81,7 @@ class Bill
         return $this->discount;
     }
 
-    public function setDiscount(float $discount): static
+    public function setDiscount(?float $discount = 0.0): static
     {
         $this->discount = $discount;
 
@@ -83,7 +92,7 @@ class Bill
         return $this->tva;
     }
 
-    public function setTVA(float $tva): static
+    public function setTVA(?float $tva = 0.0): static
     {
         $this->tva = $tva;
 
@@ -127,20 +136,16 @@ class Bill
         return $this;
     }
 
+    public function setProductBills(Collection $productBills): self
+    {
+        $this->productBills = $productBills;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCustomer(): Customer
-    {
-        return $this->customer;
-    }
-
-    public function setCustomer(Customer $customer): self
-    {
-        $this->customer = $customer;
-        return $this;
     }
 
     public function getQuote(): ?Quote
@@ -164,6 +169,23 @@ class Bill
     {
         $this->billNumber = $billNumber;
         return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): static
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function hasId(): bool
+    {
+        return isset($this->id);
     }
 
 }
