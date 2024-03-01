@@ -60,6 +60,9 @@
                     <th class="{{ cellPadding }} text-center">
                         <input type="checkbox" class="products-checkbox" data-form--checkbox--multiple-target="main">
                     </th>
+                    {% if showCompany %}
+                        <th class="{{ cellPadding }} text-left">Entreprise</th>
+                    {% endif %}
                     <th class="{{ cellPadding }} text-left">Reference</th>
                     <th class="{{ cellPadding }} text-left">Nom</th>
                     <th class="{{ cellPadding }} text-left">Catégorie</th>
@@ -84,8 +87,11 @@
                             value="{{ csrf_token('delete' ~ product.id) }}"
                             data-form--checkbox--multiple-target="items"
                             data-form--checkbox--post-target="items"
-                        >
-                    </td>
+                            >
+                        </td>
+                    {% if showCompany %}
+                        <td class="{{ cellPadding }} text-left">{{ product.company.getName() }}</td>
+                    {% endif %}
                     {% if product.getReference() is empty %}
                         <td class="{{ cellPadding }} text-left italic text-gray-300">null</td>
                     {% else %}
