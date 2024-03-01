@@ -56,22 +56,19 @@ class ProductQuoteType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('totalHT', MoneyType::class, [
-                'label' => 'Total HT',
-                'currency' => null,
-                'required' => false,
+            ->add('discount', NumberType::class, [
+                'label' => 'Remise (%)',
                 'attr' => [
-                    'placeholder' => 'Total HT',
-                    'disabled' => 'disabled',
+                    'placeholder' => 'Remise (%)',
                 ],
-                'mapped' => false,
+                'required' => false,
             ])
             ->add('total', MoneyType::class, [
-                'label' => 'Total TTC',
+                'label' => 'Total',
                 'currency' => null,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Total TTC',
+                    'placeholder' => 'Total',
                     'disabled' => 'disabled',
                 ],
                 'mapped' => false,

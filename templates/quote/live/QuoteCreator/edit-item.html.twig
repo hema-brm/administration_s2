@@ -42,6 +42,7 @@
             </div>
             <div class="mr-2">
                 {{ form_row(form.tva, {
+                    label : '% TVA ~ ' ~ totalTVA ~ '€',
                     attr: {
                         'data-model': 'tva',
                         'data-action': "live#emit",
@@ -53,12 +54,18 @@
                     }
                 }) }}
             </div>
-            <div class="mr-2 cursor-not-allowed">
-                {{ form_row(form.totalHT, {
+            <div class="mr-2">
+                {{ form_row(form.discount, {
+                    label : '% Remise ~ ' ~ totalDiscount ~ '€',
                     attr: {
-                        'data-model': 'totalHT',
-                        'disabled': true,
-                        'class': 'cursor-not-allowed'
+                        'data-model': 'discount',
+                        'data-action': "live#emit",
+                        'data-event': 'product_tva_has_been_changed',
+                        'with_error': _errors.has('discount') ? true : false,
+                        'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                        'error_text_position': 'top',
+                        'disabled': isEditing ? false : true,
+
                     }
                 }) }}
             </div>

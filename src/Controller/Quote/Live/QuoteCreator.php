@@ -71,6 +71,15 @@ class QuoteCreator extends AbstractController
     #[LiveProp]
     public string $mode = 'create';
 
+    #[LiveProp]
+    public float $total = 0.0;
+
+    #[LiveProp]
+    public $totalDiscount = 0.0;
+
+    #[LiveProp]
+    public float $totalWithDiscount = 0.0;
+
     public bool $savedSuccessfully = false;
 
     private const FIELD_TO_VALIDATE = [
@@ -167,7 +176,7 @@ class QuoteCreator extends AbstractController
     #[PreReRender]
     public function onEachUpdate(): void
     {
-
+        $this->refreshTotal();
     }
 
     #[PreMount]
@@ -181,6 +190,7 @@ class QuoteCreator extends AbstractController
     public function postMount()
     {
         $this->initializeQuoteData();
+        $this->refreshTotal();
     }
 
     private function initializeQuoteData(): void
@@ -250,6 +260,7 @@ class QuoteCreator extends AbstractController
         #[LiveArg] float $price,
         #[LiveArg] int $quantity,
         #[LiveArg] float $tva,
+        #[LiveArg] float $discount,
         #[LiveArg] float $total,
     ): void
     {
@@ -257,7 +268,7 @@ class QuoteCreator extends AbstractController
             $this->addFlash('warning', 'Vous ne pouvez pas modifier un devis en mode lecture seule.');
             return;
         }
-        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $tva, $price, $total);
+        $this->quoteCreatorService->saveLineItem($this->lineItems, $key, $product, $quantity, $tva, $discount, $price, $total);
     }
 
     #[ExposeInTemplate('_mode')]
@@ -313,18 +324,37 @@ class QuoteCreator extends AbstractController
         return $this->quoteCreatorService->productItemsIsEmpty($this->lineItems);
     }
 
-    #[ExposeInTemplate]
-    public function getTotals(): array
-    {
-        return $this->quoteCreatorService::getTotals(
-            $this->lineItems,
-            $this->discount,
-        );
-    }
-
     #[ExposeInTemplate('_hasDiscountValue')]
     public function hasDiscountValue(): bool
     {
         return $this->discount > 0;
+    }
+
+    public function _getTotal(): float
+    {
+        $total = 0.0;
+        foreach ($this->lineItems as $lineItem) {
+            if ($lineItem['isEditing']) {
+                continue;
+            }
+            $price = $lineItem['price'];
+            $quantity = $lineItem['quantity'];
+            $tva = $lineItem['tva'];
+            $discount = $lineItem['discount'];
+
+            $totalHT = $price * $quantity;
+            $totalTva = $totalHT * ($tva / 100);
+            $totalDiscount = $totalHT * ($discount / 100);
+
+            $total += $totalHT + $totalTva - $totalDiscount;
+        }
+        return $total;
+    }
+
+    private function refreshTotal(): void
+    {
+        $this->total = $this->_getTotal();
+        $this->totalDiscount = $this->total * ($this->discount / 100);
+        $this->totalWithDiscount = $this->total - $this->totalDiscount;
     }
 }

@@ -108,10 +108,10 @@ class QuoteCreatorService {
 
         $lineItems[] = [
             'productId' => $defaultProduct->getId(),
+            'price' => $defaultProduct->getPrice(),
             'quantity' => 1,
             'tva' => Product::DEFAULT_TAX_RATE,
-            'price' => $defaultProduct->getPrice(),
-            'total' => ProductQuote::_getTotal($defaultProduct->getPrice(), 1, Product::DEFAULT_TAX_RATE),
+            'discount' => 0,
             'isEditing' => true,
         ];
     }
@@ -127,10 +127,10 @@ class QuoteCreatorService {
             foreach ($productQuotes as $productQuote) {
                 $lineItems[] = [
                     'productId' => $productQuote->getProduct()->getId(),
+                    'price' => $productQuote->getPrice(),
                     'quantity' => $productQuote->getQuantity(),
                     'tva' => $productQuote->getTva(),
-                    'price' => $productQuote->getPrice(),
-                    'total' => ProductQuote::_getTotal($productQuote->getPrice(), $productQuote->getQuantity(), $productQuote->getTva()),
+                    'discount' => $productQuote->getDiscount(),
                     'isEditing' => false,
                 ];
             }
@@ -161,6 +161,7 @@ class QuoteCreatorService {
         Product $product,
         int $quantity,
         float $tva,
+        float $discount,
         float $price,
         float $total
     ): void
@@ -173,7 +174,7 @@ class QuoteCreatorService {
         $lineItems[$key]['price'] = $price;
         $lineItems[$key]['quantity'] = $quantity;
         $lineItems[$key]['tva'] = $tva;
-        $lineItems[$key]['total'] = $total;
+        $lineItems[$key]['discount'] = $discount;
     }
 
     private function removeExistingProductQuotes(EntityManagerInterface $entityManager,?Quote $quoteData, array &$lineItems): void
@@ -192,6 +193,7 @@ class QuoteCreatorService {
             $productQuoteItem->setProduct($product);
             $productQuoteItem->setQuantity($lineItem['quantity']);
             $productQuoteItem->setTva($lineItem['tva']);
+            $productQuoteItem->setDiscount($lineItem['discount']);
             $productQuoteItem->setPrice($lineItem['price']);
             $productQuoteItem->setQuote($quoteData);
             $quoteData->addProductQuote($productQuoteItem);
@@ -262,29 +264,6 @@ class QuoteCreatorService {
     {
         return (!self::areAnyLineItemsEditing($lineItems))
             && (!self::productItemsIsEmpty($lineItems));
-    }
-
-    public static function getTotals(
-        array $lineItems,
-        ?float $discount,
-    ): array
-    {
-        $total = 0;
-
-        foreach ($lineItems as $lineItem) {
-            $total += $lineItem['total'];
-        }
-
-        $totalDiscount = $total * ($discount / 100);
-
-        $totalTTC = $total;
-
-        return [
-            'total' => $total,
-            'totalTTC' => $totalTTC,
-            'totalDiscount' => $totalDiscount,
-            'grandTotal' => $totalTTC - $totalDiscount,
-        ];
     }
 
     public static function getMode(?Quote $quote = null): string

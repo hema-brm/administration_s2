@@ -184,4 +184,24 @@ class Quote
     {
         return $this->id !== null;
     }
+
+    public function getTotal(): float
+    {
+        $total = 0;
+        foreach ($this->productQuotes as $productQuote) {
+            $total += $productQuote->getTotal();
+        }
+
+        return $total;
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotal() * ($this->discount / 100);
+    }
+
+    public function getTotalWithDiscount(): float
+    {
+        return $this->getTotal() - $this->getTotalDiscount();
+    }
 }
