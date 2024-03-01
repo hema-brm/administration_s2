@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
+use App\DTO\SearchDto;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Request\RequestQueryService;
 use Symfony\Component\HttpFoundation\Request;
+use App\Twig\Helper\Paginator\PaginatorHelper;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Request\PageFromRequestService;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\SecurityBundle\Security;
-
-
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 
 #[Route('/products', name: 'app_product_')]
 class ProductController extends AbstractController
@@ -42,36 +44,22 @@ class ProductController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET', 'POST'])]
-    // #[IsGranted('view')]
-    public function index(Request $request, ProductRepository $productRepository): Response
+    #[IsGranted('view')]
+    public function index(Request $request, ProductRepository $productRepository,#[MapQueryString()] SearchDto $searchDto = null): Response
     {   
-        if ($this->searchTerm) {
-            return $this->search($this->searchTerm, $productRepository);
-        }
-
-        $products = $productRepository->findAllWithPage($this->page, self::LIMIT); 
+        $products = $productRepository->_search($searchDto);
         $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
 
         return $this->render('product/index.html.twig', [
-            'products' => $products,
+            'products' => $products->getIterator()->getArrayCopy(),
             'paginatorHelper' => $paginatorHelper,
             'showCompany' => $this->isAdmin,
             'isGTCompany' => $this->isGTCompany,
-            
+            'searchDto' => $searchDto,
+            'searchTerm' => $this->searchTerm
         ]);
     }
 
-    private function search(string $searchTerm, ProductRepository $productRepository): Response
-    {
-        $products =  $productRepository->search($searchTerm, $this->page, self::LIMIT);
-        $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
-
-        return $this->render('product/index.html.twig', [
-            'searchTerm' => $searchTerm,
-            'products' => $products,
-            'paginatorHelper' => $paginatorHelper,
-        ]);
-    }
     
     #[Route('/new', name: 'new', methods: ['GET','POST'])]
     #[IsGranted('add')]

@@ -22,13 +22,7 @@
             
             {% if isGTCompany %}
             <div class="gap-2 py-2">
-                {{ form_search_macro({
-                    id: 'form-search-product',
-                    action: path('app_product_index'),
-                    placeholder: 'Rechercher',
-                    name: constant('App\\Controller\\ProductController::SEARCH_FORM_NAME'),
-                    value: searchTerm|default(''),
-                }) }}
+                <twig:Product:MainSearch :searchDto="searchDto"></twig:Product:MainSearch>
             </div>
             
             <div class="flex justify-end py-2 gap-2">
@@ -153,7 +147,7 @@
             total: paginatorHelper.total,
             route: 'app_product_index',
             urlParams: { 
-                (constant('App\\Controller\\ProductController::SEARCH_FORM_NAME')): searchTerm|default('') 
+                (constant('App\\Controller\\ProductController::SEARCH_FORM_NAME')): searchTerm|default('')
             },
         }) }}
     </div>

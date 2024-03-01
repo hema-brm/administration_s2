@@ -2,13 +2,14 @@
 
 namespace App\Repository;
 
+use App\DTO\SearchDto;
 use App\Entity\Product;
 use App\Query\Trait\PaginatorTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Query\Product\FullSearchQuery;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Security\Core\Security;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Product>
@@ -29,6 +30,27 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
         $this->fullSearchQuery = $fullSearchQuery;
         $this->user = $security->getUser();
+    }
+
+    public function _search(?SearchDto $searchDto, int $page = 1, int $limit = 10){
+        $queryBuilder = $this
+                        ->createQueryBuilder('p')
+                        ->leftJoin('p.company', 'c')
+                        ->leftJoin('p.category', 'category')
+                        ->andWhere('LOWER(p.name) LIKE LOWER(:search)')
+                        ->orWhere('LOWER(category.name) LIKE LOWER(:search)')
+                        ->orWhere('LOWER(p.reference) LIKE LOWER(:search)')
+                        ->orWhere('LOWER(p.description) LIKE LOWER(:search)')
+                        ->setParameter('search', '%' . $searchDto?->getSearch() . '%');
+        
+        if($this->user){
+            $queryBuilder->andWhere('p.company = :company')
+                         ->setParameter('company', $this->user->getCompany());
+        }
+        
+        $queryBuilder =  $queryBuilder->getQuery();
+        $this->decoratePaginator($queryBuilder, $page, $limit);
+        return new Paginator($queryBuilder);
     }
 
     public function search(string $search, int $page = 1, int $limit = 10): Paginator 
