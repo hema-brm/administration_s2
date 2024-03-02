@@ -73,6 +73,7 @@ class PaymentRepository extends ServiceEntityRepository
 
         return $totals;
     }
+
     public function getTotalPriceSumByYear(): array
     {
         $paymentsData = $this->createQueryBuilder('payment')
@@ -97,5 +98,13 @@ class PaymentRepository extends ServiceEntityRepository
         }
 
         return $totals;
+    }
+    public function findRecentPayments($limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.datePaiement', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

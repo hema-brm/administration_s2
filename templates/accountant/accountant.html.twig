@@ -16,5 +16,20 @@
            {{ render_chart(doughnutChart) }}
        </div>
     </div>
+    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+        <div class="flex flex-col md:flex-row">
+           <div class="w-1/2">
+              <h2 class="text-lg font-medium">Factures récentes:</h2>
+           </div>
+           <div class="w-1/2">
+              <h2 class="text-lg font-medium">Paiements récentes:</h2>
+              <ul>
+                    {% for payment in recentPayments %}
+                        <li>{{ payment.bill.billnumber }} - {{ payment.datePaiement|date('d-m-Y') }}</li>
+                    {% endfor %}
+              </ul>
+           </div>
+        </div>
+    </div>
 
 {% endblock %}

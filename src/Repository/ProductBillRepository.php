@@ -15,29 +15,46 @@ class ProductBillRepository extends ServiceEntityRepository
 
     public function getProductSalesByMonth(): array
     {
-        return $this->createQueryBuilder('productBill')
+        $productSales = $this->createQueryBuilder('productBill')
             ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y-%m') AS period", 'SUM(productBill.quantity) AS totalQuantity', 'SUM(productBill.quantity * productBill.price) AS totalAmount')
             ->join('productBill.bill', 'bill')
             ->join('bill.payment', 'pay')
             ->join('productBill.product', 'p')
             ->where('pay.status = :status')
             ->setParameter('status', 'terminé')
-            ->groupBy('productName', 'period', 'pay.datePaiement')
+            ->groupBy('productName', 'period')
+            ->orderBy('period', 'DESC')
             ->getQuery()
             ->getResult();
+
+        foreach ($productSales as &$productSale) {
+            $productSale['totalAmount'] = $this->calculateTotalForProductSale($productSale);
+        }
+
+        return $productSales;
     }
 
-    public function getProductSalesByYear(): array
+
+    private function calculateTotalForProductSale(array $productSale): float
     {
-        return $this->createQueryBuilder('productBill')
-            ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y') AS year", 'SUM(productBill.quantity) AS totalQuantity', 'SUM(productBill.quantity * productBill.price) AS totalAmount')
+        $totalAmount = 0;
+        $productBills = $this->createQueryBuilder('productBill')
             ->join('productBill.bill', 'bill')
             ->join('bill.payment', 'pay')
             ->join('productBill.product', 'p')
             ->where('pay.status = :status')
+            ->andWhere('p.name = :productName')
+            ->andWhere("DATE_FORMAT(pay.datePaiement, '%Y-%m') = :period")
             ->setParameter('status', 'terminé')
-            ->groupBy('productName', 'year', 'pay.datePaiement')
+            ->setParameter('productName', $productSale['productName'])
+            ->setParameter('period', $productSale['period'])
             ->getQuery()
             ->getResult();
+
+        foreach ($productBills as $productBill) {
+            $totalAmount += $productBill->getRealTotal();
+        }
+
+        return $totalAmount;
     }
 }

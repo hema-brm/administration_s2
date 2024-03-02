@@ -11,8 +11,6 @@ use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 use App\Service\SalesReportService;
 
-
-
 class ReportController extends AbstractController
 {
     /**
@@ -20,15 +18,9 @@ class ReportController extends AbstractController
      */
     public function report(Request $request, ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, SalesReportService $salesReportService): Response
     {
-
-
         $timePeriod = $request->query->get('period', 'month');
         switch ($timePeriod) {
             case 'year':
-                $productSales = $salesReportService->getProductSalesByYear();
-                echo "<pre>";
-                print_r($productSales);
-                echo "</pre>";
                 $paymentsData = $paymentRepository->getTotalPriceSumByYear();
                 $labels = [];
                 $data = [];
@@ -41,118 +33,44 @@ class ReportController extends AbstractController
                 }
 
                 // Create the bar chart
-                $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
-                $chart->setData([
-                    'labels' => $labels,
-                    'datasets' => [
-                        [
-                            'label' => 'Total Price',
-                            'backgroundColor' => 'rgb(144, 213, 79)',
-                            'borderColor' => 'rgb(255, 255, 255)',
-                            'data' => $data,
-                        ],
-                    ],
-                ]);
-                $chart->setOptions([
-                    'scales' => [
-                        'y' => [
-                            'beginAtZero' => true,
-                            'ticks' => [
-                                'stepSize' => 500,
-                            ],
-                            'title' => [
-                                'display' => true,
-                                'text' => 'Total (€)',
-                            ],
-                        ],
-                        'x' => [
-                            'title' => [
-                                'display' => true,
-                                'text' => 'Year', // Change the x-axis title to "Year"
-                            ],
-                        ],
-                    ],
-                    'plugins' => [
-                        'legend' => [
-                            'position' => 'top',
-                        ],
-                        'title' => [
-                            'display' => true,
-                            'text' => 'Revenus par année', // Change the chart title to "Revenue Per Year"
-                        ],
-                    ],
-                    'maintainAspectRatio' => false,
-                ]);
-
+                $chart = $this->createBarChart($chartBuilder, 'Revenus par année', 'Year', array_reverse($labels), array_reverse($data));
                 break;
             default:
                 // Default to month
-                $productSales = $salesReportService->getProductSalesByMonth();
-                echo "<pre>";
-                print_r($productSales);
-                echo "</pre>";
                 $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
                 $labels = [];
-                $data = array_fill(1, 12, 0);
+                $data = [];
 
+                // Group payments data by year and month
+                $groupedData = [];
                 foreach ($paymentsData as $payment) {
-                    $month = (int) $payment['month'];
-                    $data[$month] = $payment['totalPrice'];
+                    $year = $payment['year'];
+                    $month = $payment['month'];
+                    if (!isset($groupedData[$year])) {
+                        $groupedData[$year] = array_fill(1, 12, 0);
+                    }
+                    $groupedData[$year][$month] = $payment['totalPrice'];
                 }
 
+                // Populate labels and data arrays for the current year and the previous year
+                $currentYear = date('Y');
+                $previousYear = $currentYear - 1;
+                foreach ([$currentYear, $previousYear] as $year) {
+                    // Reverse the order of months within each year
+                    krsort($groupedData[$year]);
+                    foreach ($groupedData[$year] as $month => $totalPrice) {
+                        $labels[] = sprintf('%s-%02d', $year, $month); // Format: YYYY-MM
+                        $data[] = $totalPrice;
+                    }
+                }
 
-                $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
-                $chart->setData([
-                    'labels' => $labels,
-                    'datasets' => [
-                        [
-                            'label' => 'Total Price',
-                            'backgroundColor' => 'rgb(144, 213, 79)',
-                            'borderColor' => 'rgb(255, 255, 255)',
-                            'data' => $data,
-                        ],
-                    ],
-                ]);
-                $chart->setOptions([
-                    'scales' => [
-                        'y' => [
-                            'beginAtZero' => true,
-                            'ticks' => [
-                                'stepSize' => 500,
-                            ],
-                            'title' => [
-                                'display' => true,
-                                'text' => 'Total (€)',
-                            ],
-                        ],
-                        'x' => [
-                            'title' => [
-                                'display' => true,
-                                'text' => 'Mois',
-                            ],
-                        ],
-                    ],
-                    'plugins' => [
-                        'legend' => [
-                            'position' => 'top',
-                        ],
-                        'title' => [
-                            'display' => true,
-                            'text' => 'Revenus par mois',
-                        ],
-                    ],
-                    'maintainAspectRatio' => false,
-                ]);
-
+                // Create the bar chart
+                $chart = $this->createBarChart($chartBuilder, 'Revenus par mois (sur les deux dernières années)', 'Mois', array_reverse($labels), array_reverse($data));
                 break;
         }
 
-
-
-        // Data for the doughnut chart
         // Data for the doughnut chart
         $doughnutData = $paymentRepository->getTotalPriceSumByCategory();
-
         $doughnutLabels = array_keys($doughnutData);
         $doughnutValues = array_values($doughnutData);
         $doughnutBackgroundColors = ['rgb(255, 99, 132)', 'rgb(144, 213, 79)', 'rgb(255, 205, 86)'];
@@ -175,16 +93,67 @@ class ReportController extends AbstractController
                 ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Etat des paiements',
+                    'text' => 'Etat total des paiements',
                 ],
             ],
             'maintainAspectRatio' => false,
         ]);
+
+        // Get product sales data
+        $productSales = $salesReportService->getProductSalesByMonth();
 
         return $this->render('accountant/report.html.twig', [
             'chart' => $chart,
             'doughnutChart' => $doughnutChart,
             'productSales' => $productSales,
         ]);
+    }
+
+    private function createBarChart(ChartBuilderInterface $chartBuilder, string $title, string $xAxisTitle, array $labels, array $data): Chart
+    {
+        $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
+        $chart->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Total Price',
+                    'backgroundColor' => 'rgb(144, 213, 79)',
+                    'borderColor' => 'rgb(255, 255, 255)',
+                    'data' => $data,
+                ],
+            ],
+        ]);
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 500,
+                    ],
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Total (€)',
+                    ],
+                ],
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $xAxisTitle,
+                    ],
+                ],
+            ],
+            'plugins' => [
+                'legend' => [
+                    'position' => 'top',
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => $title,
+                ],
+            ],
+            'maintainAspectRatio' => false,
+        ]);
+
+        return $chart;
     }
 }

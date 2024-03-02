@@ -18,15 +18,32 @@ class AccountantController extends AbstractController
      */
     public function accountant(ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository): Response
     {
-
+        $recentPayments = $paymentRepository->findRecentPayments(5);
         $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
-
         $labels = [];
-        $data = array_fill(1, 12, 0);
+        $data = [];
 
+        // Group payments data by year and month
+        $groupedData = [];
         foreach ($paymentsData as $payment) {
-            $month = (int) $payment['month'];
-            $data[$month] = $payment['totalPrice'];
+            $year = $payment['year'];
+            $month = $payment['month'];
+            if (!isset($groupedData[$year])) {
+                $groupedData[$year] = array_fill(1, 12, 0);
+            }
+            $groupedData[$year][$month] = $payment['totalPrice'];
+        }
+
+        // Populate labels and data arrays for the current year and the previous year
+        $currentYear = date('Y');
+        $previousYear = $currentYear - 1;
+        foreach ([$currentYear, $previousYear] as $year) {
+            // Reverse the order of months within each year
+            krsort($groupedData[$year]);
+            foreach ($groupedData[$year] as $month => $totalPrice) {
+                $labels[] = sprintf('%s-%02d', $year, $month); // Format: YYYY-MM
+                $data[] = $totalPrice;
+            }
         }
 
 
@@ -67,7 +84,7 @@ class AccountantController extends AbstractController
                 ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Revenus',
+                    'text' => 'Revenus par mois (sur les deux dernières années)',
                 ],
             ],
             'maintainAspectRatio' => false,
@@ -98,7 +115,7 @@ class AccountantController extends AbstractController
                 ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Etat des paiements',
+                    'text' => 'Etat total des paiements',
                 ],
             ],
             'maintainAspectRatio' => false,
@@ -107,6 +124,7 @@ class AccountantController extends AbstractController
         return $this->render('accountant/accountant.html.twig', [
             'chart' => $chart,
             'doughnutChart' => $doughnutChart,
+            'recentPayments' => $recentPayments,
         ]);
     }
 }
