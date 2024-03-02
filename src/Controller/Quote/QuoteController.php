@@ -9,6 +9,7 @@ use App\Entity\Quote;
 use App\Form\QuoteType;
 use App\Repository\BillRepository;
 use App\Repository\QuoteRepository;
+use App\Service\Bill\BillCreatorService;
 use App\Service\PdfService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
@@ -32,7 +33,8 @@ class QuoteController extends AbstractController
 
     public function __construct(
         RequestQueryService $requestQueryService,
-        PageFromRequestService $pageFromRequestService
+        PageFromRequestService $pageFromRequestService,
+        private readonly BillCreatorService $billCreatorService,
     ) {
         $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
@@ -92,21 +94,21 @@ class QuoteController extends AbstractController
                 $bill = new Bill();
 
                 $user = $this->getUser();
-                $company = $user->getCompany();
 
+                $bill->setBillNumber($this->billCreatorService->getDefaultBillNumber());
                 $bill->setCustomer($quote->getCustomer());
                 $bill->setDiscount($quote->getDiscount());
-                $bill->setTva($quote->getTva());
-                $bill->setEntreprise($company);
-                $bill->setCreationDate(new \DateTime());
                 $bill->setBillIssuanceDate(new \DateTime());
-                $bill->setStatus('en attente');
+                $bill->setStatus(Bill::STATUS_DRAFT);
                 $bill->setQuote($quote);
 
                 foreach ($quote->getProductQuotes() as $productQuote) {
                     $productBill = new ProductBill();
                     $productBill->setProduct($productQuote->getProduct());
+                    $productBill->setPrice($productQuote->getPrice());
                     $productBill->setQuantity($productQuote->getQuantity());
+                    $productBill->setTva($productQuote->getTva());
+                    $productBill->setDiscount($productQuote->getDiscount());
                     $productBill->setBill($bill); // Associer le produit à la nouvelle facture
                     $bill->addProductBill($productBill); // Ajouter le produit à la collection de produits de la facture
                 }
@@ -117,7 +119,8 @@ class QuoteController extends AbstractController
 
                 // Rediriger vers la page de la nouvelle facture
                 $this->addFlash('success', 'Le devis a été transformé en facture.');
-                return $this->redirect($request->headers->get('referer') ?? 'app_quote_index');
+
+                return $this->redirectToRoute('app_bill_show', ['id' => $bill->getId()]);
             }
         }
 
