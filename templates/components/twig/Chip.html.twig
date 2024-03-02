@@ -1,0 +1,24 @@
+{% set defaultClasses = [
+    'rounded'
+] %}
+
+{% set sizeDefaultClasses = {
+    'normal': [
+        'p-2',
+        'text-base',
+    ],
+    'small': [
+        'p-1',
+        'text-sm',
+    ],
+} %}
+
+{% set backgroundColor = 'bg-%s-100'|format(color) %}
+{% set textColor = 'text-%s-600'|format(color) %}
+{% set sizeClasses = sizeDefaultClasses[size]|join(' ') %}
+
+<span
+    class="{{ sizeClasses }} {{ backgroundColor }} {{ textColor }}"
+>
+    {{ text }}
+</span>
