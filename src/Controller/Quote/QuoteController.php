@@ -196,7 +196,7 @@ class QuoteController extends AbstractController
                 $count++;
             }
         }
-        $this->addFlash('success', $count.' devis(s) supprimé(s) avec succès.');
+        $this->addFlash('success', $count.' devis supprimé(s) avec succès.');
         $entityManager->flush();
         return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
     }

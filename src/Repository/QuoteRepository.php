@@ -4,10 +4,11 @@ namespace App\Repository;
 
 use App\Entity\Quote;
 use App\Query\Trait\PaginatorTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Query\Quote\FullSearchQuery;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 
 
@@ -25,9 +26,10 @@ class QuoteRepository extends ServiceEntityRepository
 
     private FullSearchQuery $fullSearchQuery;
 
-    public function __construct(ManagerRegistry $registry,FullSearchQuery $fullSearchQuery) {
+    public function __construct(ManagerRegistry $registry,FullSearchQuery $fullSearchQuery, Security $security) {
         parent::__construct($registry, Quote::class);
         $this->fullSearchQuery = $fullSearchQuery;
+        $this->security = $security;
     }
 
     public function findByMonth(\DateTimeInterface $date): array
@@ -87,8 +89,16 @@ class QuoteRepository extends ServiceEntityRepository
     public function findAllWithPage(int $page = 1, int $limit = 10): Paginator
     {
         $query = $this
-            ->createQueryBuilder('c')
-            ->getQuery();
+            ->createQueryBuilder('q');
+
+        if(!in_array('ROLE_ADMIN', $this->security->getUser()->getRoles())){
+            $query = $query            
+                        ->join('q.customer', 'customer') // Rejoindre la relation customer de la quote
+                        ->join('customer.company', 'company') // Rejoindre la relation company du client
+                        ->andWhere('company = :userCompany')
+                        ->setParameter('userCompany', $this->security->getUser()->getCompany());
+        }
+        $query = $query->getQuery();
 
         $this->decoratePaginator($query, $page, $limit); 
 

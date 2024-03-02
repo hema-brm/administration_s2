@@ -2,34 +2,36 @@
 
 namespace App\Controller\Bill;
 
-use App\Controller\Quote;
+use DateTime;
 use App\Entity\Bill;
 use App\Form\BillType;
+use App\Service\PdfService;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
-use App\Service\PdfService;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 
-
-#[Route('/bill')]
+#[Route('/bill', name: 'app_bill_')]
 class BillController extends AbstractController
 {
 
 
     private $kernel;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, Security $security)
     {
         $this->kernel = $kernel;
+$this->isAdmin = $security->isGranted('ROLE_ADMIN');
+        $this->isGTEmployee = $security->isGranted('ROLE_EMPLOYEE');
     }
 
-    public function generateHtml(Quote $quote) : string {
+    public function generateHtml(Bill $bill) : string {
     }
 
 
@@ -228,7 +230,8 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
 
 
 
-    #[Route('/', name: 'app_bill_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
+    #[IsGranted('view')]
     public function index(BillRepository $billRepository, UserRepository $userRepository): Response
     {
     $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -242,20 +245,26 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         // Si l'utilisateur appartient à une entreprise
         if ($userCompany) {
             // Récupère les factures de l'entreprise de l'utilisateur connecté
-            $bills = $billRepository->findBy([]);
+            $bills = $billRepository->findBillsByUserCompany();
+        }
+        else{
+            $bills = $billRepository->findAll();
         }
 
     }
 
     return $this->render('bill/index.html.twig', [
         'bills' => $bills,
+        'showCompany' => $this->isAdmin,
+        'isGTEmployee' => $this->isGTEmployee
     ]);
     }
 
 
 
 
-    #[Route('/new', name: 'app_bill_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $bill = new Bill();
@@ -275,7 +284,25 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bill_show', methods: ['GET'])]
+    #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    public function deleteMany(Request $request, BillRepository $billRepository, EntityManagerInterface $entityManager): Response
+    {
+        $bills = $request->request->all()['bills'];
+        $count = 0;
+        foreach($bills as $id => $token){
+            $bill = $billRepository->find($id);
+            if($bill && $this->isCsrfTokenValid('delete'.$id, $token)){
+                $entityManager->remove($bill);
+                $count++;
+            }
+        }
+        $this->addFlash('success', $count.' facture(s) supprimée(s) avec succès.');
+        $entityManager->flush();
+        return $this->redirectToRoute('app_bill_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[IsGranted('read', 'bill')]
     public function show(Bill $bill): Response
     {
         return $this->render('bill/show.html.twig', [
@@ -286,7 +313,8 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
 
 
 
-    #[Route('/{id}/edit', name: 'app_bill_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('edit', 'bill')]
     public function edit(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BillType::class, $bill);
@@ -304,7 +332,8 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bill_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted('delete', 'bill')]
     public function delete(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$bill->getId(), $request->request->get('_token'))) {

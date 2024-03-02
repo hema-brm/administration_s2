@@ -1,85 +1,28 @@
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/macros/content.html.twig" import alert %}
-{% from "@components/macros/content.html.twig" import paginator %}
-{% from "@components/macros/table.html.twig" import default as table %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
-
 
 {% extends '@base/app.html.twig' %}
 
 {% block title %}Factures{% endblock %}
 
-
 {% block body %}
-
-{% from "@components/macros/content.html.twig" import header, button_macro %}
-
+{{ displayFlash() }}
     {{ header({
-        text: 'Listes des factures',
+        text: 'Liste des factures',
     }) }}
 
-
-    <div class="px-4">
-    <div class="flex flex-row justify-between py-2">
-            <a href="{{ path('app_bill_new') }}">
-                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Nouvelle facture</span>
-                </button>
-            </a>
+    <div class="px-4" data-controller="form--checkbox--post">
+            <div class="bill_subheader">
+            {% include "bill/list/subheader.html.twig" %}
     </div>
-    {% set cellPadding = 'p-4 px-2' %}
-    {% set borderClass = 'border-b border-b-secondary-200' %}
-    {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
-
-    <div class="px-4 m-10">
-    <table class="w-full border shadow-sm text-sm">
-        <thead>
-            <tr class="{{ tableHeaderClasses }}">
-                <th>N° facture</th>
-                <th>Nom du client</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for bill in bills %}
-            <tr class="border-b hover:bg-gray-50 text-sm">
-                <td class="p-4 text-center">{{ bill.id }}</td>
-                <td class="p-4 text-center">{{ bill.customer }}</td>
-                <td class="{{ cellPadding }} p-4 text-center text-secondary-400">
-                    <div class="flex flex-row justify-end gap-3" data-link--clickable-target="exclude">
-                        
-                        {{ include("components/navigation/bar/item/mailing-choice.html.twig", {
-                            customerID:bill.getCustomer().getId(),
-                            firstRoute: path('app_mailer_billReminderEmail', {'customer': bill.getCustomer().getId()}),
-                            secondRoute: path('app_mailer_billLateEmail', {'customer': bill.getCustomer().getId(), 'bill': bill.getId()}),
-                            thirdRoute: path('app_mailer_billReplayEmail', {'customer': bill.getCustomer().getId(), 'bill': bill.getId()}),
-                            firstChoiceText: "Envoyer un mail de rappel",
-                            secondChoiceText: "Envoyer un mail de retard",
-                            thirdChoiceText: "Renvoyer la facture en PDF"
-                        }) }}
-
-                        <a href="{{ path('app_bill_edit', {'id': bill.id}) }}" data-link--clickable-target="exclude">
-                            <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                        </a>
-                        <a href="{{ path('app_bill_show', {'id': bill.id}) }}">show</a>
-                    </div>
-                </td>
-            </tr>
+    
+        <div id="bill_list">
+            {% if bills is empty %}
+                {% include "@bill/list/no-data.html.twig" %}
         {% else %}
-            <tr>
-                <td colspan="7">
-                    {{ alert({
-                        text: 'Aucune facture enregistrée',
-                        color: 'warning',
-                        icon: 'fa-circle-info',
-                        variant: 'small',
-                    }) }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% include "bill/list/multiple-delete-form.html.twig" %}
+            {% endif %}
+        </div>
     </div>
 
 {% endblock %}

@@ -6,6 +6,8 @@ use App\Entity\Bill;
 use App\Entity\Quote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
+
 
 /**
  * @extends ServiceEntityRepository<Bill>
@@ -17,9 +19,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BillRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Bill::class);
+$this->user = $security->getUser();
     }
 
     public function findLastBill(): ?Bill
@@ -41,6 +44,16 @@ class BillRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('b')
             ->orderBy('b.billIssuanceDate', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBillsByUserCompany()
+    {
+        return $this->createQueryBuilder('b')
+            ->join('b.customer', 'c') // Rejoindre la relation customer de la facture
+            ->where('c.company = :userCompany') // Filtrer par la société du client égale à la société de l'utilisateur
+            ->setParameter('userCompany',  $this->user->getCompany())
             ->getQuery()
             ->getResult();
     }
