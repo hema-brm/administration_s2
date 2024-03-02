@@ -3,22 +3,27 @@
 namespace App\Controller;
 
 use App\Repository\PaymentRepository;
+use App\Repository\BillRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
-
-
 class AccountantController extends AbstractController
 {
     /**
      * @Route("/accountant", name="accountant")
      */
-    public function accountant(ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository): Response
+    public function accountant(ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, BillRepository $billRepository): Response
     {
+        // Fetch recent payments
         $recentPayments = $paymentRepository->findRecentPayments(5);
+
+        // Fetch recent bills
+        $recentBills = $billRepository->findRecentBills(5);
+
+        // Get payment data for the bar chart
         $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
         $labels = [];
         $data = [];
@@ -46,7 +51,11 @@ class AccountantController extends AbstractController
             }
         }
 
+        // Reverse the order of labels and data to show oldest to newest
+        $labels = array_reverse($labels);
+        $data = array_reverse($data);
 
+        // Create the bar chart
         $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
         $chart->setData([
             'labels' => $labels,
@@ -125,6 +134,7 @@ class AccountantController extends AbstractController
             'chart' => $chart,
             'doughnutChart' => $doughnutChart,
             'recentPayments' => $recentPayments,
+            'recentBills' => $recentBills,
         ]);
     }
 }

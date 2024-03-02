@@ -10,17 +10,17 @@
     }) }}
     
     <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
-        <form id="periodForm" action="{{ path('report') }}" method="GET">
-            <select name="period" onchange="document.getElementById('periodForm').submit()">
+        <form id="periodForm" action="{{ path('report') }}" method="GET" class="mb-4 md:mb-0">
+            <select name="period" onchange="document.getElementById('periodForm').submit()" class="py-2 px-4 border rounded-md">
                 <option value="month" {% if app.request.query.get('period', 'month') == 'month' %}selected{% endif %}>Datavisualisation par mois</option>
                 <option value="year" {% if app.request.query.get('period', 'month') == 'year' %}selected{% endif %}>Datavisualisation par année</option>
             </select>
         </form>
-        <div class="flex flex-col md:flex-row">
-            <div class="md:w-1/2 mb-4 md:mb-0">
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 mb-4 md:mb-0 md:pr-2">
                 {{ render_chart(chart) }}
             </div>
-            <div class="md:w-1/2">
+            <div class="w-full md:w-1/2 md:pl-2">
                 {{ render_chart(doughnutChart) }}
             </div>
         </div>
@@ -30,10 +30,10 @@
         {% set cellPadding = 'p-4 px-2' %}
         {% set borderClass = 'border-b border-b-secondary-200' %}
         {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
-        <h2 class="text-lg font-medium">Ventes par produit</h2>
+        <h2 class="text-lg font-medium mb-4">Ventes par produit</h2>
         
         <div class="overflow-x-auto">
-            <table class="w-full border shadow-sm text-sm mt-5">
+            <table class="w-full border shadow-sm text-sm">
                 <thead>
                     <tr class="{{ tableHeaderClasses }}">
                         <th class="{{ cellPadding }} text-left">Mois</th>

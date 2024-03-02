@@ -56,10 +56,10 @@
                             <input type="checkbox" class="payments-checkbox" data-form--checkbox--multiple-target="main">
                         </th>
                         <th class="{{ cellPadding }} text-left">Client</th>
-                        <th class="{{ cellPadding }} text-right">N° Facture</th>
+                        <th class="{{ cellPadding }} text-left">N° Facture</th>
                         <th class="{{ cellPadding }} text-left">Status</th>
-                        <th class="{{ cellPadding }} text-right">Date de paiement</th>
-                        <th class="{{ cellPadding }} text-right">Date d'échéance</th>
+                        <th class="{{ cellPadding }} text-left">Date de paiement</th>
+                        <th class="{{ cellPadding }} text-left">Date d'échéance</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -81,11 +81,12 @@
                                     data-form--checkbox--post-target="items"
                                 >
                             </td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.bill.customer.lastname }} {{ payment.bill.customer.firstname }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.bill.billnumber }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.status }}</td>
-                            <td class="{{ cellPadding }} text-right">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
-                            <td class="{{ cellPadding }} text-right">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
-                            <td class="{{ cellPadding }} text-right">{{ payment.bill.billnumber }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
+                            
                             <td class="{{ cellPadding }} text-right text-secondary-400">
                                 <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" data-link--clickable-target="exclude">
                                     <i class="fa-solid fa-edit hover:text-warning-500"></i>

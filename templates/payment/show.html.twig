@@ -39,7 +39,9 @@
                     <h2 class="font-bold text-lg mb-2">Facture associée:</h2>
                     <div class="grid grid-cols-2 gap-2">
                         <div><span class="font-semibold">N° de facture:</span></div><div>{{ payment.bill.billnumber }}</div>
-                        {# <div><span class="font-semibold">Client:</span></div><div>{{ payment.bill.billnumber }}</div> #}
+                        <div><span class="font-semibold">Nom du Client:</span></div><div>{{ payment.bill.customer.lastname }}</div>
+                        <div><span class="font-semibold">Prénom du Client:</span></div><div>{{ payment.bill.customer.firstname }}</div>
+
                     </div>
                 </div>
             </div>

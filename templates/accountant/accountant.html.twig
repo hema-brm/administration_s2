@@ -8,27 +8,58 @@
     {{ header({
         text: 'Dashboard',
     }) }}
-    <div class="flex">
-       <div class="w-1/2">
+    <div class="flex flex-wrap">
+       <div class="w-full md:w-1/2 px-4 mb-4 md:mb-0">
            {{ render_chart(chart) }}
        </div>
-       <div class="w-1/2">
+       <div class="w-full md:w-1/2 px-4 mb-4 md:mb-0">
            {{ render_chart(doughnutChart) }}
        </div>
     </div>
-    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+    <div class="m-6 p-3">
+        {% set cellPadding = 'p-4 px-2' %}
+        {% set borderClass = 'border-b border-b-secondary-200' %}
+        {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
         <div class="flex flex-col md:flex-row">
-           <div class="w-1/2">
-              <h2 class="text-lg font-medium">Factures récentes:</h2>
-           </div>
-           <div class="w-1/2">
-              <h2 class="text-lg font-medium">Paiements récentes:</h2>
-              <ul>
-                    {% for payment in recentPayments %}
-                        <li>{{ payment.bill.billnumber }} - {{ payment.datePaiement|date('d-m-Y') }}</li>
-                    {% endfor %}
-              </ul>
-           </div>
+           <div class="w-full md:w-1/2 mx-auto md:m-5 p-3 rounded-md">
+                <h2 class="text-lg font-medium mb-3">Paiements récents:</h2>
+                <table class="w-full border shadow-sm text-sm">
+                    <thead>
+                        <tr class="{{ tableHeaderClasses }}">
+                            <th class="border border-gray-300 px-4 py-2">Client</th>
+                            <th class="border border-gray-300 px-4 py-2">Date de paiement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in recentPayments %}
+                            <tr onclick="window.location.href='{{ path('app_payment_show', {'id': payment.id}) }}';" class="{{ borderClass }} hover:bg-teal-100 text-sm cursor-pointer">
+                                <td class="px-4 py-2 text-left">{{ payment.bill.customer.lastname }} {{ payment.bill.customer.firstname }}</td>
+                                <td class="px-4 py-2 text-center">{{ payment.datePaiement|date('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="w-full md:w-1/2 mx-auto md:m-5 p-3 rounded-md">
+                <h2 class="text-lg font-medium mb-3">Factures récentes:</h2>
+                <table class="w-full border shadow-sm text-sm">
+                    <thead>
+                        <tr class="{{ tableHeaderClasses }}">
+                            <th class="border border-gray-300 px-4 py-2 text-left">Client</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Date d'émission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in recentBills %}
+                            <tr onclick="window.location.href='{{ path('app_bill_show', {'id': bill.id}) }}';" class="{{ borderClass }} hover:bg-teal-100 text-sm cursor-pointer">
+                                <td class="px-4 py-2 text-left">{{ bill.customer.lastname }} {{ bill.customer.firstname }}</td>
+                                <td class="px-4 py-2 text-center">{{ bill.billIssuanceDate|date('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
