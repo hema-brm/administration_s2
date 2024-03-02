@@ -204,12 +204,23 @@ class Bill
         return isset($this->id);
     }
 
-    public function getTotalHT(): float
+    public function getTotal(): float
     {
-        $totalHT = 0.0;
-        foreach ($this->getProductBills() as $productBill) {
-            $totalHT += $productBill->getTotal();
+        $total = 0;
+        foreach ($this->productBills as $productBill) {
+            $total += $productBill->getTotal();
         }
-        return $totalHT;
+
+        return $total;
+    }
+
+    public function getTotalDiscount(): float
+    {
+        return $this->getTotal() * ($this->discount / 100);
+    }
+
+    public function getTotalWithDiscount(): float
+    {
+        return $this->getTotal() - $this->getTotalDiscount();
     }
 }

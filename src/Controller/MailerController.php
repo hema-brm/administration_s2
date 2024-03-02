@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Controller\Bill\BillController;
 use App\Controller\Quote\QuoteController;
 use App\Entity\Bill;
 use App\Entity\Customer;

@@ -176,7 +176,6 @@ class Item extends AbstractController
         ]);
 
         $this->changeEditMode(false, $responder);
-        $this->addFlash('info', 'Produit ajouté au facture.');
     }
 
     #[LiveAction]

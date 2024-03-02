@@ -114,7 +114,7 @@ class ProductBill
         return $this->getTotalHT() * ($this->discount / 100);
     }
 
-    public function getRealTotal(): float
+    public function getTotal(): float
     {
         return $this->getTotalTTC() - $this->getTotalDiscount();
     }

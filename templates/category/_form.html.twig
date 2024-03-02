@@ -3,6 +3,10 @@
 {{ form_start(form) }}
     <div class='input-wrapper'>
        {{form_row(form.name)}}
+       
+       {% if is_granted('ROLE_ADMIN') %}
+            {{form_row(form.company)}}
+       {% endif %}
     </div>
 
     <div class="flex flex-row-reverse">

@@ -1,0 +1,14 @@
+
+<div{{ attributes }}>
+    {{ form_start(form, {
+        attr: {
+            'data-action': 'live#action',
+            'data-action-name': 'save',
+        }
+    }) }}
+            {{ form_widget(form.search, {
+                'id': 'search-dropdown',
+                'class': 'block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-s-gray-50 border-s-2 border border-gray-300',
+            }) }}
+    {{ form_end(form) }}
+</div>

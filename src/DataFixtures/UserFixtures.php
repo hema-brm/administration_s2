@@ -23,6 +23,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $this->addAdmin($manager);
         $this->addOwner($manager, AppFixtures::COMPANY_OWNER_COUNT);
         $this->addEmployee($manager, AppFixtures::EMPLOYEE_COUNT);
+        $this->addAccountant($manager, AppFixtures::ACCOUNTANT_COUNT);
         $manager->flush();
     }
 
@@ -85,6 +86,27 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $this->addReference("employee-$i", $user);
         }
     }
+
+    private function addAccountant(ObjectManager $manager, int $count = 1): void
+    {
+        for ($i = 1; $i <= $count; $i++) {
+            $user = (new User())
+                ->setFirstName($this->faker->firstName())
+                ->setLastName($this->faker->lastName())
+                ->setPhoneNumber($this->faker->regexify('/^(\+\d{2,3})?0\d{1}\d{2}\d{2}\d{2}\d{2}$/'))
+                ->setEmail("accountant-$i@gmail.com")
+                ->setRoles(['ROLE_COMPTABLE']);
+
+            $user->setPassword("accountant-$i");
+
+            $company = $this->getReference(sprintf('company-%d', rand(1, AppFixtures::COMPANY_COUNT)));
+            $user->setCompany($company);
+
+            $manager->persist($user);
+            $this->addReference("accountant-$i", $user);
+        }
+    }
+
     public function getDependencies() : array
     {
         return [

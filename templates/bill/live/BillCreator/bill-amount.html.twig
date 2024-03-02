@@ -1,0 +1,19 @@
+<div class="shadow">
+    <table class="w-full text-sm">
+        {% if _hasDiscountValue %}
+        <tr class="border">
+            <td class="px-2 text-left border">Remise globale ({{ this.discount }}%)</td>
+            <td class=" py-2 px-2 text-right font-bold text-normal text-success-500 border">{{ totalDiscount|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
+        </tr>
+        {% endif %}
+    <tr class="border text-base">
+        <td class="text-left py-4 px-2 font-bold border">Montant total</td>
+        <td class="py-4 px-2 text-right font-bold border">
+            {% if _hasDiscountValue %}
+            <p class="line-through text-xs text-secondary-500">{{ total|format_currency('EUR', {rounding_mode: 'floor'}) }}</p>
+            {% endif %}
+            <p>{{ totalWithDiscount|format_currency('EUR', {rounding_mode: 'floor'}) }}</p>
+        </td>
+    </tr>
+    </table>
+</div>

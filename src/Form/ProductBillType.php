@@ -29,6 +29,7 @@ class ProductBillType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Prix',
                 ],
+                'rounding_mode' => \NumberFormatter::ROUND_HALFUP,
             ])
             ->add('quantity', IntegerType::class, [
                 'label' => 'Quantité',
@@ -58,6 +59,7 @@ class ProductBillType extends AbstractType
                     'placeholder' => 'Total',
                     'disabled' => 'disabled',
                 ],
+                'rounding_mode' => \NumberFormatter::ROUND_HALFUP,
                 'mapped' => false,
             ]);
         ;

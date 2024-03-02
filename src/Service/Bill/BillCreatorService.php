@@ -98,7 +98,7 @@ class BillCreatorService {
             'price' => $productBill->getPrice(),
             'tva' => $productBill->getTva(),
             'discount' => $productBill->getDiscount(),
-            'total' => $productBill->getRealTotal(),
+            'total' => $productBill->getTotal(),
             'isEditing' => false,
         ];
     }

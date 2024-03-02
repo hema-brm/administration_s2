@@ -34,7 +34,7 @@
     {% endfor %}
 
     {% if has_action %}
-        <a href="{{ route }}">
+        <a href="{{ route }}" target="{{ target }}">
     {% endif %}
 
     <button id="{{id}}" class="{{ button_classes }}" onclick="{{onClick}}" {{bool}} {{ str_attr|raw }}>
