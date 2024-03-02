@@ -2,6 +2,7 @@
 
 namespace App\Controller\Bill;
 
+use App\Service\Bill\AccessibleBillService;
 use DateTime;
 use App\Entity\Bill;
 use App\Form\BillType;
@@ -232,36 +233,16 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
 
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('view')]
-    public function index(BillRepository $billRepository, UserRepository $userRepository): Response
+    public function index(AccessibleBillService $accessibleBillService): Response
     {
-    $user = $this->getUser(); // Récupère l'utilisateur connecté
-    $bills = [];
+        $bills = $accessibleBillService->findAll();
 
-    // Vérifie si l'utilisateur est connecté
-    if ($user) {
-        // Récupère l'entreprise de l'utilisateur connecté
-        $userCompany = $user->getCompany();
-
-        // Si l'utilisateur appartient à une entreprise
-        if ($userCompany) {
-            // Récupère les factures de l'entreprise de l'utilisateur connecté
-            $bills = $billRepository->findBillsByUserCompany();
-        }
-        else{
-            $bills = $billRepository->findAll();
-        }
-
+        return $this->render('bill/index.html.twig', [
+            'bills' => $bills,
+            'showCompany' => $this->isAdmin,
+            'isGTEmployee' => $this->isGTEmployee
+        ]);
     }
-
-    return $this->render('bill/index.html.twig', [
-        'bills' => $bills,
-        'showCompany' => $this->isAdmin,
-        'isGTEmployee' => $this->isGTEmployee
-    ]);
-    }
-
-
-
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     #[IsGranted('add')]

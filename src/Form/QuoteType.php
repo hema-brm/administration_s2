@@ -51,7 +51,7 @@ class QuoteType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Client',
                 ],
-                'query_builder' => $this->accessibleCustomerService->findAll(),
+                'query_builder' => $this->accessibleCustomerService->getFindAllQuery(),
             ])
             ->add('quote_number', TextType::class, [
                 'label' => 'Numéro',
