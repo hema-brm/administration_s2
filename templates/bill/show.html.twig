@@ -18,11 +18,12 @@
             <twig:Button
                 text="PDF"
                 color="secondary"
-                route="{{ path('facture_pdf', {'id': bill.id}) }}"
+                route="{{ path('app_bill_facture_pdf', {'id': bill.id}) }}"
                 target="_blank"
                 icon="fa-file-pdf"
                 variant="secondary"
             />
+            {% if bill.getStatus() == 0  %}
             <twig:Button
                 text="Modifier"
                 color="warning"
@@ -30,6 +31,7 @@
                 route="{{ path('app_bill_edit', {'id': bill.id}) }}"
                 icon="fa-pen"
             />
+            {% endif %}
         </div>
     </div>
 
