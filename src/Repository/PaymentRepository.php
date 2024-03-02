@@ -37,7 +37,7 @@ class PaymentRepository extends ServiceEntityRepository
             $year = $payment->getDatePaiement()->format('Y');
             $totalPrice = 0;
             foreach ($payment->getBill()->getProductBills() as $productBill) {
-                $totalPrice += $productBill->getRealTotal();
+                $totalPrice += $productBill->getTotal();
             }
             $totals[] = [
                 'year' => $year,
@@ -66,7 +66,7 @@ class PaymentRepository extends ServiceEntityRepository
             $status = ucfirst(strtolower($payment->getStatus()));
             if (array_key_exists($status, $totals)) {
                 foreach ($payment->getBill()->getProductBills() as $productBill) {
-                    $totals[$status] += $productBill->getRealTotal();
+                    $totals[$status] += $productBill->getTotal();
                 }
             }
         }
@@ -89,7 +89,7 @@ class PaymentRepository extends ServiceEntityRepository
             $year = $payment->getDatePaiement()->format('Y');
             $totalPrice = 0;
             foreach ($payment->getBill()->getProductBills() as $productBill) {
-                $totalPrice += $productBill->getRealTotal();
+                $totalPrice += $productBill->getTotal();
             }
             $totals[] = [
                 'year' => $year,

@@ -30,24 +30,28 @@ class AccountantController extends AbstractController
 
         // Group payments data by year and month
         $groupedData = [];
-        foreach ($paymentsData as $payment) {
-            $year = $payment['year'];
-            $month = $payment['month'];
-            if (!isset($groupedData[$year])) {
-                $groupedData[$year] = array_fill(1, 12, 0);
+        if ($paymentsData !== null) { // Check if paymentsData is not null
+            foreach ($paymentsData as $payment) {
+                $year = $payment['year'];
+                $month = $payment['month'];
+                if (!isset($groupedData[$year])) {
+                    $groupedData[$year] = array_fill(1, 12, 0);
+                }
+                $groupedData[$year][$month] = $payment['totalPrice'];
             }
-            $groupedData[$year][$month] = $payment['totalPrice'];
-        }
 
-        // Populate labels and data arrays for the current year and the previous year
-        $currentYear = date('Y');
-        $previousYear = $currentYear - 1;
-        foreach ([$currentYear, $previousYear] as $year) {
-            // Reverse the order of months within each year
-            krsort($groupedData[$year]);
-            foreach ($groupedData[$year] as $month => $totalPrice) {
-                $labels[] = sprintf('%s-%02d', $year, $month); // Format: YYYY-MM
-                $data[] = $totalPrice;
+            // Populate labels and data arrays for the current year and the previous year
+            $currentYear = date('Y');
+            $previousYear = $currentYear - 1;
+            foreach ([$currentYear, $previousYear] as $year) {
+                if (isset($groupedData[$year])) { // Check if $groupedData[$year] is set
+                    // Reverse the order of months within each year
+                    krsort($groupedData[$year]);
+                    foreach ($groupedData[$year] as $month => $totalPrice) {
+                        $labels[] = sprintf('%s-%02d', $year, $month); // Format: YYYY-MM
+                        $data[] = $totalPrice;
+                    }
+                }
             }
         }
 
