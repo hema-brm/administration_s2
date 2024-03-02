@@ -39,13 +39,9 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
     // Récupération des informations nécessaires à partir de l'objet Bill
     $customerLastName = $bill->getCustomer()->getLastname();
     $customerFirstName = $bill->getCustomer()->getFirstname();
-    $billCreationDate = $bill->getCreationDate()->format('Y-m-d');
-    $billCreationDate = $bill->getBillIssuanceDate()->format('Y-m-d');
-    $totalPrice = $bill->getTotalPrice();
+    $company = $bill->getCustomer()->getCompany();
     $discount = $bill->getDiscount();
-    $tva = $bill->getTva();
     $status = $bill->getStatus();
-    $company = $bill->getEntreprise();
     $products = $bill->getProductBills();
 
     // Initialisation des variables pour les totaux
@@ -129,7 +125,6 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
                 <p>Statut de la facture:<strong>  $status </strong> </p>
                 <p style='text-align: center;'>----------------------------------------------------------------------------------------------------------------------------------</p>
                 <p>Entreprise:<strong>  $company </strong> </p>
-                <p>TVA:<strong>  $tva % </strong> </p>
                 <p>Réduction:<strong>  $discount % </strong> </p>
             </div>
             <table class='invoice-table'>
@@ -190,11 +185,6 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
                     <td style='text-align: center;'>{$product['totalPrice']} €</td>
                   </tr>";
         }
-    }
-
-    // Calcul de la TVA
-    if ($tva) {
-        $tvaAmount = $totalPriceSum * ($tva / 100); // Calcul de la TVA
     }
 
     // Calcul du total avec TVA
