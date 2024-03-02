@@ -55,11 +55,13 @@
                         firstChoiceText: "Envoyer le 1er mail de rappel",
                         secondChoiceText: "Renvoyer le devis en PDF",
                     }) }}
-                        
-                    <a href="{{ path('app_quote_edit', {'id': quote.id}) }}" data-turbo-action="replace"
-                       data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                    </a>                    
+                    <twig:Button
+                        color="secondary"
+                        type="secondary"
+                        route="{{ path('app_quote_edit', {'id': quote.id}) }}"
+                        icon="fa-edit"
+                        variant="icon"
+                    />
                 </div>
             </td>
         </tr>

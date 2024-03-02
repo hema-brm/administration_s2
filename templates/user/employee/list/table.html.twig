@@ -52,10 +52,13 @@
                 {% endfor %}
             </td>
             <td class="{{ cellPadding }} text-right text-gray-400">
-                <a href="{{ path('app_employee_edit', {'id': user.id}) }}"
-                   data-link--clickable-target="exclude">
-                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                </a>
+                <twig:Button
+                    color="secondary"
+                    type="secondary"
+                    route="{{ path('app_employee_edit', {'id': user.id}) }}"
+                    icon="fa-edit"
+                    variant="icon"
+                />
             </td>
         </tr>
     {% else %}

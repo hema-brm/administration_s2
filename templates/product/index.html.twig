@@ -112,9 +112,13 @@
                     <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.getPrice() }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
                         {% if isGTCompany %}
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
-                            <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                        </a>
+                            <twig:Button
+                                color="secondary"
+                                type="secondary"
+                                route="{{ path('app_product_edit', {'id': product.id}) }}"
+                                icon="fa-edit"
+                                variant="icon"
+                            />
                         {% endif %}
                     </td>
                 </tr>

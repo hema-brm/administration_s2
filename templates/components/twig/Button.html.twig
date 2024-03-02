@@ -17,6 +17,9 @@
         'p-3',
         'text-lg',
     ],
+    'icon': [
+        'text-sm',
+    ],
 } %}
 
 {% set defaultClasses = [
@@ -31,6 +34,11 @@
         {% set textColor = 'text-white' %}
     {% elseif 'secondary' == type %}
         {% set backgroundColor = 'bg-%s-100 hover:bg-%s-200'|format(color, color) %}
+        {% set textColor = 'text-%s-500'|format(color) %}
+    {% endif %}
+
+    {% if variant == 'icon' %}
+        {% set backgroundColor = 'bg-transparent' %}
         {% set textColor = 'text-%s-500'|format(color) %}
     {% endif %}
 
