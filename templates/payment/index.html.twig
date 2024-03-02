@@ -30,12 +30,12 @@
                         text: 'Êtes-vous sûrs de vouloir supprimer ce(s) suivi(s) de paiement(s) ?',
                     } %}
                     {% endembed %}
-                    {{ button_macro({
-                        custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                        text:  "Nouveau paiement",
-                        icon: "fa-plus",
-                        route : path('app_payment_new')
-                    }) }}
+                    <twig:Button
+                        text="Nouveau paiement"
+                        type="secondary"
+                        icon="fa-plus"
+                        route="{{ path('app_payment_new') }}"
+                    />
                 </div>
             </div>
             {% set cellPadding = 'p-4 px-2' %}

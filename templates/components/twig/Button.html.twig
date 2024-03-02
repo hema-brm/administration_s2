@@ -1,27 +1,45 @@
 {% set has_action = route is not empty and route != '#' %}
 {% set custom_classes = customClasses %}
 {% set disabled = disabled|default(false) %}
-{% set bool = disabled ? 'disabled':'' %}
+{% set disabledAttr = disabled ? 'disabled':'' %}
 {% set attr = attr|default([]) %}
 
-    {% if 'secondary' == variant %}
-        {% set backgroundColor = 'bg-' ~ color ~ '-100' %}
-        {% set textColor = 'text-' ~ color ~ '-500' %}
-    {% else %}
-        {% set backgroundColor = 'bg-' ~ color ~ '-500' %}
-        {% set textColor = 'text-' ~ textColor %}
+{% set variantDefaultClasses = {
+    'default': [
+        'p-2',
+        'text-base',
+    ],
+    'small': [
+        'p-2',
+        'text-sm',
+    ],
+    'medium': [
+        'p-3',
+        'text-lg',
+    ],
+} %}
+
+{% set defaultClasses = [
+    'rounded',
+    'transition-all',
+    'ease-out',
+]|merge(variantDefaultClasses[variant]) %}
+
+    {# Setting default colors #}
+    {% if 'primary' == type %}
+        {% set backgroundColor = 'bg-%s-500 hover:bg-%s-700'|format(color, color) %}
+        {% set textColor = 'text-white' %}
+    {% elseif 'secondary' == type %}
+        {% set backgroundColor = 'bg-%s-50 hover:bg-%s-200'|format(color, color) %}
+        {% set textColor = 'text-%s-500'|format(color) %}
     {% endif %}
+
 
     {# Initialize button classes #}
     {% set button_classes = [
         backgroundColor,
         textColor,
-        'rounded',
-        'p-2',
-        'text-sm',
-        'transition-all',
-        'ease-out',
-    ] %}
+    ]|merge(defaultClasses) %}
     {% if custom_classes is not empty %}
         {% set button_classes = button_classes|merge(custom_classes) %}
     {% endif %}
@@ -33,11 +51,13 @@
         {% set str_attr = str_attr ~ ' ' ~ key ~ '="' ~ value|raw ~ '"' %}
     {% endfor %}
 
+    {% set target = (target is not empty) ? 'target="%s"'|format(target) : '' %}
+
     {% if has_action %}
-        <a href="{{ route }}" target="{{ target }}">
+        <a href="{{ route }}" target="{{target}}">
     {% endif %}
 
-    <button id="{{id}}" class="{{ button_classes }}" onclick="{{onClick}}" {{bool}} {{ str_attr|raw }}>
+    <button id="{{id}}" class="{{ button_classes }}" onclick="{{onClick}}" {{disabledAttr}} {{ str_attr|raw }}>
         <i class="fa-solid {{ icon }}"></i>
         {% if text is not empty %}
             {{ text }}
