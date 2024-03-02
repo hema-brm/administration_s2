@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Product;
 use App\Entity\ProductQuote;
 use App\Repository\ProductRepository;
+use App\Service\Product\AccessibleProductService;
 use Symfony\Component\Form\AbstractType;
 use App\Form\Field\ProductAutocompleteField;
 use Symfony\Component\Security\Core\Security;
@@ -20,9 +21,10 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class ProductQuoteType extends AbstractType
 {
-public function __construct(Security $security)
+    public function __construct(
+        private readonly AccessibleProductService $accessibleProductService,
+    )
     {
-        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,26 +33,13 @@ public function __construct(Security $security)
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'label' => 'Choisissez un produit',
-'query_builder' => function (ProductRepository $productRepository) {
-                    if(in_array('ROLE_ADMIN',$this->security->getUser()->getRoles())){
-                        return $productRepository->createQueryBuilder('p');
-                    }else{
-                        return $productRepository->createQueryBuilder('p')
-                            ->where('p.company = :company')
-                            ->setParameter('company', $this->security->getUser()->getCompany());
-                    }
-                },
+                'query_builder' => $this->accessibleProductService->findAll(),
             ])
             ->add('quantity', IntegerType::class, [
                 'label' => 'Quantité',
                 'attr' => [
                     'placeholder' => 'Quantité',
                 ],
-                'constraints' => [
-                    new Assert\Positive([
-                        'message' => 'La quantité doit être un nombre positif.'
-                    ])
-                ]
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
@@ -58,12 +47,6 @@ public function __construct(Security $security)
                 'attr' => [
                     'placeholder' => 'Prix',
                 ],
-                'constraints' => [
-                    new Assert\GreaterThanOrEqual(
-                        value: 0,
-                        message: 'Le prix ne doit pas être négatif.'
-                    ),
-                ]
             ])
             ->add('tva', NumberType::class, [
                 'label' => 'TVA (%)',
