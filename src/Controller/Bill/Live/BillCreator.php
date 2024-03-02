@@ -3,31 +3,34 @@
 namespace App\Controller\Bill\Live;
 
 use App\Entity\Bill;
-use App\Entity\Customer;
-use App\Entity\Product;
-use App\Entity\ProductBill;
 use App\Form\BillType;
-use App\Repository\CustomerRepository;
+use App\Entity\Product;
+use App\Entity\Customer;
+use App\Entity\ProductBill;
+use App\Service\PdfService;
+use App\Controller\MailerController;
 use App\Repository\ProductRepository;
+use App\Repository\CustomerRepository;
 use App\Service\Bill\BillCreatorService;
-use App\Service\Bill\ProductBillCreatorService;
-use App\Service\Quote\QuoteCreatorService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
-use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use App\Service\Quote\QuoteCreatorService;
+use App\Controller\Quote\QuotePdfController;
+use App\Service\Bill\ProductBillCreatorService;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
-use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
-use Symfony\UX\LiveComponent\Attribute\PreReRender;
-use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\UX\LiveComponent\ValidatableComponentTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
+use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use Symfony\UX\LiveComponent\Attribute\PreReRender;
+use Symfony\UX\LiveComponent\Attribute\LiveListener;
+use Symfony\UX\LiveComponent\ComponentWithFormTrait;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\ValidatableComponentTrait;
+use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[AsLiveComponent]
 class BillCreator extends AbstractController
@@ -94,6 +97,9 @@ class BillCreator extends AbstractController
         private readonly BillCreatorService $billCreatorService,
         private readonly ProductBillCreatorService $productBillCreatorService,
         private readonly CustomerRepository $customerRepository,
+        private readonly PdfService $pdfService,
+        private readonly QuotePdfController $quotePdfController,
+        private readonly MailerController $mailer
     )
     {
     }
@@ -131,6 +137,10 @@ class BillCreator extends AbstractController
         } catch (\Exception $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_bill_index');
+        }
+        
+        if($quoteData->getStatus() == Bill::STATUS_SENT){
+            $this->mailer->newBillCreateEmail($this->billData->getCustomer(), $$this->billData, $this->pdfService, $this->quotePdfController);
         }
 
         $this->addFlash('success', 'Facture enregistrée avec succès.');

@@ -2,15 +2,16 @@
 
 namespace App\Form;
 
+use App\Entity\Company;
 use App\Entity\Category;
+use App\Security\Roles\IUserRole;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Form\Field\CompanyAutocompleteField;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Bundle\SecurityBundle\Security;
-use App\Security\Roles\IUserRole;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Company;
 
 
 class CategoryType extends AbstractType
@@ -31,11 +32,13 @@ class CategoryType extends AbstractType
             ]);
             if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
                 $builder
-                    ->add('company', EntityType::class, [
-                        'class' => Company::class,
+                    ->add('company', CompanyAutocompleteField::class, [
                         'label' => 'Entreprise',
                         'required' => true,
                         'autocomplete' => true,
+                        'attr' => [
+                            'wrapper' => 'compact',
+                        ],
                     ]);
             }
         ;
