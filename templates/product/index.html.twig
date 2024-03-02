@@ -14,17 +14,14 @@
         text: 'Liste des produits',
     }) }}
 
-    {% set margin = isGTCompany ? '' : 'mt-14' %}
-
-    <div class="px-4 {{margin}}" data-controller="form--checkbox--post">
+    <div class="px-4" data-controller="form--checkbox--post">
         
         <div class="flex flex-row justify-between">
             
-            {% if isGTCompany %}
             <div class="gap-2 py-2">
-                <twig:Product:MainSearch :searchDto="searchDto"></twig:Product:MainSearch>
+                <twig:MainSearch :searchDto="searchDto"></twig:MainSearch>
             </div>
-            
+            {% if isGTCompany %}
             <div class="flex justify-end py-2 gap-2">
                 {% embed "./modal/delete-many-button-confirm.html.twig" with {
                     formAction : 'app_product_deleteAll',

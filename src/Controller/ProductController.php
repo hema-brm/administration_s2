@@ -7,18 +7,16 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use App\Service\Request\RequestQueryService;
 use Symfony\Component\HttpFoundation\Request;
 use App\Twig\Helper\Paginator\PaginatorHelper;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Request\PageFromRequestService;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\Request\PageFromRequestService;
-use App\Service\Request\RequestQueryService;
-use App\Twig\Helper\Paginator\PaginatorHelper;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/products', name: 'app_product_')]
 class ProductController extends AbstractController
@@ -47,11 +45,11 @@ class ProductController extends AbstractController
     #[IsGranted('view')]
     public function index(Request $request, ProductRepository $productRepository,#[MapQueryString()] SearchDto $searchDto = null): Response
     {   
-        $products = $productRepository->_search($searchDto);
-        $paginatorHelper = new PaginatorHelper($this->page, count($products), self::LIMIT);
-
+        $products = $productRepository->_search($searchDto, $this->page, self::LIMIT);
+        $paginatorHelper = new PaginatorHelper($this->page, $products['totalResults'], self::LIMIT);
+        
         return $this->render('product/index.html.twig', [
-            'products' => $products->getIterator()->getArrayCopy(),
+            'products' => $products['results'],
             'paginatorHelper' => $paginatorHelper,
             'showCompany' => $this->isAdmin,
             'isGTCompany' => $this->isGTCompany,

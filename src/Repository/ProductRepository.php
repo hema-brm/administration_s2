@@ -42,15 +42,23 @@ class ProductRepository extends ServiceEntityRepository
                         ->orWhere('LOWER(p.reference) LIKE LOWER(:search)')
                         ->orWhere('LOWER(p.description) LIKE LOWER(:search)')
                         ->setParameter('search', '%' . $searchDto?->getSearch() . '%');
-        
-        if($this->user){
+
+        if($this->user && !in_array('ROLE_ADMIN', $this->user->getRoles()) ){
             $queryBuilder->andWhere('p.company = :company')
                          ->setParameter('company', $this->user->getCompany());
         }
-        
-        $queryBuilder =  $queryBuilder->getQuery();
-        $this->decoratePaginator($queryBuilder, $page, $limit);
-        return new Paginator($queryBuilder);
+         // Comptage des résultats sans pagination
+        $countQuery = clone $queryBuilder;
+        $countQuery->select('COUNT(p.id)');
+        $totalResults = (int) $countQuery->getQuery()->getSingleScalarResult();
+
+        // Définition de la pagination
+        $paginator = new Paginator($queryBuilder);
+        $this->decoratePaginator($paginator->getQuery(),  $page, $limit);
+        return [
+            'results' => $paginator->getIterator()->getArrayCopy(),
+            'totalResults' => $totalResults
+        ];
     }
 
     public function search(string $search, int $page = 1, int $limit = 10): Paginator 

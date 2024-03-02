@@ -4,4 +4,8 @@ twig_component:
         # Namespace & directory for components
         App\Controller\Bill\Live\: 'bill/live/'
         App\Controller\Quote\Live\: 'quote/live/'
+        App\Twig\Components\Live\Product\: 'components/twig/live/product/'
         App\Twig\Components\: 'components/twig/'
+
+
+
