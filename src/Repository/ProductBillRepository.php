@@ -52,7 +52,7 @@ class ProductBillRepository extends ServiceEntityRepository
             ->getResult();
 
         foreach ($productBills as $productBill) {
-            $totalAmount += $productBill->getRealTotal();
+            $totalAmount += $productBill->getTotal();
         }
 
         return $totalAmount;
