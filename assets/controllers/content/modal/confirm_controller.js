@@ -39,7 +39,7 @@ export default class extends Controller {
     }
 
     getForm() {
-        console.log('AYO', this.customFormIdValue, this.formTarget);
+        //console.log('AYO', this.customFormIdValue, this.formTarget);
         if (this.customFormIdValue) {
             return document.getElementById(this.customFormIdValue);
         }
