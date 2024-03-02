@@ -1,8 +1,5 @@
-{% from "@components/macros/content.html.twig" import alert %}
-
-{{ alert({
-    text: 'Aucune facture enregistrée.',
-    color: 'warning',
-    icon: 'fa-circle-info',
-    variant: 'small',
-}) }}
+<twig:Alert
+    color="info"
+    text="Vous n'avez pas de facture enregistrée. Pour en créer une, cliquez sur le bouton ci-dessus."
+    icon="fa-info-circle"
+/>

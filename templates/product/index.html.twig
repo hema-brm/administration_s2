@@ -1,6 +1,5 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 {% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
@@ -122,12 +121,11 @@
             {% else %}
                 <tr>
                     <td colspan="10">
-                        {{ alert({
-                            text: 'Aucun produit enregistré',
-                            color: 'warning',
-                            icon: 'fa-circle-info',
-                            variant: 'small',
-                        }) }}
+                        <twig:Alert
+                            color="info"
+                            text="Aucun produit enregistré"
+                            icon="fa-info-circle"
+                        />
                     </td>
                 </tr>
             {% endfor %}

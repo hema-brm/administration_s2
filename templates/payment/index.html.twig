@@ -1,7 +1,6 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
-{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {% block title %}Suivis de paiement{% endblock %}
@@ -96,12 +95,11 @@
                     {% else %}
                         <tr>
                             <td colspan="7">
-                                {{ alert({
-                                    text: 'Aucun paiement enregistré',
-                                    color: 'warning',
-                                    icon: 'fa-circle-info',
-                                    variant: 'small',
-                                }) }}
+                                <twig:Alert
+                                    color="info"
+                                    text="Aucun paiement enregistré"
+                                    icon="fa-info-circle"
+                                />
                             </td>
                         </tr>
                     {% endfor %}

@@ -1,5 +1,4 @@
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/macros/table.html.twig" import default as table %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
@@ -78,12 +77,11 @@
                 {% else %}
                     <tr>
                     <td colspan="7">
-                        {{ alert({
-                            text: 'Aucune liste de dépenses enregistrée',
-                            color: 'warning',
-                            icon: 'fa-circle-info',
-                            variant: 'small',
-                        }) }}
+                        <twig:Alert
+                            color="warning"
+                            text="Aucune liste de dépenses enregistrée"
+                            icon="fa-info-circle"
+                        />
                     </td>
                 {% endfor %}
             </tbody>
