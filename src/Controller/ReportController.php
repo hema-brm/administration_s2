@@ -20,21 +20,16 @@ class ReportController extends AbstractController
      */
     public function report(Request $request, ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, SalesReportService $salesReportService): Response
     {
-        $productSalesByMonth = $salesReportService->getProductSalesByMonth();
-        $productSalesByYear = $salesReportService->getProductSalesByYear();
+
 
         $timePeriod = $request->query->get('period', 'month');
         switch ($timePeriod) {
             case 'year':
-                // $salesData = $salesReportService->generateSalesReport()['product_sales'];
+                $productSales = $salesReportService->getProductSalesByYear();
+                echo "<pre>";
+                print_r($productSales);
+                echo "</pre>";
                 $paymentsData = $paymentRepository->getTotalPriceSumByYear();
-                // $result = $paymentRepository->getTotalPriceSumByYear();
-
-                // // Output the result
-                // foreach ($result as $item) {
-                //     echo 'Year: ' . $item['year'] . ', Total Price: ' . $item['totalPrice'] . '<br>';
-                // }
-                // Initialize arrays for labels and data
                 $labels = [];
                 $data = [];
 
@@ -92,7 +87,10 @@ class ReportController extends AbstractController
                 break;
             default:
                 // Default to month
-                //$salesData = $salesReportService->generateSalesReport()['product_sales'];
+                $productSales = $salesReportService->getProductSalesByMonth();
+                echo "<pre>";
+                print_r($productSales);
+                echo "</pre>";
                 $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
                 $labels = [];
                 $data = array_fill(1, 12, 0);
@@ -152,10 +150,11 @@ class ReportController extends AbstractController
 
 
         // Data for the doughnut chart
+        // Data for the doughnut chart
         $doughnutData = $paymentRepository->getTotalPriceSumByCategory();
-        $doughnutLabels = ['En retard', 'Terminé', 'En cours'];
 
-        $doughnutValues = array_column($doughnutData, 'totalPrice');
+        $doughnutLabels = array_keys($doughnutData);
+        $doughnutValues = array_values($doughnutData);
         $doughnutBackgroundColors = ['rgb(255, 99, 132)', 'rgb(144, 213, 79)', 'rgb(255, 205, 86)'];
 
         // Create the doughnut chart
@@ -185,8 +184,7 @@ class ReportController extends AbstractController
         return $this->render('accountant/report.html.twig', [
             'chart' => $chart,
             'doughnutChart' => $doughnutChart,
-            'productSalesByMonth' => $productSalesByMonth,
-            'productSalesByYear' => $productSalesByYear,
+            'productSales' => $productSales,
         ]);
     }
 }

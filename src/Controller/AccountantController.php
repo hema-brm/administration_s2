@@ -75,9 +75,9 @@ class AccountantController extends AbstractController
 
         // Data for the doughnut chart
         $doughnutData = $paymentRepository->getTotalPriceSumByCategory();
-        $doughnutLabels = ['En retard', 'Terminé', 'En cours'];
 
-        $doughnutValues = array_column($doughnutData, 'totalPrice');
+        $doughnutLabels = array_keys($doughnutData);
+        $doughnutValues = array_values($doughnutData);
         $doughnutBackgroundColors = ['rgb(255, 99, 132)', 'rgb(144, 213, 79)', 'rgb(255, 205, 86)'];
 
         // Create the doughnut chart

@@ -16,12 +16,13 @@ class ProductBillRepository extends ServiceEntityRepository
     public function getProductSalesByMonth(): array
     {
         return $this->createQueryBuilder('productBill')
-            ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y') AS year", "DATE_FORMAT(pay.datePaiement, '%m') AS month", 'productBill.quantity AS quantity')
+            ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y-%m') AS period", 'SUM(productBill.quantity) AS totalQuantity', 'SUM(productBill.quantity * productBill.price) AS totalAmount')
             ->join('productBill.bill', 'bill')
             ->join('bill.payment', 'pay')
             ->join('productBill.product', 'p')
             ->where('pay.status = :status')
             ->setParameter('status', 'terminé')
+            ->groupBy('productName', 'period', 'pay.datePaiement')
             ->getQuery()
             ->getResult();
     }
@@ -29,12 +30,13 @@ class ProductBillRepository extends ServiceEntityRepository
     public function getProductSalesByYear(): array
     {
         return $this->createQueryBuilder('productBill')
-            ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y') AS year", 'productBill.quantity AS quantity')
+            ->select('p.name AS productName', "DATE_FORMAT(pay.datePaiement, '%Y') AS year", 'SUM(productBill.quantity) AS totalQuantity', 'SUM(productBill.quantity * productBill.price) AS totalAmount')
             ->join('productBill.bill', 'bill')
             ->join('bill.payment', 'pay')
             ->join('productBill.product', 'p')
             ->where('pay.status = :status')
             ->setParameter('status', 'terminé')
+            ->groupBy('productName', 'year', 'pay.datePaiement')
             ->getQuery()
             ->getResult();
     }

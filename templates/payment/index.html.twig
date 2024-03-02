@@ -81,11 +81,11 @@
                                     data-form--checkbox--post-target="items"
                                 >
                             </td>
-                            <td class="{{ cellPadding }} text-left">{{ payment.bill.nameClient }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ payment.bill.billnumber }}</td>
                             <td class="{{ cellPadding }} text-left">{{ payment.status }}</td>
                             <td class="{{ cellPadding }} text-right">{{ payment.datePaiement ? payment.datePaiement|date('d-m-Y H:i') : '' }}</td>
                             <td class="{{ cellPadding }} text-right">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
-                            <td class="{{ cellPadding }} text-right">{{ payment.bill.numeroFacture }}</td>
+                            <td class="{{ cellPadding }} text-right">{{ payment.bill.billnumber }}</td>
                             <td class="{{ cellPadding }} text-right text-secondary-400">
                                 <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" data-link--clickable-target="exclude">
                                     <i class="fa-solid fa-edit hover:text-warning-500"></i>

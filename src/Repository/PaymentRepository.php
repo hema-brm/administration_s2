@@ -23,41 +23,79 @@ class PaymentRepository extends ServiceEntityRepository
 
     public function getTotalPriceSumByMonth(): array
     {
-        return $this->createQueryBuilder('payment')
-            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", "DATE_FORMAT(payment.datePaiement, '%m') as month", 'SUM(productBill.price) as totalPrice')
+        $paymentsData = $this->createQueryBuilder('payment')
             ->leftJoin('payment.bill', 'bill')
-            ->leftJoin('bill.productBills', 'productBill')
             ->where('payment.datePaiement IS NOT NULL')
             ->andWhere('payment.status = :status')
             ->setParameter('status', 'terminé')
-            ->groupBy('month', 'year')
             ->getQuery()
             ->getResult();
-    }
 
-    public function getTotalPriceSumByYear(): array
-    {
-        return $this->createQueryBuilder('payment')
-            ->select("DATE_FORMAT(payment.datePaiement, '%Y') as year", 'SUM(productBill.price) as totalPrice')
-            ->leftJoin('payment.bill', 'bill')
-            ->leftJoin('bill.productBills', 'productBill')
-            ->where('payment.datePaiement IS NOT NULL')
-            ->andWhere('payment.status = :status')
-            ->setParameter('status', 'terminé')
-            ->groupBy('year')
-            ->getQuery()
-            ->getResult();
+        $totals = [];
+        foreach ($paymentsData as $payment) {
+            $month = $payment->getDatePaiement()->format('m');
+            $year = $payment->getDatePaiement()->format('Y');
+            $totalPrice = 0;
+            foreach ($payment->getBill()->getProductBills() as $productBill) {
+                $totalPrice += $productBill->getRealTotal();
+            }
+            $totals[] = [
+                'year' => $year,
+                'month' => $month,
+                'totalPrice' => $totalPrice
+            ];
+        }
+
+        return $totals;
     }
 
     public function getTotalPriceSumByCategory(): array
     {
-        return $this->createQueryBuilder('payment')
-            ->select('payment.status as category', 'SUM(productBill.price) as totalPrice')
+        $paymentsData = $this->createQueryBuilder('payment')
             ->leftJoin('payment.bill', 'bill')
-            ->leftJoin('bill.productBills', 'productBill')
-            ->where('payment.datePaiement IS NOT NULL')
-            ->groupBy('category')
             ->getQuery()
             ->getResult();
+
+        $totals = [
+            'En retard' => 0,
+            'Terminé' => 0,
+            'En cours' => 0,
+        ];
+
+        foreach ($paymentsData as $payment) {
+            $status = ucfirst(strtolower($payment->getStatus()));
+            if (array_key_exists($status, $totals)) {
+                foreach ($payment->getBill()->getProductBills() as $productBill) {
+                    $totals[$status] += $productBill->getRealTotal();
+                }
+            }
+        }
+
+        return $totals;
+    }
+    public function getTotalPriceSumByYear(): array
+    {
+        $paymentsData = $this->createQueryBuilder('payment')
+            ->leftJoin('payment.bill', 'bill')
+            ->where('payment.datePaiement IS NOT NULL')
+            ->andWhere('payment.status = :status')
+            ->setParameter('status', 'terminé')
+            ->getQuery()
+            ->getResult();
+
+        $totals = [];
+        foreach ($paymentsData as $payment) {
+            $year = $payment->getDatePaiement()->format('Y');
+            $totalPrice = 0;
+            foreach ($payment->getBill()->getProductBills() as $productBill) {
+                $totalPrice += $productBill->getRealTotal();
+            }
+            $totals[] = [
+                'year' => $year,
+                'totalPrice' => $totalPrice
+            ];
+        }
+
+        return $totals;
     }
 }

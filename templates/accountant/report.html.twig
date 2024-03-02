@@ -23,50 +23,25 @@
        </div>
     </div>
     
-    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
-        <h2>Ventes par produit (par mois)</h2>
-        <table class="table-auto">
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Mois</th>
-                    <th>Nombre de produits vendus</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for productSale in productSalesByMonth %}
-                    <tr>
-                        <td>{{ productSale.product.name }}</td>
-                        <td>{{ productSale.month }}</td>
-                        <td>{{ productSale.quantity }}</td>
-                        <td>{{ productSale.total }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
     <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
-        <h2>Ventes par produit (par année)</h2>
+        <h2>Ventes par produit</h2>
         <table class="table-auto">
             <thead>
                 <tr>
                     <th>Produit</th>
-                    <th>Année</th>
                     <th>Nombre de produits vendus</th>
                     <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                {% for productSale in productSalesByYear %}
+                {# {% for productSale in productSales %}
                     <tr>
                         <td>{{ productSale.product.name }}</td>
-                        <td>{{ productSale.year }}</td>
                         <td>{{ productSale.quantity }}</td>
                         <td>{{ productSale.total }}</td>
                     </tr>
-                {% endfor %}
+                {% endfor %} #}
             </tbody>
         </table>
     </div>
