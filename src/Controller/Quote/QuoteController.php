@@ -55,6 +55,7 @@ class QuoteController extends AbstractController
             'quotes' => $quotes,
             'paginatorHelper' => $paginatorHelper,
         ]);
+        
     }
     private function search(string $searchTerm, QuoteRepository $quoteRepository): Response
     {
