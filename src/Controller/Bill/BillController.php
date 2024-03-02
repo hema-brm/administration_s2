@@ -266,6 +266,7 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
     }
 
     #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    #[IsGranted('add')]
     public function deleteMany(Request $request, BillRepository $billRepository, EntityManagerInterface $entityManager): Response
     {
         $bills = $request->request->all()['bills'];

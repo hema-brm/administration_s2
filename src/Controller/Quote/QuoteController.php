@@ -186,7 +186,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
-    #[IsGranted('edit', 'quote')]
+    #[IsGranted('add')]
     public function deleteMany(Request $request, QuoteRepository $quoteRepository, EntityManagerInterface $entityManager): Response
     {
         $quotes = $request->request->all()['quotes'];
