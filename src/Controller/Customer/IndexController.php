@@ -46,7 +46,7 @@ class IndexController extends AbstractController
     #[IsGranted('view')]
     public function index(AccessibleCustomerService $customerService): Response
     {
-        $customers = $customerService->findAll($this->page, self::LIMIT);
+        $customers = $customerService->findAllOverPages($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($customers), self::LIMIT);
 
         return $this->render('@customer/index/index.html.twig', [

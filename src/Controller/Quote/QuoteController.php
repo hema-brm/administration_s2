@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/quote', name: 'app_quote_')]
 class QuoteController extends AbstractController
@@ -41,6 +42,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
+    #[IsGranted('view')]
     public function index(QuoteRepository $quoteRepository): Response
     {
         if ($this->searchTerm) {
@@ -129,6 +131,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer, PdfService $pdfService): Response
     {
         // Get the logged-in user
@@ -167,6 +170,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('edit', 'quote')]
     public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(QuoteType::class, $quote);
@@ -186,6 +190,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    #[IsGranted('edit', 'quote')]
     public function deleteMany(Request $request, QuoteRepository $quoteRepository, EntityManagerInterface $entityManager): Response
     {
         $quotes = $request->request->all()['quotes'];
@@ -203,6 +208,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/{id}/show', name: 'show', methods: ['GET'])]
+    #[IsGranted('read', 'quote')]
     public function show(Quote $quote): Response
     {
         return $this->render('quote/show.html.twig', [
@@ -211,6 +217,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted('delete', 'quote')]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {

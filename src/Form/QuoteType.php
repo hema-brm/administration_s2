@@ -4,26 +4,27 @@ namespace App\Form;
 
 use App\Entity\Quote;
 use App\Entity\Customer;
-use App\Repository\CustomerRepository;
-use Symfony\Component\Form\AbstractType;
+use App\Service\Customer\AccessibleCustomerService;
 use App\Util\Quote\Status\QuoteStatusLabel;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Validator\Constraint as EasyVowsConstraint;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraint as EasyVowsConstraint;
 
 class QuoteType extends AbstractType
 {
-public function __construct(Security $security)
+
+    public function __construct(
+        private readonly AccessibleCustomerService $accessibleCustomerService,
+    )
     {
-        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -50,15 +51,7 @@ public function __construct(Security $security)
                 'attr' => [
                     'placeholder' => 'Client',
                 ],
-'query_builder' => function (CustomerRepository $customerRepository) {
-                    if(in_array('ROLE_ADMIN',$this->security->getUser()->getRoles())){
-                        return $customerRepository->createQueryBuilder('c');
-                    }else{
-                        return $customerRepository->createQueryBuilder('c')
-                            ->where('c.company = :company')
-                            ->setParameter('company', $this->security->getUser()->getCompany());
-                    }
-                }
+                'query_builder' => $this->accessibleCustomerService->findAll(),
             ])
             ->add('quote_number', TextType::class, [
                 'label' => 'Numéro',
