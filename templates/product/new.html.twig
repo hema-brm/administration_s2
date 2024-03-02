@@ -20,12 +20,14 @@
 
           <div>
             <div class="flex justify-end py-2 gap-2 w-1/2">
-                {{ button_macro({
-                    id: "category_open_button",
-                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    text:  "Catégorie",
-                    route : path('app_category_index')
-                }) }}      
+                <twig:Button
+                    id="category_open_button"
+                    text="Catégorie"
+                    color="primary"
+                    type="secondary"
+                    variant="small"
+                    route="{{ path('app_category_index') }}"
+                />
             </div>
 
           </div>
@@ -33,17 +35,6 @@
               <div class="text-sm">
                   {% include('product/_form.html.twig') with {
                       button_label: 'Ajouter',
-                      button_classes: [
-                          'rounded',
-                          'p-2',
-                          'bg-primary-500',
-                          'text-white',
-                          'text-sm',
-                          'transition-all',
-                          'ease-out',
-                          'hover:bg-primary-600',
-                          'ml-2',
-                      ]
                   } %}
               </div>
           </div>
