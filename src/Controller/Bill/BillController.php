@@ -42,11 +42,9 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
     $company = $bill->getCustomer()->getCompany();
     $discount = $bill->getDiscount();
     $status = $bill->getStatus();
-    $products = $bill->getProductBills();
 
     // Initialisation des variables pour les totaux
     $totalPriceSum = 0;
-    $subtotal = 0;
     $tvaAmount = 0;
 
     // Initialisation du contenu HTML de la facture
@@ -134,6 +132,8 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
                     <th>Produit</th>
                     <th>Quantité</th>
                     <th>Prix unitaire</th>
+                    <th>TVA</th>
+                    <th>Remise</th>
                     <th>Total</th>
                 </tr>
                 </thead>
@@ -159,8 +159,12 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
         $categories[$category->getId()]['products'][] = [
             'name' => $product->getName(),
             'quantity' => $productBill->getQuantity(),
-            'price' => $product->getPrice(),
-            'totalPrice' => $product->getPrice() * $productBill->getQuantity(),
+            'tva' => $productBill->getTva(),
+            'tvaAmount' => $productBill->getTotalTVA(),
+            'discount' => $productBill->getDiscount(),
+            'discountAmount' => $productBill->getTotalDiscount(),
+            'price' => $productBill->getPrice(),
+            'totalPrice' => $productBill->getTotal(),
         ];
 
         // Mise à jour du total des prix
@@ -182,28 +186,24 @@ public function generatePdfFacture(Bill $bill, PdfService $pdf): Response
             $html .= "<td style='text-align: center;'>{$product['name']}</td>
                     <td style='text-align: center;'>{$product['quantity']}</td>
                     <td style='text-align: center;'>{$product['price']} €</td>
+                    <td style='text-align: center;'>{$product['tva']}% ~ {$product['tvaAmount']}</td>
+                    <td style='text-align: center;'>{$product['discount']}% ~ {$product['discountAmount']}</td>
                     <td style='text-align: center;'>{$product['totalPrice']} €</td>
                   </tr>";
         }
     }
 
     // Calcul du total avec TVA
-    $totalWithTva = $totalPriceSum + $tvaAmount;
-
-    // Calcul du total avec remise si elle existe
-    if ($discount) {
-        $discountAmount = $totalWithTva * ($discount / 100); // Calcul du montant de la remise
-        $totalWithDiscount = $totalWithTva - $discountAmount; // Calcul du total avec remise
-    } else {
-        $totalWithDiscount = $totalWithTva; // Si pas de remise, le total avec remise est le même que le total avec TVA
-    }
+    $total = $bill->getTotal();
+    $totalDiscount = $bill->getTotalDiscount();
+    $totalWithDiscount = $bill->getTotalWithDiscount();
 
     // Finalisation du HTML avec les totaux
     $html .= "</tbody>
             </table>
             <div class='invoice-total'>
-                <p>Total: " . $totalPriceSum . " €</p>
-                <p>Total avec TVA: " . $totalWithTva .  " €</p>
+                <p>Total: " . $total . " €</p>
+                <p>Remise: " . $totalDiscount .  " €</p>
                 <p>Total avec remise: " . $totalWithDiscount .  " €</p>
             </div>
         </div>

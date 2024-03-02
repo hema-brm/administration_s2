@@ -18,6 +18,7 @@ class Button
     public string $variant = 'normal';
     public string $route = '#';
     public string $onClick = '';
+    public string $target = '_self';
     public array $customClasses = [];
     public bool $disabled = false;
     public array $attr = [];
