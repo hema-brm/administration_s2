@@ -9,6 +9,7 @@ class Card
 {
     public string $id;
     public string $background = 'white';
+    public bool $fullWidth = false;
     public array $widths = [
         'xs' => 'full',
         'sm' => 'full',
@@ -44,7 +45,22 @@ class Card
     ];
 
     public string $title = '';
-    public string $padding = '4';
+    public int $padding;
+    public array $paddingSizes = [
+        'xs' => '2',
+        'sm' => '2',
+        'md' => '3',
+        'lg' => '4',
+        'xl' => '4',
+    ];
+    public int $margin;
+    public array $marginSizes = [
+        'xs' => '0',
+        'sm' => '0',
+        'md' => '0',
+        'lg' => '0',
+        'xl' => '0',
+    ];
 
     public function __construct()
     {
@@ -53,6 +69,9 @@ class Card
 
     public function getWidthClasses(): string
     {
+        if ($this->fullWidth) {
+            return 'w-full';
+        }
         $classes = [];
         foreach ($this->widths as $breakpoint => $size) {
             $classes[] = "{$breakpoint}:w-{$size}";
@@ -94,6 +113,32 @@ class Card
         $classes = [];
         foreach ($this->roundedSizes as $breakpoint => $size) {
             $classes[] = "{$breakpoint}:rounded-{$size}";
+        }
+
+        return implode(' ', $classes);
+    }
+
+    public function getPaddingClasses(): string
+    {
+        if (isset($this->padding)) {
+            return 'p-' . $this->padding;
+        }
+        $classes = [];
+        foreach ($this->paddingSizes as $breakpoint => $size) {
+            $classes[] = "{$breakpoint}:p-{$size}";
+        }
+
+        return implode(' ', $classes);
+    }
+
+    public function getMarginClasses(): string
+    {
+        if (isset($this->margin)) {
+            return 'm-' . $this->margin;
+        }
+        $classes = [];
+        foreach ($this->marginSizes as $breakpoint => $size) {
+            $classes[] = "{$breakpoint}:m-{$size}";
         }
 
         return implode(' ', $classes);

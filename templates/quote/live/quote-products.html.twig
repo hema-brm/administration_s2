@@ -1,11 +1,3 @@
-{% set productBillFormWidths = {
-    'xs': 'full',
-    'sm': 'full',
-    'md': 'full',
-    'lg': 'full',
-    'xl': 'full',
-} %}
-
 {% set shadowSizes = {
     'xs': 'xs',
     'sm': 'xs',
@@ -16,9 +8,10 @@
 
 <twig:Card
     title="Liste des produits"
-    :widths="productBillFormWidths"
+    :fullWidth="true"
     :shadowSizes="shadowSizes"
     :rounded="false"
+    :padding="4"
 >
 {% if not _isReadOnlyMode %}
 <button

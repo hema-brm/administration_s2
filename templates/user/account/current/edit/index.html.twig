@@ -13,8 +13,8 @@
         text: 'Mon compte',
     }) }}
 
-    <div class="p-4 flex flex-row w-3/4">
-        <div id="account_tabs" class="w-80 text-sm mr-4">
+    <div class="p-4 flex flex-col md:flex-row w-full lg:w-3/4">
+        <div id="account_tabs" class="mb-4 md:mb-0 text-sm mr-4">
             {% set activeClass = 'personal' == tabs ? activeTabClass : inactiveTabClass %}
             <div class="{{ defaultTabClass }} {{ activeClass }} rounded">
                 <a href="{{ path('app_account_me_edit', { 'tabs': 'personal' }) }}" class="flex items-center p-2">

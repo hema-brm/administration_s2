@@ -1,18 +1,13 @@
-{% set widthClasses = this.getWidthClasses() %}
-{% set textSizeClasses = this.getTextSizeClasses() %}
-{% set shadowClasses = this.getShadowClasses() %}
-{% set roundedClasses = this.getRoundedClasses() %}
-
 {% set borderClass = border is same as true ? 'border' : '' %}
-{% set paddingClass = 'p-%s'|format(padding) %}
 
 {% set classes = [
-    widthClasses,
-    textSizeClasses,
-    shadowClasses,
+    this.widthClasses,
+    this.textSizeClasses,
+    this.shadowClasses,
     borderClass,
-    roundedClasses,
-    paddingClass
+    this.roundedClasses,
+    this.paddingClasses,
+    this.marginClasses,
 ]|join(' ') %}
 
 <div class="{{ classes }} transition-all duration-300">
