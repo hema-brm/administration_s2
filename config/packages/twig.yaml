@@ -3,7 +3,7 @@ twig:
     paths:
         '%kernel.project_dir%/templates/category': category
         '%kernel.project_dir%/templates/components': components
-        '%kernel.project_dir%/templates/guidelines': guidelines
+        '%kernel.project_dir%/templates/guideline': guideline
         '%kernel.project_dir%/templates/customer': customer
         '%kernel.project_dir%/templates/product': product
         '%kernel.project_dir%/templates/base': base

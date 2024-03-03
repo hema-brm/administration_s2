@@ -16,26 +16,9 @@ export default class extends Controller {
 
     toggle() {
         this.toggleClicked = true;
-        this.updateToggleClass();
         this.toggleClicked = false;
         this.contentTarget.classList.toggle(this.showClass);
         this.contentTarget.classList.toggle(this.hideClass);
-    }
-
-    updateToggleClass() {
-        if(this.isFirstClick){
-            if(this.toggleClicked){
-                this.toggleTarget.classList.add('rotate-45');
-                this.toggleTarget.classList.add('bg-primary-600');
-                this.toggleTarget.classList.add('rounded-full');
-                this.isFirstClick = false;
-            }
-        }else{
-            this.toggleTarget.classList.remove('rotate-45');
-            this.toggleTarget.classList.remove('bg-primary-600');
-            this.toggleTarget.classList.remove('rounded-full');
-            this.isFirstClick = true;
-        }
     }
 
     initToggleEvent() {
@@ -48,7 +31,6 @@ export default class extends Controller {
                 && (!this.contentTarget.contains(event.target)));
 
             if (isClickInside) {
-                this.updateToggleClass();
                 this.contentTarget.classList.remove(this.showClass);
                 this.contentTarget.classList.add(this.hideClass);
             }

@@ -1,0 +1,47 @@
+{% from "@components/macros/content.html.twig" import paginator %}
+
+<div class="mb-2">
+    {{ paginator({
+        name: 'page',
+        countButton: 5,
+        current: 1,
+        total: 8,
+    }) }}
+</div>
+
+<div class="mb-2">
+    {{ paginator({
+        name: 'page',
+        countButton: 5,
+        current: 2,
+        total: 8,
+    }) }}
+</div>
+
+<div class="mb-2">
+    {{ paginator({
+        name: 'page',
+        countButton: 5,
+        current: 8,
+        total: 8,
+    }) }}
+</div>
+
+<div class="mb-2">
+    {{ paginator({
+        name: 'page',
+        countButton: 3,
+        current: 2,
+        total: 3,
+    }) }}
+</div>
+
+<div class="mb-2">
+    {{ paginator({
+        name: 'page',
+        countButton: 10,
+        current: 2,
+        total: 11,
+    }) }}
+</div>
+
