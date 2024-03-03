@@ -40,6 +40,8 @@
             </div>
         </article>
         <div class="flex flex-col md:flex-row justify-between mt-4">
+            {% set company = user.company %}
+            {% if company is not empty %}
                 <div class="w-full md:w-1/2 shadow mr-4">
                     <div class="px-4 py-2 bg-gray-50">
                         <i class="fa-solid fa-building "></i>
@@ -51,6 +53,7 @@
                         <p>Adresse : {{ user.company.address }}</p>
                     </div>
                 </div>
+            {% endif %}
             <div class="w-full md:w-1/2 shadow">
                 <div class="px-4 py-2 bg-gray-50">
                     <i class="fa-solid fa-address-book w-4"></i>
