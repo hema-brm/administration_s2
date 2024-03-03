@@ -13,14 +13,12 @@ class StringToFileTransformer implements DataTransformerInterface
 
     public function transform($value): ?File
     {
-        // Transform the File instance to a string path for rendering in the form
         $res = !empty($value) ? new File($this->directory . $value) : null;
         return $res;
     }
 
     public function reverseTransform($value): ?File
     {
-        // Transform the string path back to a File instance for submission
         return $value ? new File($value) : null;
     }
 }

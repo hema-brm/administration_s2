@@ -29,12 +29,14 @@
                         text: 'Êtes-vous sûrs de vouloir supprimer ce(s) suivi(s) de paiement(s) ?',
                     } %}
                     {% endembed %}
-                    <twig:Button
-                        text="Nouveau paiement"
-                        type="secondary"
-                        icon="fa-plus"
-                        route="{{ path('app_payment_new') }}"
-                    />
+                    {% if isGTEmployee %}
+                        <twig:Button
+                            text="Nouveau paiement"
+                            type="secondary"
+                            icon="fa-plus"
+                            route="{{ path('app_payment_new') }}"
+                        />
+                    {% endif %}
                 </div>
             </div>
             {% set cellPadding = 'p-4 px-2' %}

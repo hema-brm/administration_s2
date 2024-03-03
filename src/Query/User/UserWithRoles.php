@@ -14,7 +14,6 @@ class UserWithRoles implements Criteria
 
     public function apply(QueryBuilder $builder): QueryBuilder
     {
-        // If no roles are given, return no user
         if (empty($this->roles)) {
             return $builder
                 ->andWhere('1 = 0');

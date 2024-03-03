@@ -24,15 +24,12 @@ final class MainSearch extends AbstractController
 
     protected function instantiateForm(): FormInterface
     {
-        // we can extend AbstractController to get the normal shortcuts
         return $this->createForm(MainSearchType::class, $this->searchDto);
     }
 
     #[LiveAction]
     public function save()
     {
-        // Submit the form! If validation fails, an exception is thrown
-        // // and the component is automatically re-rendered with the errors
         $this->submitForm();
 
         /** @var SearchDto $searchDto */

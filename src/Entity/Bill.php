@@ -1,5 +1,4 @@
 <?php
-// src/Entity/Bill.php
 
 namespace App\Entity;
 
@@ -56,13 +55,13 @@ class Bill
     {
         $this->payment = $payment;
 
-        // Set the bill reference on the payment entity
         if ($payment !== null) {
             $payment->setBill($this);
         }
 
         return $this;
     }
+
     public function getStatus(): ?string
     {
         return $this->status;
@@ -133,7 +132,6 @@ class Bill
     public function removeProductBill(ProductBill $productBill): self
     {
         if ($this->productBills->removeElement($productBill)) {
-            // set the owning side to null (unless already changed)
             if ($productBill->getBill() === $this) {
                 $productBill->setBill(null);
             }

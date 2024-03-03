@@ -15,7 +15,6 @@ class UserIsEmployee implements Criteria
 
     public function apply(QueryBuilder $builder): QueryBuilder
     {
-        //get all roles that are children of ROLE_EMPLOYEE
         $roles = $this->roleHierarchy->getReachableRoleNames([IUserRole::ROLE_EMPLOYEE]);
 
         return (new UserWithRoles($roles))->apply($builder);

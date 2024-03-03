@@ -70,7 +70,7 @@ class MailerController extends AbstractController
         {
             $filename = $this->generateFilenameAndHTML('devis', $customer);
             $html = $quotePdfController->generateHtml($quote);
-            //je sauvegarde dans un dossier tmp
+            //Sauvegarder dans un dossier tmp
             $pdfService->savePdf($html, $filename);
 
             $email = $this->mailer->sendEmail($this->templateQuoteReplayID, $customer, $filename);
@@ -91,7 +91,7 @@ class MailerController extends AbstractController
         {
             $filename = $this->generateFilenameAndHTML('devis', $customer);
             $html = $quotePdfController->generateHtml($quote);
-            //je sauvegarde dans un dossier tmp
+            //Sauvegarder dans un dossier tmp
             $pdfService->savePdf($html, $filename);
 
             $email = $this->mailer->sendEmail($this->templateNewQuoteID, $customer, $filename);
@@ -127,7 +127,7 @@ class MailerController extends AbstractController
         {
             $filename = $this->generateFilenameAndHTML('facture', $customer);
             $html = $billPdfController->generateHtml($bill);
-            //je sauvegarde dans un dossier tmp
+            //Sauvegarder dans un dossier tmp
             $pdfService->savePdf($html, $filename);
             $email = $this->mailer->sendEmail($this->templateBillReplayID, $customer, $filename);
 
@@ -147,7 +147,7 @@ class MailerController extends AbstractController
         {
             $filename = $this->generateFilenameAndHTML('facture', $customer);
             $html = $billPdfController->generateHtml($bill);
-            //je sauvegarde dans un dossier tmp
+            //Sauvegarder dans un dossier tmp
             $pdfService->savePdf($html, $filename);
             $email = $this->mailer->sendEmail($this->templateBillLateID, $customer, $filename);
 
@@ -167,7 +167,7 @@ class MailerController extends AbstractController
         {
             $filename = $this->generateFilenameAndHTML('facture', $customer);
             $html = $billPdfController->generateHtml($bill);
-            //je sauvegarde dans un dossier tmp
+            //Sauvegarder dans un dossier tmp
             $pdfService->savePdf($html, $filename);
             $email = $this->mailer->sendEmail($this->templateNewBillID, $customer, $filename);
 

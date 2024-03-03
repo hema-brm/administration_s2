@@ -20,8 +20,6 @@
 
 <script type="text/javascript">
     let checkboxes = document.querySelectorAll('input[name="{{ name }}"]');
-    // Loop through checkboxes and add event listeners
-    // to deselect all other checkboxes when one is selected
     checkboxes.forEach(function(checkbox) {
         {% if not toggle %}
             break;

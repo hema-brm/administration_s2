@@ -1,5 +1,5 @@
 <?php
-//Quote.php
+
 namespace App\Entity;
 
 use App\Repository\QuoteRepository;
@@ -71,7 +71,6 @@ class Quote
     public function removeProductQuote(ProductQuote $productQuote): self
     {
         if ($this->productQuotes->removeElement($productQuote)) {
-            // set the owning side to null (unless already changed)
             if ($productQuote->getQuote() === $this) {
                 $productQuote->setQuote(null);
             }
@@ -135,8 +134,8 @@ class Quote
 
     public function setExpiryDate(?\DateTimeInterface $expiry_date): static
     {
-        // must be greater than the issuance date
-
+        //doit etre superieure à la date d'échéance
+        
         if ($expiry_date < $this->quote_issuance_date) {
             throw new \InvalidArgumentException('The expiry date must be greater than the issuance date.');
         }

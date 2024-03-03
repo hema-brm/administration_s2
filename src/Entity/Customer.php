@@ -45,7 +45,6 @@ class Customer
     )]
     private ?string $phone = null;
 
-    // Add tsvector column, used for full text search
     #[ORM\Column(type: 'tsvector', nullable: true, options: ['default' => ''])]
     private ?string $searchVector = null;
 
@@ -225,7 +224,6 @@ class Customer
     public function removeBill(Bill $bill): static
     {
         if ($this->bills->removeElement($bill)) {
-            // set the owning side to null (unless already changed)
             if ($bill->getCustomer() === $this) {
                 $bill->setCustomer(null);
             }

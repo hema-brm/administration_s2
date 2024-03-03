@@ -14,12 +14,12 @@ class TsvectorType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return $value; // conversion to PHP value
+        return $value; 
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value; // conversion to database value
+        return $value; 
     }
 
     public function getName()

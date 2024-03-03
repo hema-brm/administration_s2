@@ -42,10 +42,8 @@ class BillPdfController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function index(Bill $bill, PdfService $pdf): Response
     {
-        $html = $this->generateHtml($bill);
-        // Générer le PDF à partir du contenu HTML
-        $pdfContent = $pdf->generatePdfContent($html);
-        // Retourner le PDF en tant que réponse HTTP
+        $html = $this->generateHtml($bill); // Générer le PDF à partir du contenu HTML
+        $pdfContent = $pdf->generatePdfContent($html); // Retourner le PDF en tant que réponse HTTP
         return new Response(
             $pdfContent,
             Response::HTTP_OK,

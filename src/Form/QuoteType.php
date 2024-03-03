@@ -1,5 +1,5 @@
 <?php
-//QuoteType.php
+
 namespace App\Form;
 
 use App\Entity\Quote;

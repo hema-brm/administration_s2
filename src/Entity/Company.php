@@ -145,7 +145,6 @@ class Company
     public function removeCategory(Category $category): static
     {
         if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
             if ($category->getCompany() === $this) {
                 $category->setCompany(null);
             }
@@ -175,7 +174,6 @@ class Company
     public function removeProduct(Product $product): static
     {
         if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
             if ($product->getCompany() === $this) {
                 $product->setCompany(null);
             }

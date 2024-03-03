@@ -94,7 +94,6 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        // If form is not valid when submitted, display error message
         if ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash('info', "Veuillez corriger les informations saisies.");
             $this->addFlash('error', "Le client n'a pas été enregistré.");
@@ -175,8 +174,7 @@ class IndexController extends AbstractController
             $this->addFlash('info', "Le client n'a pas été supprimé.");
             $this->addFlash('error', "Oups, une erreur est survenue.");
         }
-
-        // get referer query params
+        
         $referer = $request->headers->get('referer');
         $refererQuery = parse_url($referer, PHP_URL_QUERY);
         parse_str($refererQuery, $refererQueryParams);
