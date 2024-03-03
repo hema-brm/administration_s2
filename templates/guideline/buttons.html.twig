@@ -1,0 +1,48 @@
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Color</h6>
+    <twig:Button text="Primary" color="primary"/>
+    <twig:Button text="Secondary" color="secondary"/>
+    <twig:Button text="Success" color="success"/>
+    <twig:Button text="Danger" color="danger"/>
+    <twig:Button text="Warning" color="warning"/>
+    <twig:Button text="Info" color="info"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Secondary color</h6>
+    <twig:Button type="secondary" text="Primary" color="primary"/>
+    <twig:Button type="secondary" text="Secondary" color="secondary"/>
+    <twig:Button type="secondary" text="Success" color="success"/>
+    <twig:Button type="secondary" text="Danger" color="danger"/>
+    <twig:Button type="secondary" text="Warning" color="warning"/>
+    <twig:Button type="secondary" text="Info" color="info"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Size</h6>
+    <twig:Button text="Small" variant="small"/>
+    <twig:Button text="Default" variant="default"/>
+    <twig:Button text="Medium" variant="medium"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Icon button</h6>
+    <twig:Button icon="fa-edit" variant="icon"/>
+    <twig:Button icon="fa-pen" variant="icon"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">With icon</h6>
+    <twig:Button icon="fa-pen" text="Supports icon" color="primary"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Linkable</h6>
+    <twig:Button text="Open Google" color="primary" route="https://www.google.com"/>
+    <twig:Button text="Open Google in a new tab" color="primary" route="https://www.google.com" target="_blank"/>
+</div>
+
+<div class="mb-2 py-2 border-b">
+    <h6 class="text-base">Disabled</h6>
+    <twig:Button text="Do nothing" color="secondary" route="https://www.google.com" :disabled="true"/>
+</div>

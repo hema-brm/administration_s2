@@ -54,8 +54,13 @@
 ### 4. Johan Mickaël RAKOTONIAINA
 
 > Github: johan-mickael-myges
- 
-- Création de composants
+- Mise en place de l'environnement de développement
+- Integration
+  - Tailwind
+  - Stimulus
+  - Turbo UX
+  - Twig Live Component
+- Création des composants
   - Pagination
   - Champs des formulaires
   - Bouttons
@@ -65,29 +70,28 @@
   - Alert
   - Badge
   - Card
-  - Clickable Row
-- Gestion des clients
-  - CRUD
-  - Voter
+  - Clickable Table Row
 - Gestion des devis v2.0
   - Nouvelle affichage + mode de création
   - Ajout des produits
-  - Voter
+  - Gestion des remises globales et par produit
+  - Gestion des TVA pour chaque produits
 - Gestion des factures v2.0
   - Nouvelle affichage + mode de création
   - Ajout des produits
-- Responsivité
-- Gestion de mon compte
-  - Réinitialiser mon mot de passe
-  - Modifier mes informations personelles
-- Page Login + Inscription v2.0
-- Integration
-  - Tailwind
-  - Stimulus
-  - Turbo UX
-  - Twig Live Component
+  - Gestion des remises globales et par produit
+  - gestion des tva pour chaque produit
+- Gestion des clients
+  - CRUD
+- Responsivité du site
+- Paramètres de l'utilisateur connecté
+  - Réinitialisation du mot de passe
+  - Modification des informations personnelles
+- Page Login + Inscription v2.0 (Design)
 - Thèmes du site
-- Déploiement
+- Mise en production
+- Résolution des bugs constatés
+- Rédaction des documentations (Techniques + Guideline des composants)
 
 ---
 

@@ -12,6 +12,7 @@ class Dropdown
     public string $contentId;
     public string $showClass = 'scale-100';
     public string $hideClass = 'scale-0';
+    public string $position = 'right';
 
     public function __construct()
     {

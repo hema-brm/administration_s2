@@ -79,6 +79,9 @@ class Item extends AbstractController
     public string $mode = 'create';
 
     #[LiveProp]
+    public bool $canEdit = true;
+
+    #[LiveProp]
     public ?ProductQuote $initialFormData = null;
 
     #[LiveProp(writable: true)]
@@ -191,6 +194,9 @@ class Item extends AbstractController
     #[ExposeInTemplate('_canSaveItems')]
     public function canSaveItems(): bool
     {
+        if (!$this->canEdit) {
+            return false;
+        }
         return $this->mode != 'show';
     }
 

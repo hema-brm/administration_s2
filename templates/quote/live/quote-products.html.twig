@@ -13,7 +13,7 @@
     :rounded="false"
     :padding="4"
 >
-{% if not _isReadOnlyMode %}
+{% if _canAddProductItem %}
 <button
     data-action="live#action"
     data-action-name="addLineItem"
@@ -47,6 +47,7 @@
         discount="{{ line.discount }}"
         isEditing="{{ line.isEditing }}"
         mode="{{ _mode }}"
+        :canEdit="_canAddProductItem"
     />
 {% endfor %}
 

@@ -280,13 +280,40 @@ class QuoteCreator extends AbstractController
     #[ExposeInTemplate('_isReadOnlyMode')]
     public function isReadOnlyMode(): bool
     {
+        if ('edit' == $this->mode && !$this->canEdit()) {
+            return true;
+        }
         return ('show' == $this->mode);
     }
 
-    #[ExposeInTemplate('_cannotEdit')]
-    public function cannotEdit(): bool
+    #[ExposeInTemplate('_disableForms')]
+    public function disableForms(): bool
     {
-        return ('edit' == $this->mode) && (Quote::STATUS_ACCEPTED == $this->quoteData->getStatus());
+        return $this->isReadOnlyMode() || $this->canEdit();
+    }
+
+    #[ExposeInTemplate('_canEdit')]
+    public function canEdit(): bool
+    {
+        return ('edit' == $this->mode) && ($this->quoteData->canEdit());
+    }
+
+    #[ExposeInTemplate('_showSaveButton')]
+    public function showSaveButton(): bool
+    {
+        if ('edit' == $this->mode) {
+            return $this->quoteData->canEdit();
+        }
+
+        if ('create' == $this->mode) {
+            return true;
+        }
+
+        if ('show' == $this->mode) {
+            return false;
+        }
+
+        return 'false';
     }
 
     #[ExposeInTemplate]
@@ -328,6 +355,24 @@ class QuoteCreator extends AbstractController
     public function hasDiscountValue(): bool
     {
         return $this->discount > 0;
+    }
+
+    #[ExposeInTemplate('_canAddProductItem')]
+    public function canAddProductItem(): bool
+    {
+        if ('create' == $this->mode) {
+            return true;
+        }
+
+        if ('edit' == $this->mode) {
+            return $this->quoteData->canEdit();
+        }
+
+        if ('show' == $this->mode) {
+            return false;
+        }
+
+        return false;
     }
 
     public function _getTotal(): float

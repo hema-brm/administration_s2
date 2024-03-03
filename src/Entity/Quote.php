@@ -203,4 +203,9 @@ class Quote
     {
         return $this->getTotal() - $this->getTotalDiscount();
     }
+
+    public function canEdit(): bool
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
 }

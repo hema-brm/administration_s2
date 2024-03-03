@@ -10,7 +10,9 @@
     <thead>
     <tr class="{{ tableHeaderClasses }}">
         <th class="{{ cellPadding }} text-center">
+          {% if isGTEmployee %}
             <input type="checkbox" class="bills-checkbox" data-form--checkbox--multiple-target="main">
+          {% endif %}
         </th>
         <th class="{{ cellPadding }} text-center">N° facture</th>
         <th class="{{ cellPadding }} text-left">Client</th>
@@ -30,7 +32,7 @@
             class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
         >
             <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
-                {% if bill.getStatus == 0 %}
+                {% if bill.getStatus == 0 and isGTEmployee %}
                 <input
                     type="checkbox"
                     class="bill-checkbox"
@@ -59,7 +61,7 @@
                         thirdChoiceText: "Renvoyer la facture en PDF"
                     }) }}
                     {% endif %}
-                    {% if bill.getStatus() == 0 %}
+                    {% if bill.getStatus() == 0 and isGTEmployee %}
                         <twig:Button
                             color="secondary"
                             type="secondary"

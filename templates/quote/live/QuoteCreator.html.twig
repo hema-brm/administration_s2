@@ -1,10 +1,10 @@
 <div {{ attributes }}>
     {{ displayFlash() }}
-    {% if _cannotEdit is same as true %}
+    {% if not _canEdit and mode == 'edit' %}
         <div class="mb-3">
             <twig:Alert
                 color="warning"
-                text="Vous ne pouvez plus modifier ce devis car il a déjà été accepté."
+                text="Vous ne pouvez plus modifier ce devis car il n'est plus en brouillon."
                 icon="fa-warning"
                 variant="small"
             />
@@ -41,7 +41,7 @@
             />
         </div>
     {% endif %}
-    {% if not _isReadOnlyMode %}
+    {% if _showSaveButton is same as true %}
     <div class="flex flex-row justify-end mb-3">
         {% set buttonClass = 'flex text-white px-4 py-2 rounded text-sm' %}
         {% set action = 'live#action' %}

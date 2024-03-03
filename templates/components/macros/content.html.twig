@@ -105,7 +105,8 @@
                 {% set previousButtonClasses = previousButtonClasses ~ ' ' ~ disabledButtonClasses %}
             {% endif %}
             {% set previousButtonParams = urlParams|merge({(name): current-1}) %}
-            <a href="{{ path(route, previousButtonParams) }}" data-turbo-action="replace">
+            {% set path = route != '#' ? path(route, buttonPageParams) : '#' %}
+            <a href="{{ path }}" data-turbo-action="replace">
                 <button {{ previousButtonAttribute }} class="{{ previousButtonClasses }}">
                     <i class="fa-solid fa-caret-left"></i>
                 </button>
@@ -116,7 +117,8 @@
                 {% if page is not empty and page != current %}
                     {% set availableButtonClasses = pageClasses ~ ' ' ~ hoveredPageClass %}
                     {% set buttonPageParams = urlParams|merge({(name): page}) %}
-                    <a href="{{ path(route, buttonPageParams) }}" data-turbo-action="replace">
+                    {% set path = route != '#' ? path(route, buttonPageParams) : '#' %}
+                    <a href="{{ path }}" data-turbo-action="replace">
                         <button class="{{ availableButtonClasses }}">{{ page }}</button>
                     </a>
                 {% elseif page == current %}
@@ -135,7 +137,8 @@
                 {% set nextButtonClasses = nextButtonClasses ~ ' ' ~ disabledButtonClasses %}
             {% endif %}
             {% set nextButtonParams = urlParams|merge({(name): current+1}) %}
-            <a href="{{ path(route, nextButtonParams) }}" data-turbo-action="replace">
+            {% set path = route != '#' ? path(route, buttonPageParams) : '#' %}
+            <a href="{{ path }}" data-turbo-action="replace">
                 <button {{ nextButtonAttribute }} class="{{ nextButtonClasses }}">
                     <i class="fa-solid fa-caret-right"></i>
                 </button>

@@ -1,0 +1,27 @@
+<div class="grid grid-cols-5">
+    <twig:Dropdown
+            position="left"
+    >
+        {% block toggle %}
+            <button class="bg-gray-100 p-4">Right</button>
+        {% endblock %}
+        {% block content %}
+            <div class="bg-white border w-60 p-5">
+                You can put anything here
+            </div>
+        {% endblock %}
+    </twig:Dropdown>
+
+    <twig:Dropdown
+            position="right"
+    >
+        {% block toggle %}
+            <button class="bg-gray-100 p-4">Left</button>
+        {% endblock %}
+        {% block content %}
+            <div class="bg-white border w-60 p-5">
+                You can put anything here
+            </div>
+        {% endblock %}
+    </twig:Dropdown>
+</div>

@@ -23,13 +23,15 @@
                 icon="fa-file-pdf"
             />
             {% if bill.getStatus() == 0  %}
-            <twig:Button
-                text="Modifier"
-                color="warning"
-                textColor="secondary-700"
-                route="{{ path('app_bill_edit', {'id': bill.id}) }}"
-                icon="fa-pen"
-            />
+                {% if isGTEmployee %}
+                    <twig:Button
+                        text="Modifier"
+                        color="warning"
+                        textColor="secondary-700"
+                        route="{{ path('app_bill_edit', {'id': bill.id}) }}"
+                        icon="fa-pen"
+                    />
+                {% endif %}
             {% endif %}
         </div>
     </div>
