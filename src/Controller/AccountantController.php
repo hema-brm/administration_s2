@@ -9,12 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 class AccountantController extends AbstractController
 {
     /**
      * @Route("/accountant", name="accountant")
      */
+    #[IsGranted('view')]
     public function accountant(ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, BillRepository $billRepository): Response
     {
         // Fetch recent payments

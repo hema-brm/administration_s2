@@ -55,6 +55,8 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
         if ($this->security->isGranted('ROLE_ENTREPRISE')) {
             return new RedirectResponse($this->urlGenerator->generate('app_employee_index'));
+        } else if ($this->security->isGranted('ROLE_EMPLOYEE')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_customer_index'));
         } else if ($this->security->isGranted('ROLE_COMPTABLE')) {
             return new RedirectResponse($this->urlGenerator->generate('accountant'));
         }

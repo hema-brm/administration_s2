@@ -10,12 +10,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 use App\Service\SalesReportService;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 class ReportController extends AbstractController
 {
     /**
      * @Route("/report", name="report")
      */
+    #[IsGranted('view')]
     public function report(Request $request, ChartBuilderInterface $chartBuilder, PaymentRepository $paymentRepository, SalesReportService $salesReportService): Response
     {
         $timePeriod = $request->query->get('period', 'month');
@@ -112,7 +115,7 @@ class ReportController extends AbstractController
             'productSales' => $productSales,
         ]);
     }
-
+    #[IsGranted('view')]
     private function createBarChart(ChartBuilderInterface $chartBuilder, string $title, string $xAxisTitle, array $labels, array $data): Chart
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
