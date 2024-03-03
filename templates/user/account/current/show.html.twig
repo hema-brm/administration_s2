@@ -9,61 +9,80 @@
         text: 'Mon compte',
     }) }}
 
-    <div class="p-4">
-        <article class="w-full shadow relative">
-            <div class="absolute top-0 right-0 p-2 flex flex-row-reverse items-baseline text-sm text-gray-400">
-                <a href="{{ path('app_account_me_edit') }}">
-                    <button class="group">
-                        <i class="fa-solid fa-edit ml-2 group-hover:text-warning-500"></i>
-                    </button>
-                </a>
-            </div>
-            <div class="flex flex-row p-4 items-start">
-                <div class="mr-4">
-                    {% set avatar = vich_uploader_asset(user, 'pictureFile')|default(asset('build/images/default/profile.png')) %}
-                    <img class="w-24 aspect-square rounded-md object-cover object-center" src="{{ avatar }}" alt="">
+    <twig:Card
+        :padding="4"
+        :fullWidth="true"
+        :shadow="false"
+        :border="false"
+    >
+        <twig:Card
+            :margin="0"
+            :padding="0"
+            :fullWidth="true"
+        >
+            <article class="relative">
+                <div class="absolute top-0 right-0 p-2 flex flex-row-reverse items-baseline text-sm text-gray-400">
+                    <a href="{{ path('app_account_me_edit') }}">
+                        <button class="group">
+                            <i class="fa-solid fa-edit ml-2 group-hover:text-warning-500"></i>
+                        </button>
+                    </a>
                 </div>
-                <div class="flex flex-col">
-                    <div class="text-lg leading-10">
-                        {{ user.fullName }}
+                <div class="flex flex-row p-4 items-start">
+                    <div class="mr-4">
+                        {% set avatar = vich_uploader_asset(user, 'pictureFile')|default(asset('build/images/default/profile.png')) %}
+                        <img class="w-24 aspect-square rounded-md object-cover object-center" src="{{ avatar }}" alt="">
                     </div>
-                    <div class="text-xs mb-2">
-                        {% for role in user.rolesLabel %}
-                            <span class="mr-1 p-1 bg-{{ role.color }}-100 text-{{ role.color }}-600 rounded">{{ role.text }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="text-xs text-secondary-400 leading-4">
-                        <p>Création : <i>{{ user.createdAt|date('d/m/Y à H:i') }}</i></p>
-                        <p>Dernière modification : <i>{{ user.updatedAt|date('d/m/Y à H:i') }}</i></p>
+                    <div class="flex flex-col">
+                        <div class="text-lg leading-10">
+                            {{ user.fullName }}
+                        </div>
+                        <div class="text-xs mb-2">
+                            {% for role in user.rolesLabel %}
+                                <span class="mr-1 p-1 bg-{{ role.color }}-100 text-{{ role.color }}-600 rounded">{{ role.text }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="text-xs text-secondary-400 leading-4">
+                            <p>Création : <i>{{ user.createdAt|date('d/m/Y à H:i') }}</i></p>
+                            <p>Dernière modification : <i>{{ user.updatedAt|date('d/m/Y à H:i') }}</i></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </article>
-        <div class="flex flex-col md:flex-row justify-between mt-4">
-            {% set company = user.company %}
-            {% if company is not empty %}
-                <div class="w-full md:w-1/2 shadow mr-4">
+            </article>
+        </twig:Card>
+
+        <twig:Card
+            :fullWidth="true"
+            :border="false"
+            :shadow="false"
+        >
+            <div class="flex flex-col md:flex-row justify-between mt-4">
+                {% set company = user.company %}
+                {% if company is not empty %}
+                    <div class="w-full md:w-1/2 shadow mr-4">
+                        <div class="px-4 py-2 bg-gray-50">
+                            <i class="fa-solid fa-building "></i>
+                            <span>Entreprise</span>
+                        </div>
+                        <div class="text-xs leading-5 p-4">
+                            <p>Nom : <b>{{ user.company.name }}</b></p>
+                            <p>Numero siret : {{ user.company.siretNumber }}</p>
+                            <p>Adresse : {{ user.company.address }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="w-full md:w-1/2 shadow">
                     <div class="px-4 py-2 bg-gray-50">
-                        <i class="fa-solid fa-building "></i>
-                        <span>Entreprise</span>
+                        <i class="fa-solid fa-address-book w-4"></i>
+                        <span>Contact</span>
                     </div>
                     <div class="text-xs leading-5 p-4">
-                        <p>Nom : <b>{{ user.company.name }}</b></p>
-                        <p>Numero siret : {{ user.company.siretNumber }}</p>
-                        <p>Adresse : {{ user.company.address }}</p>
+                        <p>Email : <a href="mailto:{{ user.email }}" target="_blank"><b>{{ user.email }}</b></a></p>
+                        <p>Téléphone : {{ user.getPhoneWithSpace() }}</p>
                     </div>
                 </div>
-            {% endif %}
-            <div class="w-full md:w-1/2 shadow">
-                <div class="px-4 py-2 bg-gray-50">
-                    <i class="fa-solid fa-address-book w-4"></i>
-                    <span>Contact</span>
-                </div>
-                <div class="text-xs leading-5 p-4">
-                    <p>Email : <a href="mailto:{{ user.email }}" target="_blank"><b>{{ user.email }}</b></a></p>
-                    <p>Téléphone : {{ user.getPhoneWithSpace() }}</p>
-                </div>
             </div>
-        </div>
-    </div>
+        </twig:Card>
+
+    </twig:Card>
 {% endblock %}

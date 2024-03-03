@@ -1,11 +1,11 @@
 <h3 class="text-lg mb-2">Réinitialiser mon mot de passe</h3>
-{% from "@components/macros/content.html.twig" import button_macro %}
 {{ form_start(form) }}
 {{ form_rest(form) }}
 <div class="flex flex-row-reverse">
-    {{ button_macro({
-        text: button_label|default('Modifier'),
-        custom_classes: ["group", "rounded", "p-2", "bg-primary-500", "text-white", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-700"],
-    }) }}
+    <twig:Button
+        text="{{ button_label|default('Modifier') }}"
+        icon="fa-edit"
+        variant="small"
+    />
 </div>
 {{ form_end(form) }}

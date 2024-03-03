@@ -17,15 +17,14 @@
             <a href="{{ path('app_product_index') }}">Retour à la liste</a>
         </div>
 
-        <div>
-
-        <div class="p-4 shadow-md w-1/2 border rounded">
-            <div class="text-sm">
+        <twig:Card
+            :padding="4"
+        >
+            {% block content %}
                 {{ include('product/_form.html.twig', {
                     button_label: 'Modifier',
                 }) }}
-            </div>
-        </div>
-        </div>
+            {% endblock %}
+        </twig:Card>
     </div>
 {% endblock %}

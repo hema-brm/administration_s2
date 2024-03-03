@@ -17,29 +17,15 @@
               <i class="fa-solid fa-arrow-left mr-1"></i>
               <a href="{{ path('app_product_index') }}">Retour à la liste</a>
           </div>
-
-          <div>
-            <div class="flex justify-end py-2 gap-2 w-1/2">
-                <twig:Button
-                    id="category_open_button"
-                    text="Catégorie"
-                    color="primary"
-                    type="secondary"
-                    variant="small"
-                    route="{{ path('app_category_index') }}"
-                />
-            </div>
-
-          </div>
-          <div class="p-4 shadow-md w-1/2 border rounded">
-              <div class="text-sm">
+          <twig:Card
+              :padding="4"
+          >
+              {% block content %}
                   {% include('product/_form.html.twig') with {
                       button_label: 'Ajouter',
                   } %}
-              </div>
-          </div>
-          </div>
-          
+              {% endblock %}
+          </twig:Card>
       </div>
   {% endblock %}
   

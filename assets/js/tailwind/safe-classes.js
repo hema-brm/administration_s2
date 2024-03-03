@@ -11,6 +11,11 @@ const availableTailwindSafeClasses = [
         // pattern for tailwind rounded size or text size or shadow size
         pattern: /^(rounded|text|shadow)-([a-z]+)-?$/,
         variants: ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
+    },
+    {
+        // pattern for Tailwind CSS block and hidden utilities
+        pattern: /^(block|hidden)$/,
+        variants: ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
     }
 ];
 
