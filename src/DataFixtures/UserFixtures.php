@@ -29,17 +29,13 @@ class UserFixtures extends Fixture implements DependentFixtureInterface, Fixture
 
     private function addAdmin(ObjectManager $manager): void
     {
-        $company = $this->getReference('company-0');
         $user = (new User())
             ->setFirstName('Super')
             ->setLastName('Admin')
             ->setPhoneNumber('0102030405')
             ->setEmail('admin@easyvows.com')
             ->setRoles(['ROLE_ADMIN'])
-            ->setCompany($company);
         ;
-
-        $company->addUser($user);
 
         $user->setPassword('admin');
 

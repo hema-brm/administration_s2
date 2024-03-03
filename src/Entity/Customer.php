@@ -18,7 +18,7 @@ class Customer
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true, nullable: false)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank(message: 'Veuillez saisir une adresse email.')]
     #[Assert\Email(message: 'Veuillez saisir une adresse email valide.')]
     private string $email;

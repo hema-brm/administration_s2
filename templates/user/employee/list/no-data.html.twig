@@ -1,8 +1,5 @@
-{% from "@components/macros/content.html.twig" import alert %}
-
-{{ alert({
-    text: 'Aucun employé n\'a été trouvé',
-    color: 'warning',
-    icon: 'fa-circle-info',
-    variant: 'small',
-}) }}
+<twig:Alert
+    color="info"
+    text="Aucun employé n'a été trouvé"
+    icon="fa-info-circle"
+/>

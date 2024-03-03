@@ -1,10 +1,10 @@
 {% include '@user/employee/list/delete-many-button-confirm.html.twig' %}
 
 <div class="flex flex-row items-center justify-between py-2">
-    <a href="{{ path('app_employee_new') }}">
-        <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-            <i class="fa-solid fa-plus"></i>
-            <span>Nouvel employé</span>
-        </button>
-    </a>
+    <twig:Button
+        text="Nouvel employé"
+        type="secondary"
+        icon="fa-plus"
+        route="{{ path('app_employee_new') }}"
+    />
 </div>

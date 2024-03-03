@@ -7,11 +7,12 @@
             } %}
         {% endembed %}
 
-        <a href="{{ path('app_quote_new') }}">
-            <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-                <i class="fa-solid fa-plus"></i>
-                <span>Nouveau devis</span>
-            </button>
-        </a>
+        <twig:Button
+            text="Nouveau devis"
+            type="secondary"
+            icon="fa-plus"
+            route="{{ path('app_quote_new') }}"
+            variant="default"
+        />
     </div>
 </div>

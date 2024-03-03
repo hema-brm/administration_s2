@@ -1,0 +1,82 @@
+{% set cellPadding = 'p-4 px-2' %}
+{% set borderClass = 'border-b border-b-secondary-200' %}
+{% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+
+<table 
+    class="w-full border shadow-sm text-sm"
+    data-controller="form--checkbox--multiple"
+
+
+    <thead>
+    <tr class="{{ tableHeaderClasses }}">
+        <th class="{{ cellPadding }} text-center">
+            <input type="checkbox" class="bills-checkbox" data-form--checkbox--multiple-target="main">
+        </th>
+        <th class="{{ cellPadding }} text-center">N° facture</th>
+        <th class="{{ cellPadding }} text-left">Client</th>
+        <th class="{{ cellPadding }} text-left">Statut</th>
+        <th class="{{ cellPadding }} text-right">Date d'émission</th>
+        <th class="{{ cellPadding }} text-right"></th>
+    </tr>
+    </thead>
+    <tbody>
+        
+    {% for bill in bills %}
+        <tr
+            data-controller="link--clickable"
+            data-link--clickable-path-value="{{ path('app_bill_show', { 'id': bill.id }) }}"
+            data-action="click->link--clickable#visit"
+            data-link--clickable-target="element" 
+            class="{{ borderClass }} hover:bg-secondary-50 hover:border-x hover:border-x-primary-500"
+        >
+            <td class="{{ cellPadding }} text-center" data-link--clickable-target="exclude">
+                {% if bill.getStatus == 0 %}
+                <input
+                    type="checkbox"
+                    class="bill-checkbox"
+                    name="bills[{{ bill.id }}]"
+                    value="{{ csrf_token('delete' ~ bill.id) }}"
+                    data-form--checkbox--multiple-target="items"
+                    data-form--checkbox--post-target="items"
+                >
+                {% endif %}
+            </td>
+            <td class="{{ cellPadding }} text-center">{{ bill.getBillNumber() }}</td>
+            <td class="{{ cellPadding }} text-left">{{ bill.getCustomer() }}</td>
+            <td class="{{ cellPadding }} text-left">{{ bill.getStatus() ? 'Envoyé' : 'Brouillon'}}</td>
+            <td class="{{ cellPadding }} text-right">{{ bill.getBillIssuanceDate()|date('Y-m-d') }}</td>
+
+            <td class="{{ cellPadding }} text-right text-secondary-400">
+                <div class="flex flex-row justify-end gap-3" data-link--clickable-target="exclude">
+                    {% if isGTEmployee %}
+                    {{ include("components/navigation/bar/item/mailing-choice.html.twig", {
+                        customerID:bill.getCustomer().getId(),
+                        firstRoute: path('app_mailer_billReminderEmail', {'customer': bill.getCustomer().getId()}),
+                        secondRoute: path('app_mailer_billLateEmail', {'customer': bill.getCustomer().getId(), 'bill': bill.getId()}),
+                        thirdRoute: path('app_mailer_billReplayEmail', {'customer': bill.getCustomer().getId(), 'bill': bill.getId()}),
+                        firstChoiceText: "Envoyer un mail de rappel",
+                        secondChoiceText: "Envoyer un mail de retard",
+                        thirdChoiceText: "Renvoyer la facture en PDF"
+                    }) }}
+                    {% endif %}
+                    {% if bill.getStatus() == 0 %}
+                        <twig:Button
+                            color="secondary"
+                            type="secondary"
+                            route="{{ path('app_bill_edit', {'id': bill.id}) }}"
+                            icon="fa-edit"
+                            variant="icon"
+                        />
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">
+            {% include "bill/list/no-data.html.twig" %}
+            </td>
+        </tr>        
+    {% endfor %}
+    </tbody>
+</table>

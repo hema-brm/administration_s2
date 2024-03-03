@@ -16,32 +16,30 @@
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="#">Retour à la liste</a>
         </div>
-        <div class="p-4 shadow-md w-1/2 border rounded">
+        <twig:Card>
             <div class="text-sm">
                 {{ form_start(form) }}
-                    {{ form_row(form.firstName) }}
-                    {{ form_row(form.lastName) }}
-                    {{ form_row(form.email) }}
-                    {{ form_row(form.password) }}
-                    {{ form_row(form.company) }}
-                    {{ form_row(form.roles) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.company) }}
+                {{ form_row(form.roles) }}
 
-                    <div class="flex flex-row-reverse">
-                        {{ button_macro({
-                            text: 'Ajouter',
-                            custom_classes: [
-                                'bg-primary-500',
-                                'text-white',
-                                'hover:bg-primary-600',
-                                'ml-2',
-                            ],
-                        }) }}
-                    </div>
+                <div class="flex flex-row-reverse">
+                    {{ button_macro({
+                        text: 'Ajouter',
+                        custom_classes: [
+                            'bg-primary-500',
+                            'text-white',
+                            'hover:bg-primary-600',
+                            'ml-2',
+                        ],
+                    }) }}
+                </div>
 
                 {{ form_end(form) }}
             </div>
-        </div>
-        </div>
-        
+        </twig:Card>
     </div>
 {% endblock %}

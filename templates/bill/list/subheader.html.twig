@@ -1,0 +1,18 @@
+<div class="flex flex-row items-center justify-between py-2">
+    <div class="flex flex-row justify-end items-center py-2 gap-2">
+        {% embed "./modal/delete-many-button-confirm.html.twig" with {
+            formAction : 'app_bill_deleteAll',
+            customFormId : 'deleteManyBillsForm',
+            text: 'Êtes-vous sûrs de vouloir supprimer ce(s) devis ?',
+            } %}
+        {% endembed %}
+        {% if isGTEmployee %}
+            <twig:Button
+                text="Nouvelle facture"
+                type="secondary"
+                icon="fa-plus"
+                route="{{ path('app_bill_new') }}"
+            />
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<form
+        id="deleteManyBillsForm"
+        data-form--checkbox--post-target="form"
+        action="{{ path('app_bill_deleteAll') }}"
+        method="POST"
+>
+    {% include 'bill/list/table.html.twig' %}
+</form>

@@ -2,14 +2,17 @@
 
 namespace App\Service\Quote;
 
-use App\Entity\Customer;
-use App\Entity\Product;
-use App\Entity\ProductQuote;
 use App\Entity\Quote;
-use App\Repository\CustomerRepository;
-use App\Repository\ProductRepository;
+use App\Entity\Product;
+use App\Entity\Customer;
+use App\Service\PdfService;
+use App\Entity\ProductQuote;
 use App\Repository\QuoteRepository;
+use App\Controller\MailerController;
+use App\Repository\ProductRepository;
+use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\Quote\QuotePdfController;
 
 class QuoteCreatorService {
 
@@ -21,6 +24,9 @@ class QuoteCreatorService {
         private readonly CustomerRepository $customerRepository,
         private readonly ProductRepository $productRepository,
         private readonly QuoteRepository $quoteRepository,
+        private readonly PdfService $pdfService,
+        private readonly QuotePdfController $quotePdfController,
+        private readonly MailerController $mailer
     ) {}
 
     private static function setDefaultIssuanceDate(?\DateTime &$defaultIssuanceDate, ?Quote $quote = null): void
@@ -242,6 +248,11 @@ class QuoteCreatorService {
     {
         $this->removeExistingProductQuotes($entityManager, $quoteData, $lineItems);
         $this->setQuoteBeforeSaving($entityManager, $quoteData, $customerId, $quoteNumber, $issuanceDate, $expiryDate, $discount, $status, $lineItems);
+        
+        if($quoteData->getStatus() == Quote::STATUS_SENT || $quoteData->getStatus() == Quote::STATUS_ACCEPTED){
+            $this->mailer->newQuoteCreateEmail($quoteData->getCustomer(), $quoteData, $this->pdfService, $this->quotePdfController);
+        }
+        
     }
 
     private static function areAnyLineItemsEditing(array $lineItems): bool

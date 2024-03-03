@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Quote;
 use App\Entity\Customer;
+use App\Service\Customer\AccessibleCustomerService;
 use App\Util\Quote\Status\QuoteStatusLabel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -19,6 +20,13 @@ use App\Validator\Constraint as EasyVowsConstraint;
 
 class QuoteType extends AbstractType
 {
+
+    public function __construct(
+        private readonly AccessibleCustomerService $accessibleCustomerService,
+    )
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /**
@@ -43,6 +51,7 @@ class QuoteType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Client',
                 ],
+                'query_builder' => $this->accessibleCustomerService->getFindAllQuery(),
             ])
             ->add('quote_number', TextType::class, [
                 'label' => 'Numéro',

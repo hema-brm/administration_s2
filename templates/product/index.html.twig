@@ -1,6 +1,5 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
-{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 {% from "@components/macros/content.html.twig" import paginator %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
@@ -29,12 +28,12 @@
                     text: 'Êtes-vous sûrs de vouloir supprimer ce(s) produit(s) ?',
                 } %}
                 {% endembed %}
-                {{ button_macro({
-                    custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                    text:  "Nouveau produit",
-                    icon: "fa-plus",
-                    route : path('app_product_new')
-                }) }}
+                <twig:Button
+                    text="Nouveau produit"
+                    type="secondary"
+                    icon="fa-plus"
+                    route="{{ path('app_product_new') }}"
+                />
             </div> 
             {% endif %}
         </div>
@@ -113,21 +112,24 @@
                     <td class="{{ cellPadding }} text-right max-w-[20px] truncate">{{ product.getPrice() }}</td>
                     <td class="{{ cellPadding }} text-right text-secondary-400">
                         {% if isGTCompany %}
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" data-link--clickable-target="exclude">
-                            <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                        </a>
+                            <twig:Button
+                                color="secondary"
+                                type="secondary"
+                                route="{{ path('app_product_edit', {'id': product.id}) }}"
+                                icon="fa-edit"
+                                variant="icon"
+                            />
                         {% endif %}
                     </td>
                 </tr>
             {% else %}
                 <tr>
                     <td colspan="10">
-                        {{ alert({
-                            text: 'Aucun produit enregistré',
-                            color: 'warning',
-                            icon: 'fa-circle-info',
-                            variant: 'small',
-                        }) }}
+                        <twig:Alert
+                            color="info"
+                            text="Aucun produit enregistré"
+                            icon="fa-info-circle"
+                        />
                     </td>
                 </tr>
             {% endfor %}

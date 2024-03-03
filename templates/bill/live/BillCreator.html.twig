@@ -1,12 +1,13 @@
 <div {{ attributes }}>
     {{ displayFlash() }}
-    <div class="border shadow-lg p-4 mb-4">
+
+    <div class="mb-3">
         {% include '@bill/live/form.html.twig' %}
     </div>
-
-    <div class="border shadow p-4 mb-3">
+    <div class="mb-3">
         {% include '@bill/live/product-bill.html.twig' %}
     </div>
+
     {% if not _productItemsIsEmpty %}
     <div class="flex justify-end mb-3 bg-white">
         {% include '@bill/live/BillCreator/bill-amount.html.twig' %}

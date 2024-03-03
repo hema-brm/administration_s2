@@ -1,0 +1,59 @@
+{% extends '@base/app.html.twig' %}
+{% from "@components/macros/content.html.twig" import header %}
+{% from "@components/input/macros/index.html.twig" import form_search_macro %}
+
+{% block title %}Rapport{% endblock %}
+
+{% block body %}
+    {{ header({
+        text: 'Rapport',
+    }) }}
+    
+    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+        <form id="periodForm" action="{{ path('report') }}" method="GET" class="mb-4 md:mb-0">
+            <select name="period" onchange="document.getElementById('periodForm').submit()" class="py-2 px-4 border rounded-md">
+                <option value="month" {% if app.request.query.get('period', 'month') == 'month' %}selected{% endif %}>Datavisualisation par mois</option>
+                <option value="year" {% if app.request.query.get('period', 'month') == 'year' %}selected{% endif %}>Datavisualisation par année</option>
+            </select>
+        </form>
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 mb-4 md:mb-0 md:pr-2">
+                {{ render_chart(chart) }}
+            </div>
+            <div class="w-full md:w-1/2 md:pl-2">
+                {{ render_chart(doughnutChart) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="shadow-md bg-gray-100 m-6 p-3 rounded-md">
+        {% set cellPadding = 'p-4 px-2' %}
+        {% set borderClass = 'border-b border-b-secondary-200' %}
+        {% set tableHeaderClasses = borderClass ~ ' bg-secondary-50' %}
+        <h2 class="text-lg font-medium mb-4">Ventes par produit</h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full border shadow-sm text-sm">
+                <thead>
+                    <tr class="{{ tableHeaderClasses }}">
+                        <th class="{{ cellPadding }} text-left">Mois</th>
+                        <th class="{{ cellPadding }} text-left">Produit</th>
+                        <th class="{{ cellPadding }} text-center">Nombre de produits vendus</th>
+                        <th class="{{ cellPadding }} text-left">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for productSale in productSales %}
+                        <tr>
+                            <td class="{{ cellPadding }} text-left">{{ productSale.period }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ productSale.productName }}</td>
+                            <td class="{{ cellPadding }} text-center">{{ productSale.totalQuantity }}</td>
+                            <td class="{{ cellPadding }} text-left">{{ productSale.totalAmount }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

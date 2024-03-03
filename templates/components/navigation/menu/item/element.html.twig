@@ -53,11 +53,10 @@
             icon: 'fa-solid fa-chart-line',
             route:'accountant'
         }) }}
-        
         {{ menuMacro.item({
-            text: 'Revenus',
-            icon: 'fa-solid fa-sack-dollar',
-            route:'accountant'
+            text: 'Factures',
+            icon: 'fa-file-invoice-dollar',
+            route: 'app_bill_index'
         }) }}
         {{ menuMacro.item({
             text: 'Suivi paiements',
@@ -65,9 +64,9 @@
             route:'app_payment_index'
         }) }}
         {{ menuMacro.item({
-            text: 'Rapports financiers',
+            text: 'Rapports',
             icon: 'fa-regular fa-file-invoice',
-            route:'accountant'
+            route:'report'
         }) }}
     {% endif %}
 </ul>

@@ -48,14 +48,21 @@
             {% endif %}
             <td class="{{ cellPadding }} text-left">
                 {% for role in user.rolesLabel %}
-                    <span class="mr-1 p-1 bg-{{ role.color }}-100 text-{{ role.color }}-600 rounded">{{ role.text }}</span>
+                    <twig:Chip
+                        color="{{ role.color }}"
+                        text="{{ role.text }}"
+                        size="small"
+                    />
                 {% endfor %}
             </td>
             <td class="{{ cellPadding }} text-right text-gray-400">
-                <a href="{{ path('app_employee_edit', {'id': user.id}) }}"
-                   data-link--clickable-target="exclude">
-                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                </a>
+                <twig:Button
+                    color="secondary"
+                    type="secondary"
+                    route="{{ path('app_employee_edit', {'id': user.id}) }}"
+                    icon="fa-edit"
+                    variant="icon"
+                />
             </td>
         </tr>
     {% else %}

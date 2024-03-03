@@ -2,26 +2,36 @@
 // ProductQuoteType.php
 namespace App\Form;
 
-use App\Form\Field\ProductAutocompleteField;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Product;
 use App\Entity\ProductBill;
+use App\Repository\ProductRepository;
+use App\Service\Product\AccessibleProductService;
+use Symfony\Component\Form\AbstractType;
+use App\Form\Field\ProductAutocompleteField;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class ProductBillType extends AbstractType
 {
+    public function __construct(
+        private readonly AccessibleProductService $accessibleProductService,
+    )
+    {
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'label' => 'Choisissez un produit',
+                'query_builder' => $this->accessibleProductService->findAll(),
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',

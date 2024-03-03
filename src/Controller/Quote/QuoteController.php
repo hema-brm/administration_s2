@@ -11,6 +11,7 @@ use App\Repository\BillRepository;
 use App\Repository\QuoteRepository;
 use App\Service\Bill\BillCreatorService;
 use App\Service\PdfService;
+use App\Service\Quote\AccessibleQuoteService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
@@ -19,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/quote', name: 'app_quote_')]
 class QuoteController extends AbstractController
@@ -41,13 +43,10 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(QuoteRepository $quoteRepository): Response
+    #[IsGranted('view')]
+    public function index(AccessibleQuoteService $accessibleQuoteService): Response
     {
-        if ($this->searchTerm) {
-            return $this->search($this->searchTerm, $quoteRepository);
-        }
-        
-        $quotes = $quoteRepository->findAllWithPage($this->page, self::LIMIT); 
+        $quotes = $accessibleQuoteService->findAllOverPages($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($quotes), self::LIMIT);
 
         
@@ -128,6 +127,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer, PdfService $pdfService): Response
     {
         // Get the logged-in user
@@ -166,6 +166,7 @@ class QuoteController extends AbstractController
     }
     
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('edit', 'quote')]
     public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(QuoteType::class, $quote);
@@ -185,6 +186,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
+    #[IsGranted('add')]
     public function deleteMany(Request $request, QuoteRepository $quoteRepository, EntityManagerInterface $entityManager): Response
     {
         $quotes = $request->request->all()['quotes'];
@@ -196,12 +198,13 @@ class QuoteController extends AbstractController
                 $count++;
             }
         }
-        $this->addFlash('success', $count.' devis(s) supprimé(s) avec succès.');
+        $this->addFlash('success', $count.' devis supprimé(s) avec succès.');
         $entityManager->flush();
         return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/show', name: 'show', methods: ['GET'])]
+    #[IsGranted('read', 'quote')]
     public function show(Quote $quote): Response
     {
         return $this->render('quote/show.html.twig', [
@@ -210,6 +213,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted('delete', 'quote')]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {

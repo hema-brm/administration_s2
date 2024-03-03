@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/pdf/quote', name: 'app_quote_pdf_')]
 class QuotePdfController extends AbstractController
 {
-    private function generateHtml(Quote $quote) : string{
+    public function generateHtml(Quote $quote) : string{
 
         $categories = [];
 

@@ -22,7 +22,7 @@ class PaymentType extends AbstractType
                     'En Retard' => 'en retard',
                     'En Cours' => 'en cours',
                 ],
-                'label' => 'Status du paiement', 
+                'label' => 'Status du paiement',
             ])
             ->add('moyen', ChoiceType::class, [
                 'choices' => [
@@ -31,7 +31,7 @@ class PaymentType extends AbstractType
                     'Chèque' => 'chèques',
                     'Virement bancaire' => 'vb',
                 ],
-                'label' => 'Moyen de paiement', 
+                'label' => 'Moyen de paiement',
             ])
             ->add('datePaiement', DateTimeType::class, [
                 'required' => false,
@@ -43,8 +43,8 @@ class PaymentType extends AbstractType
             ])
             ->add('bill', EntityType::class, [
                 'class' => Bill::class,
-                'choice_label' => 'nameClient', 
-                'label' => 'Client',
+                'choice_label' => 'getBillNumber',
+                'label' => 'Numéro de facture',
             ]);
     }
 
