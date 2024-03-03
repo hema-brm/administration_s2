@@ -2,21 +2,23 @@
 
 namespace App\Controller\Bill;
 
-use App\Service\Bill\AccessibleBillService;
 use DateTime;
 use App\Entity\Bill;
 use App\Form\BillType;
 use App\Service\PdfService;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
+use App\Controller\MailerController;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\Bill\BillPdfController;
+use App\Service\Bill\AccessibleBillService;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/bill', name: 'app_bill_')]
 class BillController extends AbstractController
@@ -25,11 +27,20 @@ class BillController extends AbstractController
 
     private $kernel;
 
-    public function __construct(KernelInterface $kernel, Security $security)
+    public function __construct(
+        KernelInterface $kernel,
+        Security $security, 
+        PdfService $pdfService, 
+        BillPdfController $billPdfController,
+        MailerController $mailer
+        )
     {
         $this->kernel = $kernel;
         $this->isAdmin = $security->isGranted('ROLE_ADMIN');
         $this->isGTEmployee = $security->isGranted('ROLE_EMPLOYEE');
+        $this->pdfService = $pdfService;
+        $this->billPdfController = $billPdfController;
+        $this->mailer = $mailer;
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -100,11 +111,17 @@ class BillController extends AbstractController
     #[IsGranted('edit', 'bill')]
     public function edit(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
     {
+        $originalStatus = $bill->getStatus();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $data = $form->getData();
+            $updatedStatus = $data->getStatus();
+            if($originalStatus === Bill::STATUS_DRAFT && $updatedStatus === Bill::STATUS_SENT){
+                $this->mailer->newBillCreateEmail($data->getCustomer(), $data, $this->pdfService, $this->billPdfController);
+            }
 
             return $this->redirectToRoute('app_bill_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -28,6 +28,18 @@ class MailerController extends AbstractController
             $this->templateBillReplayID = $_ENV['TEMPLATE_BILL_REPLAY_ID'];
             $this->templateBillLateID = $_ENV['TEMPLATE_BILL_LATE_ID'];
         }
+
+        public function changeBillStatus(Bill $bill){
+            if($bill->getStatus() != Bill::STATUS_SENT){
+                $bil->setStatus(Bill::STATUS_SENT);
+            }
+        }
+
+        public function changeQuoteStatus(Quote $quote){
+            if($quote->getStatus() == Quote::STATUS_DRAFT){
+                $quote->setStatus(Quote::STATUS_SENT);
+            }
+        }
         
         public function generateFilenameAndHTML(string $type, Customer $customer)
         {
@@ -43,6 +55,7 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateQuoteReminderID, $customer);
 
             if($email){
+                $this->changeQuoteStatus($quote);
                 $this->addFlash('success', "Le mail de rappel à été envoyé avec succès.");
             }
             else{
@@ -63,6 +76,7 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateQuoteReplayID, $customer, $filename);
 
             if($email){
+                $this->changeQuoteStatus($quote);
                 $this->addFlash('success', "Le PDF du devis a été envoyé avec succès.");
             }
             else{
@@ -98,6 +112,7 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateBillReminderID, $customer);
             
             if($email){
+                $this->changeBillStatus($bill);
                 $this->addFlash('success', "Le mail de rappel à été envoyé avec succès.");
             }
             else{
@@ -117,6 +132,7 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateBillReplayID, $customer, $filename);
 
             if($email){
+                $this->changeBillStatus($bill);
                 $this->addFlash('success', "Le PDF de la facture a été envoyé avec succès.");
             }
             else{
@@ -136,6 +152,7 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateBillLateID, $customer, $filename);
 
             if($email){
+                $this->changeBillStatus($bill);
                 $this->addFlash('success', "Le mail indiquant le retard de paiement a été envoyé avec succès.");
             }
             else{
