@@ -1,6 +1,6 @@
 const availableTailwindSafeClasses = [
     {
-        pattern: /^(-)?(m([lrtb])?|max-w|min-w|max-h|min-h)-(\d+|\d+(\.\d+)?)(.*)$/,
+        pattern: /^(-)?(m([lrtb])?|max-w|min-w|max-h|min-h|grid-cols|gap)-(\d+|\d+(\.\d+)?)(.*)$/,
         variants: ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
     },
     {
@@ -9,7 +9,7 @@ const availableTailwindSafeClasses = [
     },
     {
         // pattern for tailwind rounded size or text size or shadow size
-        pattern: /^(rounded|text|shadow|grid-cols|gap)-([a-z]+)-?$/,
+        pattern: /^(rounded|text|shadow)-([a-z]+)-?$/,
         variants: ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
     }
 ];
