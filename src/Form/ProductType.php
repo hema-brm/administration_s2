@@ -4,19 +4,20 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Category;
-use App\Form\Field\CategoryAutocompleteField;
-use App\Form\Field\CompanyAutocompleteField;
+use App\Security\Roles\IUserRole;
 use App\Repository\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Form\Field\CompanyAutocompleteField;
+use App\Form\Field\CategoryAutocompleteField;
 use Symfony\Component\Security\Core\Security;
+
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class   ProductType extends AbstractType
@@ -26,7 +27,8 @@ class   ProductType extends AbstractType
     
     public function __construct(CategoryRepository $categoryRepository, Security $security)
     {
-        $this->currentUser = $security->getUser(); 
+        $this->security = $security;
+        $this->currentUser = $this->security->getUser(); 
         $this->categoryRepository = $categoryRepository;
 
     }
@@ -76,8 +78,23 @@ class   ProductType extends AbstractType
                     'placeholder' => 'Prix du produit',
                 ],
             ])
-            
-            ->add('category', CategoryAutocompleteField::class);
+            ->add('category', CategoryAutocompleteField::class, [
+                'attr' => [
+                    'wrapper' => 'compact',
+                ],
+            ]);
+
+            if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
+                $builder
+                    ->add('company', CompanyAutocompleteField::class, [
+                        'label' => 'Entreprise',
+                        'required' => true,
+                        'autocomplete' => true,
+                        'attr' => [
+                            'wrapper' => 'compact',
+                        ],
+                    ]);
+            }
 
     }
 

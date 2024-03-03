@@ -6,6 +6,10 @@
     {{ form_row(form.description) }}
     {{ form_row(form.price) }}
     {{ form_row(form.category) }}
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ form_row(form.company) }}
+    {% endif %}
 
     <div class="flex flex-row-reverse">
         <twig:Button
