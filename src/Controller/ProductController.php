@@ -88,7 +88,8 @@ class ProductController extends AbstractController
     {
         return $this->render('product/show.html.twig', [
             'product' => $product,
-            'isGTCompany' => $this->isGTCompany
+            'isGTCompany' => $this->isGTCompany,
+            'showCompany' => $this->isAdmin
         ]);
     }
 

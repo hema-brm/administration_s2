@@ -1,8 +1,5 @@
-{% from "@components/macros/content.html.twig" import alert %}
-
-{{ alert({
-    text: 'Aucune catégorie n\'a été trouvée',
-    color: 'warning',
-    icon: 'fa-circle-info',
-    variant: 'small',
-}) }}
+<twig:Alert
+    color="info"
+    text="Aucune catégorie n'a été trouvée"
+    icon="fa-info-circle"
+/>

@@ -18,7 +18,7 @@ class AccessibleCustomerService {
         private readonly CustomerRepository $customerRepository,
     ) {}
 
-    public function findAll(): QueryBuilder
+    public function getFindAllQuery(): QueryBuilder
     {
         $queryBuilder = $this->customerRepository->createQueryBuilder('c');
 

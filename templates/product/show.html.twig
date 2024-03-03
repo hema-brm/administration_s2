@@ -31,6 +31,12 @@
             <div class="text-sm leading-10 p-4">
                 <table>
                     <tbody>
+                        {% if showCompany %}
+                            <tr>
+                                <th class="align-top text-left w-1/4">Entreprise :</th>
+                                    <td class="leading-5">{{ product.getCompany() }}</td>
+                            </tr>
+                        {% endif %}
                         <tr>
                             <th class="align-top text-left w-1/4">Référence :</th>
                             {% if product.description is empty %}

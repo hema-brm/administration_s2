@@ -18,12 +18,6 @@
             {% block content %}
                 {% include('@customer/index/_form.html.twig') with {
                     button_label: 'Ajouter',
-                    button_classes: [
-                        'bg-primary-500',
-                        'text-white',
-                        'hover:bg-primary-600',
-                        'ml-2',
-                    ],
                 } %}
             {% endblock %}
         {% endembed %}

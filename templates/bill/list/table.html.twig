@@ -60,11 +60,14 @@
                     }) }}
                     {% endif %}
                     {% if bill.getStatus() == 0 %}
-                    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}" data-turbo-action="replace"
-                       data-link--clickable-target="exclude">
-                        <i class="fa-solid fa-edit hover:text-warning-500"></i>
+                        <twig:Button
+                            color="secondary"
+                            type="secondary"
+                            route="{{ path('app_bill_edit', {'id': bill.id}) }}"
+                            icon="fa-edit"
+                            variant="icon"
+                        />
                     {% endif %}
-                    </a>                    
                 </div>
             </td>
         </tr>

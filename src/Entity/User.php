@@ -63,8 +63,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     private ?string $password = null;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Company $company;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Company $company;
 
     #[Vich\UploadableField(mapping: 'avatar', fileNameProperty: 'picture')]
     #[Assert\Image(
@@ -238,12 +238,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         // $this->plainPassword = null;
     }
 
-    public function getCompany(): Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(Company $company): self
+    public function setCompany(?Company $company = null): self
     {
         $this->company = $company;
 

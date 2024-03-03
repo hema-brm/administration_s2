@@ -12,13 +12,12 @@
             text: 'Êtes-vous sûrs de vouloir supprimer ce(s) client(s) ?',
             } %}
             {% endembed %}
-
-            <a href="{{ path('app_customer_new') }}">
-                <button class="group rounded p-2 bg-primary-50 text-primary-500 text-sm transition-all ease-in-out hover:bg-primary-500 hover:text-white">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Nouveau client</span>
-                </button>
-            </a>
+            <twig:Button
+                text="Nouveau client"
+                type="secondary"
+                icon="fa-plus"
+                route="{{ path('app_customer_new') }}"
+            />
     </div>
    
 </div>

@@ -33,7 +33,7 @@ class BillType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Client',
                 ],
-                'query_builder' => $this->accessibleCustomerService->findAll(),
+                'query_builder' => $this->accessibleCustomerService->getFindAllQuery(),
             ])
             ->add('bill_number', IntegerType::class, [
                 'label' => 'Numéro',

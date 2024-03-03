@@ -1,7 +1,6 @@
 {% extends '@base/app.html.twig' %}
 {% from "@components/macros/content.html.twig" import header %}
 {% from "@components/input/macros/index.html.twig" import form_search_macro %}
-{% from "@components/macros/content.html.twig" import alert %}
 {% from "@components/macros/content.html.twig" import button_macro %}
 
 {% block title %}Suivis de paiement{% endblock %}
@@ -30,12 +29,12 @@
                         text: 'Êtes-vous sûrs de vouloir supprimer ce(s) suivi(s) de paiement(s) ?',
                     } %}
                     {% endembed %}
-                    {{ button_macro({
-                        custom_classes: ["group", "rounded", "p-2", "bg-primary-50", "text-primary-500", "text-sm", "transition-all", "ease-in-out", "hover:bg-primary-500", "hover:text-white"],
-                        text:  "Nouveau paiement",
-                        icon: "fa-plus",
-                        route : path('app_payment_new')
-                    }) }}
+                    <twig:Button
+                        text="Nouveau paiement"
+                        type="secondary"
+                        icon="fa-plus"
+                        route="{{ path('app_payment_new') }}"
+                    />
                 </div>
             </div>
             {% set cellPadding = 'p-4 px-2' %}
@@ -88,20 +87,23 @@
                             <td class="{{ cellPadding }} text-left">{{ payment.dateEcheance ? payment.dateEcheance|date('d-m-Y H:i') : '' }}</td>
                             
                             <td class="{{ cellPadding }} text-right text-secondary-400">
-                                <a href="{{ path('app_payment_edit', {'id': payment.id}) }}" data-link--clickable-target="exclude">
-                                    <i class="fa-solid fa-edit hover:text-warning-500"></i>
-                                </a>
+                                <twig:Button
+                                    color="secondary"
+                                    type="secondary"
+                                    route="{{ path('app_payment_edit', {'id': payment.id}) }}"
+                                    icon="fa-edit"
+                                    variant="icon"
+                                />
                             </td>
                         </tr>
                     {% else %}
                         <tr>
                             <td colspan="7">
-                                {{ alert({
-                                    text: 'Aucun paiement enregistré',
-                                    color: 'warning',
-                                    icon: 'fa-circle-info',
-                                    variant: 'small',
-                                }) }}
+                                <twig:Alert
+                                    color="info"
+                                    text="Aucun paiement enregistré"
+                                    icon="fa-info-circle"
+                                />
                             </td>
                         </tr>
                     {% endfor %}

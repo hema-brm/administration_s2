@@ -9,7 +9,7 @@
         text: 'Devis',
     }) }}
 
-    <div class= "flex flex-row items-center justify-between mb-4 m-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+    <div class="flex flex-row items-center justify-between mb-4 m-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
         <div>
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_quote_index') }}">Retour à la liste</a>
@@ -18,17 +18,16 @@
             <twig:Button
                 text="PDF"
                 color="secondary"
+                type="secondary"
                 route="{{ path('app_quote_pdf_show', {'id': quote.id}) }}"
                 target="_blank"
                 icon="fa-file-pdf"
-                variant="secondary"
             />
             <twig:Button
                 text="Transformer en facture"
                 color="secondary"
                 route="{{ path('app_quote_to_bill', {'id': quote.id}) }}"
                 icon="fa-random"
-                variant="secondary"
             />
             <twig:Button
                 text="Modifier"

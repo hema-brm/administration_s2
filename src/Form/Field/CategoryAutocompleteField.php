@@ -2,13 +2,16 @@
 
 namespace App\Form\Field;
 
+use App\Entity\Company;
 use App\Entity\Category;
+use App\Security\Roles\IUserRole;
+use Doctrine\ORM\EntityRepository;
+use App\Query\Company\CompanyExists;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
 use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\Security;
 
 #[AsEntityAutocompleteField]
 class CategoryAutocompleteField extends AbstractType
@@ -17,7 +20,8 @@ class CategoryAutocompleteField extends AbstractType
 
     public function __construct(Security $security)
     {
-        $this->currentUser = $security->getUser(); 
+        $this->security = $security;
+        $this->currentUser = $this->security->getUser(); 
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -35,9 +39,13 @@ class CategoryAutocompleteField extends AbstractType
             'multiple' => false,
             'autocomplete' => true,
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('c')
-                    ->andWhere('c.company = :company')
+                if ($this->security->isGranted(IUserRole::ROLE_ADMIN)) {
+                    return (new CompanyExists())
+                        ->apply($er->createQueryBuilder('c'));
+                } else {
+                    return $er->createQueryBuilder('c')->andWhere('c.company = :company')
                     ->setParameter('company', $this->currentUser->getCompany());
+                }
             },
         ]);
     }

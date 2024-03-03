@@ -11,6 +11,7 @@ use App\Repository\BillRepository;
 use App\Repository\QuoteRepository;
 use App\Service\Bill\BillCreatorService;
 use App\Service\PdfService;
+use App\Service\Quote\AccessibleQuoteService;
 use App\Service\Request\PageFromRequestService;
 use App\Service\Request\RequestQueryService;
 use App\Twig\Helper\Paginator\PaginatorHelper;
@@ -43,13 +44,9 @@ class QuoteController extends AbstractController
 
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('view')]
-    public function index(QuoteRepository $quoteRepository): Response
+    public function index(AccessibleQuoteService $accessibleQuoteService): Response
     {
-        if ($this->searchTerm) {
-            return $this->search($this->searchTerm, $quoteRepository);
-        }
-        
-        $quotes = $quoteRepository->findAllWithPage($this->page, self::LIMIT); 
+        $quotes = $accessibleQuoteService->findAllOverPages($this->page, self::LIMIT);
         $paginatorHelper = new PaginatorHelper($this->page, count($quotes), self::LIMIT);
 
         
@@ -190,7 +187,7 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/delete', name: 'deleteAll', methods: ['POST'])]
-    #[IsGranted('edit', 'quote')]
+    #[IsGranted('add')]
     public function deleteMany(Request $request, QuoteRepository $quoteRepository, EntityManagerInterface $entityManager): Response
     {
         $quotes = $request->request->all()['quotes'];

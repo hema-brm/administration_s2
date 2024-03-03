@@ -49,11 +49,13 @@ class CategoryController extends AbstractController
          $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-    $category->setCompany($this->getUser()->getCompany());
-    $entityManager->persist($category);
-    $entityManager->flush();
+        if ($category->getCompany() == null){
+            $category->setCompany($this->getUser()->getCompany());
+        }
+        $entityManager->persist($category);
+        $entityManager->flush();
 
-    return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
 
     return $this->render('category/new.html.twig', [

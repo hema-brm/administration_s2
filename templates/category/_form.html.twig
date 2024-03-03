@@ -10,10 +10,11 @@
     </div>
 
     <div class="flex flex-row-reverse">
-        {{ button_macro({
-            text: button_label|default('Enregistrer'),
-            custom_classes: button_classes,
-        }) }}
+        <twig:Button
+            text="{{ button_label|default('Enregistrer') }}"
+            color="primary"
+            icon="fa-plus"
+        />
     </div>
     
 {{ form_end(form) }}

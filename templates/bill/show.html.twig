@@ -21,7 +21,6 @@
                 route="{{ path('app_bill_pdf_show', {'id': bill.id}) }}"
                 target="_blank"
                 icon="fa-file-pdf"
-                variant="secondary"
             />
             {% if bill.getStatus() == 0  %}
             <twig:Button
