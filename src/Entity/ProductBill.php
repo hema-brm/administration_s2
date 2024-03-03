@@ -1,5 +1,4 @@
 <?php
-//ProductBill.php
 
 namespace App\Entity;
 

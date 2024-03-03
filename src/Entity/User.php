@@ -281,8 +281,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     {
         $this->pictureFile = $pictureFile;
 
-        // Only change the updated af if the file is really uploaded to avoid database updates.
-        // This is needed when the file should be set when loading the entity.
         if ($this->pictureFile instanceof UploadedFile) {
             $this->updatedAt = new \DateTime('now');
         }
@@ -310,12 +308,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     public function serialize()
     {
-        // TODO: Implement serialize() method.
     }
 
     public function unserialize(string $data)
     {
-        // TODO: Implement unserialize() method.
     }
 
     public function __serialize(): array

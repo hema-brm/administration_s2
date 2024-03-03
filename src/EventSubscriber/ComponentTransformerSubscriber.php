@@ -1,6 +1,5 @@
 <?php
 
-// src/EventSubscriber/ComponentTransformerSubscriber.php
 namespace App\EventSubscriber;
 
 use App\Controller\ComponentController;
@@ -18,10 +17,8 @@ class ComponentTransformerSubscriber implements EventSubscriberInterface
             $request = $event->getRequest();
             $component = $request->attributes->get('component');
 
-            // Transform the component parameter
             $transformedComponent = $this->transformComponent($component);
 
-            // Set the transformed component back to the request attributes
             $request->attributes->set('component', $transformedComponent);
         }
     }

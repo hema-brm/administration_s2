@@ -14,14 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/expenses')]
 class ExpensesController extends AbstractController
 {
-    //#[Route('/', name: 'app_expenses_index', methods: ['GET'])]
-    //public function index(ExpensesRepository $expensesRepository): Response
-    //{
-        //return $this->render('expenses/index.html.twig', [
-          //  'expenses' => $expensesRepository->findAll(),
-        //]);
-    //}
-
     #[Route('/', name: 'app_expenses_index', methods: ['GET'])]
     public function index(Request $request, ExpensesRepository $expensesRepository): Response
     {

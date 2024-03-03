@@ -28,7 +28,6 @@ class CompanyFixtures extends Fixture implements FixtureGroupInterface
 
     public function addDefaultCompany(ObjectManager $manager): void
     {
-        // add company with id = 0
         $company = new Company();
         $company
             ->setId(0)

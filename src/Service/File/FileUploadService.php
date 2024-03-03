@@ -25,7 +25,6 @@ class FileUploadService
         $safeFilename = $this->slugger->slug($originalFilename);
         $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-        // Move the file to the directory
         try {
             $file->move($directory, $newFilename);
         } catch (FileException $e) {

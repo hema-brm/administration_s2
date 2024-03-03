@@ -42,10 +42,8 @@ class PaymentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Perform additional validation to check if client name and invoice number exist in Bill table
             $selectedBill = $form->get('bill')->getData();
 
-            // If validation passes, proceed to save the payment
             $payment->setBill($selectedBill);
 
             $entityManager->persist($payment);

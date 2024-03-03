@@ -1,7 +1,5 @@
 <?php
 
-// src/Service/SalesReportService.php
-
 namespace App\Service;
 
 use App\Repository\ProductBillRepository;

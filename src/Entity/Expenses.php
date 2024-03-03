@@ -87,7 +87,6 @@ class Expenses
 
     public function setPrice(?string $price): self
     {
-        // Here, we don't set the price directly in Expenses, as it's retrieved from the associated Product
         return $this;
     }
 
@@ -102,7 +101,6 @@ class Expenses
 
     public function setCategory(?string $category): self
     {
-        // Here, we don't set the category directly in Expenses, as it's retrieved from the associated Product
         return $this;
     }
 
@@ -119,7 +117,6 @@ class Expenses
     {
         $this->total = $total;
 
-        // Mettre à jour le total en fonction de la quantité et du prix
         $quantity = $this->getQuantity();
         $price = $this->getPrice();
 

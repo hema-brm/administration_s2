@@ -17,12 +17,10 @@ class AccessibleQuote implements Criteria
             throw new \LogicException('User is not set, call withUser() first.');
         }
 
-        // if user is admin, return all customers
         if (in_array(IUserRole::ROLE_ADMIN, $this->user->getRoles())) {
             return $builder;
         }
 
-        // otherwise, return only customers from the same company
         (new QuoteOfCompany())
             ->withCompanyId($this->user->getCompany()->getId())
             ->apply($builder);

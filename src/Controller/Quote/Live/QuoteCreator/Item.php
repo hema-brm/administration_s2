@@ -226,12 +226,10 @@ class Item extends AbstractController
     #[LiveListener('product_selection_has_been_changed')]
     public function onProductChanged()
     {
-        // Do not reset the price default value if the user is editing the line item
         if (!$this->isEditing || $this->itemPriceHasBeenEdited) {
             return;
         }
 
-        // Only reset the price if the line item is not being edited, and the default price is not already set
         $this->price = $this->product->getPrice();
     }
 

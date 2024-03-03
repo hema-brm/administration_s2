@@ -1,5 +1,4 @@
 <?php
-//ProductQuote.php
 
 namespace App\Entity;
 

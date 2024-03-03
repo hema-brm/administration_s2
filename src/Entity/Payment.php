@@ -1,7 +1,5 @@
 <?php
 
-// src/Entity/Payment.php
-
 namespace App\Entity;
 
 use App\Repository\PaymentRepository;
@@ -30,8 +28,6 @@ class Payment
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $dateEcheance = null;
-
-    // Getter et Setter pour chaque propriété
 
     public function getId(): ?int
     {

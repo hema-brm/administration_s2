@@ -36,22 +36,22 @@ class RegistrationController extends AbstractController
                 // Récupérer les données du formulaire User
                 $userData = $form->getData();
 
-                // Récupérer les données de l'company à partir du formulaire
+                // Récupérer les données de l'entreprise à partir du formulaire
                 $companyName = $form->get('company')->getData();
                 $companyAdress = $form->get('address')->getData();
                 $companySiretNumber = $form->get('siretNumber')->getData();
 
-                // Créer une instance d'company et lui attribuer les données du formulaire
+                // Créer une instance de Company et lui attribuer les données du formulaire
                 $company = new Company();
                 $company->setName($companyName);
                 $company->setAddress($companyAdress);
                 $company->setSiretNumber($companySiretNumber);
 
-                // Enregistrer l'company
+                // Enregistrer l'entreprise
                 $entityManager->persist($company);
                 $entityManager->flush();
 
-                // Enregistrer l'utilisateur et associer l'company
+                // Enregistrer l'utilisateur et associer l'entreprise
                 $user->setPassword($form->get('password')->getData());
 
                 $user->setCompany($company);

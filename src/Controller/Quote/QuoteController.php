@@ -93,11 +93,10 @@ class QuoteController extends AbstractController
             return $this->redirectToRoute('app_quote_index');
         }else{
             if ($existingBill) {
-                // Si un enregistrement existe déjà, afficher un message et rediriger
-                $this->addFlash('warning', 'Ce devis a déjà été transformé en facture.');
+                $this->addFlash('warning', 'Ce devis a déjà été transformé en facture.'); // Si un enregistrement existe déjà, afficher un message et rediriger
                 return $this->redirectToRoute('app_quote_index'); // Rediriger vers la page des devis par exemple
-            }else{
-                //Créer une nouvelle facture
+            }else{ //Créer une nouvelle facture
+                
                 $bill = new Bill();
 
                 $user = $this->getUser();
@@ -138,16 +137,10 @@ class QuoteController extends AbstractController
     #[IsGranted('add')]
     public function new(Request $request, EntityManagerInterface $entityManager, MailerController $mailer, PdfService $pdfService): Response
     {
-        // Get the logged-in user
         $user = $this->getUser();
-
-        // Assuming your User entity has a method to get the associated company
         $company = $user->getCompany();
-
-        // Create a new Quote instance
         $quote = new Quote();
 
-        // Create the form
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
 
@@ -182,7 +175,6 @@ class QuoteController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // No need to iterate over productQuotes here, Symfony will handle it
             $entityManager->flush();
             $data = $form->getData();
             $updatedStatus = $data->getStatus();

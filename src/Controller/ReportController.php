@@ -24,29 +24,28 @@ class ReportController extends AbstractController
         $timePeriod = $request->query->get('period', 'month');
         switch ($timePeriod) {
             case 'year':
+
                 $paymentsData = $paymentRepository->getTotalPriceSumByYear();
                 $labels = [];
                 $data = [];
 
-                // Iterate over the payment data and populate the labels and data arrays
                 foreach ($paymentsData as $payment) {
                     $year = (int) $payment['year'];
-                    $labels[] = $year; // Add the year to the labels array
-                    $data[] = $payment['totalPrice']; // Add the total price to the data array
+                    $labels[] = $year; 
+                    $data[] = $payment['totalPrice']; 
                 }
 
-                // Create the bar chart
                 $chart = $this->createBarChart($chartBuilder, 'Revenus par année', 'Year', array_reverse($labels), array_reverse($data));
                 break;
+
             default:
-                // Default to month
+                
                 $paymentsData = $paymentRepository->getTotalPriceSumByMonth();
                 $labels = [];
                 $data = [];
 
-                // Group payments data by year and month
                 $groupedData = [];
-                if ($paymentsData !== null) { // Check if paymentsData is not null
+                if ($paymentsData !== null) { 
                     foreach ($paymentsData as $payment) {
                         $year = $payment['year'];
                         $month = $payment['month'];
@@ -57,12 +56,10 @@ class ReportController extends AbstractController
                     }
                 }
 
-                // Populate labels and data arrays for the current year and the previous year
                 $currentYear = date('Y');
                 $previousYear = $currentYear - 1;
                 foreach ([$currentYear, $previousYear] as $year) {
-                    if (isset($groupedData[$year])) { // Check if $groupedData[$year] is set
-                        // Reverse the order of months within each year
+                    if (isset($groupedData[$year])) { 
                         krsort($groupedData[$year]);
                         foreach ($groupedData[$year] as $month => $totalPrice) {
                             $labels[] = sprintf('%s-%02d', $year, $month); // Format: YYYY-MM
@@ -71,18 +68,15 @@ class ReportController extends AbstractController
                     }
                 }
 
-                // Create the bar chart
                 $chart = $this->createBarChart($chartBuilder, 'Revenus par mois (sur les deux dernières années)', 'Mois', array_reverse($labels), array_reverse($data));
                 break;
         }
 
-        // Data for the doughnut chart
         $doughnutData = $paymentRepository->getTotalPriceSumByCategory();
         $doughnutLabels = array_keys($doughnutData);
         $doughnutValues = array_values($doughnutData);
         $doughnutBackgroundColors = ['rgb(255, 99, 132)', 'rgb(144, 213, 79)', 'rgb(255, 205, 86)'];
 
-        // Create the doughnut chart
         $doughnutChart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
         $doughnutChart->setData([
             'labels' => $doughnutLabels,
@@ -106,7 +100,6 @@ class ReportController extends AbstractController
             'maintainAspectRatio' => false,
         ]);
 
-        // Get product sales data
         $productSales = $salesReportService->getProductSalesByMonth();
 
         return $this->render('accountant/report.html.twig', [

@@ -17,12 +17,12 @@ class AccessibleBill implements Criteria
             throw new \LogicException('User is not set, call withUser() first.');
         }
 
-        // if user is admin, return all customers
+        //Afficher tous les clients sir le User est Admin
         if (in_array(IUserRole::ROLE_ADMIN, $this->user->getRoles())) {
             return $builder;
         }
 
-        // otherwise, return only customers from the same company
+        // Sinon afficher que kes clients de la meme entreprise que le User
         (new BillOfCompany())
             ->withCompanyId($this->user->getCompany()->getId())
             ->apply($builder);
