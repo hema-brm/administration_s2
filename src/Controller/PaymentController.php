@@ -61,16 +61,17 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    #[IsGranted('read', 'bill')]
+
     public function show(Payment $payment): Response
     {
         return $this->render('payment/show.html.twig', [
             'payment' => $payment,
+            'isGTEmployee' => $this->isGTEmployee
         ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    #[IsGranted('edit', 'bill')]
+    #[IsGranted('edit', 'payment')]
     public function edit(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PaymentEditType::class, $payment);
@@ -109,7 +110,7 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    #[IsGranted('delete', 'bill')]
+    #[IsGranted('delete', 'payment')]
     public function delete(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $payment->getId(), $request->request->get('_token'))) {
