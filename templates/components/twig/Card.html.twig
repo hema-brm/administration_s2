@@ -1,0 +1,22 @@
+{% set widthClasses = this.getWidthClasses() %}
+{% set textSizeClasses = this.getTextSizeClasses() %}
+{% set shadowClasses = this.getShadowClasses() %}
+{% set roundedClasses = this.getRoundedClasses() %}
+
+{% set borderClass = border is same as true ? 'border' : '' %}
+{% set paddingClass = 'p-%s'|format(padding) %}
+
+{% set classes = [
+    widthClasses,
+    textSizeClasses,
+    shadowClasses,
+    borderClass,
+    roundedClasses,
+    paddingClass
+]|join(' ') %}
+
+<div class="{{ classes }} transition-all duration-300">
+    <h3 class="mb-1 text-lg">{{ title }}</h3>
+
+    {% block content %}{% endblock %}
+</div>

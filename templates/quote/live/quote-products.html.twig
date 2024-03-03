@@ -1,4 +1,25 @@
-<h3 class="mb-1 text-lg">Liste des produits</h3>
+{% set productBillFormWidths = {
+    'xs': 'full',
+    'sm': 'full',
+    'md': 'full',
+    'lg': 'full',
+    'xl': 'full',
+} %}
+
+{% set shadowSizes = {
+    'xs': 'xs',
+    'sm': 'xs',
+    'md': 'sm',
+    'lg': 'md',
+    'xl': 'md',
+} %}
+
+<twig:Card
+    title="Liste des produits"
+    :widths="productBillFormWidths"
+    :shadowSizes="shadowSizes"
+    :rounded="false"
+>
 {% if not _isReadOnlyMode %}
 <button
     data-action="live#action"
@@ -35,3 +56,5 @@
         mode="{{ _mode }}"
     />
 {% endfor %}
+
+</twig:Card>
