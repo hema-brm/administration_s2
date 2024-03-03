@@ -10,10 +10,10 @@
     :widths="billFormWidths"
     :rounded="false"
 >
-    <div class="flex flex-row items-start">
+    <div class="flex flex-col md:flex-row items-start">
         {{ form_row(form.customer, {
             attr: {
-                'class': 'w-1/2 mr-4',
+                'class': 'w-full md:w-1/2 md:mr-4',
                 'data-model': 'customer',
                 'with_error': _errors.has('customer') ? true : false,
                 'error_text': _errors.has('customer') ? _errors.get('customer') : '',
@@ -23,7 +23,7 @@
 
         {{ form_row(form.bill_number, {
             attr: {
-                'class': 'w-1/2',
+                'class': 'w-full md:w-1/2',
                 'data-model': 'billNumber',
                 'with_error': _errors.has('billNumber') ? true : false,
                 'error_text': _errors.has('billNumber') ? _errors.get('billNumber') : '',
@@ -32,10 +32,10 @@
         }) }}
     </div>
 
-    <div class="flex flex-row items-start">
+    <div class="flex flex-col md:flex-row items-start">
         {{ form_row(form.billIssuanceDate, {
             attr: {
-                'class': 'w-1/2 mr-4',
+                'class': 'w-full mr-2',
                 'data-model': 'billIssuanceDate',
                 'with_error': _errors.has('billIssuanceDate') ? true : false,
                 'error_text': _errors.has('billIssuanceDate') ? _errors.get('billIssuanceDate') : '',
@@ -44,7 +44,7 @@
         }) }}
         {{ form_row(form.status, {
             attr: {
-                'class': 'w-1/2',
+                'class': 'w-full',
                 'data-model': 'status',
                 'with_error': _errors.has('status') ? true : false,
                 'error_text': _errors.has('status') ? _errors.get('status') : '',
@@ -53,17 +53,15 @@
         }) }}
     </div>
 
-    <div class="flex flex-row">
-        <div class="flex w-1/2">
-            {{ form_row(form.discount, {
-                attr: {
-                    'class': 'w-full mr-2',
-                    'data-model': 'debounce(300)|discount',
-                    'with_error': _errors.has('discount') ? true : false,
-                    'error_text': _errors.has('discount') ? _errors.get('discount') : '',
-                    'disabled': _isReadOnlyMode ? true : false,
-                }
-            }) }}
-        </div>
+    <div class="w-full md:w-1/2">
+        {{ form_row(form.discount, {
+            attr: {
+                'class': 'w-full mr-2',
+                'data-model': 'debounce(300)|discount',
+                'with_error': _errors.has('discount') ? true : false,
+                'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                'disabled': _isReadOnlyMode ? true : false,
+            }
+        }) }}
     </div>
 </twig:Card>

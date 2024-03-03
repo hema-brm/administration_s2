@@ -2,25 +2,26 @@
 
 namespace App\Controller\Quote;
 
-use App\Controller\MailerController;
 use App\Entity\Bill;
-use App\Entity\ProductBill;
 use App\Entity\Quote;
 use App\Form\QuoteType;
+use App\Entity\ProductBill;
+use App\Service\PdfService;
 use App\Repository\BillRepository;
 use App\Repository\QuoteRepository;
+use App\Controller\MailerController;
 use App\Service\Bill\BillCreatorService;
-use App\Service\PdfService;
-use App\Service\Quote\AccessibleQuoteService;
-use App\Service\Request\PageFromRequestService;
-use App\Service\Request\RequestQueryService;
-use App\Twig\Helper\Paginator\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\Quote\QuotePdfController;
+use App\Service\Request\RequestQueryService;
+use App\Service\Quote\AccessibleQuoteService;
 use Symfony\Component\HttpFoundation\Request;
+use App\Twig\Helper\Paginator\PaginatorHelper;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Request\PageFromRequestService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/quote', name: 'app_quote_')]
 class QuoteController extends AbstractController
@@ -37,9 +38,15 @@ class QuoteController extends AbstractController
         RequestQueryService $requestQueryService,
         PageFromRequestService $pageFromRequestService,
         private readonly BillCreatorService $billCreatorService,
+        PdfService $pdfService, 
+        QuotePdfController $quotePdfController,
+        MailerController $mailer
     ) {
         $this->searchTerm = $requestQueryService->get(self::SEARCH_FORM_NAME);
         $this->page = $pageFromRequestService->get(self::PAGE_PARAM_NAME);
+        $this->pdfService = $pdfService;
+        $this->quotePdfController = $quotePdfController;
+        $this->mailer = $mailer;
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -54,6 +61,7 @@ class QuoteController extends AbstractController
             'quotes' => $quotes,
             'paginatorHelper' => $paginatorHelper,
         ]);
+        
     }
     private function search(string $searchTerm, QuoteRepository $quoteRepository): Response
     {
@@ -169,12 +177,18 @@ class QuoteController extends AbstractController
     #[IsGranted('edit', 'quote')]
     public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
+        $originalStatus = $quote->getStatus();
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
             // No need to iterate over productQuotes here, Symfony will handle it
             $entityManager->flush();
+            $data = $form->getData();
+            $updatedStatus = $data->getStatus();
+            if($originalStatus === Quote::STATUS_DRAFT && ($updatedStatus != Quote::STATUS_DRAFT || $updatedStatus != Quote::STATUS_REFUSED)){
+                $this->mailer->newQuoteCreateEmail($data->getCustomer(), $data, $this->pdfService, $this->quotePdfController);
+            }
     
             return $this->redirectToRoute('app_quote_index', [], Response::HTTP_SEE_OTHER);
         }

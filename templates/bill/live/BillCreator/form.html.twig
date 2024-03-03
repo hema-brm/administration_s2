@@ -1,6 +1,8 @@
 {{ displayFlash() }}
-<div class="flex flex-row items-end">
-    <div class="w-1/3 mr-4">
+{% set isShowing = mode == 'show' %}
+{% set gridCols = isShowing ? '6' : '7' %}
+<div class="w-full grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2 lg:grid-cols-{{ gridCols}} lg:gap-4 items-end border-b mb-2">
+    <div>
         {{ form_row(form.product, {
             attr: {
                 'data-model': 'product',
@@ -13,74 +15,70 @@
             }
         }) }}
     </div>
-    <div class="w-3/4 flex flex-row">
-        <div class="flex flex-row items-end">
-            <div class="mr-2">
-                {{ form_row(form.price, {
-                    attr: {
-                        'data-model': 'debounce(300)|price',
-                        'with_error': _errors.has('price') ? true : false,
-                        'error_text': _errors.has('price') ? _errors.get('price') : '',
-                        'error_text_position': 'top',
-                        'disabled': isEditing ? false : true,
-                    }
-                }) }}
-            </div>
-            <div class="mr-2">
-                {{ form_row(form.quantity, {
-                    attr: {
-                        'data-model': 'quantity',
-                        'with_error': _errors.has('quantity') ? true : false,
-                        'error_text': _errors.has('quantity') ? _errors.get('quantity') : '',
-                        'error_text_position': 'top',
-                        'disabled': isEditing ? false : true,
-                    }
-                }) }}
-            </div>
-            <div class="mr-2">
-                {{ form_row(form.tva, {
-                    label : '% TVA ~ ' ~ totalTVA ~ '€',
-                    attr: {
-                        'data-model': 'tva',
-                        'with_error': _errors.has('tva') ? true : false,
-                        'error_text': _errors.has('tva') ? _errors.get('tva') : '',
-                        'error_text_position': 'top',
-                        'disabled': isEditing ? false : true,
-                    }
-                }) }}
-            </div>
-            <div class="mr-2">
-                {{ form_row(form.discount, {
-                    label : '% Remise ~ ' ~ totalDiscount ~ '€',
-                    attr: {
-                        'data-model': 'discount',
-                        'with_error': _errors.has('discount') ? true : false,
-                        'error_text': _errors.has('discount') ? _errors.get('discount') : '',
-                        'error_text_position': 'top',
-                        'disabled': isEditing ? false : true,
-                    }
-                }) }}
-            </div>
-            <div class="mr-2 cursor-not-allowed">
-                {{ form_row(form.total, {
-                    attr: {
-                        'data-model': 'total',
-                        'disabled': true,
-                        'class': 'cursor-not-allowed',
-                    }
-                }) }}
-            </div>
-        </div>
+    <div>
+        {{ form_row(form.price, {
+            attr: {
+                'data-model': 'debounce(300)|price',
+                'with_error': _errors.has('price') ? true : false,
+                'error_text': _errors.has('price') ? _errors.get('price') : '',
+                'error_text_position': 'top',
+                'disabled': isEditing ? false : true,
+            }
+        }) }}
+    </div>
+    <div>
+        {{ form_row(form.quantity, {
+            attr: {
+                'data-model': 'quantity',
+                'with_error': _errors.has('quantity') ? true : false,
+                'error_text': _errors.has('quantity') ? _errors.get('quantity') : '',
+                'error_text_position': 'top',
+                'disabled': isEditing ? false : true,
+            }
+        }) }}
+    </div>
+    <div>
+        {{ form_row(form.tva, {
+            label : '% TVA ~ ' ~ totalTVA ~ '€',
+            attr: {
+                'data-model': 'tva',
+                'with_error': _errors.has('tva') ? true : false,
+                'error_text': _errors.has('tva') ? _errors.get('tva') : '',
+                'error_text_position': 'top',
+                'disabled': isEditing ? false : true,
+            }
+        }) }}
+    </div>
+    <div>
+        {{ form_row(form.discount, {
+            label : '% Remise ~ ' ~ totalDiscount ~ '€',
+            attr: {
+                'data-model': 'discount',
+                'with_error': _errors.has('discount') ? true : false,
+                'error_text': _errors.has('discount') ? _errors.get('discount') : '',
+                'error_text_position': 'top',
+                'disabled': isEditing ? false : true,
+            }
+        }) }}
+    </div>
+    <div>
+        {{ form_row(form.total, {
+            attr: {
+                'data-model': 'total',
+                'disabled': true,
+                'class': 'cursor-not-allowed',
+            }
+        }) }}
     </div>
     {% if _canSave %}
-        <div class="flex flex-row">
+        <div class="flex flex-row items-end">
             {% if isEditing %}
                 <button
-                        id="{{ uniqid() }}"
-                        data-action="live#action"
-                        data-action-name="save"
-                        data-loading="action(save)|addAttribute(disabled)"
-                        class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
+                    id="{{ uniqid() }}"
+                    data-action="live#action"
+                    data-action-name="save"
+                    data-loading="action(save)|addAttribute(disabled)"
+                    class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
                 >
             <span data-loading="show">
                 <i class="fas fa-spinner animate-spin"></i>
@@ -89,10 +87,10 @@
                 </button>
             {% else %}
                 <button
-                        id="{{ uniqid() }}"
-                        data-action="live#action"
-                        data-action-name="edit"
-                        class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
+                    id="{{ uniqid() }}"
+                    data-action="live#action"
+                    data-action-name="edit"
+                    class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
                 >
             <span data-loading="show">
                 <i class="fas fa-spinner animate-spin"></i>
@@ -105,7 +103,7 @@
                     data-action="live#emitUp"
                     data-event="product_bill_item:remove(index={{ key }})"
                     data-loading="addAttribute(disabled)"
-                    class="px-4 py-2 text-danger-500 mb-3 rounded hover:bg-danger-100"
+                    class="text-sm px-4 py-2 text-danger-500 mb-3 rounded hover:bg-danger-100"
             >
                 <i class="fas fa-times"></i>
             </button>

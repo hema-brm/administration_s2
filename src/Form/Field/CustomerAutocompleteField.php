@@ -5,7 +5,7 @@ namespace App\Form\Field;
 use App\Entity\Category;
 use App\Entity\Company;
 use App\Entity\Customer;
-use App\Query\Company\CompanyIsNotDefault;
+use App\Query\Company\CompanyExists;
 use App\Repository\CompanyRepository;
 use App\Repository\CustomerRepository;
 use Symfony\Component\Form\AbstractType;

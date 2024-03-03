@@ -9,12 +9,12 @@
         text: 'Devis',
     }) }}
 
-    <div class="flex flex-row items-center justify-between mb-4 m-4 text-xs text-secondary-500 hover:text-primary-500 ease-in-out">
+    <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_quote_index') }}">Retour à la liste</a>
         </div>
-        <div>
+        <div class="flex flex-col lg:flex-row lg:justify-end gap-2">
             <twig:Button
                 text="PDF"
                 color="secondary"
@@ -41,6 +41,4 @@
     <div class="px-4">
         <twig:QuoteCreator :quoteData="quote" mode="show" />
     </div>
-
-
 {% endblock %}

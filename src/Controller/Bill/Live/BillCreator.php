@@ -14,6 +14,7 @@ use App\Repository\CustomerRepository;
 use App\Service\Bill\BillCreatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use App\Controller\Bill\BillPdfController;
 use App\Service\Quote\QuoteCreatorService;
 use App\Service\Bill\ProductBillCreatorService;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -97,7 +98,7 @@ class BillCreator extends AbstractController
         private readonly ProductBillCreatorService $productBillCreatorService,
         private readonly CustomerRepository $customerRepository,
         private readonly PdfService $pdfService,
-        //private readonly BillPdfController $billPdfController,
+        private readonly BillPdfController $billPdfController,
         private readonly MailerController $mailer
     )
     {
@@ -138,9 +139,9 @@ class BillCreator extends AbstractController
             return $this->redirectToRoute('app_bill_index');
         }
         
-        // if($this->billData->getStatus() == Bill::STATUS_SENT){
-        //     $this->mailer->newBillCreateEmail($this->billData->getCustomer(), $this->billData, $this->pdfService, $this->billPdfController);
-        // }
+        if($this->billData->getStatus() == Bill::STATUS_SENT){
+             $this->mailer->newBillCreateEmail($this->billData->getCustomer(), $this->billData, $this->pdfService, $this->billPdfController);
+        }
 
         $this->addFlash('success', 'Facture enregistrée avec succès.');
         return $this->redirectToRoute('app_bill_show', [
