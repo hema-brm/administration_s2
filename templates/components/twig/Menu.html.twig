@@ -1,0 +1,11 @@
+<aside
+    id="{{ this.id }}"
+    class="relative bg-{{ this.color }}-{{ this.colorValue }} transform min-h-screen transition-all duration-300 ease-in-out shadow-2xl">
+
+    <div class="{{ this.desktopClasses }}">
+        {% block desktop %}{% endblock %}
+    </div>
+    <div class="{{ this.mobileClasses }}">
+        {% block mobile %}{% endblock %}
+    </div>
+</aside>

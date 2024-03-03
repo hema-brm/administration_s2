@@ -1,0 +1,78 @@
+{% import "@components/macros/menu.html.twig" as menuMacro %}
+
+<div class="flex flex-row justify-center">
+    <ul class="text-sm flex flex-col items-center gap-4">
+        <div class="w-12">
+            {% set avatar = vich_uploader_asset(app.user, 'pictureFile')|default(asset('build/images/default/profile.png')) %}
+            <img class="rounded-full aspect-square object-cover object-center" src="{{ avatar }}">
+        </div>
+        {% if is_granted('ROLE_ENTREPRISE') or is_granted('ROLE_ADMIN') %}
+            <twig:Button
+                variant="icon"
+                icon="fa-user"
+                route="{{ path('app_employee_index') }}"
+            />
+        {% endif %}
+
+        {% if is_granted('ROLE_EMPLOYEE') %}
+            <twig:Button
+                    variant="icon"
+                    icon="fa-file-invoice-dollar"
+                    route="{{ path('app_bill_index') }}"
+            />
+            <twig:Button
+                    variant="icon"
+                    icon="fa-file-invoice"
+                    route="{{ path('app_quote_index') }}"
+            />
+            <twig:Button
+                variant="icon"
+                icon="fa-user"
+                route="{{ path('app_customer_index') }}"
+            />
+            <twig:Button
+                variant="icon"
+                icon="fa-money-bill-wave"
+                route="{{ path('app_payment_index') }}"
+            />
+            <twig:Button
+                variant="icon"
+                icon="fa-box"
+                route="{{ path('app_product_index') }}"
+            />
+            {% set currentRoute = app.request.attributes.get('_route')|split('_')|slice(0, 2)|join('_') %}
+            {% if  currentRoute == 'app_product' or currentRoute ==  'app_category'%}
+                <ul>
+                    <twig:Button
+                        variant="icon"
+                        icon="fa-layer-group"
+                        route="{{ path('app_category_index') }}"
+                    />
+                </ul>
+            {% endif %}
+        {% endif %}
+        {% if not is_granted('ROLE_EMPLOYEE') %}
+            <twig:Button
+                variant="icon"
+                icon="fa-solid fa-chart-line"
+                route="{{ path('accountant') }}"
+            />
+            <twig:Button
+                variant="icon"
+                icon="fa-file-invoice-dollar"
+                route="{{ path('app_bill_index') }}"
+            />
+            <twig:Button
+                variant="icon"
+                icon="fa-regular fa-receipt"
+                route="{{ path('app_payment_index') }}"
+            />
+
+            <twig:Button
+                variant="icon"
+                icon="fa-regular fa-file-invoice"
+                route="{{ path('report') }}"
+            />
+        {% endif %}
+    </ul>
+</div>
