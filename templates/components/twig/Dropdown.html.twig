@@ -1,0 +1,15 @@
+<div class="relative"
+     data-controller="content--dropdown"
+     data-content--dropdown-target="container"
+     data-content--dropdown-show-class="{{ showClass }}"
+     data-content--dropdown-hide-class="{{ hideClass }}"
+>
+    <div id="{{ triggerId }}" data-content--dropdown-target="toggle">
+        {% block toggle %}
+        {% endblock %}
+    </div>
+    <div id="{{ contentId }}" class="scale-0 absolute top-100 right-0 mt-1 transition-transform duration-200 ease-in-out" data-content--dropdown-target="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
