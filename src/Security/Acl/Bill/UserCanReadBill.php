@@ -32,7 +32,6 @@ class UserCanReadBill implements AuthorizationInterface {
 
     private function hasSameCompany(UserInterface $user, Bill $bill): bool
     {   
-        //dd($user->getCompany()->getId() == $bill->getCustomer()->getCompany()->getId());
         return $user->getCompany() === $bill->getCustomer()->getCompany();
     }
 }

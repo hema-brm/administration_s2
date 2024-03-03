@@ -1,15 +1,17 @@
 <?php
 namespace App\Controller;
-use App\Controller\Bill\BillPdfController;
-use App\Controller\Quote\QuotePdfController;
 use App\Entity\Bill;
-use App\Entity\Customer;
+use App\Entity\User;
 use App\Entity\Quote;
 use App\Service\Mailer;
+use App\Entity\Customer;
 use App\Service\PdfService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\Bill\BillPdfController;
+use App\Controller\Quote\QuotePdfController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 #[Route(name: 'app_mailer_')]
@@ -27,6 +29,8 @@ class MailerController extends AbstractController
             $this->templateBillReminderID = $_ENV['TEMPLATE_BILL_REMINDER_ID'];
             $this->templateBillReplayID = $_ENV['TEMPLATE_BILL_REPLAY_ID'];
             $this->templateBillLateID = $_ENV['TEMPLATE_BILL_LATE_ID'];
+            $this->templateResetPassword = $_ENV['TEMPLATE_RESET_PASSWORD'];
+
         }
 
         public function changeBillStatus(Bill $bill){
@@ -177,6 +181,18 @@ class MailerController extends AbstractController
             }
 
             return $this->redirectToRoute('app_bill_index', [], Response::HTTP_SEE_OTHER);  
+        }
+
+        public function resetPassword(User $user,ResetPasswordToken $resetToken)
+        {
+            $this->mailer->sendResetEmail($this->templateResetPassword, $user, $resetToken);
+            if($user->getEmail()){
+                $this->addFlash('success', "Le mail a été envoyé avec succès.");
+            }
+            else{
+                $this->addFlash('error', "Une erreur s'est produite lors de l'envoi du mail.");
+            }
+
         }
 
         

@@ -3,12 +3,14 @@
 namespace App\Service;
 
 use Exception;
+use App\Entity\User;
 use GuzzleHttp\Client;
-use SendinBlue\Client\Api\TransactionalEmailsApi;
-use SendinBlue\Client\Configuration;
-use SendinBlue\Client\Model\SendSmtpEmail;
 use App\Entity\Customer;
 use App\Service\PdfService;
+use SendinBlue\Client\Configuration;
+use SendinBlue\Client\Model\SendSmtpEmail;
+use SendinBlue\Client\Api\TransactionalEmailsApi;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 class Mailer
 {
@@ -17,6 +19,7 @@ class Mailer
     public function __construct()
     {
         $this->sendinblueApiKey = $_ENV['SENDINBLUE_API_KEY'];
+
     }
     /**
      * @throws Exception
@@ -59,7 +62,7 @@ class Mailer
         }
     }
 
-    public function sendEmail(int $templateID ,Customer $customer, string $filenamePDF = null): bool
+    public function sendEmail(int $templateID ,Customer $customer, string $filenamePDF = null, ResetPasswordToken $resetPasswordToken = null): bool
     {
         if($customer){
             $email = $customer->getEmail();
@@ -89,6 +92,26 @@ class Mailer
            unlink($pathPDF); 
         }
         
+        return $sendEmail;                                                            
+    }
+  
+
+    public function sendResetEmail(int $templateID , User $user, ResetPasswordToken $resetPasswordToken): bool
+    {
+        if($user){
+            $email = $user->getEmail();
+            $lastname = $user->getLastname();
+            $firstname = $user->getFirstname();
+            
+        }
+
+        $sendEmail = $this->sendTemplate($templateID, [['email' => $email]], [
+                                                                        'lastname' => $lastname,
+                                                                        'firstname' => $firstname,
+                                                                        'token' => $resetPasswordToken->getToken(), 
+                                                                                            
+                                                                    ]); 
+                                                                           
         return $sendEmail;                                                            
     }
 }
