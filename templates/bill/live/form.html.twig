@@ -7,8 +7,9 @@
 } %}
 <twig:Card
     title="Informations de la facture"
-    :widths="billFormWidths"
+    :fullWidth="true"
     :rounded="false"
+    :padding="4"
 >
     <div class="flex flex-col md:flex-row items-start">
         {{ form_row(form.customer, {

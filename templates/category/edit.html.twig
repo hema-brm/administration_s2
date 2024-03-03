@@ -11,22 +11,19 @@
     }) }}
 
     <div class="p-4">
-<div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-primary-500 ease-in-out">
+        <div class= "flex flex-row items-center justify-start mb-4 text-xs text-gray-500 hover:text-primary-500 ease-in-out">
             <i class="fa-solid fa-arrow-left mr-1"></i>
             <a href="{{ path('app_category_index') }}">Retour à la liste</a>
         </div>
-    
-
-        <div class="p-4 shadow-md w-1/2 border rounded">
-            <div class="text-sm">
-
+        <twig:Card
+            :padding="4"
+        >
+            {% block content %}
                 {{ include('category/_form.html.twig', {
                     button_label: 'Modifier',
                 }) }}
-                </div>
-            </div>
-        </div>
-        </div>
+            {% endblock %}
+        </twig:Card>
     </div>
 
     {% endblock %}
