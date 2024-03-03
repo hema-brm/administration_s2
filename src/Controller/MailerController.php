@@ -31,7 +31,7 @@ class MailerController extends AbstractController
 
         public function changeBillStatus(Bill $bill){
             if($bill->getStatus() != Bill::STATUS_SENT){
-                $bil->setStatus(Bill::STATUS_SENT);
+                $bill->setStatus(Bill::STATUS_SENT);
             }
         }
 
@@ -55,7 +55,6 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateQuoteReminderID, $customer);
 
             if($email){
-                $this->changeQuoteStatus($quote);
                 $this->addFlash('success', "Le mail de rappel à été envoyé avec succès.");
             }
             else{
@@ -112,7 +111,6 @@ class MailerController extends AbstractController
             $email = $this->mailer->sendEmail($this->templateBillReminderID, $customer);
             
             if($email){
-                $this->changeBillStatus($bill);
                 $this->addFlash('success', "Le mail de rappel à été envoyé avec succès.");
             }
             else{
@@ -153,7 +151,7 @@ class MailerController extends AbstractController
 
             if($email){
                 $this->changeBillStatus($bill);
-                $this->addFlash('success', "Le mail indiquant le retard de paiement a été envoyé avec succès.");
+                $this->addFlash('success', "Le mail informant le retard de paiement a été envoyé avec succès.");
             }
             else{
                 $this->addFlash('error', "Une erreur s'est produite lors de l'envoi du mail.");

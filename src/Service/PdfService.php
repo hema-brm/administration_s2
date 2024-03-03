@@ -41,8 +41,13 @@ class PdfService
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
     
+        $tmpPdfDirectory = __DIR__ . '/../../tmp_pdf/';
+        
+        if (!file_exists($tmpPdfDirectory)) {
+            mkdir($tmpPdfDirectory, 0777, true);
+        }
         // Enregistrer le PDF dans le dossier tmp_pdf
-        $filePath = __DIR__ . '/../../tmp_pdf/' . $filename;
+        $filePath = $tmpPdfDirectory . $filename;
         file_put_contents($filePath, $pdfContent);
 
         // Retourner la réponse et le chemin du fichier enregistré
