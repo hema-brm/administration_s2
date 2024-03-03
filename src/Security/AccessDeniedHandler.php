@@ -21,7 +21,6 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
         $user = $this->security->getUser();
 
         if($user === null){
-            dd('ici');
             $referer = '/';
         }
         else{

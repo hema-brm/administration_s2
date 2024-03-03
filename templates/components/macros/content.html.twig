@@ -105,7 +105,7 @@
                 {% set previousButtonClasses = previousButtonClasses ~ ' ' ~ disabledButtonClasses %}
             {% endif %}
             {% set previousButtonParams = urlParams|merge({(name): current-1}) %}
-            {% set path = route != '#' ? path(route, buttonPageParams) : '#' %}
+            {% set path = route != '#' ? path(route, previousButtonParams) : '#' %}
             <a href="{{ path }}" data-turbo-action="replace">
                 <button {{ previousButtonAttribute }} class="{{ previousButtonClasses }}">
                     <i class="fa-solid fa-caret-left"></i>
@@ -137,7 +137,7 @@
                 {% set nextButtonClasses = nextButtonClasses ~ ' ' ~ disabledButtonClasses %}
             {% endif %}
             {% set nextButtonParams = urlParams|merge({(name): current+1}) %}
-            {% set path = route != '#' ? path(route, buttonPageParams) : '#' %}
+            {% set path = route != '#' ? path(route, nextButtonParams) : '#' %}
             <a href="{{ path }}" data-turbo-action="replace">
                 <button {{ nextButtonAttribute }} class="{{ nextButtonClasses }}">
                     <i class="fa-solid fa-caret-right"></i>

@@ -2,7 +2,7 @@
 
 {% block title %}Password Reset Email Sent{% endblock %}
 
-{% block body %}
+{% block form %}
 
     <div class="flex justify-center items-center h-screen">
         <div class="w-full max-w-md bg-secondary-100 p-4 rounded-md mx-auto">
@@ -13,4 +13,4 @@
             <p>Si vous ne recevez pas d'e-mail, veuillez vérifier votre dossier de courrier indésirable ou <a class="text-primary-500 hover:text-primary-700" href="{{ path('app_forgot_password_request') }}">Réessayer</a>.</p>
         </div>
     </div>
-{% endblock %}
+{% endblock form %}
