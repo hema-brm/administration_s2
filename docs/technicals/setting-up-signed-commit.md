@@ -24,5 +24,4 @@ gpg --armor --export <key-id>
 
 ```bash
 gpg --list-secret-keys --keyid-format LONG
-# It should be something like '89C89C73C3C82431BF1C9A6C1...'
 ```
