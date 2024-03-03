@@ -29,12 +29,11 @@ class BillController extends AbstractController
 
     public function __construct(
         KernelInterface $kernel,
-        Security $security, 
-        PdfService $pdfService, 
+        Security $security,
+        PdfService $pdfService,
         BillPdfController $billPdfController,
         MailerController $mailer
-        )
-    {
+    ) {
         $this->kernel = $kernel;
         $this->isAdmin = $security->isGranted('ROLE_ADMIN');
         $this->isGTEmployee = $security->isGranted('ROLE_EMPLOYEE');
@@ -83,14 +82,14 @@ class BillController extends AbstractController
     {
         $bills = $request->request->all()['bills'];
         $count = 0;
-        foreach($bills as $id => $token){
+        foreach ($bills as $id => $token) {
             $bill = $billRepository->find($id);
-            if($bill && $this->isCsrfTokenValid('delete'.$id, $token)){
+            if ($bill && $this->isCsrfTokenValid('delete' . $id, $token)) {
                 $entityManager->remove($bill);
                 $count++;
             }
         }
-        $this->addFlash('success', $count.' facture(s) supprimée(s) avec succès.');
+        $this->addFlash('success', $count . ' facture(s) supprimée(s) avec succès.');
         $entityManager->flush();
         return $this->redirectToRoute('app_bill_index', [], Response::HTTP_SEE_OTHER);
     }
@@ -101,6 +100,7 @@ class BillController extends AbstractController
     {
         return $this->render('bill/show.html.twig', [
             'bill' => $bill,
+            'isGTEmployee' => $this->isGTEmployee,
         ]);
     }
 
@@ -119,7 +119,7 @@ class BillController extends AbstractController
             $entityManager->flush();
             $data = $form->getData();
             $updatedStatus = $data->getStatus();
-            if($originalStatus === Bill::STATUS_DRAFT && $updatedStatus === Bill::STATUS_SENT){
+            if ($originalStatus === Bill::STATUS_DRAFT && $updatedStatus === Bill::STATUS_SENT) {
                 $this->mailer->newBillCreateEmail($data->getCustomer(), $data, $this->pdfService, $this->billPdfController);
             }
 
@@ -129,6 +129,7 @@ class BillController extends AbstractController
         return $this->render('bill/edit.html.twig', [
             'bill' => $bill,
             'form' => $form,
+            'isGTEmployee' => $this->isGTEmployee
         ]);
     }
 
@@ -136,7 +137,7 @@ class BillController extends AbstractController
     #[IsGranted('delete', 'bill')]
     public function delete(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$bill->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $bill->getId(), $request->request->get('_token'))) {
             $entityManager->remove($bill);
             $entityManager->flush();
         }

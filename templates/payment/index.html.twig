@@ -45,7 +45,9 @@
                 <thead>
                     <tr class="{{ tableHeaderClasses }}">
                         <th class="{{ cellPadding }} text-center">
-                            <input type="checkbox" class="payments-checkbox" data-form--checkbox--multiple-target="main">
+                            {% if isGTEmployee %}
+                                <input type="checkbox" class="payments-checkbox" data-form--checkbox--multiple-target="main">
+                            {% endif %}
                         </th>
                         <th class="{{ cellPadding }} text-left">Client</th>
                         <th class="{{ cellPadding }} text-left">N° Facture</th>
