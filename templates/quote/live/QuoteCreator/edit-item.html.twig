@@ -84,11 +84,11 @@
         <div class="flex flex-row items-end">
             {% if isEditing %}
                 <button
-                        id="{{ uniqid() }}"
-                        data-action="live#action"
-                        data-action-name="save"
-                        data-loading="action(save)|addAttribute(disabled)"
-                        class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
+                    id="{{ uniqid() }}"
+                    data-action="live#action"
+                    data-action-name="save"
+                    data-loading="action(save)|addAttribute(disabled)"
+                    class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
                 >
                 <span data-loading="show">
                     <i class="fas fa-spinner animate-spin"></i>
@@ -97,10 +97,10 @@
                 </button>
             {% else %}
                 <button
-                        id="{{ uniqid() }}"
-                        data-action="live#action"
-                        data-action-name="edit"
-                        class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
+                    id="{{ uniqid() }}"
+                    data-action="live#action"
+                    data-action-name="edit"
+                    class="text-sm px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-500 mb-3 rounded mr-2"
                 >
                 <span data-loading="show">
                     <i class="fas fa-spinner animate-spin"></i>
