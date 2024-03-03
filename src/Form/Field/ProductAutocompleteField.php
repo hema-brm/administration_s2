@@ -2,13 +2,7 @@
 
 namespace App\Form\Field;
 
-use App\Entity\Category;
-use App\Entity\Company;
-use App\Entity\Customer;
 use App\Entity\Product;
-use App\Query\Company\CompanyIsNotDefault;
-use App\Repository\CompanyRepository;
-use App\Repository\CustomerRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;

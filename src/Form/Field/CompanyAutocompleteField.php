@@ -2,9 +2,8 @@
 
 namespace App\Form\Field;
 
-use App\Entity\Category;
 use App\Entity\Company;
-use App\Query\Company\CompanyIsNotDefault;
+use App\Query\Company\CompanyExists;
 use App\Repository\CompanyRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,7 +28,7 @@ class CompanyAutocompleteField extends AbstractType
             'multiple' => false,
             'autocomplete' => true,
             'query_builder' => function (CompanyRepository $companyRepository) {
-                return (new CompanyIsNotDefault())
+                return (new CompanyExists())
                     ->apply($companyRepository->createQueryBuilder('c'));
             },
         ]);
