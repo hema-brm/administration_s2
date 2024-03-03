@@ -39,17 +39,18 @@
   - Ajout / Modification / Suppression / Liste
   - Recherche des produits
   - Sécurité
-  - Fixtures
 - Gestion des catégories
   - Ajout / Modification / Suppression / Liste
   - Sécurité
-  - Fixtures
 - Design Liste (Devis / Facture)
 - Envoi des mails
   - Devis (Création / Rappel / Renvoi)
   - Factures (Création / Rappel / Renvoi / Retard)
+  - Réinitialisation de mot de passe
 - Suppression multiple (Employés / Clients / Devis / Factures / Produits / Catégories)
+- Fixture (user, entreprise, category, produit)
 - Sécurité factures
+
 
 ### 4. Johan Mickaël RAKOTONIAINA
 
