@@ -1,31 +1,16 @@
-<nav class="min-w-screen bg-primary-600 text-base text-white flex flex-row items-center justify-between flex-wrap px-4 py-2 shadow-md sticky top-0 left-0 z-[9999] transition-colors ease-in-out duration-300">
-    <div class="flex items-center flex-shrink-0 w-64 mr-4">
-        <button id="btn_toggle-menu" class="hover:bg-primary-600 duration-300 ease-in-out p-1 rounded-full"
-            data-controller="content--toggle-menu"
-            data-content--toggle-menu-target="button"
-            data-content--toggle-menu-open-value="true"
-            data-content--toggle-menu-menu-value="side-menu"
-            data-content--toggle-menu-margin-value="60"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-        </button>
-        <span class="font-semibold text-xl tracking-tight ml-4">EasyVows</span>
+<nav class="text-white min-w-screen grid grid-cols-2 bg-primary-600 shadow-md sticky top-0 left-0 z-[9999] p-4">
+    <div class="flex flex-row items-center gap-4">
+        <span class="font-semibold text-xl">EasyVows</span>
     </div>
-    <div class="flex flex-row  p-2">
-        <div class="flex flex-row-reverse mr-5">
-            <div class="flex justify-center items-center cursor-pointer">
+    <div class="flex flex-row items-center justify-end gap-4">
+            <div class="cursor-pointer">
                 {% include "@components/navigation/bar/item/theme-chooser.html.twig" %}
             </div>
-        </div>
-        <div class="flex flex-row-reverse mr-5">
-            <div class="flex justify-center items-center cursor-pointer">
+            <div class="cursor-pointer">
                 {% include "@components/navigation/bar/item/setting.html.twig" %}
             </div>
-        </div>
-        <div class="flex justify-center items-center rounded-full hover:bg-primary-600 cursor-pointer transform duration-300 ease-in-out px-1">
-            {% include "@components/navigation/bar/item/logout-button.html.twig" %}
-        </div>
+            <div class="cursor-pointer">
+                {% include "@components/navigation/bar/item/logout-button.html.twig" %}
+            </div>
     </div>
 </nav>

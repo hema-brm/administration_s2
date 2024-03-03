@@ -1,0 +1,6 @@
+{% if app.user %}
+    <div class="">
+        {% set avatar = vich_uploader_asset(app.user, 'pictureFile')|default(asset('build/images/default/profile.png')) %}
+        <img class="rounded-full aspect-square object-cover object-center w-10" src="{{ avatar }}">
+    </div>
+{% endif %}
