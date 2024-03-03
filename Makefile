@@ -41,11 +41,11 @@ database-reset:
 
 clean-migration:
 	rm -rf migrations/*.php \
-	&& docker-compose exec php php bin/console doctrine:database:drop --if-exists --force \
-	&& docker-compose exec php php bin/console doctrine:database:create \
-	&& docker-compose exec php php bin/console make:migration \
-	&& docker-compose exec php php bin/console doctrine:migrations:migrate --no-interaction \
-	&& docker-compose exec php php bin/console doctrine:fixtures:load --no-interaction
+	&& docker compose exec php php bin/console doctrine:database:drop --if-exists --force \
+	&& docker compose exec php php bin/console doctrine:database:create \
+	&& docker compose exec php php bin/console make:migration \
+	&& docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction \
+	&& docker compose exec php php bin/console doctrine:fixtures:load --no-interaction
 
 fixtures:
 	docker compose exec php php bin/console doctrine:fixtures:load --no-interaction

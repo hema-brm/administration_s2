@@ -1,9 +1,9 @@
 {
-  "build/app.css": "/build/app.64728a32.css",
-  "build/app.js": "/build/app.65097e9f.js",
-  "build/runtime.js": "/build/runtime.2816be4a.js",
-  "build/829.1ce02f5b.css": "/build/829.1ce02f5b.css",
-  "build/829.6ae5afbf.js": "/build/829.6ae5afbf.js",
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-22ab6f.css": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-22ab6f.css",
+  "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-22ab6f.js": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-22ab6f.js",
   "build/images/default/login.png": "/build/images/default/login.png",
   "build/images/default/profile.png": "/build/images/default/profile.png"
 }
