@@ -31,17 +31,6 @@ class BillController extends AbstractController
         $this->isGTEmployee = $security->isGranted('ROLE_EMPLOYEE');
     }
 
-    public function generateHtml(Bill $bill) : string {
-    }
-
-
-         
-
-
-
-
-
-
     #[Route('/', name: 'index', methods: ['GET'])]
     #[IsGranted('view')]
     public function index(BillRepository $billRepository, UserRepository $userRepository): Response
