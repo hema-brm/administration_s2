@@ -1,4 +1,4 @@
-{% set isShowing = mode == 'show' %}
+{% set isShowing = mode == 'show' or not canEdit %}
 {% set gridCols = isShowing ? '6' : '7' %}
 <div class="w-full grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2 lg:grid-cols-{{ gridCols}} lg:gap-4 items-end border-b mb-2">
         <div class="">
