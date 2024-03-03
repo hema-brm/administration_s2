@@ -1,3 +1,100 @@
+# Répartition des tâches
+
+### 1. Racha Ramoul
+
+> Github: RachaRamoul
+
+- Suivi de paiement
+  - Ajout / Modification / Suppression / Liste
+  - Sécurité
+- Devis v1.0
+  - Ajout / Modification / Suppression / Liste
+- Gestion partie comptable
+  - Dashboard (Factures / Paiements / Graphes)
+  - Rapport (Graphes: mois / année) + Vente par produits
+  - Sécurité
+
+### 2. Sarah Lina Salamani
+
+> Github: Sarahlyna
+ 
+- Authentification
+  - Création table utilisateurs
+  - Page de connexion v1.0
+  - Page d'inscription v1.0
+- Gestion des employés v1.0
+  - Ajout / Modification / Suppression / Liste
+- Gestion des factures v1.0
+  - Transformation des devis en factures
+  - Géneration des PDF des factures
+  - Filtre des factures (par dates)
+- Gestion des devis
+  - Génération des PDF des devis 
+
+### 3. Hemavathi Birabourame 
+
+> Github: hema-brm
+ 
+- Gestion des produits
+  - Ajout / Modification / Suppression / Liste
+  - Recherche des produits
+  - Sécurité
+  - Fixtures
+- Gestion des catégories
+  - Ajout / Modification / Suppression / Liste
+  - Sécurité
+  - Fixtures
+- Design Liste (Devis / Facture)
+- Envoi des mails
+  - Devis (Création / Rappel / Renvoi)
+  - Factures (Création / Rappel / Renvoi / Retard)
+- Suppression multiple (Employés / Clients / Devis / Factures / Produits / Catégories)
+- Sécurité factures
+
+### 4. Johan Mickaël RAKOTONIAINA
+
+> Github: johan-mickael-myges
+ 
+- Création de composants
+  - Pagination
+  - Champs des formulaires
+  - Bouttons
+  - Popup
+  - Dropdown
+  - Modale
+  - Alert
+  - Badge
+  - Card
+  - Clickable Row
+- Gestion des clients
+  - CRUD
+  - Voter
+- Gestion des devis v2.0
+  - Nouvelle affichage + mode de création
+  - Ajout des produits
+  - Voter
+- Gestion des factures v2.0
+  - Nouvelle affichage + mode de création
+  - Ajout des produits
+- Responsivité
+- Gestion de mon compte
+  - Réinitialiser mon mot de passe
+  - Modifier mes informations personelles
+- Page Login + Inscription v2.0
+- Integration
+  - Tailwind
+  - Stimulus
+  - Turbo UX
+  - Twig Live Component
+- Thèmes du site
+- Déploiement
+
+---
+
+---
+
+---
+
 # Symfony Docker (PHP8 / Caddy / Postgresql / NPM)
 
 ### Installing the project locally
@@ -159,21 +256,3 @@ plugins: ["@babel/plugin-proposal-class-properties"],
 ```
 
 ---
-
-
-# About the project - Gestion de devis - facture
-
-### 👥 Pseudos Github Group 12
-
-**[hema-brm](https://github.com/hema-brm)** : BIRABOURAME Hemavathi 
-
-**[RamoulRacha](https://github.com/RachaRamoul)** : RAMOUL Racha
-
-**[Sarahlyna](https://github.com/Sarahlyna)** : SALAMANI Sarah Lina
-
-**[johan-mickael-myges](https://github.com/johan-mickael-myges)** : RAKOTONIAINA Johan Mickael
-
----
-
-### 1. 📝Task repartition
-See this [trello](https://trello.com/b/NahufbTb/challenge-s1-esgi) link.
