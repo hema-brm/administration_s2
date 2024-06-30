@@ -27,11 +27,11 @@ services:
       - "8000:80"
 
   database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    image: postgres:13-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-challenges1}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      POSTGRES_USER: ${POSTGRES_USER:-group12}
+      POSTGRES_DB: challenges1
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: group12
     volumes:
       - db_data:/var/lib/postgresql/data:rw
 
