@@ -3,8 +3,13 @@
 ### Installer le projet en local
 
 - Cloner l'application
+_via https_
 ```bash
-git clone 
+git clone https://github.com/hema-brm/administration_s2.git
+```
+_via ssh_
+```bash
+git clone git@github.com:hema-brm/administration_s2.git
 ```
 
 - Build l'application
