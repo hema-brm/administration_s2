@@ -2,11 +2,11 @@
 
 ### Installer le projet en local
 
-- Cloner l'application
+- Cloner l'application  
 _via https_
 ```bash
 git clone https://github.com/hema-brm/administration_s2.git
-```
+```  
 _via ssh_
 ```bash
 git clone git@github.com:hema-brm/administration_s2.git
@@ -29,6 +29,9 @@ docker compose exec php composer install
 ```bash
 docker compose exec php npm install
 ```
+
+- Entrer l'url sur un navigateur  
+  [https://localhost:8443](https://localhost:8443/)
 
 - Arrêter docker
 ```bash
